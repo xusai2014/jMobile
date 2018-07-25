@@ -1,0 +1,26 @@
+.carousel {
+  width: 7.5rem;
+  height: 3.5rem;
+  overflow: hidden;
+  box-shadow: 0rem 0.04rem 0.14rem rgba(1, 23, 32, 0.33);
+}
+
+.carousel1 {
+  width: 7.5rem;
+  height: auto!important;
+  overflow: hidden;
+  box-shadow: 0rem 0.04rem 0.14rem rgba(1, 23, 32, 0.33);
+  ul{
+    height: auto!important;
+  }
+}
+
+:global{
+  .my-carousel{
+    width: 7.5rem;
+    height: auto!important;
+    overflow: hidden;
+    box-shadow: 0rem 0.04rem 0.14rem rgba(1, 23, 32, 0.33);
+
+  }
+}

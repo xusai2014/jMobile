@@ -1,0 +1,23 @@
+{
+  "presets": [
+    ["@babel/preset-env", {
+      "targets": {
+        "browsers": ["ie>=8", ">1% in CN", "iOS >= 8", "Android >= 4"]
+      }
+    }],
+    "@babel/preset-react"
+  ],
+  "plugins": [
+    "@babel/plugin-proposal-object-rest-spread",
+    "@babel/plugin-syntax-dynamic-import",
+    ["@babel/plugin-syntax-decorators",{"legacy":true}],
+    ["@babel/plugin-proposal-class-properties"],
+    ["@babel/plugin-transform-object-assign"],
+    ["@babel/plugin-transform-runtime"],
+    ["import", {
+      "libraryName": "antd-mobile",
+      "style": true
+    }]
+
+  ]
+}

@@ -7,5 +7,7 @@ import { Switch,Route} from 'react-router-dom';
 import pathList from './config';
 import Loadable from 'react-loadable';
 import Loading from '../compoents/Loading';
+import HomeTest from '../page/HomeTest.jsx';
 
-export default ()=>(<Switch></Switch>)
+export default ()=>(<Switch><Route exact={false} path={'/test'} component={HomeTest} />
+</Switch>)

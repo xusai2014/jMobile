@@ -7,4 +7,5 @@ import { Switch,Route} from 'react-router-dom';
 import pathList from './config';
 import Loadable from 'react-loadable';
 import Loading from '../compoents/Loading';
-export default ()=>(<Switch></Switch>)
+export default ()=>(<Switch><Route  path={'/test'} component={ Loadable({loader: () => import('../page/HomeTest.jsx'),loading: Loading,})} />
+</Switch>)

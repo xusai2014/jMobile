@@ -39,7 +39,7 @@ class FixedContent extends React.Component {
     render() {
         var {className, children, style} = this.props;
         return (
-            <div ref="content" className={className} style={{background: '#FFFFFF', width:'7.5rem',minHeight:gloablMinHeight}}>
+            <div ref="content" className={className} style={{background: '#F5F5F5', width:'7.5rem',minHeight:gloablMinHeight}}>
                 {children}
             </div>
         );

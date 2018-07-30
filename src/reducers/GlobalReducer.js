@@ -15,9 +15,11 @@ export default function (state = initialState, actions) {
                 ...state,
                 requestStaus: true,
             };
-        case 'FINISH':
+      case 'FINISH':
+          const { type, data} = actions;
             return {
                 ...state,
+                type:data,
                 requestStaus: false,
             }
         case 'FAILURE':

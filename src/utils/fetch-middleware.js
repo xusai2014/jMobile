@@ -10,27 +10,13 @@ import { apiUrl } from '../config/api'
 *   @description 事件生成器
 *
 */
-export const ActionCreator = (type, url, method, data, key) => {
+export const ActionCreator = (type, url, method, data, key,cancel = false) => {
     return () => {
         return {
             types: [...type],
             payload: key,
             promise: () => {
-                return new Promise((resolve, reject) => {
-                    fetch(url, {
-                        method: method,//注意token获取不可抽取出来
-                        headers: {
-                            ...headers,
-                            'auth-token': $.cookie('auth-token'),
-                            'app-version': $.cookie('app-version'),
-                        },
-                        body: data ? JSON.stringify(data) : null,
-                    }).then(checkStatus).then(parseJSON).then(filterResponse).then((data) => {
-                        resolve(data);
-                    }).catch((err) => {
-                        reject({err});
-                    });
-                })
+                return fetchPromise(url, method = 'GET', data, cancel)
             }
         }
     }

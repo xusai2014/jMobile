@@ -7,5 +7,6 @@ import { Switch,Route} from 'react-router-dom';
 import pathList from './config';
 import Loadable from 'react-loadable';
 import Loading from '../compoents/Loading';
-export default ()=>(<Switch><Route  path={'/test'} component={ Loadable({loader: () => import('../page/HomeTest.jsx'),loading: Loading,})} />
+export default ()=>(<Switch><Route exact={false} path={'/home/index'} component={ Loadable({loader: () => import('../page/home/Index.jsx'),loading: Loading,})} />
+<Route exact={false} path={'/cards/cardslist'} component={ Loadable({loader: () => import('../page/cardsPackage/CardsList.jsx'),loading: Loading,})} />
 </Switch>)

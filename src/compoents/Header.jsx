@@ -1,45 +1,62 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
+import {Icon} from "antd-mobile";
 
-class  AllHeader extends React.Component{
-  componentWillMount () {
+class AllHeader extends React.Component {
+  componentWillMount() {
     this.refreshTitle(this.props.title);
   }
-  refreshTitle(title){
-    if(!title){
+
+  refreshTitle(title) {
+    if (!title) {
       return;
     }
     document.title = title;
   }
-  componentWillReceiveProps(nextprops){
-    if(this.props.title != nextprops.title){
+
+  componentWillReceiveProps(nextprops) {
+    if (this.props.title != nextprops.title) {
       this.refreshTitle(nextprops.title);
     }
   }
 
-  backStart(){
-    const { startPage } = this.props;
+  backStart() {
+    const {startPage} = this.props;
     startPage ? this.props.history.push(startPage) : window.history.back();
   }
 
-  render(){
-    const {title,hide} = this.props;
+  render() {
+    const {title, hide} = this.props;
     const ua = window.navigator.userAgent;
-    return (<div>
-      {(hide||/MicroMessenger/i.test(ua) || /SuiXingPay-Mpos/i.test(ua)||/SuiXingPay-Cashier/i.test(ua) ) ? '':<div className={styles.this+' '+styles['white']}>
-        <div className={styles.center}>
-          {title}
-        </div>
-        <div onClick={()=>{}}></div>
-      </div>}
+    return (<div style={{height:'0.81rem',width:'7.5rem',background: "#FFFFFF",border:"1px solid #F1F1F1"}}>
+      {
+        hide ? null :
+            <div   style={{textAlign:'center',lineHeight:"0.81rem"}}>
+              <div style={{
+                height: "0.81rem",
+                display: "inline-flex",
+                alignItems: "center",
+                position:'absolute',
+                left:'0.11rem'
+              }}>
+                <Icon color="#666666" type="left" size={'md'} onClick={()=>{
+                  window.history.go(-1);
+                }}/>
+              </div>
+              <span>
+                {title}
+              </span>
+            </div>
+      }
+
     </div>)
   }
 }
 
-const mapPropsToState = (state)=>{
+const mapPropsToState = (state) => {
   return {
-    startPage:''
+    startPage: ''
   }
 };
 

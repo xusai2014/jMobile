@@ -8,7 +8,7 @@ import React from 'react';
 import Routers from './router';
 import FixedContent from './compoents/FixedContent';
 import uam from './utils/deviceMark';//ua mark
-import { fetchPromise, PromiseList, syncToRedux } from './utils/fetch-middleware';
+import { fetchPromise, PromiseList } from './utils/fetch-middleware';
 import sa from 'sa-sdk-javascript';
 /*
  * whatwg 是fetch API的统一版本，在不支持fetch的浏览器中处理兼容问题，同时引入轻量的promise库
@@ -16,7 +16,6 @@ import sa from 'sa-sdk-javascript';
 import 'whatwg-fetch';
 
 import Promise from 'promise-polyfill';
-import { Toast } from "antd-mobile";
 import { initJSBridge } from './utils/jsBridge';
 
 // To add to window, 定义全局变量
@@ -25,7 +24,6 @@ if (!window.Promise) {
 }
 window.fetchPromise = fetchPromise;
 window.promiseList = new PromiseList();
-window.syncToRedux = syncToRedux;
 window.uam = uam;
 window.sa = sa;
 

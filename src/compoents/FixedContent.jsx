@@ -24,6 +24,7 @@ class FixedContent extends React.Component {
     }
 
     componentDidMount() {
+
         window.addEventListener("resize", this.setFontSize);
     }
 
@@ -38,7 +39,7 @@ class FixedContent extends React.Component {
     render() {
         var {className, children, style} = this.props;
         return (
-            <div ref="content" className={className} style={{...style || {}}}>
+            <div ref="content" className={className} style={{background: '#FFFFFF', width:'7.5rem',minHeight:gloablMinHeight}}>
                 {children}
             </div>
         );

@@ -31,6 +31,7 @@ export default class Card extends React.Component {
             textAlign: 'center', letterSpacing: '0'
           }}>{'*胜臣'}<span style={{margin: "0 0.165rem"}}>|</span>{'尾号6537'}</div>
         </div>
+        <img src="/static/img/设置@2x.png" style={styles.img}/>
 
       </div>
       <div
@@ -40,7 +41,6 @@ export default class Card extends React.Component {
           color: '#FFFFFF',
           letterSpacing: '0',
           marginTop: '0.66rem',
-
         }}
       ><span style={{marginLeft: '0.53rem'}}>免息期：{'50'}天</span>
         <span style={{
@@ -50,5 +50,12 @@ export default class Card extends React.Component {
       </div>
 
     </div>)
+  }
+}
+const styles = {
+  img:{
+    width:"0.3rem",
+    float:'right',
+    margin:" 0.5rem 0.5rem 0 0"
   }
 }

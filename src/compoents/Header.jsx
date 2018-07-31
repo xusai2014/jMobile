@@ -27,7 +27,7 @@ class AllHeader extends React.Component {
   }
 
   render() {
-    const {title, hide} = this.props;
+    const {title, hide, right} = this.props;
     const ua = window.navigator.userAgent;
     return (<div style={{height:'0.81rem',width:'7.5rem',background: "#FFFFFF",border:"1px solid #F1F1F1"}}>
       {
@@ -47,6 +47,12 @@ class AllHeader extends React.Component {
               <span>
                 {title}
               </span>
+              <div style={{
+                display:'inline-block',
+                position: 'absolute',
+                right: "0.29rem",
+                color:"#4C7BFE"
+              }}>{right}</div>
             </div>
       }
 

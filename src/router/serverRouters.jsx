@@ -9,7 +9,9 @@ import Loadable from 'react-loadable';
 import Loading from '../compoents/Loading';
 import HomeIndex from '../page/home/Index.jsx';
 import CardsList from '../page/cardsPackage/CardsList.jsx';
+import Result from '../page/result/Result.jsx';
 
 export default ()=>(<Switch><Route exact={false} path={'/home/index'} component={HomeIndex} />
 <Route exact={false} path={'/cards/cardslist'} component={CardsList} />
+<Route exact={false} path={'/result/:type'} component={Result} />
 </Switch>)

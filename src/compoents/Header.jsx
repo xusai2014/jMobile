@@ -53,10 +53,12 @@ class AllHeader extends React.Component {
                 {title}
               </span>
               <div style={{
-                display:'inline-block',
                 position: 'absolute',
                 right: "0.29rem",
-                color:"#4C7BFE"
+                color:"#4C7BFE",
+                display: 'inline-flex',
+                alignItems: 'center',
+                height: '0.81rem',
               }}>{right}</div>
             </div>
       }

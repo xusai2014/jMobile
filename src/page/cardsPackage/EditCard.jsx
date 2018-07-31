@@ -1,13 +1,49 @@
 import React from 'react';
 import Header from '../../compoents/Header';
 import InputRadio from "./components/InputRadio";
+import { Modal, Toast } from 'antd-mobile'
+import ModalCom from "../../compoents/ModalCom";
+const prompt = Modal.prompt;
 
 export default class EditCard extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      activeOne:0,
+      modal:false,
+      description:''
+    }
+  }
+
+  promptClick= () => prompt('输入验证码', '请输入手机号135****1234收到的验证码',
+    [
+      {
+        text: '取消',
+        onPress: value => new Promise((resolve) => {
+          Toast.info('onPress promise resolve', 1);
+          setTimeout(() => {
+            resolve();
+            console.log(`value:${value}`);
+          }, 1000);
+        }),
+      },
+      {
+        text: '确定',
+        onPress: value => new Promise((resolve, reject) => {
+          resolve();
+          setTimeout(() => {
+            this.setState({modal:true,description:"您绑定的卡为借记卡，卡包只支持绑定信用卡，请您重新绑定"})
+            console.log(`value:${value}`);
+          }, 1000);
+        }),
+      },
+    ], 'default', null, ['请输入验证码'])
 
 
   render() {
+    const { activeOne,modal,description } = this.state;
 
-    return [<Header title="信用卡信息"/>, <style>
+    return [<Header key={1} title="信用卡信息"/>, <style key={2}>
       {
         `
           input::-webkit-input-placeholder, {
@@ -16,11 +52,11 @@ export default class EditCard extends React.Component {
           }
         `
       }
-    </style>, <div>
+    </style>, <div key={3}>
 
       <div style={{background: '#FFFFFF'}}>
         <div style={styles.typeDes}>信用卡类型</div>
-        <InputRadio />
+        <InputRadio activeOne={ activeOne } setActiveOne={(v)=>{this.setState({activeOne:v})}}/>
       </div>
       {
         [{
@@ -29,9 +65,11 @@ export default class EditCard extends React.Component {
         },{
           name: '姓名', value: "",
           placeHolder: "请输入姓名",
+          disabled:activeOne==0?true:false,
         },{
           name: '持卡人身份证', value: "",
           placeHolder: "请输入身份证号码",
+          disabled:activeOne==0?true:false,
         },{
           name: '发卡行', value: "",
           placeHolder: "请输入发卡行",
@@ -39,16 +77,17 @@ export default class EditCard extends React.Component {
           name: '手机号', value: "",
           placeHolder: "请输入发卡行预留手机号",
         }].map((v, k) => {
-            const {name, value, placeHolder, icon} = v;
-          return <div style={styles.item}>
-            <div style={styles.name}>{name}</div>
-            <input style={styles.input} placeholder={placeHolder}/>
+            const {name,disabled, value, placeHolder, icon} = v;
+          return <div key={k} style={styles.item}><div style={styles.name}>{name}</div>
+            <input disabled={disabled} style={styles.input} placeholder={placeHolder}/>
             {icon ? <img src={icon} style={ styles.img}/> : null}
           </div>
 
         })
       }
       <div style={styles.tips}>请核对卡号信息，确认无误</div>
+      <div style={styles.finishBtn} onClick={()=>this.promptClick()}>确认</div>
+      <ModalCom visible={modal} showAction={(v)=>{this.setState({modal:v})}} description={description}/>
 
     </div>];
   }
@@ -94,5 +133,16 @@ const styles = {
     color: '#5481FE',
     letterSpacing: '-0.77PX',
     margin:"0.31rem 0 0 0.31rem"
+  },
+  finishBtn:{
+    background:'#4C7BFE',
+    boxShadow: '0 0.06rem 0.12rem 0 #9BB5FF',
+    borderRadius: "0.08rem",
+    margin:"1.4rem 0.16rem 0 0.16rem",
+    lineHeight:"1.18rem",
+    textAlign:'center',
+    fontSize: "0.34rem",
+    color: "#FFFFFF",
+    letterSpacing: '-0.011rem',
   }
 }

@@ -3,20 +3,18 @@ import React from 'react';
 export default class InputRadio extends React.Component {
   constructor(props){
     super(props);
-    this.state = {
-      activeOne:0, //默认第一个
-    }
+
   }
 
 
   render() {
-    const { activeOne } = this.state;
+    const { activeOne, setActiveOne } = this.props;
 
     return [<div style={styles.container}>
       {
         ['本人卡','常用卡'].map((v,k)=>{
           return <div key={k} style={{borderRight: k==0?'0.01rem solid #979797':'0',color:activeOne == k?'#4C7BFE':"#999999",...styles.blockOne}}>
-            <img onClick={()=>{this.setState({activeOne:k})}} src={activeOne == k?"/static/img/Group@2x.png":"/static/img/Oval@2x.png"} style={styles.radio}/>
+            <img onClick={()=>{setActiveOne(k)}} src={activeOne == k?"/static/img/Group@2x.png":"/static/img/Oval@2x.png"} style={styles.radio}/>
             <span>{v}</span>
           </div>
         })

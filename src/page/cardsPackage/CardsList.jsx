@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from "../../compoents/Header";
 import Card from "./components/Card";
-import {Menu} from "antd-mobile";
+import {Menu ,Icon } from "antd-mobile";
 
 const method = [
   {
@@ -25,7 +25,7 @@ export default class CardsList extends React.Component{
   render(){
     const { activeCard } = this.state;
     return <div>
-      <Header title="卡包" hide={false}/>
+      <Header title="卡包" hide={false} right={(<Icon type="plus" onClick={()=>{this.props.history.push('/cards/edit')}}/>)}/>
       <div style={{
         background: "#F0F7FF",
         lineHeight:'0.68rem',

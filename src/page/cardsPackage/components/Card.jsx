@@ -1,23 +1,12 @@
 import React from 'react';
 
+
 export default class Card extends React.Component {
   render() {
-    return (<div style={{
-      margin: '0.24rem 0.16rem',
-      width: '7.18rem',
-      backgroundImage: "linear-gradient(-133deg, #6475E9 0%, #5E53D0 100%)",
-      boxShadow: "0 0.06rem 0.12rem 0 #A7AEFD",
-      borderRadius: "0.08rem",
-      height: '2.64rem',
-      position: 'relative'
-    }}>
+    const { popupCard, id } =this.props;
+    return (<div style={styles.container}>
       <div>
-        <div style={{
-          width: "0.72rem", height: '0.72rem',
-          background: '#FFFFFF', borderRadius: '0.36rem',
-          marginLeft: '0.53rem', marginTop: '0.47rem',
-          display: 'inline-block'
-        }}
+        <div style={styles.rowItem}
         >
           <img style={{width: '0.4rem', margin: '0.16rem', height: "0.4rem"}} src="/static/img/交通银行@2x.png"/>
         </div>
@@ -31,7 +20,11 @@ export default class Card extends React.Component {
             textAlign: 'center', letterSpacing: '0'
           }}>{'*胜臣'}<span style={{margin: "0 0.165rem"}}>|</span>{'尾号6537'}</div>
         </div>
-        <img src="/static/img/设置@2x.png" style={styles.img}/>
+        <div style={styles.img}>
+          <img src="/static/img/设置@2x.png" style={{width:'0.3rem'}}  onClick={()=>{
+            popupCard(id)
+          }}/>
+        </div>
 
       </div>
       <div
@@ -49,10 +42,27 @@ export default class Card extends React.Component {
       }}>单笔限额：{'5'}万元</span>
       </div>
 
+      <div className="menu-mask" onClick={this.onMaskClick} />
+
     </div>)
   }
 }
 const styles = {
+  container:{
+    margin: '0.24rem 0.16rem',
+    width: '7.18rem',
+    backgroundImage: "linear-gradient(-133deg, #6475E9 0%, #5E53D0 100%)",
+    boxShadow: "0 0.06rem 0.12rem 0 #A7AEFD",
+    borderRadius: "0.08rem",
+    height: '2.64rem',
+    position: 'relative'
+  },
+  rowItem:{
+    width: "0.72rem", height: '0.72rem',
+    background: '#FFFFFF', borderRadius: '0.36rem',
+    marginLeft: '0.53rem', marginTop: '0.47rem',
+    display: 'inline-block'
+  },
   img:{
     width:"0.3rem",
     float:'right',

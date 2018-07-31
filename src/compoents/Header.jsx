@@ -44,7 +44,12 @@ class AllHeader extends React.Component {
                   window.history.go(-1);
                 }}/>
               </div>
-              <span>
+              <span style={{
+                fontSize: '0.31rem',
+                color: '#333333',
+                letterSpacing: '0',
+                fontWeight:'500'
+              }}>
                 {title}
               </span>
               <div style={{

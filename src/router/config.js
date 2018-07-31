@@ -10,6 +10,11 @@ export default [{
   component:"../page/result/Result.jsx",
   path:"/result/:type",
   name:"Result"
-}
+},
+  {
+    component:"../page/cardsPackage/EditCard.jsx",
+    path:"/cards/edit",
+    name:"CardsEdit"
+  }
 
 ]

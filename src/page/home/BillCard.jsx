@@ -4,7 +4,7 @@ export default class BillCard extends React.Component {
 
 
   render() {
-    return <div style={{ background: '#FFFFFF',marginTop:'0.2rem',padding:"0.3rem 0"}}>
+    return <div style={{ background: '#FFFFFF',marginTop:'0.2rem',padding:"0.3rem 0",position: 'relative'}}>
       <div style={{ display:'flex',alignItems:'center'}}>
         <div style={{
           margin: '0 0.14rem 0 0.28rem',
@@ -95,10 +95,11 @@ export default class BillCard extends React.Component {
           width:'1.26rem',
           height:'0.53rem',
           lineHeight: '0.53rem'
-        }}>
+        }} onClick={()=>this.props.repay()}>
           立即还款
         </div>
       </div>
+      <img src="/static/img/示例@2x.png" style={{ width:"0.71rem",position: 'absolute', right: '0', top: '0'}}/>
     </div>
   }
 }

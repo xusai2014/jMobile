@@ -2,12 +2,14 @@ import React from 'react';
 import {Modal, Icon} from 'antd-mobile'
 import CustomIcon from "../../compoents/CustomIcon";
 import BillCard from "./BillCard";
+import Popup from "./components/Popup";
 export default class Index extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      interestShow: false, //免息期弹窗展示
+      interestShow: false, //免息期弹窗展示,
+      visible:false,//弹出框
     }
   }
 
@@ -23,12 +25,12 @@ export default class Index extends React.Component {
   }
 
   render() {
-    const {interestShow,} = this.state;
+    const {interestShow, visible} = this.state;
     return [<div style={{background: '#FFFFFF', paddingBottom: "0.7rem"}}>
       <div style={styles.top}>
         <div style={styles.topText}>7日内待还<span style={styles.topSubText}>{'0'}笔</span></div>
-        <img style={styles.img} src="/static/img/canlendar@2x.png"/>
-        <span style={styles.icon}><Icon type="plus" size="sm" color="#000"/></span>
+        <img onClick={()=>{this.setState({interestShow:true})}} style={styles.img} src="/static/img/canlendar@2x.png"/>
+        <span onClick={()=>{this.props.history.push('/bill/method')}} style={styles.icon}><Icon type="plus" size="sm" color="#000"/></span>
       </div>
       <div style={{marginTop: "0.19rem"}}>
           <span style={{
@@ -47,10 +49,10 @@ export default class Index extends React.Component {
           }}>元</span></span></div>
       <div style={styles.cover}>
         {
-          [{img: "/static/img/kabao@2x.png", text: "卡包"}, {img: "/static/img/banka@2x.png", text: "办卡"}].map((v, k) => {
-            const {img, text} = v
+          [{img: "/static/img/kabao@2x.png", text: "卡包",action:"/cards/cardslist"}, {img: "/static/img/banka@2x.png", text: "办卡",action:"action"}].map((v, k) => {
+            const {img, text, action} = v
             return <div>
-              <span style={{margin: "0.32rem 0 0 0", display: 'inline-block'}}>
+              <span style={{margin: "0.32rem 0 0 0", display: 'inline-block'}} onClick={()=>{this.props.history.push(action)}}>
                 <img src={img} style={{width: '0.65rem'}}/>
               </span>
               <div style={{fontSize: '0.3rem', color: '#FFFFFF', letterSpacing: '0', textAlign: 'center'}}>
@@ -63,13 +65,15 @@ export default class Index extends React.Component {
     </div>,<div>
       {
         [1].map(()=>{
-          return <BillCard  />
+          return <BillCard repay={()=>this.setState({visible:true})} />
         })
       }
     </div>,
       <div style={{
         display: 'flex',justifyContent: 'center',alignItems: 'center',
-        background: '#FFFFFF', height:'0.84rem',widht:'7.5rem',margin:"0.2rem 0 0 0"}}>
+        background: '#FFFFFF', height:'0.84rem',widht:'7.5rem',margin:"0.2rem 0 0 0"}}
+        onClick={()=>this.props.history.push('/bill/method')}
+      >
         <Icon  type="plus" color="#999999" size="xs"/>
         <span style={{
           fontSize: '0.28rem',
@@ -97,10 +101,18 @@ export default class Index extends React.Component {
           scoll content...<br />
         </div>
       </Modal>
-    , <div>
 
-
-    </div>]
+    ,visible?<Popup title="选择还款方式"  data={
+          [
+            {imgSrc:"/static/img/还@2x.png",name:'还到',action:"",type:'0',des:'（授信额度30000元）',color:'#4d7cfe'},
+            {imgSrc:"/static/img/qita@2x.png",name:'其它',action:"",type:'1',des:'',color:'',node:[
+              {imgSrc:"/static/img/微信@2x.png",name:'微信',action:"",type:'0',des:'',color:''},
+              {imgSrc:"/static/img/支付宝@2x.png",name:'支付宝',action:"",type:'0',des:'',color:''}
+            ]},
+          ]
+        } visible={visible} setVisible={(v)=>{this.setState({visible:v})}}
+      />:null
+    ]
   }
 
 }
@@ -140,4 +152,15 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-around'
   }
+}
+
+function closest(el, selector) {
+  const matchesSelector = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector;
+  while (el) {
+    if (matchesSelector.call(el, selector)) {
+      return el;
+    }
+    el = el.parentElement;
+  }
+  return null;
 }

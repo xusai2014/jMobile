@@ -38,11 +38,10 @@ class AllHeader extends React.Component {
                 display: "inline-flex",
                 alignItems: "center",
                 position:'absolute',
-                left:'0.11rem'
-              }}>
-                <Icon color="#666666" type="left" size={'md'} onClick={()=>{
-                  window.history.go(-1);
-                }}/>
+                left:'0.11rem',
+                width: '1rem'
+              }} onClick={()=>{window.history.go(-1);}}>
+                <Icon color="#666666" type="left" size={'md'} />
               </div>
               <span style={{
                 fontSize: '0.31rem',

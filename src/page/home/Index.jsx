@@ -62,6 +62,28 @@ export default class Index extends React.Component {
           })
         }
       </div>
+      <div style={{display:"flex",justifyContent:"space-around",marginTop:"0.49rem"}}>{
+        [{
+          imgSrc:'/static/img/img_5049@2x.png',
+          action:"",
+          title:"等你抽奖"
+        },{
+          imgSrc:'/static/img/img_5050@2x.png',
+          action:"",
+          title:"我的红包"
+        },{
+          imgSrc:'/static/img/img_5051@2x.png',
+          action:"",
+          title:"免息35天"
+        },{
+          imgSrc:'/static/img/img_5052@2x.png',
+          action:"",
+          title:"挖金币"
+        }].map((v,k)=>{
+          const { imgSrc, action, title} = v;
+          return <div style={{display:"inline-block"}}><img style={{width:'0.74rem'}} src={imgSrc} /><div>{title}</div></div>
+        })
+      }</div>
     </div>,<div>
       {
         [1].map(()=>{
@@ -89,16 +111,64 @@ export default class Index extends React.Component {
         transparent
         maskClosable={false}
         onClose={() => this.setState({interestShow: false})}
-        title="Title"
+        title={<div style={{textAlign:'left'}}>最长免息期</div>}
         wrapProps={{onTouchStart: this.onWrapTouchStart}}
+        closable={true}
       >
-        <div style={{height: 100, overflow: 'scroll'}}>
-          scoll content...<br />
-          scoll content...<br />
-          scoll content...<br />
-          scoll content...<br />
-          scoll content...<br />
-          scoll content...<br />
+        <div style={{height: '5.03rem', overflow: 'scroll'}}>
+          {
+            [{
+              imgSrc:"/static/img/交通银行@2x.png",
+              title:"交通银行",
+              des:"总额度1万元|剩余额度0.00",
+              cardNum:"9178"
+            },{
+              imgSrc:"/static/img/jianshe@2x.png",
+              title:"建设银行",
+              des:"总额度1万元|剩余额度0.00",
+              cardNum:"9178"
+            },{
+              imgSrc:"/static/img/交通银行@2x.png",
+              title:"交通银行",
+              des:"总额度1万元|剩余额度0.00",
+              cardNum:"9178"
+            },{
+              imgSrc:"/static/img/jianshe@2x.png",
+              title:"建设银行",
+              des:"总额度1万元|剩余额度0.00",
+              cardNum:"9178"
+            },{
+              imgSrc:"/static/img/交通银行@2x.png",
+              title:"交通银行",
+              des:"总额度1万元|剩余额度0.00",
+              cardNum:"9178"
+            },{
+              imgSrc:"/static/img/jianshe@2x.png",
+              title:"建设银行",
+              des:"总额度1万元|剩余额度0.00",
+              cardNum:"9178"
+            },].map((v,k)=>{
+              const { imgSrc, title, des, cardNum} = v;
+              return (<div style={{textAlign:'left',margin:"0.23rem 0"}}>
+                <span style={{width:'0.6rem',borderRadius:'0.3rem'}}>
+                  <img style={{width:'0.6rem'}} src={imgSrc}/>
+                </span>
+                <div style={{display:"inline-block",margin:"0 0 0 0.14rem"}}>
+                  <div style={{
+                    fontSize:'0.24rem',
+                    color: '#333333',
+                    textAlign:'left',
+                    letterSpacing: '0',
+                  }}>{title}({cardNum})</div>
+                <div style={{
+                  fontSize: '0.2rem',
+                  color: '#999999',
+                  letterSpacing: '0',
+                }}>{des}</div>
+                </div>
+              </div>)
+            })
+          }
         </div>
       </Modal>
 

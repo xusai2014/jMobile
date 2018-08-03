@@ -27,9 +27,9 @@ class AllHeader extends React.Component {
   }
 
   render() {
-    const {title, hide, right} = this.props;
+    const {title, hide, right ,color="#FFFFFF"} = this.props;
     const ua = window.navigator.userAgent;
-    return (<div style={{height:'0.81rem',width:'7.5rem',background: "#FFFFFF",border:"1px solid #F1F1F1"}}>
+    return (<div style={{height:'0.81rem',width:'7.5rem',background: color,border:"1px solid #F1F1F1"}}>
       {
         hide ? null :
             <div   style={{textAlign:'center',lineHeight:"0.81rem"}}>

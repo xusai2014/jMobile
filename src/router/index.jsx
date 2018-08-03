@@ -14,6 +14,8 @@ export default ()=>(<Switch><Route exact={false} path={'/home/index'} component=
 <Route exact={false} path={'/bill/method'} component={ Loadable({loader: () => import('../page/bill/MethodList.jsx'),loading: Loading,})} />
 <Route exact={false} path={'/bill/cardlist'} component={ Loadable({loader: () => import('../page/bill/BankCardList.jsx'),loading: Loading,})} />
 <Route exact={false} path={'/manual/handlebill'} component={ Loadable({loader: () => import('../page/manual/HandleBill.jsx'),loading: Loading,})} />
-<Route exact={false} path={'/manual/add'} component={ Loadable({loader: () => import('../page/manual/AddBill.jsx'),loading: Loading,})} />
+<Route exact={false} path={'/manual/add/:bankId'} component={ Loadable({loader: () => import('../page/manual/AddBill.jsx'),loading: Loading,})} />
 <Route exact={false} path={'/email/manager'} component={ Loadable({loader: () => import('../page/email/EmailManager.jsx'),loading: Loading,})} />
+<Route exact={false} path={'/email/add'} component={ Loadable({loader: () => import('../page/email/EmailAdd.jsx'),loading: Loading,})} />
+<Route exact={false} path={'/bill/detail/:bankId'} component={ Loadable({loader: () => import('../page/bill/BillDetail.jsx'),loading: Loading,})} />
 </Switch>)

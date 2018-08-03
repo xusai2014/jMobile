@@ -16,6 +16,8 @@ import BankCardList from '../page/bill/BankCardList.jsx';
 import HandleBill from '../page/manual/HandleBill.jsx';
 import BankCardList from '../page/manual/AddBill.jsx';
 import EmailManager from '../page/email/EmailManager.jsx';
+import EmailAdd from '../page/email/EmailAdd.jsx';
+import BillDetail from '../page/bill/BillDetail.jsx';
 
 export default ()=>(<Switch><Route exact={false} path={'/home/index'} component={HomeIndex} />
 <Route exact={false} path={'/cards/cardslist'} component={CardsList} />
@@ -24,6 +26,8 @@ export default ()=>(<Switch><Route exact={false} path={'/home/index'} component=
 <Route exact={false} path={'/bill/method'} component={BillMethodList} />
 <Route exact={false} path={'/bill/cardlist'} component={BankCardList} />
 <Route exact={false} path={'/manual/handlebill'} component={HandleBill} />
-<Route exact={false} path={'/manual/add'} component={BankCardList} />
+<Route exact={false} path={'/manual/add/:bankId'} component={BankCardList} />
 <Route exact={false} path={'/email/manager'} component={EmailManager} />
+<Route exact={false} path={'/email/add'} component={EmailAdd} />
+<Route exact={false} path={'/bill/detail/:bankId'} component={BillDetail} />
 </Switch>)

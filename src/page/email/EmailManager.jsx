@@ -30,11 +30,13 @@ export default class EmailManager extends React.Component{
                 fontSize: '0.31rem',
                 color: '#333333',
                 letterSpacing: '-1PX',
+                margin:"0.2rem 0 0.01rem 0 "
               }}>{'an881205@126.com'}</div>
                 <div style={{
                   fontSize: '0.24rem',
                   color: '#999999',
-                  letterSpacing: '-0.77PX'
+                  letterSpacing: '-0.77PX',
+                  margin:"0 0 0.2rem 0 "
                 }}>上次导入时间 {'2018-07-15 11:05:48'}</div>
               </List.Item>
             </SwipeAction>

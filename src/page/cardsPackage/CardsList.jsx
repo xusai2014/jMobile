@@ -5,11 +5,13 @@ import {Menu ,Icon } from "antd-mobile";
 
 const method = [
   {
-    value: '1',
+    value: '0',
     label: '手写账单',
+    action:"/manual/add"
   }, {
-    value: '2',
+    value: '1',
     label: '查看账单',
+    action:"/bill/detail"
   },
 ];
 
@@ -86,8 +88,9 @@ export default class CardsList extends React.Component{
             data={method}
             level={1}
             height={document.documentElement.clientHeight / 6}
-            onChange={()=>{
-              this.props.history.push('/')
+            onChange={(data)=>{
+              debugger;
+              this.props.history.push(`${method[data[0]].action}/${activeCard}`)
             }}
             multiSelect={false}
           />,

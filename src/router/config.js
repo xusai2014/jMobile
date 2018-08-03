@@ -32,7 +32,7 @@ export default [{
 
   },{
     component:"../page/manual/AddBill.jsx",
-    path:"/manual/add",
+    path:"/manual/add/:bankId",
     name:"BankCardList"
 
   },{
@@ -40,7 +40,15 @@ export default [{
     path:"/email/manager",
     name:"EmailManager"
 
+  },{
+    component:"../page/email/EmailAdd.jsx",
+    path:"/email/add",
+    name:"EmailAdd"
+
+  },{
+    component:"../page/bill/BillDetail.jsx",
+    path:"/bill/detail/:bankId",
+    name:"BillDetail"
+
   }
-
-
 ]

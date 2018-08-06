@@ -3,6 +3,7 @@ import {packageReqData, aesDecrypt} from './encrypt-util'
 import {Toast} from 'antd-mobile';
 import 'antd-mobile/lib/toast/style/index.css';
 import { apiUrl } from '../config/api'
+import {resetToken} from "../interface/jsNative";
 /*
 *   @author jerryxu
 *   @methodName ActionCreator
@@ -15,14 +16,12 @@ export const ActionCreator = (type, url, method, data, key,cancel = false) => {
         return {
             types: [...type],
             payload: key,
-            promise: () => {
-                return fetchPromise(url, method = 'GET', data, cancel)
-            }
+            promise: () => fetchPromise(url, method = 'GET', data, cancel)
+
         }
     }
 }
 
-export const syncToRedux = (args) => (p) => p
 
 /*
 *   @author jerryxu
@@ -92,18 +91,6 @@ export const fetchPromise = (url, method = 'GET', data, cancel = false) => {
     }
     return x;
 }
-// export const fetchPromise = ()=>{
-//   const x = new Promise((resolve,reject)=>{
-//     setTimeout(()=>{
-//       if(true){
-//         resolve();
-//       }
-//       reject();
-//     },1000)
-//   })
-//   PromiseList.addPromise(x);
-//    return x;
-// }
 
 
 /*
@@ -165,7 +152,7 @@ export const headers = {
     "Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"
 }
 
-/*
+/**
 *   @author jerryxu
 *   @description 统一处理网络请求数据
 */
@@ -173,10 +160,27 @@ export function filterResponse(data) {
     data = JSON.parse(aesDecrypt(data));
     if (data["RETURNCODE"] === "0000") {
         return data;
+    } else if((data["RETURNCODE"] === "1004")||data["RETURNCODE"] === "1004"){
+        resetToken('')
     } else {
-        const error = new Error(data['RETURNCON'])
+        const error = new Error(data['RETURNCON']?data['RETURNCON']:data['RESULTMSG'])
         Toast.info(error.message, 2)
         throw error
     }
 
 }
+
+/**
+ * 打包公共参数
+ * @param nativeParams    android/ios 原生返回接口基础参数
+ * @param TRDE_CODE       接口标识
+ * @returns {{APPVERSION: app版本号, OSVERSION: 手机系统版本, PLATFORM: ios/android, channelNo: 个人版/商务版, TOKEN_ID: token}}
+ */
+export const packagePublicParams = (nativeParams, TRDE_CODE) => ({
+  APPVERSION: nativeParams['APPVERSION'],
+  OSVERSION: nativeParams['OSVERSION'],
+  PLATFORM: nativeParams['PLATFORM'],
+  channelNo: nativeParams['channelNo'],
+  TOKEN_ID: nativeParams['TOKEN_ID'],
+  TRDE_CODE,
+});

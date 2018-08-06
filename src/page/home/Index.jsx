@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
   return {
     loginToken:state.GlobalReducer.loginToken
   }
-},()=>{})
+},()=>({}))
 export default class Index extends React.Component {
   constructor(props) {
     super(props);
@@ -55,10 +55,16 @@ export default class Index extends React.Component {
           }}>元</span></span></div>
       <div style={styles.cover}>
         {
-          [{img: "/static/img/kabao@2x.png", text: "卡包",action:"/cards/cardslist"}, {img: "/static/img/banka@2x.png", text: "办卡",action:"action"}].map((v, k) => {
-            const {img, text, action} = v
+          [{img: "/static/img/kabao@2x.png", text: "卡包",action:"/cards/cardslist",type:"0"}, {img: "/static/img/banka@2x.png", text: "办卡",action:"https://www.baidu.com",type:'1'}].map((v, k) => {
+            const {img, text, action, type} = v
             return <div>
-              <span style={{margin: "0.32rem 0 0 0", display: 'inline-block'}} onClick={()=>{this.props.history.push(action)}}>
+              <span style={{margin: "0.32rem 0 0 0", display: 'inline-block'}} onClick={()=>{
+                  if(type == '0'){
+                    this.props.history.push(action)
+                  } else if(type =='1'){
+                    window.location.href = action;
+                  }
+                }}>
                 <img src={img} style={{width: '0.65rem'}}/>
               </span>
               <div style={{fontSize: '0.3rem', color: '#FFFFFF', letterSpacing: '0', textAlign: 'center'}}>

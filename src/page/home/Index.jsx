@@ -1,8 +1,14 @@
 import React from 'react';
 import {Modal, Icon} from 'antd-mobile'
-import CustomIcon from "../../compoents/CustomIcon";
 import BillCard from "./BillCard";
 import Popup from "./components/Popup";
+import { connect } from 'react-redux';
+
+@connect((state)=>{
+  return {
+    loginToken:state.GlobalReducer.loginToken
+  }
+},()=>{})
 export default class Index extends React.Component {
   constructor(props) {
     super(props);

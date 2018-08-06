@@ -61,7 +61,9 @@ export default {
         use: [
           "style-loader", // creates style nodes from JS strings,
           'postcss-loader',
-          "less-loader", // compiles Sass to CSS
+          {
+            loader: 'less-loader', options: { javascriptEnabled: true}
+          }
         ]
       },
       {test: /\.(png|jpg|svg|gif)$/, loader: 'url-loader?limit=25000&name=public/[name][hash:8].[ext]'},//指定图片路径
@@ -76,7 +78,7 @@ export default {
     moment: 'moment',
   },
   resolve: {
-    extensions: ['.web.js', '.js', '.jsx', '.scss', '.less', '.css']
+    extensions: ['.web.js', '.js', '.jsx', '.scss', '.less', '.css'],
   },
   plugins:  [
     new webpack.BannerPlugin('This file is created by Jerry'),

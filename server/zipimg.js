@@ -9,7 +9,7 @@ export default (filePath,func)=>{
       if (err) {
         console.log('imagemin failed to minfy the imagefile err:' + stderr);
       } else {
-        log.info('压缩图片成功！', stdout);
+        console.log('压缩图片成功！', stdout);
       }
     });
     files.forEach((filename)=>{

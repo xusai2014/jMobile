@@ -9,6 +9,9 @@
     "server": "node  ./mock/server.js",
     "debug": "export mode=development && npx babel-node server/server.js --inspect-brk=9229"
   },
+  "theme": {
+    "icon-url": "'/static/font/iconfont/iconfont'"
+  },
   "browserslist": [
     "iOS >= 8",
     "last 2 versions",
@@ -20,8 +23,7 @@
     "@babel/cli": "^7.0.0-beta.46",
     "@babel/core": "^7.0.0-beta.46",
     "@babel/plugin-proposal-class-properties": "^7.0.0-beta.46",
-    "@babel/plugin-proposal-decorators": "^7.0.0-beta.46",
-    "@babel/plugin-syntax-decorators": "^7.0.0-beta.46",
+    "@babel/plugin-proposal-decorators": "^7.0.0-beta.55",
     "@babel/plugin-syntax-dynamic-import": "^7.0.0-beta.46",
     "@babel/plugin-transform-object-assign": "^7.0.0-beta.48",
     "@babel/plugin-transform-runtime": "^7.0.0-beta.46",

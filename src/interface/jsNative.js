@@ -4,10 +4,11 @@ import { Toast } from "antd-mobile";
  * 调用原生OCR功能
  * @param params
  * @returns {Promise<any>}
- * FIXME 待调试
+ * FIXME android 待调试
  */
-const nativeOcrFunc = (params = {}) => new Promise((resolve, reject) => {
-  JSBridge.invoke('ocrFunc', (data) => {
+const nativeOcrBankCard = (params = {}) => new Promise((resolve, reject) => {
+  /* 0000:成功; 0001:取消; 0002:未知; 0003:编辑; */
+  JSBridge.invoke('nativeOcrBankCard', (data) => {
     resolve(data)
   }, params)
 });
@@ -26,7 +27,7 @@ const nativeRequestBaseParams = (request = {}) => new Promise((resolve, reject) 
 /**
  * 调用原生实名认证
  * @param request   暂不需要请求参数
- * FIXME 待调试
+ * FIXME android 待调试
  */
 const nativeGoRealName = (request = {}) => {
   JSBridge.invoke('goRealName', response => {}, request);
@@ -35,7 +36,7 @@ const nativeGoRealName = (request = {}) => {
 /**
  * 调用原生绑定设备
  * @param request            暂不需请求参数
- * FIXME 待调试
+ * FIXME android 待调试
  */
 const nativeGoBindDevice = (request = {}) => {
   JSBridge.invoke('goBoundDevice', response => {}, request);
@@ -98,14 +99,14 @@ const syncData = (request = {}) => {
  */
 const checkNativeLoginStatus = (request = {}) => new Promise((resolve, reject) => {
   nativeRequestBaseParams(request).then(result => {
-    result['TOKEN_ID'] ? resolve(result) : reject(result);
+    result['token'] ? resolve(result) : reject(result);
   });
 });
 
 /**
  * 跳转到原生优惠券列表
  * @param request
- * FIXME 待调试
+ * FIXME android 待调试
  */
 const nativeGoCouponList = (request = {}) => {
   JSBridge.invoke('goCouponList', response => {}, request);
@@ -123,7 +124,6 @@ const nativeShare = (request = {}) => {
 /**
  * 调用原生分享功能(包含web功能)
  * @param request
- * FIXME 待调试
  */
 const nativeWebShare = (request = {}) => {
   JSBridge.invoke('nativeWebShare', response => {}, request);
@@ -164,7 +164,7 @@ const loginHelper = (callback, loginResultCall) => {
   }, () => {
     // 未登录状态
     nativeLogin().then(params => {
-      if (params.errorCode == 0) { // 登录成功
+      if (params.errorCode == '0000') { // 登录成功
         loginResultCall ? loginResultCall(params) : callback(params);
       } else {
         /* 登录取消 */
@@ -179,7 +179,7 @@ const loginHelper = (callback, loginResultCall) => {
 };
 
 export {
-  nativeOcrFunc,
+  nativeOcrBankCard,
   nativeRequestBaseParams,
   nativeGoRealName,
   nativeGoBindDevice,

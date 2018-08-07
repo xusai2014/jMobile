@@ -16,7 +16,6 @@ const nativeOcrFunc = (params = {}) => new Promise((resolve, reject) => {
  * 获取原生获取的基础请求参数
  * @param request            暂不需请求参数
  * @returns {Promise<any>}
- * FIXME 待调试
  */
 const nativeRequestBaseParams = (request = {}) => new Promise((resolve, reject) => {
   JSBridge.invoke('getRequestBaseParams', response => {
@@ -69,27 +68,25 @@ const nativeAliPay = (request = {}) => new Promise((resolve, reject) => {
 /**
  * 调用原生打开一个新的 WebView
  * @param request
- * FIXME 待调试
  */
 const nativeOpenNewWebView = (request = {}) => {
   JSBridge.invoke('openNewNativeWebView', response => {}, request);
 };
 
 /*
-* 打开原生登录界面，登录成功后回到web页面
-* @params { destination}
-* */
-
-const nativeLogin = (requst = {}) => new Promise((resolve,reject)=>{
+ * 打开原生登录界面，登录成功后回到web页面
+ * @returns {Promise<any>}
+ */
+const nativeLogin = (request = {}) => new Promise((resolve, reject) => {
   JSBridge.invoke('nativeLogin', response => {
     resolve(response);
   }, request);
 });
 
-/*
-*   同步基本数据，用户Token 、用户状态、APP版本号
-*
-* */
+/**
+ * 同步基本数据，用户Token 、用户状态、APP版本号
+ * FIXME 待调试
+ */
 const syncData = (request = {}) => {
   JSBridge.invoke('syncData', response => {}, request)
 }
@@ -98,7 +95,6 @@ const syncData = (request = {}) => {
  * 校验原生登录状态
  * @param request  暂不需请求参数
  * @returns {Promise<any>}
- * FIXME 待调试
  */
 const checkNativeLoginStatus = (request = {}) => new Promise((resolve, reject) => {
   nativeRequestBaseParams(request).then(result => {
@@ -109,6 +105,7 @@ const checkNativeLoginStatus = (request = {}) => new Promise((resolve, reject) =
 /**
  * 跳转到原生优惠券列表
  * @param request
+ * FIXME 待调试
  */
 const nativeGoCouponList = (request = {}) => {
   JSBridge.invoke('goCouponList', response => {}, request);
@@ -117,7 +114,6 @@ const nativeGoCouponList = (request = {}) => {
 /**
  * 调用原生分享功能
  * @param request
- * @returns {Promise<any>}
  * FIXME 待调试
  */
 const nativeShare = (request = {}) => {
@@ -134,8 +130,21 @@ const nativeWebShare = (request = {}) => {
 };
 
 /**
+ * 原生将WebView保存为png
+ * @param request
+ * @returns {Promise<any>}
+ */
+const nativeSaveWebView2Png = (request = {}) => new Promise((resolve, reject) => {
+  JSBridge.invoke('nativeSaveWebView2Png', response => {
+    // if (response.result == '0000') {/* 成功 */} else {/* 失败 */}
+    resolve(response);
+  }, request);
+});
+
+/**
  * 是否展示开通VIP按钮
  * @param request
+ * @returns {Promise<any>}
  */
 const nativeIsShowOpenVipButton = (request = {}) => new Promise((resolve, reject) => {
   JSBridge.invoke('isShowButton', data => {
@@ -144,7 +153,7 @@ const nativeIsShowOpenVipButton = (request = {}) => new Promise((resolve, reject
 });
 
 /**
- * 检验登录方法 TODO 待调试
+ * 检验登录方法
  * @param callback          已登录状态回调
  * @param loginResultCall   登录成功后回调(不传默认会执行: 已登录状态回调)
  */
@@ -155,7 +164,7 @@ const loginHelper = (callback, loginResultCall) => {
   }, () => {
     // 未登录状态
     nativeLogin().then(params => {
-      if (params.status == '01') { // 登录成功 TODO 状态码未确认
+      if (params.errorCode == 0) { // 登录成功
         loginResultCall ? loginResultCall(params) : callback(params);
       } else {
         /* 登录取消 */
@@ -168,8 +177,6 @@ const loginHelper = (callback, loginResultCall) => {
     Toast.show(`程序异常, 请重新尝试!`, 2, false);
   });
 };
-
-
 
 export {
   nativeOcrFunc,
@@ -186,4 +193,5 @@ export {
   loginHelper,
   nativeIsShowOpenVipButton,
   nativeWebShare,
+  nativeSaveWebView2Png,
 }

@@ -1,6 +1,6 @@
 export default {
   getRequestBaseParams:{
-    TOKEN_ID:"111111111111111111",
+    TOKEN_ID:"oooooooooo",
     APP_VERSIONS:"4.0.1",
     PHONE_VERSIONS:"1111",
     PHONE_PLATFORM:"IOS",
@@ -8,7 +8,12 @@ export default {
 
   },
   nativeOcrFunc:{
+    card_num:'',
+  },
+  nativeGoRealName:{
 
+  },
+  nativeLogin:{
 
   }
 

@@ -3,6 +3,7 @@ import {Modal, Icon} from 'antd-mobile'
 import BillCard from "./BillCard";
 import Popup from "./components/Popup";
 import { InitDecorator } from "../../compoents/InitDecorator";
+import {loginHelper} from "../../interface/jsNative";
 
 @InitDecorator()
 export default class Index extends React.Component {
@@ -12,19 +13,6 @@ export default class Index extends React.Component {
       interestShow: false, //免息期弹窗展示,
       visible:false,//弹出框
     }
-    const x = (param)=>new Promise((resolve,reject)=>{
-      setTimeout(()=>{
-        if(param >10){
-          resolve({data:true})
-        } else {
-          reject({data:false})
-        }
-
-      },10)
-    });
-
-
-
   }
 
   onWrapTouchStart = (e) => {
@@ -38,13 +26,54 @@ export default class Index extends React.Component {
     }
   }
 
+  async componentWillMount(){
+    const params = await this.props.getBaseParams();
+    fetchPromise('/api','POST',{
+      'TRDE_CODE':"M113",
+      ...params
+    },true).then((data)=>{
+
+    },()=>{
+
+    })
+
+  }
+  loginEnter(type,params){
+    loginHelper(()=>{
+      switch (type){
+        case 1:
+          //展示免息期
+          this.setState({interestShow:true});
+          return
+        case 2:
+          //添加账单
+          this.props.history.push('/bill/method');
+          return
+        case 3:
+          //进入卡包
+          const {action:url} = params
+          this.props.history.push(url);
+          return
+        case 4:
+          //进入办卡中心
+          const {action} = params;
+          window.location.href = action;
+          return;
+      }
+    })
+  }
+
   render() {
     const {interestShow, visible} = this.state;
     return [<div style={{background: '#FFFFFF', paddingBottom: "0.7rem"}}>
       <div style={styles.top}>
         <div style={styles.topText}>7日内待还<span style={styles.topSubText}>{'0'}笔</span></div>
-        <img onClick={()=>{this.setState({interestShow:true})}} style={styles.img} src="/static/img/canlendar@2x.png"/>
-        <span onClick={()=>{this.props.history.push('/bill/method')}} style={styles.icon}><Icon type="plus" size="sm" color="#000"/></span>
+        <img onClick={()=>{
+          this.loginEnter(1)
+        }} style={styles.img} src="/static/img/canlendar@2x.png"/>
+        <span onClick={()=>{
+          this.loginEnter(2)
+        }} style={styles.icon}><Icon type="plus" size="sm" color="#000"/></span>
       </div>
       <div style={{marginTop: "0.19rem"}}>
           <span style={{
@@ -68,9 +97,9 @@ export default class Index extends React.Component {
             return <div>
               <span style={{margin: "0.32rem 0 0 0", display: 'inline-block'}} onClick={()=>{
                   if(type == '0'){
-                    this.props.history.push(action)
+                    this.loginEnter(3,{action})
                   } else if(type =='1'){
-                    window.location.href = action;
+                    this.loginEnter(4,{action})
                   }
                 }}>
                 <img src={img} style={{width: '0.65rem'}}/>
@@ -114,7 +143,7 @@ export default class Index extends React.Component {
       <div style={{
         display: 'flex',justifyContent: 'center',alignItems: 'center',
         background: '#FFFFFF', height:'0.84rem',widht:'7.5rem',margin:"0.2rem 0 0 0"}}
-        onClick={()=>this.props.history.push('/bill/method')}
+        onClick={()=>this.loginEnter(1)}
       >
         <Icon  type="plus" color="#999999" size="xs"/>
         <span style={{

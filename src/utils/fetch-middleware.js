@@ -1,9 +1,7 @@
 import Storage from '../store';
 import {packageReqData, aesDecrypt} from './encrypt-util'
 import {Toast} from 'antd-mobile';
-import 'antd-mobile/lib/toast/style/index.css';
-import { apiUrl } from '../config/api'
-import {resetToken} from "../interface/jsNative";
+import { apiUrl,isMock } from '../config/api'
 /*
 *   @author jerryxu
 *   @methodName ActionCreator
@@ -24,149 +22,189 @@ export const ActionCreator = (type, url, method, data, key,cancel = false) => {
 
 
 /*
-*   @author jerryxu
-*   Create a Class PromiseList
-*   @description 异步请求管理类
-*
-*/
+ *   @author jerryxu
+ *   Create a Class PromiseList
+ *   @description 异步请求管理类
+ *
+ */
 export class PromiseList {
-    static list = [];
+  static list = [];
 
-    constructor() {
-    }
+  constructor() {
+  }
 
-    static addPromise(promise) {
-        PromiseList.list.push(promise)
-    }
+  static addPromise(promise) {
+    PromiseList.list.push(promise)
+  }
 
-    cancel() {
-        PromiseList.list.map((v, k) => {
-            v.isCanceled = true;
-        })
+  cancel() {
+    PromiseList.list.map((v, k) => {
+      v.isCanceled = true;
+    })
 
-        PromiseList.list = [];
-    }
+    PromiseList.list = [];
+  }
 };
 
 /*
-*   @author jerryxu
-*   @description 网络请求方法
-*
-*/
+ *   @author jerryxu
+ *   @description 网络请求方法
+ *
+ */
 export const fetchPromise = (url, method = 'GET', data, cancel = false) => {
-    //let baseUrl = 'http://172.16.135.174:8080/phoneclient/notify.htm'; //开发服务器
-    let baseUrl = apiUrl;//'http://172.16.42.28:8080/lemon-mobile/phoneclient/notify.htm'; //李建
-    if(window.location.host.indexOf('mpaw.vbill.cn')>-1 ){
-      baseUrl = '//mp.vbill.cn/phoneclient/notify.htm'
-    }  else if(window.location.host.indexOf('mpaw-rc.vbill.cn')>-1){
-        baseUrl ='https://mp-rc.vbill.cn/phoneclient/notify.htm'
-    } else if(window.location.host.indexOf('mpaw-alpha.vbill.cn')>-1){
-      baseUrl ='https://mp-alpha.vbill.cn:8084/phoneclient/notify.htm'
-    }
-    const isnv = 1;//是否sha256
-    const encflag = 1;//是否AES
+  if(isMock){
+    return fetchMockData(data);
+  }
 
-    Storage.dispatch({type: "REQUEST", data: true});
+  //let baseUrl = 'http://172.16.135.174:8080/phoneclient/notify.htm'; //开发服务器
+  let baseUrl = apiUrl;//'http://172.16.42.28:8080/lemon-mobile/phoneclient/notify.htm'; //李建
+  if(window.location.host.indexOf('mpaw.vbill.cn')>-1 ){
+    baseUrl = '//mp.vbill.cn/phoneclient/notify.htm'
+  }  else if(window.location.host.indexOf('mpaw-rc.vbill.cn')>-1){
+    baseUrl ='https://mp-rc.vbill.cn/phoneclient/notify.htm'
+  } else if(window.location.host.indexOf('mpaw-alpha.vbill.cn')>-1){
+    baseUrl ='https://mp-alpha.vbill.cn:8084/phoneclient/notify.htm'
+  }
+  const isnv = 1;//是否sha256
+  const encflag = 1;//是否AES
 
-    let queryData = '';
-    const dataBody = packageReqData(data, isnv, encflag)
-    Object.keys(dataBody).map((v, k) => {
-        queryData = queryData + v + '=' + dataBody[v] + '&'
+  Storage.dispatch({type: "REQUEST", data: true});
+
+  let queryData = '';
+  const dataBody = packageReqData(data, isnv, encflag)
+  Object.keys(dataBody).map((v, k) => {
+    queryData = queryData + v + '=' + dataBody[v] + '&'
+  })
+  const params = method != 'GET' && dataBody ? {body:JSON.stringify(dataBody)} : {}
+  const x = new Promise((resolve, reject) =>
+    fetch(`${baseUrl}?${queryData}`, {
+      method: method,
+      headers: {...headers, 'Access-Control-Allow-Origin': '*',},
+      mode: 'cors',
+      ...params
+    }).then((p)=>{if(x.isCanceled){return;}else{return p}}).then(checkStatus).then(parseJSON).then(filterResponse).then((data) => {
+      resolve(data)
+    }).catch((err) => {
+      reject({err})
     })
-    const params = method != 'GET' && dataBody ? {body:JSON.stringify(dataBody)} : {}
-    const x = new Promise((resolve, reject) =>
-        fetch(`${baseUrl}?${queryData}`, {
-            method: method,
-            headers: {...headers, 'Access-Control-Allow-Origin': '*',},
-            mode: 'cors',
-            ...params
-        }).then((p)=>{if(x.isCanceled){return;}else{return p}}).then(checkStatus).then(parseJSON).then(filterResponse).then((data) => {
-            resolve(data)
-        }).catch((err) => {
-            reject({err})
-        })
-    );
-    if (cancel) {
-        PromiseList.addPromise(x);
-    }
-    return x;
+  );
+  if (cancel) {
+    PromiseList.addPromise(x);
+  }
+  return x;
 }
 
-
-/*
-*   @author jerryxu
-*   @description 检查响应状态
-*
-*/
-export function checkStatus(response) {
-    if ((response.status >= 200 && response.status < 300) || response.status == 400) {
-        return response
-    } else if (response.status === 401) {
-        $.cookie('auth-token', '', {expires: -1, path: '/'});
-        window.location.href = `${window.specialOrigin}/error-401.html`
-        const err = new Error("token过期")
-        err.response = response
-        err.message = response.statusText
-        throw err
-    } else if (response.status === 403) {
-        window.location.href = `${window.specialOrigin}/error-403.html`
-        const err = new Error("没有权限")
-        err.response = response
-        err.message = response.statusText
-        throw err
-    } else if (response.status === 500) {
-        window.location.href = `${window.specialOrigin}/error-500.html`
-        const err = new Error("网络异常")
-        err.response = response
-        err.message = response.statusText
-        throw err
-    } else {
-        const err = new Error("网络异常")
-        err.response = response
-        err.message = response.statusText
-        throw err
-    }
-}
-
-/*
-*   @author jerryxu
-*   @description 解析response
-*
-*/
-export function parseJSON(response) {
+const fetchMockData = (data)=>new Promise((resolve,reject)=>{
+  const { TRDE_CODE } = data;
+  return fetch(`http://172.16.135.175:8080/app/mock/16/${TRDE_CODE}`, {
+    method: "GET",
+    headers: {...headers, 'Access-Control-Allow-Origin': '*',},
+    mode: 'cors',
+  }).then(checkStatus).then((response)=>{
     if (response.ok || response.status == '400') {
-        return response.text();
+      return response.json()
     } else {
-        return {err: {msg: '请求异常', code: '7777'}}
+      return {err: {msg: '请求异常', code: '7777'}}
     }
+  }).then((data)=>{
+    if (data["RETURNCODE"] === "0000" ||data["RESULTCODE"] === "0000") {
+      return data;
+    } else {
+      let error = null;
+      if(data['RESULTMSG']){
+        error = new Error(data['RESULTMSG'])
+      } else {
+        error = new Error(data['RETURNCON'])
+      }
+
+      Toast.info(error.message, 2)
+      throw error
+    }
+  }).then((data) => {
+    resolve(data)
+  }).catch((err) => {
+    reject({err})
+  })
+})
+
+
+/*
+ *   @author jerryxu
+ *   @description 检查响应状态
+ *
+ */
+export function checkStatus(response) {
+  if ((response.status >= 200 && response.status < 300) || response.status == 400) {
+    return response
+  } else if (response.status === 401) {
+    $.cookie('auth-token', '', {expires: -1, path: '/'});
+    window.location.href = `${window.specialOrigin}/error-401.html`
+    const err = new Error("token过期")
+    err.response = response
+    err.message = response.statusText
+    throw err
+  } else if (response.status === 403) {
+    window.location.href = `${window.specialOrigin}/error-403.html`
+    const err = new Error("没有权限")
+    err.response = response
+    err.message = response.statusText
+    throw err
+  } else if (response.status === 500) {
+    window.location.href = `${window.specialOrigin}/error-500.html`
+    const err = new Error("网络异常")
+    err.response = response
+    err.message = response.statusText
+    throw err
+  } else {
+    const err = new Error("网络异常")
+    err.response = response
+    err.message = response.statusText
+    throw err
+  }
 }
 
 /*
-*   @author jerryxu
-*   @description 请求头部设置
-*/
-export const headers = {
-    "Content-Type": "application/json",
-    'Access-Control-Allow-Origin': '*',
-    "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"
+ *   @author jerryxu
+ *   @description 解析response
+ *
+ */
+export function parseJSON(response) {
+  if (response.ok || response.status == '400') {
+    return response.text();
+  } else {
+    return {err: {msg: '请求异常', code: '7777'}}
+  }
 }
 
-/**
-*   @author jerryxu
-*   @description 统一处理网络请求数据
-*/
+/*
+ *   @author jerryxu
+ *   @description 请求头部设置
+ */
+export const headers = {
+  "Content-Type": "application/json",
+  'Access-Control-Allow-Origin': '*',
+  "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"
+}
+
+/*
+ *   @author jerryxu
+ *   @description 统一处理网络请求数据
+ */
 export function filterResponse(data) {
-    data = JSON.parse(aesDecrypt(data));
-    if (data["RETURNCODE"] === "0000") {
-        return data;
-    } else if((data["RETURNCODE"] === "1004")||data["RETURNCODE"] === "1004"){
-        resetToken('')
+  data = JSON.parse(aesDecrypt(data));
+  if (data["RETURNCODE"] === "0000" || data["RESULTCODE"] === "0000") {
+    return data;
+  } else {
+    let error = null;
+    if(data['RESULTMSG']){
+      error = new Error(data['RESULTMSG'])
     } else {
-        const error = new Error(data['RETURNCON']?data['RETURNCON']:data['RESULTMSG'])
-        Toast.info(error.message, 2)
-        throw error
+      error = new Error(data['RETURNCON'])
     }
+    Toast.info(error.message, 2)
+    throw error
+  }
 
 }
 
@@ -177,10 +215,10 @@ export function filterResponse(data) {
  * @returns {{APPVERSION: app版本号, OSVERSION: 手机系统版本, PLATFORM: ios/android, channelNo: 个人版/商务版, TOKEN_ID: token}}
  */
 export const packagePublicParams = (nativeParams, TRDE_CODE) => ({
-  APPVERSION: nativeParams['APPVERSION'],
-  OSVERSION: nativeParams['OSVERSION'],
-  PLATFORM: nativeParams['PLATFORM'],
-  channelNo: nativeParams['channelNo'],
+  APPVERSION: nativeParams['APP_VERSIONS'],
+  OSVERSION: nativeParams['PHONE_VERSIONS'],
+  PLATFORM: nativeParams['PHONE_PLATFORM'],
   TOKEN_ID: nativeParams['TOKEN_ID'],
+  CHANNEL_NO: nativeParams['CHANNEL_NO'],
   TRDE_CODE,
 });

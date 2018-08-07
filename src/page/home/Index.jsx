@@ -8,7 +8,6 @@ import { InitDecorator } from "../../compoents/InitDecorator";
 export default class Index extends React.Component {
   constructor(props) {
     super(props);
-    debugger;
     this.state = {
       interestShow: false, //免息期弹窗展示,
       visible:false,//弹出框
@@ -23,66 +22,8 @@ export default class Index extends React.Component {
 
       },10)
     });
-    function*  getr() {
-      try {
-        const r1 = yield x(12);
-        console.log("yield",r1);
-        const r2 = yield x(6);
-        console.log("yield",r2);
-        const r3 = yield x(18);
-        console.log("yield",r3);
-      } catch(w) {
-        console.log(w)
-      }
-    }
-    function*  getHome() {
-      try {
-        const r1 = yield x(11);
-        console.log(11,r1);
-        const r2 = yield x(5).then(()=>{
-          debugger;
-          console.log('111111111')
-        },()=>{
-          debugger;
-          throw Error('fsdfds')
-          console.log('222222222')
-        });
-        const r3 = yield* getr();
-        console.log('generator',r3);
-        const r4 = yield x(11);
-      } catch(w) {
-        console.log(w)
-      }
-    }
 
-    function run(generator){
-      var it = generator();
 
-      function go(result){
-        if(result.done) {
-          // console.log(result.value);
-          return result.value;
-        }
-        return result.value.then(function(value){
-          return go(it.next(value));
-        },function(error){
-          return go(it.throw(error));
-        });
-      }
-
-      go(it.next());
-    }
-    run(getHome)
-
-    function* setHome() {
-      yield 1;
-      yield 2;
-      yield 3;
-    }
-    const u = setHome();
-    u.next();
-    u.next();
-    u.next();
 
   }
 

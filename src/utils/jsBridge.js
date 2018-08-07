@@ -31,7 +31,7 @@ export const initJSBridge = (mock = false) => {
           } else {
             setTimeout(()=>{
               //调用native注入方法
-              const response = {x:1}//mockData[functionName] //模拟native注册的程序
+              const response = mockData[functionName] //模拟native注册的程序
               JSBridge.receiveMessage({callbackId, data:{params:data,...response},})
             },1000)
           }

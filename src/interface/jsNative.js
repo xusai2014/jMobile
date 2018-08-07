@@ -169,6 +169,8 @@ const loginHelper = (callback, loginResultCall) => {
   });
 };
 
+
+
 export {
   nativeOcrFunc,
   nativeRequestBaseParams,

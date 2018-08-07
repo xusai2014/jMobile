@@ -1,61 +1,77 @@
 import React from 'react';
 import { nativeRequestBaseParams } from "../interface/jsNative";
+import { connect } from 'react-redux';
 
 export const InitDecorator = () => (Coms) => {
-  return class extends React.Component {
+  return connect((state)=>{
+    return {isLogged:state.GlobalReducer.isLogged}
+  },(dispatch)=>{
+    return{
+      setLogin:(v)=>dispatch({type:'setLogin',data:v})
+    }
+  })(class extends React.Component {
     constructor(props) {
       super(props);
-      this.state ={
-        reqParams:{}
+      this.state = {
+        APPVERSION:'',
+        OSVERSION:'',
+        PLATFORM:'',
+        TOKEN_ID:'',
+        CHANNEL_NO:""
       }
+      this.resetParams();
     }
 
     /**
      * 重置native返回的请求参数
      */
     resetParams() {
-      return nativeRequestBaseParams().then((reqParams) => {
-        debugger;
-        this.setState({ reqParams })
+      nativeRequestBaseParams().then((reqParams) => {
+        this.props.setLogin(!!reqParams['token']);
+        this.setState({
+          APPVERSION: reqParams['APP_VERSIONS'],
+          OSVERSION: reqParams['PHONE_VERSIONS'],
+          PLATFORM: reqParams['PHONE_PLATFORM'],
+          TOKEN_ID: reqParams['token'],
+          CHANNEL_NO: reqParams['channelNo'],
+        })
       })
     }
-
-
 
     /**
      * 获取请求基础参数
      * @returns {{APPVERSION: *, OSVERSION: *, PLATFORM: *, TOKEN_ID: *, CHANNEL_NO: *}}
      */
     getBaseParams = () => nativeRequestBaseParams().then((reqParams) => {
-        this.setState({ reqParams })
-        return {
-          APPVERSION: reqParams['APP_VERSIONS'],
-          OSVERSION: reqParams['PHONE_VERSIONS'],
-          PLATFORM: reqParams['PHONE_PLATFORM'],
-          TOKEN_ID: reqParams['TOKEN_ID'],
-          CHANNEL_NO: reqParams['CHANNEL_NO'],
-        }
-      })
+      this.props.setLogin(!!reqParams['token']);
+      const data = {
+        APPVERSION: reqParams['APP_VERSIONS'],
+        OSVERSION: reqParams['PHONE_VERSIONS'],
+        PLATFORM: reqParams['PHONE_PLATFORM'],
+        TOKEN_ID: reqParams['token'],
+        CHANNEL_NO: reqParams['channelNo'],
+      }
+      this.setState({...data})
+      return data;
+    })
 
-
-
-    /**
-     * 是否登录
-     * @returns {boolean}
-     */
-    isLogged = () => !!this.state.reqParams.TOKEN_ID;
 
     render() {
-      const { reqParams } = this.state;
+      const { APPVERSION, OSVERSION, PLATFORM, TOKEN_ID, CHANNEL_NO } = this.state;
       return (
         <Coms
           {...this.props}
-          reqParams={reqParams}
-          isLogged={this.isLogged}
+          reqParams={{
+            APPVERSION,
+            OSVERSION,
+            PLATFORM,
+            TOKEN_ID,
+            CHANNEL_NO
+          }}
           getBaseParams={this.getBaseParams}
           resetParams={() => this.resetParams()}
         />
       )
     }
-  }
+  })
 }

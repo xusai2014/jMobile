@@ -14,7 +14,7 @@ export default {
     "PHONE_NETWORK": "WIFI",
     "inMno": "700000001191026",
     "QUERY_ID": "",
-    "status": "success"
+    "status": "success",
   },
   nativeLogin: {
     "APP_VERSIONS": "3.0.0",

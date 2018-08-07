@@ -5,11 +5,17 @@ const initialState = {
     requestStaus: false,
     errMsg: '',
     formTemp: {},
-    uuid: ''
+    uuid: '',
+    isLogged:false,
 };
 //全局状态信息，数据信息存储
 export default function (state = initialState, actions) {
     switch (actions.type) {
+      case 'setLogin':
+        return {
+          ...state,
+          isLogged:actions.data,
+        };
         case 'REQUEST':
             return {
                 ...state,

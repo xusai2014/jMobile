@@ -1,56 +1,61 @@
 import React from 'react';
 import Header from "../../compoents/Header";
 import Card from "./components/Card";
-import {Menu ,Icon } from "antd-mobile";
+import {Menu, Icon} from "antd-mobile";
 
 const method = [
   {
     value: '0',
     label: '手写账单',
-    action:"/manual/add"
+    action: "/manual/add"
   }, {
     value: '1',
     label: '查看账单',
-    action:"/bill/detail"
+    action: "/bill/detail"
   },
 ];
 
 
-export default class CardsList extends React.Component{
-  constructor(props){
+export default class CardsList extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {
-      activeCard:-1,// -1不选择，其它值选择
+      activeCard: -1,// -1不选择，其它值选择
     };
   }
 
-  render(){
-    const { activeCard } = this.state;
+  render() {
+    const {activeCard} = this.state;
     return <div>
-      <Header title="卡包" hide={false} right={(<Icon type="plus" onClick={()=>{this.props.history.push('/cards/edit')}}/>)}/>
+      <Header title="卡包" hide={false}
+              right={(<Icon type="plus" onClick={() => {
+                this.props.history.push('/cards/edit')
+              }}/>)}
+      />
       <div style={{
         background: "#F0F7FF",
-        lineHeight:'0.68rem',
-        display:'flex',
-        justifyContent:'center',
-      }}>
+        lineHeight: '0.68rem',
+        display: 'flex',
+        justifyContent: 'center',
+      }}
+      >
         <div>
-          <img src="/static/img/信用卡@2x.png" style={{width:"0.3rem"}}/>
-          <span style={{margin:'0.08rem',fontSize:'0.24rem',color:'#4C7BFE',letterSpacing:'0'}}>
+          <img src="/static/img/信用卡@2x.png" style={{width: "0.3rem"}}/>
+          <span style={{margin: '0.08rem', fontSize: '0.24rem', color: '#4C7BFE', letterSpacing: '0'}}>
           办信用卡
         </span>
-          <img src="/static/img/Path 3@2x.png" style={{width:"0.1rem"}}/>
+          <img src="/static/img/Path 3@2x.png" style={{width: "0.1rem"}}/>
         </div>
       </div>
       <div>
-        {[1,2].map(( v,k)=>{
-          return <Card id={k} key={k} popupCard={(v)=>this.setState({activeCard:parseInt(v)})}></Card>
+        {[1, 2].map((v, k) => {
+          return <Card id={k} key={k} popupCard={(v) => this.setState({activeCard: parseInt(v)})}></Card>
         })}
       </div>
 
       {
-        activeCard > -1?[
-          <style>{`
+        activeCard > -1 ? [
+          <style key={'a'}>{`
         .single-foo-menu {
           position: absolute;
           z-index: 90 !important;
@@ -84,18 +89,21 @@ export default class CardsList extends React.Component{
           text-align:center;
         }
       `}</style>, <Menu
+            key={'c'}
             className="single-foo-menu"
             data={method}
             level={1}
             height={document.documentElement.clientHeight / 6}
-            onChange={(data)=>{
+            onChange={(data) => {
               debugger;
               this.props.history.push(`${method[data[0]].action}/${activeCard}`)
             }}
             multiSelect={false}
           />,
-          <div className="menu-mask" onClick={()=>{this.setState({activeCard:-1,})}}  />
-        ]:null
+          <div key={'d'} className="menu-mask" onClick={() => {
+            this.setState({activeCard: -1,})
+          }}/>
+        ] : null
       }
 
     </div>

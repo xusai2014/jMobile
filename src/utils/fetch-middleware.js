@@ -9,12 +9,12 @@ import { apiUrl,isMock } from '../config/api'
 *   @description 事件生成器
 *
 */
-export const ActionCreator = (type, url, method, data, key,cancel = false) => {
+export const ActionCreator = (type, url, method, data, key ,cancel = false) => {
     return () => {
         return {
             types: [...type],
             payload: key,
-            promise: () => fetchPromise(url, method = 'GET', data, cancel)
+            promise: ()=>fetchPromise(url, method = 'GET', data, cancel,true)
 
         }
     }
@@ -51,7 +51,7 @@ export class PromiseList {
  *   @description 网络请求方法
  *
  */
-export const fetchPromise = (url, method = 'GET', data, cancel = false) => {
+export const fetchPromise = (url, method = 'GET', data, cancel = false, isRedux =false) => {
   if(isMock){
     return fetchMockData(data);
   }
@@ -68,7 +68,9 @@ export const fetchPromise = (url, method = 'GET', data, cancel = false) => {
   const isnv = 1;//是否sha256
   const encflag = 1;//是否AES
 
-  Storage.dispatch({type: "REQUEST", data: true});
+  if(!isRedux){
+    Storage.dispatch({type: "REQUEST", data: true});
+  }
 
   let queryData = '';
   const dataBody = packageReqData(data, isnv, encflag)
@@ -181,7 +183,7 @@ export function parseJSON(response) {
  *   @description 请求头部设置
  */
 export const headers = {
-  "Content-Type": "application/json",
+  "Content-Type": "application/json;charset=UTF-8",
   'Access-Control-Allow-Origin': '*',
   "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"

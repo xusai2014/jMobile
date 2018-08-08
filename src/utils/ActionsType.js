@@ -8,3 +8,6 @@ export const FORM_SET='FORM_SET';
 
 export const SET_UUID='SET_UUID';
 
+export const GET_BANK_LIST = ['REQUEST', 'CH801','FAILURE'];
+export const GET_BANK_LOGIN_LIST = ['REQUEST', 'CH802','FAILURE'];
+

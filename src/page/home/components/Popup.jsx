@@ -78,9 +78,9 @@ export default class Popup extends React.Component{
     const { visible, setVisible, title = '选择还款方式', data ,style = {} } = this.props;
     return <div style={{
       position:'absolute',
-      top: '0rem',
+      bottom: '0rem',
       width:'7.5rem',
-      height:document.documentElement.clientHeight - (0.81*parseFloat(document.documentElement.style.fontSize)),
+      height:document.documentElement.clientHeight,
       background: 'rgba(0, 0, 0, 0.5)',
       zIndex: '10',
       ...style,

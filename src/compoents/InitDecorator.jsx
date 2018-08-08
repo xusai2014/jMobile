@@ -33,7 +33,13 @@ export const InitDecorator = () => (Coms) => {
      */
     getBaseParams = () => nativeRequestBaseParams().then((reqParams) => {
       this.props.syncData(reqParams);
-      return data;
+      return {
+        APPVERSION: reqParams['APP_VERSIONS'],
+        OSVERSION: reqParams['PHONE_VERSIONS'],
+        PLATFORM: reqParams['PHONE_PLATFORM'],
+        TOKEN_ID: reqParams['token'],
+        CHANNEL_NO: reqParams['channelNo'],
+      };
     })
 
 

@@ -3,7 +3,7 @@ import Header from "../../compoents/Header";
 import {Modal} from 'antd-mobile';
 import ModalCom from "../../compoents/ModalCom";
 import {Tabs} from "antd-mobile"
-import {checkToken, getLoginList, loginCyber, verifyCode} from "../../actions/reqAction";
+import {checkToken, getLoginList, loginCyber, verifyCode, pollingCyber} from "../../actions/reqAction";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {connect} from "react-redux";
 const prompt = Modal.prompt;
@@ -84,6 +84,14 @@ export default class CyberBank extends React.Component {
     }, 3000)
   }
 
+  waitFunc(time){
+    return new Promise((resolve,reject)=>{
+      setTimeout(()=>{
+        resolve()
+      },time)
+    })
+  }
+
   async loopLogin(taskId){
     let status = {};
     do {
@@ -101,19 +109,17 @@ export default class CyberBank extends React.Component {
     switch (phase_status) {
       case 'WAIT_CODE':
         const { input ,description } = data
-        this.promptClick({
+        return this.promptClick({
           input,
           description,
           taskId,
           callback:this.verifyCode
         })
-        debugger;
-        return;
+
       case "DOING":
         return;
       case "DONE_SUCC":
-        this.loopCheckAlways({taskId})
-        return;
+        return this.loopCheckAlways({taskId});
       case "DONE_FAIL":
         return;
       case "DONE_TIMEOUT":

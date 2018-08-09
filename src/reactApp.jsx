@@ -30,7 +30,7 @@ window.sa = sa;
 if (module.hot) {
   module.hot.accept();
 }
-initJSBridge();
+initJSBridge(true);
 
 sa.init({
   server_url: process.env.mode != 'production' ? 'https://sc.suixingpay.com/sa?project=MPOS_TEST' : 'https://sc.suixingpay.com/sa?project=MPOS_PROD',

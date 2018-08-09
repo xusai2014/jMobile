@@ -18,6 +18,7 @@ import BankCardList from '../page/manual/AddBill.jsx';
 import EmailManager from '../page/email/EmailManager.jsx';
 import EmailAdd from '../page/email/EmailAdd.jsx';
 import BillDetail from '../page/bill/BillDetail.jsx';
+import CyberBank from '../page/cyber/CyberBank.jsx';
 
 export default ()=>(<Switch><Route exact={false} path={'/home/index'} component={HomeIndex} />
 <Route exact={false} path={'/cards/cardslist'} component={CardsList} />
@@ -30,4 +31,5 @@ export default ()=>(<Switch><Route exact={false} path={'/home/index'} component=
 <Route exact={false} path={'/email/manager'} component={EmailManager} />
 <Route exact={false} path={'/email/add'} component={EmailAdd} />
 <Route exact={false} path={'/bill/detail/:bankId'} component={BillDetail} />
+<Route exact={false} path={'/cyber/login/:bankId'} component={CyberBank} />
 </Switch>)

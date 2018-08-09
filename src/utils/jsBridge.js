@@ -1,4 +1,5 @@
-export const initJSBridge = () => {
+import mockData from  '../interface/mockData';
+export const initJSBridge = (mock = false) => {
   if (window.JSBridge) return window.JSBridge;
   let callbackId = 0;
   let callbacks = {};
@@ -12,6 +13,37 @@ export const initJSBridge = () => {
   } else if (window.mpos_bridge) {
     nativeBridge = window.mpos_bridge;
     // android 4.2以下及其他
+  } else if(mock){
+    if(mock){
+      //提供APP输出能力
+      nativeBridge = {
+        postMessage:(obj)=>{
+
+          const { functionName, data, callbackId } = obj;
+          if(!functionName){
+            const {responseId,data} = obj;
+            setTimeout(()=>{
+              JSBridge.receiveMessage({
+                data,
+                callbackId,
+              })
+            },1000);
+          } else {
+            setTimeout(()=>{
+              //调用native注入方法
+              const response = mockData[functionName] //模拟native注册的程序
+              JSBridge.receiveMessage({callbackId, data:{params:data,...response},})
+            },1000)
+          }
+        },
+      }
+
+      //通过WEB方法采集信息、加工，原生交互务阶段执行或者webview初始化阶段调用。
+      document.onload =()=>{
+        //执行web为native注册的方法
+      }
+    }
+
   } else {
     nativeBridge = {
       postMessage: function () {

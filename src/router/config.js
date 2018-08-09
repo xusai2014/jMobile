@@ -50,5 +50,11 @@ export default [{
     path:"/bill/detail/:bankId",
     name:"BillDetail"
 
+  },{
+    component:"../page/cyber/CyberBank.jsx",
+    path:"/cyber/login/:bankId",
+    name:"CyberBank"
+
   }
+
 ]

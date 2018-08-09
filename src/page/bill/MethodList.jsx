@@ -1,8 +1,25 @@
 import React from 'react';
 import Header from '../../compoents/Header'
+import {connect} from "react-redux";
+import {InitDecorator} from "../../compoents/InitDecorator";
+import {getBankList} from '../../actions/reqAction';
 
+@connect((state)=>{
+ return {
+   bankList:state.BillReducer.bankList,
+ }
+})
+@InitDecorator()
 export default class MethodList extends React.Component{
+  async componentWillMount(){
+    const reqParams = await this.props.getBaseParams();
+    this.props.dispatch(getBankList()).then((result)=>{
+    },(err)=>{
+    });
+  }
+
   render(){
+    const  { bankList = [] } = this.props;
     return [<Header title="添加账单" />,<div style={{
       background: '#FFFFFF',
       border: '1PX solid #DDDDDD'
@@ -53,22 +70,10 @@ export default class MethodList extends React.Component{
       margin:'0.19rem 0 0.19rem 0.28rem'
     }}>网银导入，实时掌控账单情况</div>,<div>
       {
-        [{
-          img:"/static/img/jiaotong@2x.png",
-          name:"交通银行",
-          url:"",
-        },{
-          img:"/static/img/招商银行@2x.png",
-          name:"招商银行",
-          url:"",
-        },{
-          img:"/static/img/jianshe@2x.png",
-          name:"建设银行",
-          url:"",
-        }].map((v,k)=>{
-          const {img, name, url} = v
-          return [<div style={{background: '#FFFFFF',padding:"0.18rem 0 0.18rem 0.28rem",display:'flex', alignItems: 'center'}}>
-            <span style={{width:'0.6rem',height:'0.6rem',borderRadius:'0.3rem'}}><img src={img} style={{width:'0.6rem'}}/></span>
+        bankList.map((v,k)=>{
+          const {abbr, name, logo_uri} = v
+          return [<div onClick={()=>this.props.history.push(`/cyber/login/${abbr}`,{name})} style={{background: '#FFFFFF',padding:"0.18rem 0 0.18rem 0.28rem",display:'flex', alignItems: 'center'}}>
+            <span style={{width:'0.6rem',height:'0.6rem',borderRadius:'0.3rem'}}><img src={logo_uri} style={{width:'0.6rem'}}/></span>
             <span style={{
               fontSize: '0.32rem',
               color: '#333333',

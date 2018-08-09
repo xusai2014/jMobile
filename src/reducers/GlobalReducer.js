@@ -5,12 +5,33 @@ const initialState = {
     requestStaus: false,
     errMsg: '',
     formTemp: {},
-    uuid: ''
+    uuid: '',
+    isLogged:false,
+    reqParams:{
+      APPVERSION:'',
+      OSVERSION:'',
+      PLATFORM:'',
+      TOKEN_ID:'',
+      CHANNEL_NO:""
+    }
 };
 //全局状态信息，数据信息存储
 export default function (state = initialState, actions) {
     switch (actions.type) {
-        case 'REQUEST':
+      case 'syncData':
+        return {
+          ...state,
+          isLogged:!!actions.data['token'],
+          reqParams:{
+            ...state.reqParams,
+            APPVERSION: actions.data['APP_VERSIONS'],
+            OSVERSION: actions.data['PHONE_VERSIONS'],
+            PLATFORM: actions.data['PHONE_PLATFORM'],
+            TOKEN_ID: actions.data['token'],
+            CHANNEL_NO: actions.data['channelNo'],
+          }
+        };
+      case 'REQUEST':
             return {
                 ...state,
                 requestStaus: true,

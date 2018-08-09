@@ -2,20 +2,17 @@ import React from 'react';
 import {Modal, Icon} from 'antd-mobile'
 import BillCard from "./BillCard";
 import Popup from "./components/Popup";
-import { connect } from 'react-redux';
+import {InitDecorator} from "../../compoents/InitDecorator";
+import {loginHelper} from "../../interface/jsNative";
+import FreeItem from "./components/FreeItem";
 
-@connect((state)=>{
-  return {
-    loginToken:state.GlobalReducer.loginToken
-  }
-},()=>{})
+@InitDecorator()
 export default class Index extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       interestShow: false, //免息期弹窗展示,
-      visible:false,//弹出框
+      visible: false,//弹出框
     }
   }
 
@@ -30,166 +27,219 @@ export default class Index extends React.Component {
     }
   }
 
+  async componentWillMount() {
+    const params = await this.props.getBaseParams();
+    fetchPromise('/api', 'POST', {
+      'TRDE_CODE': "M113",
+      ...params
+    }, true).then((data) => {
+    }, () => {
+
+    })
+
+  }
+
+  loginEnter(type, params) {
+    loginHelper(() => {
+      switch (type) {
+        case 1:
+          //展示免息期
+          this.setState({interestShow: true});
+          return
+        case 2:
+          //添加账单
+          this.props.history.push('/bill/method');
+          return
+        case 3:
+          //进入卡包
+          const {action: url} = params
+          this.props.history.push(url);
+          return
+        case 4:
+          //进入办卡中心
+          const {action} = params;
+          window.location.href = action;
+          return;
+        case 5:
+          //还款
+          return
+      }
+    })
+  }
+
   render() {
-    const {interestShow, visible} = this.state;
-    return [<div style={{background: '#FFFFFF', paddingBottom: "0.7rem"}}>
+    const {interestShow, visible,} = this.state;
+    const {isLogged} = this.props;
+    return [<div key={'a'} style={{background: '#FFFFFF', paddingBottom: "0.7rem"}}>
       <div style={styles.top}>
-        <div style={styles.topText}>7日内待还<span style={styles.topSubText}>{'0'}笔</span></div>
-        <img onClick={()=>{this.setState({interestShow:true})}} style={styles.img} src="/static/img/canlendar@2x.png"/>
-        <span onClick={()=>{this.props.history.push('/bill/method')}} style={styles.icon}><Icon type="plus" size="sm" color="#000"/></span>
+        <div style={styles.topText}>7日内待还
+          <span style={styles.topSubText}>
+          {isLogged ? '10' : '0'}笔
+          </span>
+        </div>
+        <img onClick={() => {
+          this.loginEnter(1)
+        }} style={styles.img} src="/static/img/canlendar@2x.png"/>
+        <span onClick={() => {
+          this.loginEnter(2)
+        }} style={styles.icon}><Icon type="plus" size="sm" color="#000"/></span>
       </div>
       <div style={{marginTop: "0.19rem"}}>
-          <span style={{
-            fontSize: '0.52rem',
-            color: '#333333',
-            letterSpacing: '0',
-            textAlign: 'center',
-            marginLeft: '0.26rem',
-            fontWeight: 'bold'
-          }}>{18889.00}<span style={{
-            fontSize: '0.26rem',
-            color: '#333333',
-            letterSpacing: '0',
-            textAlign: 'center',
-            marginLeft: "0.045rem"
-          }}>元</span></span></div>
+        <span style={styles.moneyStyle}>{isLogged ? 18889.00 : '--'}
+          <span style={styles.unitStyle}>元</span>
+        </span>
+      </div>
       <div style={styles.cover}>
         {
-          [{img: "/static/img/kabao@2x.png", text: "卡包",action:"/cards/cardslist"}, {img: "/static/img/banka@2x.png", text: "办卡",action:"action"}].map((v, k) => {
-            const {img, text, action} = v
-            return <div>
-              <span style={{margin: "0.32rem 0 0 0", display: 'inline-block'}} onClick={()=>{this.props.history.push(action)}}>
+          this.icons.map((v, k) => {
+            const {img, text, action, type} = v;
+            if (!isLogged && type == '1') {
+              return null
+            }
+            return <div key={k}>
+              <span style={styles.iconItem} onClick={() => {
+                if (type == '0') {
+                  this.loginEnter(3, {action})
+                } else if (type == '1') {
+                  this.loginEnter(4, {action})
+                }
+              }}>
                 <img src={img} style={{width: '0.65rem'}}/>
               </span>
-              <div style={{fontSize: '0.3rem', color: '#FFFFFF', letterSpacing: '0', textAlign: 'center'}}>
+              <div style={styles.textStyle}>
                 {text}
               </div>
             </div>
           })
         }
       </div>
-      <div style={{display:"flex",justifyContent:"space-around",marginTop:"0.49rem"}}>{
-        [{
-          imgSrc:'/static/img/img_5049@2x.png',
-          action:"",
-          title:"等你抽奖"
-        },{
-          imgSrc:'/static/img/img_5050@2x.png',
-          action:"",
-          title:"我的红包"
-        },{
-          imgSrc:'/static/img/img_5051@2x.png',
-          action:"",
-          title:"免息35天"
-        },{
-          imgSrc:'/static/img/img_5052@2x.png',
-          action:"",
-          title:"挖金币"
-        }].map((v,k)=>{
-          const { imgSrc, action, title} = v;
-          return <div style={{display:"inline-block"}}><img style={{width:'0.74rem'}} src={imgSrc} /><div>{title}</div></div>
-        })
-      }</div>
-    </div>,<div>
-      {
-        [1].map(()=>{
-          return <BillCard repay={()=>this.setState({visible:true})} />
-        })
-      }
+      <div style={styles.activity}>
+        {isLogged ? this.activity.map((v, k) => {
+          const {imgSrc, action, title} = v;
+          return <div key={k} style={{display: "inline-block"}}>
+            <img style={{width: '0.74rem'}} src={imgSrc}/>
+            <div>{title}</div>
+          </div>
+        }) : null
+        }
+      </div>
     </div>,
-      <div style={{
-        display: 'flex',justifyContent: 'center',alignItems: 'center',
-        background: '#FFFFFF', height:'0.84rem',widht:'7.5rem',margin:"0.2rem 0 0 0"}}
-        onClick={()=>this.props.history.push('/bill/method')}
+      <div key={'b'}>
+        {
+          isLogged ?
+            [1, 2].map((v, k) => <BillCard key={k} repay={() => this.setState({visible: true})}/>)
+            :
+            [1].map((v, k) => <BillCard key={k} repay={() => this.loginEnter(5)}/>)
+        }
+      </div>,
+      <div key={'c'} style={styles.addBtn}
+           onClick={() => this.loginEnter(1)}
       >
-        <Icon  type="plus" color="#999999" size="xs"/>
-        <span style={{
-          fontSize: '0.28rem',
-          color: '#999999',
-          letterSpacing: '0',
-          textAlign: 'center',
-          marginLeft:'0.08rem'
-        }}>添加信用卡账单</span>
+        <Icon type="plus" color="#999999" size="xs"/>
+        <span style={styles.addText}>添加信用卡账单</span>
 
       </div>,
       <Modal
+        key={'d'}
         visible={interestShow}
         transparent
         maskClosable={false}
         onClose={() => this.setState({interestShow: false})}
-        title={<div style={{textAlign:'left'}}>最长免息期</div>}
+        title={<div style={{textAlign: 'left'}}>最长免息期</div>}
         wrapProps={{onTouchStart: this.onWrapTouchStart}}
         closable={true}
       >
         <div style={{height: '5.03rem', overflow: 'scroll'}}>
           {
             [{
-              imgSrc:"/static/img/交通银行@2x.png",
-              title:"交通银行",
-              des:"总额度1万元|剩余额度0.00",
-              cardNum:"9178"
-            },{
-              imgSrc:"/static/img/jianshe@2x.png",
-              title:"建设银行",
-              des:"总额度1万元|剩余额度0.00",
-              cardNum:"9178"
-            },{
-              imgSrc:"/static/img/交通银行@2x.png",
-              title:"交通银行",
-              des:"总额度1万元|剩余额度0.00",
-              cardNum:"9178"
-            },{
-              imgSrc:"/static/img/jianshe@2x.png",
-              title:"建设银行",
-              des:"总额度1万元|剩余额度0.00",
-              cardNum:"9178"
-            },{
-              imgSrc:"/static/img/交通银行@2x.png",
-              title:"交通银行",
-              des:"总额度1万元|剩余额度0.00",
-              cardNum:"9178"
-            },{
-              imgSrc:"/static/img/jianshe@2x.png",
-              title:"建设银行",
-              des:"总额度1万元|剩余额度0.00",
-              cardNum:"9178"
-            },].map((v,k)=>{
-              const { imgSrc, title, des, cardNum} = v;
-              return (<div style={{textAlign:'left',margin:"0.23rem 0"}}>
-                <span style={{width:'0.6rem',borderRadius:'0.3rem'}}>
-                  <img style={{width:'0.6rem'}} src={imgSrc}/>
-                </span>
-                <div style={{display:"inline-block",margin:"0 0 0 0.14rem"}}>
-                  <div style={{
-                    fontSize:'0.24rem',
-                    color: '#333333',
-                    textAlign:'left',
-                    letterSpacing: '0',
-                  }}>{title}({cardNum})</div>
-                <div style={{
-                  fontSize: '0.2rem',
-                  color: '#999999',
-                  letterSpacing: '0',
-                }}>{des}</div>
-                </div>
-              </div>)
+              imgSrc: "/static/img/交通银行@2x.png",
+              title: "交通银行",
+              des: "总额度1万元|剩余额度0.00",
+              cardNum: "9178"
+            }, {
+              imgSrc: "/static/img/jianshe@2x.png",
+              title: "建设银行",
+              des: "总额度1万元|剩余额度0.00",
+              cardNum: "9178"
+            }, {
+              imgSrc: "/static/img/交通银行@2x.png",
+              title: "交通银行",
+              des: "总额度1万元|剩余额度0.00",
+              cardNum: "9178"
+            }, {
+              imgSrc: "/static/img/jianshe@2x.png",
+              title: "建设银行",
+              des: "总额度1万元|剩余额度0.00",
+              cardNum: "9178"
+            }, {
+              imgSrc: "/static/img/交通银行@2x.png",
+              title: "交通银行",
+              des: "总额度1万元|剩余额度0.00",
+              cardNum: "9178"
+            }, {
+              imgSrc: "/static/img/jianshe@2x.png",
+              title: "建设银行",
+              des: "总额度1万元|剩余额度0.00",
+              cardNum: "9178"
+            },].map((v, k) => {
+              const {imgSrc, title, des, cardNum} = v;
+              return <FreeItem key={k} {...v} />
             })
           }
         </div>
       </Modal>
-
-    ,visible?<Popup title="选择还款方式"  data={
-          [
-            {imgSrc:"/static/img/还@2x.png",name:'还到',action:"",type:'0',des:'（授信额度30000元）',color:'#4d7cfe'},
-            {imgSrc:"/static/img/qita@2x.png",name:'其它',action:"",type:'1',des:'',color:'',node:[
-              {imgSrc:"/static/img/微信@2x.png",name:'微信',action:"",type:'0',des:'',color:''},
-              {imgSrc:"/static/img/支付宝@2x.png",name:'支付宝',action:"",type:'0',des:'',color:''}
-            ]},
-          ]
-        } visible={visible} setVisible={(v)=>{this.setState({visible:v})}}
-      />:null
+      , visible ?
+        <Popup
+          key="e"
+          title="选择还款方式"
+          data={this.methodList}
+          visible={visible}
+          setVisible={(v) => {
+            this.setState({visible: v})
+          }}
+        />
+        : null
     ]
   }
+
+  methodList = [
+    {imgSrc: "/static/img/还@2x.png", name: '还到', action: "", type: '0', des: '（授信额度30000元）', color: '#4d7cfe'},
+    {
+      imgSrc: "/static/img/qita@2x.png", name: '其它', action: "", type: '1', des: '', color: '', node: [
+      {imgSrc: "/static/img/微信@2x.png", name: '微信', action: "", type: '0', des: '', color: ''},
+      {imgSrc: "/static/img/支付宝@2x.png", name: '支付宝', action: "", type: '0', des: '', color: ''}
+    ]
+    },
+  ]
+  icons = [{
+    img: "/static/img/kabao@2x.png",
+    text: "卡包",
+    action: "/cards/cardslist",
+    type: "0"
+  }, {
+    img: "/static/img/banka@2x.png",
+    text: "办卡",
+    action: "https://www.baidu.com",
+    type: '1'
+  }]
+
+  activity = [{
+    imgSrc: '/static/img/img_5049@2x.png',
+    action: "",
+    title: "等你抽奖"
+  }, {
+    imgSrc: '/static/img/img_5050@2x.png',
+    action: "",
+    title: "我的红包"
+  }, {
+    imgSrc: '/static/img/img_5051@2x.png',
+    action: "",
+    title: "免息35天"
+  }, {
+    imgSrc: '/static/img/img_5052@2x.png',
+    action: "",
+    title: "挖金币"
+  }]
 
 }
 
@@ -227,6 +277,34 @@ const styles = {
     margin: '0.26rem auto 0 auto',
     display: 'flex',
     justifyContent: 'space-around'
+  },
+  moneyStyle: {
+    fontSize: '0.52rem',
+    color: '#333333',
+    letterSpacing: '0',
+    textAlign: 'center',
+    marginLeft: '0.26rem',
+    fontWeight: 'bold'
+  }, unitStyle: {
+    fontSize: '0.26rem',
+    color: '#333333',
+    letterSpacing: '0',
+    textAlign: 'center',
+    marginLeft: "0.045rem"
+  },
+  iconItem: {margin: "0.32rem 0 0 0", display: 'inline-block'},
+  textStyle: {fontSize: '0.3rem', color: '#FFFFFF', letterSpacing: '0', textAlign: 'center'},
+  activity: {display: "flex", justifyContent: "space-around", marginTop: "0.49rem"},
+  addBtn: {
+    display: 'flex', justifyContent: 'center', alignItems: 'center',
+    background: '#FFFFFF', height: '0.84rem', widht: '7.5rem', margin: "0.2rem 0 0 0"
+  },
+  addText: {
+    fontSize: '0.28rem',
+    color: '#999999',
+    letterSpacing: '0',
+    textAlign: 'center',
+    marginLeft: '0.08rem'
   }
 }
 

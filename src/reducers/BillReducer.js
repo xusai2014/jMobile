@@ -45,13 +45,11 @@ export default function (state = initialState, actions) {
                 name: username_desc, value: "",
                 placeHolder: `请输入${username_desc}`,
                 reg: username_regex,
-                login_type,
               }, {
                 name: password_desc, value: '',
                 icon: true,
                 placeHolder: `请输入${password_desc}`,
                 reg: password_regex,
-                login_type,
               },]
 
               return {

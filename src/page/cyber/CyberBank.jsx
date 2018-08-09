@@ -178,7 +178,7 @@ export default class CyberBank extends React.Component {
 
 
   render() {
-    const {modal, description, eyesOpen, selected, inputData} = this.state;
+    const {modal, description, inputData} = this.state;
     const {bankId} = this.props.match.params;
     const {state = {}} = this.props.history.location
     const {name: bankName = ''} = state;
@@ -192,12 +192,19 @@ export default class CyberBank extends React.Component {
       >
         {
           loginData.map((v, k) => {
-            const {items} = v;
+            const {items,login_type} = v;
+            const {
+              username = '',
+              password = '',
+              eyesOpen = false,
+              protocolSelected = false,
+              passSelected = false,
+            } = inputData[login_type] ? inputData[login_type] : {}
             return <div key={3}>
               {
                 items.map((v, k) => {
-                  const {name, disabled, placeHolder, icon, login_type} = v;
-                  const {username = '', password = '', eyesOpen = false} = inputData[login_type] ? inputData[login_type] : {}
+                  const {name, disabled, placeHolder, icon} = v;
+
                   return <div key={k} style={styles.item}>
                     <div style={styles.name}>{name}</div>
                     <input value={k == 0 ? username : password}
@@ -206,25 +213,11 @@ export default class CyberBank extends React.Component {
                                this.setDeepState('inputData',login_type,{
                                  username: e.currentTarget.value
                                })
-                               {/*this.setState({*/}
-                                 {/*inputData: {*/}
-                                   {/*...inputData,*/}
-                                   {/*[login_type]: {*/}
-                                     {/*...inputData[login_type],*/}
-                                     {/*username: e.currentTarget.value*/}
-                                   {/*}*/}
-                                 {/*}*/}
-                               {/*})*/}
+
                              } else {
-                               this.setState({
-                                 inputData: {
-                                   ...inputData,
-                                   [login_type]: {
-                                     ...inputData[login_type],
-                                     password: e.currentTarget.value
-                                   }
-                                 }
-                               })
+                               this.setDeepState('inputData',login_type,{
+                                 password: e.currentTarget.value
+                               });
                              }
 
                            }}
@@ -246,7 +239,6 @@ export default class CyberBank extends React.Component {
                     }} src={eyesOpen ? "/static/img/眼睛@2x.png" : "/static/img/闭眼icon@2x.png"}
                                  style={ styles.img}/> : null}
                   </div>
-
                 })
               }
               <div style={{
@@ -254,9 +246,9 @@ export default class CyberBank extends React.Component {
                 display: 'flex',
                 alignItems: 'center'
               }} onClick={() => {
-                this.setState({selected: !selected})
+                this.setDeepState('inputData',login_type,{protocolSelected:!protocolSelected})
               }}><img style={{width: '0.23rem'}}
-                      src={selected ? "/static/img/selected@2x.png" : "/static/img/Oval@2x.png"}/>
+                      src={protocolSelected ? "/static/img/selected@2x.png" : "/static/img/Oval@2x.png"}/>
                 <span style={{
                   fontSize: '0.24rem',
                   color: '#999999',
@@ -264,7 +256,11 @@ export default class CyberBank extends React.Component {
                   margin: "0 0 0 0.18rem"
                 }}>同意用户授权协议</span>
                 <img style={{width: '0.23rem'}}
-                     src={selected ? "/static/img/square@2x.png" : "/static/img/squareno@2x.png"}/>
+                     onClick={()=>{
+                       this.setDeepState('inputData',login_type,{
+                       passSelected:!passSelected
+                     })}}
+                     src={passSelected ? "/static/img/square@2x.png" : "/static/img/squareno@2x.png"}/>
                 <span>记住密码</span>
               </div>
               <div style={styles.finishBtn} onClick={() => this.loginCyber(v)}>开始登录</div>

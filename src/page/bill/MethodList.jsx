@@ -71,7 +71,6 @@ export default class MethodList extends React.Component{
     }}>网银导入，实时掌控账单情况</div>,<div>
       {
         bankList.map((v,k)=>{
-          debugger;
           const {abbr, name, logo_uri} = v
           return [<div onClick={()=>this.props.history.push(`/cyber/login/${abbr}`,{name})} style={{background: '#FFFFFF',padding:"0.18rem 0 0.18rem 0.28rem",display:'flex', alignItems: 'center'}}>
             <span style={{width:'0.6rem',height:'0.6rem',borderRadius:'0.3rem'}}><img src={logo_uri} style={{width:'0.6rem'}}/></span>

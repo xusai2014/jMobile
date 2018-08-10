@@ -2,18 +2,16 @@ import React from 'react';
 import Header from "../../compoents/Header";
 import {Modal} from 'antd-mobile';
 import ModalCom from "../../compoents/ModalCom";
-import {Tabs} from "antd-mobile"
+import {Tabs,Toast} from "antd-mobile"
 import {checkToken, getLoginList, loginCyber, verifyCode, pollingCyber} from "../../actions/reqAction";
 import {InitDecorator} from "../../compoents/InitDecorator";
-import {connect} from "react-redux";
 const prompt = Modal.prompt;
 
 const cardType = 'CREDITCARD'
 
-@connect((state) => ({
+@InitDecorator((state) => ({
   loginList: state.BillReducer.loginList
 }))
-@InitDecorator()
 export default class CyberBank extends React.Component {
 
   constructor(props) {
@@ -23,7 +21,8 @@ export default class CyberBank extends React.Component {
       description: '',
       eyesOpen: true,
       selected: true,
-      inputData: {}
+      inputData: {},
+
     }
   }
 
@@ -32,24 +31,152 @@ export default class CyberBank extends React.Component {
     const {bankId: abbr} = this.props.match.params;
     this.props.dispatch(getLoginList({
       abbr,
-      cardType: cardType
+      cardType: cardType,
+      ...reqParams
     })).then((result) => {
     }, (err) => {
     });
   }
 
+  /**
+  *   @author jerryxu
+  *   @params 用户信息
+  *   @description 第一步流程 输入用户信息，创建任务
+  */
+  async loginCyber(v) {
+     const {login_type: loginType} = v;
+     const {inputData} = this.state;
+     const {username: account, password} = inputData[loginType];
+     const {bankId: abbr} = this.props.match.params;
+     const reqParams = await this.props.getBaseParams();
+     const data = await this.props.dispatch(loginCyber({
+       password,
+       abbr,
+       account,
+       loginType,
+       loginTarget: cardType,
+       ...reqParams
+     }))
+     const { data:taskId ='' } = data;
+    if(!taskId){
+      // 任务创建失败
+      Toast.info('任务创建失败', 1);
+    } else {
+      setTimeout(() => {
+        this.loopLogin(taskId,loginType);
+      }, 3000)
+    }
+  }
 
+  waitFunc(time){
+    return new Promise((resolve,reject)=>{
+      setTimeout(()=>{
+        resolve()
+      },time)
+    })
+  }
+
+  /**
+   *   @author jerryxu
+   *   @params 用户信息
+   *   @description 第二步流程 检查任务状态并获取任务状态
+   */
+  async loopLogin(taskId,loginType){
+    debugger;
+    let status = {};
+    do {
+      debugger;
+      const reqParams = await this.props.getBaseParams();
+      status = await this.props.dispatch(checkToken({
+        taskId,
+        ...reqParams
+      }))
+      debugger;
+    } while (this.judgeStatus(status))
+    this.handleStatus(status, taskId,loginType);
+  }
+
+  /**
+   *   @author jerryxu
+   *   @params 用户信息
+   *   @description 第三步流程判断任务状态，分别处理
+   */
+  handleStatus(status, taskId, loginType) {
+    const { data = {} } = status;
+    const { phase, phase_status ='', input ,description } = data;
+    switch (phase_status) {
+      case 'WAIT_CODE'://输入验证码
+
+        return this.promptClick({
+          input,
+          description,
+          taskId,
+          callback:this.verifycation.bind(this)
+        })
+      case "DOING":
+        return;
+      case "DONE_SUCC"://成功登录
+        this.props.history.push('/load/cyber',{
+            taskId,loginType
+        })
+        return;
+      case "DONE_FAIL":
+        Toast.info(description);
+        this.setDeepState('inputData',{login_type:loginType},{
+          disabled:true
+        });
+        return;
+      case "DONE_TIMEOUT":
+        return;
+      default:
+        return;
+    }
+  }
+
+
+
+
+  /**
+  *   @author jerryxu
+  *   @methodName
+  *   @params 任务编号 短信验证码
+  *   @description 第三步流程的分支流程，输入验证码检查登录状态
+  */
+  async verifycation({taskId,value:code}){
+    let codeStatus = ''
+    debugger;
+    const reqParams = await this.props.getBaseParams();
+    codeStatus = await this.props.dispatch(verifyCode({
+      taskId,
+      code,
+      ...reqParams
+    }));
+    debugger;
+    const { data } = codeStatus;
+    //if(value == '200'){
+
+    //} else {
+    this.loopLogin(taskId);
+    //}
+  }
+
+  /**
+  *   @author jerryxu
+  *   @methodName i
+  *   @params 魔蝎验证码模版 任务编号 信息描述 回调函数
+  *   @description Popup提示，输入信息，异步处理
+  */
   promptClick({ input, taskId, description, callback}){
     prompt('输入验证码', description, [{
-        text: '取消',
-        onPress: value => new Promise((resolve) => {
-          Toast.info('登录失败', 1);
-          setTimeout(() => {
-            resolve();
-            console.log(`value:${value}`);
-          }, 1000);
-        }),
-      },
+      text: '取消',
+      onPress: value => new Promise((resolve) => {
+        Toast.info('登录失败', 1);
+        setTimeout(() => {
+          resolve();
+          console.log(`value:${value}`);
+        }, 1000);
+      }),
+    },
       {
         text: '确定',
         onPress: value => new Promise((resolve, reject) => {
@@ -64,95 +191,7 @@ export default class CyberBank extends React.Component {
     ], 'default', null, ['请输入验证码'])
 
   }
-  async loginCyber(v) {
-    const {login_type: loginType} = v;
-    const {inputData} = this.state;
-    const {username: account, password} = inputData[loginType];
-    const {bankId: abbr} = this.props.match.params;
-    const data = await this.props.dispatch(loginCyber({
-      password,
-      abbr,
-      account,
-      loginType,
-      loginTarget: cardType,
-    }))
-    const { data:taskId ='' } = data;
-    debugger
-    //const taskId = "93842bc0-9b03-11e8-b35b-00163e0cf9f8";
-    setTimeout(() => {
-      this.loopLogin(taskId);
-    }, 3000)
-  }
 
-  waitFunc(time){
-    return new Promise((resolve,reject)=>{
-      setTimeout(()=>{
-        resolve()
-      },time)
-    })
-  }
-
-  async loopLogin(taskId){
-    let status = {};
-    do {
-      status = await this.props.dispatch(checkToken({
-        taskId
-      }))
-      debugger;
-    } while (this.judgeStatus(status))
-    this.handleStatus(status, taskId);
-  }
-
-  handleStatus(status, taskId) {
-    const { data } = status;
-    const { phase, phase_status } = data;
-    switch (phase_status) {
-      case 'WAIT_CODE':
-        const { input ,description } = data
-        return this.promptClick({
-          input,
-          description,
-          taskId,
-          callback:this.verifyCode
-        })
-
-      case "DOING":
-        return;
-      case "DONE_SUCC":
-        return this.loopCheckAlways({taskId});
-      case "DONE_FAIL":
-        return;
-      case "DONE_TIMEOUT":
-        return;
-      default:
-        return;
-    }
-  }
-
-  async verifyCode(taskId,code){
-    let codeStatus = ''
-    codeStatus = await this.props.dispatch(verifyCode({
-      taskId,
-      code
-    }))
-    const { data } = codeStatus;
-    const { value } = data;
-    //if(value == '200'){
-
-    //} else {
-    this.loopLogin(taskId);
-    //}
-  }
-
-  async loopCheckAlways({ taskId }) {
-    let pollingStatus = ''
-    do {
-      pollingStatus = await this.props.dispatch(pollingCyber({
-        taskId
-      }));
-      debugger;
-    } while (pollingStatus)
-  }
 
   judgeStatus(status) {
     const { data } = status;
@@ -174,7 +213,7 @@ export default class CyberBank extends React.Component {
         ...s,
         [key]:{
           ...s[key],
-          obj
+          ...obj
         }
       }
 
@@ -198,7 +237,7 @@ export default class CyberBank extends React.Component {
       >
         {
           loginData.map((v, k) => {
-            const {items,login_type} = v;
+            const {items,login_type,disabled = false} = v;
             const {
               username = '',
               password = '',
@@ -269,7 +308,11 @@ export default class CyberBank extends React.Component {
                      src={passSelected ? "/static/img/square@2x.png" : "/static/img/squareno@2x.png"}/>
                 <span>记住密码</span>
               </div>
-              <div style={styles.finishBtn} onClick={() => this.loginCyber(v)}>开始登录</div>
+              <button disabled={disabled}  style={styles.finishBtn} onClick={() =>{
+                this.setDeepState('inputData',login_type,{
+                  disabled:true
+                });
+                this.loginCyber(v)}}>开始登录</button>
               <ModalCom visible={modal} showAction={(v) => {
                 this.setState({modal: v})
               }} description={description}/>
@@ -331,5 +374,6 @@ const styles = {
     fontSize: "0.34rem",
     color: "#FFFFFF",
     letterSpacing: '-0.011rem',
+    width: '7.18rem',
   }
 }

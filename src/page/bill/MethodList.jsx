@@ -20,7 +20,7 @@ export default class MethodList extends React.Component{
 
   render(){
     const  { bankList = [] } = this.props;
-    return [<Header title="添加账单" />,<div style={{
+    return [<Header key={'a'} title="添加账单" />,<div key={'b'} style={{
       background: '#FFFFFF',
       border: '1PX solid #DDDDDD'
     }}>
@@ -36,7 +36,7 @@ export default class MethodList extends React.Component{
         action:"/bill/cardlist"
       }].map((v,k)=>{
         const { img, name, des,action} = v;
-        return [<span>{k==1?<div style={{
+        return [<span key={'a1'}>{k==1?<div style={{
           border: '1PX solid #F1F1F1',
           width:'6.94rem',
           margin:'auto'
@@ -63,7 +63,7 @@ export default class MethodList extends React.Component{
 
         </div>]
       })}
-    </div>,<div style={{
+    </div>,<div key={'c'} style={{
       fontSize: '0.24rem',
       color: '#999999',
       letterSpacing: '0',
@@ -72,7 +72,7 @@ export default class MethodList extends React.Component{
       {
         bankList.map((v,k)=>{
           const {abbr, name, logo_uri} = v
-          return [<div onClick={()=>this.props.history.push(`/cyber/login/${abbr}`,{name})} style={{background: '#FFFFFF',padding:"0.18rem 0 0.18rem 0.28rem",display:'flex', alignItems: 'center'}}>
+          return [<div key={k} onClick={()=>this.props.history.push(`/cyber/login/${abbr}`,{name})} style={{background: '#FFFFFF',padding:"0.18rem 0 0.18rem 0.28rem",display:'flex', alignItems: 'center'}}>
             <span style={{width:'0.6rem',height:'0.6rem',borderRadius:'0.3rem'}}><img src={logo_uri} style={{width:'0.6rem'}}/></span>
             <span style={{
               fontSize: '0.32rem',
@@ -81,7 +81,7 @@ export default class MethodList extends React.Component{
               fontWeight:"500",
               margin:"0 0 0 0.31rem"
             }}>{name}</span>
-          </div>,<div style={{
+          </div>,<div key={'f'} style={{
             border: '1PX solid #F1F1F1',
             width:'6.94rem',
             margin:'auto'

@@ -4,6 +4,8 @@ import {
   GET_BANK_LOGIN_LIST, LOGIN_CYBER,
   POLLING_CYBER,
   VERYFY_CODE_STARUS,
+  BILL_LIST,
+
 } from '../utils/ActionsType';
 
 const initialState = {
@@ -13,6 +15,8 @@ const initialState = {
   cyberTokenStatus:{},
   cyberStatus:{},
   verifyCodeStatus:{},
+  CHECK_CYBER_BILL:{},
+  billList:{}
 };
 //全局状态信息，数据信息存储
 export default function (state = initialState, actions) {
@@ -86,6 +90,11 @@ export default function (state = initialState, actions) {
       return {
         ...state,
         verifyCodeStatus:actions.data,
+      }
+    case BILL_LIST[1]:
+      return {
+        ...state,
+        billList:actions.data,
       }
     default:
       return state

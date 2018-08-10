@@ -22,6 +22,11 @@ const results = {
       <div style={styles.actionsImport}>网银导入</div>
     </div>),
     title:"无数据导入"
+  },cybersuccess:{
+    describe:(data)=>`点击完成，查看最新账单`,
+    footer:()=>(<div style={styles.finishBtn} onClick={()=>this.props.history.push('/home/index')}>完成</div>),
+    title:"导入成功",
+    img:"/static/img/done@2x.png",
   }
 
 }
@@ -29,7 +34,11 @@ export default class Result extends React.Component{
   render() {
     const  { type, data='{}'}   = this.props.match.params;
     const { describe,footer, title, img } = results[type];
-    return [<Header key="1" title={'导入结果'} right={<div>完成</div>}></Header>,<div key={2} style={{backgroundColor:"#FFFFFF",paddingBottom:"0.5rem"}}>
+    return [<Header key="1" title={'导入结果'} right={
+            <div onClick={()=>{
+              this.props.history.push('/home/index')
+            }}>完成</div>}
+    ></Header>,<div key={2} style={{backgroundColor:"#FFFFFF",paddingBottom:"0.5rem"}}>
       <img src={img} style={{width:'1rem',margin:"0.3rem 3.25rem"}}/>
       <div style={styles.describe}>{title}</div>
       <div style={styles.resason}>{describe(JSON.parse(data))}</div>

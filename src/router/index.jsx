@@ -10,6 +10,7 @@ import Loading from '../compoents/Loading';
 export default ()=>(<Switch><Route exact={false} path={'/home/index'} component={ Loadable({loader: () => import('../page/home/Index.jsx'),loading: Loading,})} />
 <Route exact={false} path={'/cards/cardslist'} component={ Loadable({loader: () => import('../page/cardsPackage/CardsList.jsx'),loading: Loading,})} />
 <Route exact={false} path={'/result/:type'} component={ Loadable({loader: () => import('../page/result/Result.jsx'),loading: Loading,})} />
+<Route exact={false} path={'/load/:type'} component={ Loadable({loader: () => import('../page/result/Loading.jsx'),loading: Loading,})} />
 <Route exact={false} path={'/cards/edit'} component={ Loadable({loader: () => import('../page/cardsPackage/EditCard.jsx'),loading: Loading,})} />
 <Route exact={false} path={'/bill/method'} component={ Loadable({loader: () => import('../page/bill/MethodList.jsx'),loading: Loading,})} />
 <Route exact={false} path={'/bill/cardlist'} component={ Loadable({loader: () => import('../page/bill/BankCardList.jsx'),loading: Loading,})} />

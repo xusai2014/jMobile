@@ -21,6 +21,10 @@ export const VERYFY_CODE_STARUS = ['REQUEST', 'CH804','FAILURE'];
 //检查网银任务状态
 export const CHECK_CYBER_STATUS = ['REQUEST', 'CH805','FAILURE'];
 
-//检查登录状态
+//账单列表
+export const BILL_LIST = ['REQUEST', 'CH807','FAILURE'];
+
+//检查邮箱导入状态
 export const POLLING_CYBER = ['REQUEST', 'CH810','FAILURE'];
+
 

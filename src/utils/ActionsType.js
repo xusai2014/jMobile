@@ -27,4 +27,13 @@ export const BILL_LIST = ['REQUEST', 'CH807','FAILURE'];
 //检查邮箱导入状态
 export const POLLING_CYBER = ['REQUEST', 'CH810','FAILURE'];
 
+//账单详情
+
+export const BILL_DETAIL = ['REQUEST', 'CH808','FAILURE'];
+
+//还款记录
+export const PAY_DETAIL = ['REQUEST', 'CH819','FAILURE'];
+
+
+
 

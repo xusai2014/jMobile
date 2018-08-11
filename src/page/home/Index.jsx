@@ -5,8 +5,13 @@ import Popup from "./components/Popup";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {loginHelper} from "../../interface/jsNative";
 import FreeItem from "./components/FreeItem";
+import {getBillList} from "../../actions/reqAction";
 
-@InitDecorator()
+@InitDecorator((state)=>{
+  return {
+    billList:state.BillReducer.billList
+  }
+})
 export default class Index extends React.Component {
   constructor(props) {
     super(props);
@@ -28,15 +33,23 @@ export default class Index extends React.Component {
   }
 
   async componentWillMount() {
-    const params = await this.props.getBaseParams();
-    fetchPromise('/api', 'POST', {
-      'TRDE_CODE': "M113",
-      ...params
-    }, true).then((data) => {
-    }, () => {
+    //const params = await this.props.getBaseParams();
 
-    })
+    //fetchPromise('/api', 'POST', {
+      //'TRDE_CODE': "M113",
+      //...params
+    //}, true).then((data) => {
+    //}, () => {
 
+    //})
+    this.getBillList();
+  }
+
+  async getBillList(){
+    const reqParams = await this.props.getBaseParams();
+    this.props.dispatch(getBillList({
+      ...reqParams
+    }))
   }
 
   loginEnter(type, params) {
@@ -69,12 +82,13 @@ export default class Index extends React.Component {
 
   render() {
     const {interestShow, visible,} = this.state;
-    const {isLogged} = this.props;
+    const {isLogged,billList ={}} = this.props;
+    const { waitPaymentAmount ='', waitPaymentNumber ='',baseResponseBillDtoList =[] } = billList
     return [<div key={'a'} style={{background: '#FFFFFF', paddingBottom: "0.7rem"}}>
       <div style={styles.top}>
         <div style={styles.topText}>7日内待还
           <span style={styles.topSubText}>
-          {isLogged ? '10' : '0'}笔
+          {isLogged ? waitPaymentNumber : '0'}笔
           </span>
         </div>
         <img onClick={() => {
@@ -85,7 +99,7 @@ export default class Index extends React.Component {
         }} style={styles.icon}><Icon type="plus" size="sm" color="#000"/></span>
       </div>
       <div style={{marginTop: "0.19rem"}}>
-        <span style={styles.moneyStyle}>{isLogged ? 18889.00 : '--'}
+        <span style={styles.moneyStyle}>{isLogged ? waitPaymentAmount : '--'}
           <span style={styles.unitStyle}>元</span>
         </span>
       </div>
@@ -127,7 +141,30 @@ export default class Index extends React.Component {
       <div key={'b'}>
         {
           isLogged ?
-            [1, 2].map((v, k) => <BillCard key={k} repay={() => this.setState({visible: true})}/>)
+            baseResponseBillDtoList.map((v, k) => {
+            const {
+              card_num,
+              bank_name,
+              bill_type,//账单状态
+              current_bill_amt,//本期账单总金额
+              payment_due_date,//还款日
+              bill_date,
+              task_id,
+              bill_id,// 账单编号,
+              logo_uri,
+            } = v;
+
+             return <BillCard card_num={card_num}
+                              bank_name = {bank_name}
+                              bill_type = {bill_type}
+                              current_bill_amt = {current_bill_amt}
+                              payment_due_date = {payment_due_date}
+                              task_id = {task_id}
+                              bill_id = {bill_id}
+                              bill_date ={bill_date}
+                              logo_uri={logo_uri}
+                              key={k} repay={() => this.setState({visible: true})}/>
+            })
             :
             [1].map((v, k) => <BillCard key={k} repay={() => this.loginEnter(5)}/>)
         }

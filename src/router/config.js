@@ -51,7 +51,7 @@ export default [{
 
   },{
     component:"../page/bill/BillDetail.jsx",
-    path:"/bill/detail/:bankId",
+    path:"/bill/detail/:billId",
     name:"BillDetail"
 
   },{

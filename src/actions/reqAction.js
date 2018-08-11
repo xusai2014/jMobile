@@ -6,7 +6,7 @@ import {
   GET_BANK_LOGIN_LIST,
   LOGIN_CYBER,
   VERYFY_CODE_STARUS,
-  CHECK_CYBER_BILL, BILL_LIST
+  BILL_LIST, BILL_DETAIL, PAY_DETAIL
 } from '../utils/ActionsType'
 
 export const getBankList = (data) => ActionCreator(
@@ -59,6 +59,23 @@ export const getBillList = (data) => ActionCreator(
     'POST',
     {...data, 'TRDE_CODE': BILL_LIST[1]}
   )();
+
+  export const getBillDetail = (data) => ActionCreator(
+    BILL_DETAIL,
+    `/api`,
+    'POST',
+    {...data, 'TRDE_CODE': BILL_DETAIL[1]}
+  )();
+
+
+export const getPayDetail= (data) => ActionCreator(
+  PAY_DETAIL,
+  `/api`,
+  'POST',
+  {...data, 'TRDE_CODE': PAY_DETAIL[1]}
+)();
+
+
 
 
 

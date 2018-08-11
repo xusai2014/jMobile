@@ -2,7 +2,16 @@ import React from 'react';
 import Header from '../../compoents/Header';
 import {Tabs} from "antd-mobile"
 import Popup from "../home/components/Popup";
+import {InitDecorator} from "../../compoents/InitDecorator";
+import {getBillDetail, getPayDetail} from "../../actions/reqAction";
 
+@InitDecorator((state)=>{
+  return {
+    billDetail:state.BillReducer.billDetail,
+    payDetail:state.BillReducer.payDetail
+
+  }
+})
 export default class BillDetail extends React.Component {
 
   constructor(props) {
@@ -14,11 +23,134 @@ export default class BillDetail extends React.Component {
 
   }
 
+  async componentDidMount(){
+    const reqParams = await this.props.getBaseParams();
+    const { billId } = this.props.match.params;
+    this.props.dispatch(getBillDetail({
+      billId,
+      ...reqParams
+    }))
+  }
+
+  async getPayDetailInfo(bankId = '0308',cardNumber = '4443'){
+    const reqParams = await this.props.getBaseParams();
+    const { billDetail } =this.props;
+    const {} = billDetail;
+    this.props.dispatch(getPayDetail({
+      bankId,
+      cardNumber,
+      ...reqParams
+    }))
+
+  }
+
+  generate(payment_due_date,bill_date,credit_limit,balance){
+    const payDate = moment(payment_due_date).format('MM.DD')
+    const billDate = moment(bill_date).format('MM.DD');
+    const  freeInterest = parseInt(moment(payment_due_date).diff(moment(),'days')) + 31;
+    let amount= 0;
+    let amountUnit = ''
+    if(credit_limit%10000){
+      amount =credit_limit/10000
+      amountUnit= '万';
+    } else if(credit_limit%1000){
+      amount =credit_limit/1000;
+      amountUnit= '千';
+    }
+
+    let ba= 0;
+    let baUnit = ''
+    if(credit_limit%10000){
+      ba =credit_limit/10000
+      baUnit= '万';
+    } else if(credit_limit%1000){
+      ba =credit_limit/1000;
+      baUnit= '千';
+    }
+    return [{
+      title: "还款日", value: payDate,
+      unit: ""
+    }, {
+      title: "出账日", value: billDate, unit: ""
+    }, {
+      title: "免息期", value: freeInterest, unit: "天"
+    }, {
+      title: "总额度", value: amount, unit: amountUnit
+    }, {
+      title: "剩余额度", value: ba , unit: baUnit
+    }]
+  }
+
+
+
+  haneleDetail(list){
+    if(list.length == 0){
+      return {
+        from:'',
+        to:'',
+        datalist:[]
+      }
+    } else {
+      const { trans_date:from } = list[0]
+      const { trans_date:to }= list[list.length-1];
+      return {
+        from:moment(from).format('MM-DD'),
+        to:moment(to).format('MM-DD'),
+        datalist:_.values(list.map((v,k)=>{
+          const { description,trans_date,amount_money } = v;
+          return {
+            description,
+            trans_date:moment(trans_date).format('MM.DD'),amount_money
+          }
+        }))
+      }
+    }
+
+
+  }
+
+  judgeStatus(bill_type, payment_due_date, bill_date) {
+    if (bill_type == 'DONE') {
+      const duM = moment(payment_due_date);
+      return {
+        day: duM.diff(moment(), 'days'),
+        date: duM.format('MM-DD'),
+        des:'天后到期'
+      }
+    } else if (bill_type == 'UNDONE') {
+      const duM = moment(bill_date);
+      return {
+        day: duM.diff(moment(), 'days'),
+        date: duM.format('MM-DD'),
+        des:'天后到期'
+      }
+    } else {
+      return {
+        day: "",
+        date: '',
+        des:''
+      }
+    }
+
+  }
 
   render() {
-    const {title = '银行'} = this.props;
+    const {title = '银行',billDetail ={},payDetail= []} = this.props;
     const {expandOne, visible} = this.state;
+    const {
+      payment_due_date,
+      bill_date ,
+      credit_limit = '',//总额度
+      balance = '',//剩余额度
+      baseShoppingSheetsList:list= [],//账单明细
+      name_on_card = '',
+      bill_type = '',
+      min_payment = '',
+      card_number = '',
+    } = billDetail;
 
+    const { from , to, datalist } = this.haneleDetail(list);
+    const {day, date, des} = this.judgeStatus(bill_type, payment_due_date, bill_date)
     return [<Header title={title}
                     right={<img style={{width: "0.36rem",}} src="/static/img/删除@2x.png"/>}/>, <div>
       <div style={{
@@ -33,7 +165,7 @@ export default class BillDetail extends React.Component {
             letterSpacing: '0',
             padding: '0.27rem 0 0 0.31rem'
           }}
-        >韩胜臣 6226 **** **** 4128
+        >{name_on_card} {card_number}
         </div>
         <div style={{paddingBottom: "0.38rem"}}>
           <div style={{width: "5rem", padding: '0.43rem 0 0 0.31rem', display: 'inline-block'}}>
@@ -44,7 +176,7 @@ export default class BillDetail extends React.Component {
                 color: '#FFFFFF',
                 letterSpacing: '0',
               }}
-            >10天后出账
+            >{day}{des}
             </div>
             <div style={{
               fontSize: '0.62rem',
@@ -57,7 +189,7 @@ export default class BillDetail extends React.Component {
               fontSize: '0.24rem',
               color: '#FFFFFF',
               letterSpacing: '0',
-            }}>最低应还：- -
+            }}>最低应还：{min_payment}
             </div>
           </div>
           <div style={{
@@ -68,18 +200,7 @@ export default class BillDetail extends React.Component {
             textAlign: 'right',
             display: 'inline-block'
           }}>
-            {[{
-              title: "还款日", value: "08.26",
-              unit: ""
-            }, {
-              title: "出账日", value: "08.08", unit: ""
-            }, {
-              title: "免息期", value: "28", unit: "天"
-            }, {
-              title: "总额度", value: "4.50", unit: "万"
-            }, {
-              title: "剩余额度", value: "2.68", unit: "万"
-            }].map((v, k) => {
+            {this.generate(payment_due_date,bill_date,credit_limit, balance).map((v, k) => {
               const {title, value, unit} = v;
               return <div>
                 <span>{title}：</span><span>{value}</span><span>{unit}</span>
@@ -94,9 +215,16 @@ export default class BillDetail extends React.Component {
             {title: '还款记录', sub: '1'},
           ]}
           initialPage={0}
+          onTabClick={(v)=>{
+            const { sub} = v
+              if(sub == '1'){
+                this.getPayDetailInfo()
+              }
+            }
+          }
         >
           <div style={{background: '#FFFFFF',height:'auto'}}>
-            {[1, 2].map((v, k) => {
+            {[1].map((v, k) => {
               return <div>
                 <div style={{
                   display: 'flex',
@@ -127,12 +255,13 @@ export default class BillDetail extends React.Component {
                       fontSize: '0.24rem',
                       color: '#999999',
                       letterSpacing: '0'
-                    }}><span>07-09</span>至<span>08-08</span></div>
+                    }}><span>{from}</span>至<span>{to}</span></div>
                   </div>
                 </div>
                 {expandOne == v ? <div >
                   {
-                    [1, 2, 3, 4].map((v, k) => {
+                    datalist.map((v, k) => {
+                      const { description,trans_date,amount_money } = v;
                       return <div style={{
                         display:'flex',
                         alignItems:'center'
@@ -145,13 +274,13 @@ export default class BillDetail extends React.Component {
                           color: '#333333',
                           letterSpacing: '0',
                           width:"4.23rem"
-                        }}>微信支付-广州唯品会电子商务有限公司
+                        }}>{description}
                         </div>
                         <div style={{
                           fontSize: '0.24rem',
                           color: '#999999',
                           letterSpacing: '0',
-                        }}>06.25
+                        }}>{trans_date}
                         </div>
                       </div><div style={{
                         fontSize: '0.32rem',
@@ -161,21 +290,25 @@ export default class BillDetail extends React.Component {
                         width:"2.63rem",
                         textAlign:'right',
                         paddingRight:"0.4rem"
-                      }}>-695.35</div></div>
+                      }}>-{amount_money}</div></div>
 
                     })
                   }
                 </div> : null}</div>
             })}
           </div>
-          <div style={{background: '#FFFFFF'}}>{[1, 11, 11].map(() => {
+          <div style={{background: '#FFFFFF'}}>{payDetail.map((v,k) => {
+            const {createTime,repaymentAmount,repaymentTime,repaymentChannel} =v;
+            const {} = repaymentTime;
             return [<div style={{height: '1.06rem', padding: '0.18rem 0', display: 'flex', alignItems: 'center'}}>
               <div style={{margin: '0 0 0 0.64rem', display: 'inline-block', width: '4.86rem'}}>
                 <div style={{
                   fontSize: '0.26rem',
                   color: '#333333',
                   letterSpacing: '0',
-                }}>还到还款
+                }}>{
+                  repaymentChannel =='01'?'还到':""
+                }还款
                 </div>
                 <div style={{
                   color: '#999999',
@@ -192,7 +325,7 @@ export default class BillDetail extends React.Component {
                 textAlign: "right",
                 padding: "0 0.26rem 0 0"
               }}>
-                -695.35
+                +{repaymentAmount}
               </div>
             </div>, <div style={{width: "6.94rem", margin: 'auto', border: '1PX solid #F1F1F1'}}></div>]
           })}</div>

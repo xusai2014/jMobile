@@ -16,13 +16,14 @@ export default class Popup extends React.Component{
     switch(type) {
       case '0':
         return data.map((v,k)=>{
-          const {imgSrc, name, des, type,color, node} = v;
+          const {imgSrc, name, des, type,color, node,action} = v;
           return [<div style={{
             display: 'flex',
             alignItems: 'center',
 
           }}  onClick={()=>{
             if(type == '0'){
+              action();
 
             } else if(type == '1'){
               this.setState({type,selectData:node})
@@ -101,7 +102,8 @@ export default class Popup extends React.Component{
         }}><span>{title}</span> <span style={{
           float: 'right',
           marginRight: '0.3rem'
-          }} onClick={()=>{this.props.setVisible(false)}}
+          }} onClick={()=>{
+            this.props.setVisible(false)}}
         ><Icon type="cross" size="md" color="#000"/></span></div>
         <div style={{
           border: '1PX solid #F1F1F1',

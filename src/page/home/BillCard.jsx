@@ -135,7 +135,7 @@ export default class BillCard extends React.Component {
           width: '1.26rem',
           height: '0.53rem',
           lineHeight: '0.53rem'
-        }} onClick={() => this.props.repay()}>
+        }} onClick={(e) => this.props.repay(e)}>
           立即还款
         </div>
       </div>

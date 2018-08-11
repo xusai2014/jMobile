@@ -5,6 +5,7 @@ import {
   POLLING_CYBER,
   VERYFY_CODE_STARUS,
   BILL_LIST, BILL_DETAIL, PAY_DETAIL,
+  HUAN_DAO,
 
 } from '../utils/ActionsType';
 
@@ -17,7 +18,8 @@ const initialState = {
   verifyCodeStatus:{},
   CHECK_CYBER_BILL:{},
   billList:{},
-  payDetail:[]
+  payDetail:[],
+  huandaoData:{},
 
 };
 //全局状态信息，数据信息存储
@@ -107,6 +109,11 @@ export default function (state = initialState, actions) {
       return {
         ...state,
         payDetail:actions.data
+      }
+    case HUAN_DAO[1]:
+      return {
+        ...state,
+        haidaoData:actions.data,
       }
     default:
       return state

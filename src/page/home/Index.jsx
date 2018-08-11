@@ -5,11 +5,13 @@ import Popup from "./components/Popup";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {loginHelper} from "../../interface/jsNative";
 import FreeItem from "./components/FreeItem";
-import {getBillList} from "../../actions/reqAction";
+import {getBillList,getHUandao} from "../../actions/reqAction";
+
 
 @InitDecorator((state)=>{
   return {
-    billList:state.BillReducer.billList
+    billList:state.BillReducer.billList,
+    huandaoData:state.BillReducer.huandaoData
   }
 })
 export default class Index extends React.Component {
@@ -53,6 +55,7 @@ export default class Index extends React.Component {
   }
 
   loginEnter(type, params) {
+    this.setState({visible:true})
     loginHelper(() => {
       switch (type) {
         case 1:
@@ -75,9 +78,24 @@ export default class Index extends React.Component {
           return;
         case 5:
           //还款
+
           return
       }
     })
+  }
+
+  async callHuandao(){
+    debugger
+    const reqParams = await this.props.getBaseParams();
+    this.props.dispatch(getHUandao({
+      ...reqParams
+    })).then((result)=>{
+      const { data = {} } = result;
+      const {telEnc,token} = data;
+      location.href = `https://lns-front-test.vbillbank.com/transitionPageService?telNo=${telEnc}&token=${token}&appId=APP20170000000271&h5Channel=MPOS_XYKHK`
+    },()=>{})
+
+
   }
 
   render() {
@@ -166,7 +184,21 @@ export default class Index extends React.Component {
                               key={k} repay={() => this.setState({visible: true})}/>
             })
             :
-            [1].map((v, k) => <BillCard key={k} repay={() => this.loginEnter(5)}/>)
+            [{
+              card_num:"29999",
+              bank_name:"lee",
+              bill_type :'DONE',
+              current_bill_amt :"1000000",
+              payment_due_date :"2018-06-09",
+              task_id :"11111111111",
+              bill_id :"11111111",
+              bill_date :"2018-06-28",
+              logo_uri:'/static/img/招商银行@2x.png'
+            }].map((v, k) => <BillCard {...v} key={k} repay={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              this.loginEnter(5)
+            }}/>)
         }
       </div>,
       <div key={'c'} style={styles.addBtn}
@@ -229,7 +261,7 @@ export default class Index extends React.Component {
         <Popup
           key="e"
           title="选择还款方式"
-          data={this.methodList}
+          data={this.methodList(this)}
           visible={visible}
           setVisible={(v) => {
             this.setState({visible: v})
@@ -239,15 +271,17 @@ export default class Index extends React.Component {
     ]
   }
 
-  methodList = [
-    {imgSrc: "/static/img/还@2x.png", name: '还到', action: "", type: '0', des: '（授信额度30000元）', color: '#4d7cfe'},
-    {
-      imgSrc: "/static/img/qita@2x.png", name: '其它', action: "", type: '1', des: '', color: '', node: [
-      {imgSrc: "/static/img/微信@2x.png", name: '微信', action: "", type: '0', des: '', color: ''},
-      {imgSrc: "/static/img/支付宝@2x.png", name: '支付宝', action: "", type: '0', des: '', color: ''}
+  methodList(HUAN_DAO) {
+    return [
+      {imgSrc: "/static/img/还@2x.png", name: '还到', action:this.callHuandao.bind(this), type: '0', des: '（授信额度30000元）', color: '#4d7cfe'},
+      {
+        imgSrc: "/static/img/qita@2x.png", name: '其它', action:()=>{}, type: '1', des: '', color: '', node: [
+        {imgSrc: "/static/img/微信@2x.png", name: '微信', action: ()=>{}, type: '0', des: '', color: ''},
+        {imgSrc: "/static/img/支付宝@2x.png", name: '支付宝', action: ()=>{}, type: '0', des: '', color: ''}
+      ]
+      },
     ]
-    },
-  ]
+  }
   icons = [{
     img: "/static/img/kabao@2x.png",
     text: "卡包",

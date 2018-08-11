@@ -6,7 +6,7 @@ import {
   GET_BANK_LOGIN_LIST,
   LOGIN_CYBER,
   VERYFY_CODE_STARUS,
-  BILL_LIST, BILL_DETAIL, PAY_DETAIL
+  BILL_LIST, BILL_DETAIL, PAY_DETAIL, HUAN_DAO
 } from '../utils/ActionsType'
 
 export const getBankList = (data) => ActionCreator(
@@ -75,7 +75,12 @@ export const getPayDetail= (data) => ActionCreator(
   {...data, 'TRDE_CODE': PAY_DETAIL[1]}
 )();
 
-
+export const getHUandao= (data) => ActionCreator(
+  HUAN_DAO,
+  `/api`,
+  'POST',
+  {...data, 'TRDE_CODE': HUAN_DAO[1]}
+)();
 
 
 

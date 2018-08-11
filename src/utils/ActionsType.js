@@ -34,6 +34,9 @@ export const BILL_DETAIL = ['REQUEST', 'CH808','FAILURE'];
 //还款记录
 export const PAY_DETAIL = ['REQUEST', 'CH819','FAILURE'];
 
+//还到
+export const HUAN_DAO = ['REQUEST', 'CH818','FAILURE'];
+
 
 
 

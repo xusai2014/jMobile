@@ -51,6 +51,7 @@ export const InitDecorator = (mergeStateToprops  = ()=>{ return {} }) => (Coms) 
           getBaseParams={this.getBaseParams}
           resetParams={() => this.resetParams()}
         />
+
       )
     }
   })

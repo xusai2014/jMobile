@@ -3,6 +3,7 @@ import Header from "../../compoents/Header";
 import {Icon, SwipeAction, List} from "antd-mobile";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {directImport, getEmailList, removeEmail} from "../../actions/reqAction";
+import {Toast} from "antd-mobile";
 
 @InitDecorator((state)=>{
   return {
@@ -12,12 +13,14 @@ import {directImport, getEmailList, removeEmail} from "../../actions/reqAction";
 export default class EmailManager extends React.Component{
 
   async importEmailOne(taskId){
+    Toast.loading('请稍后')
     const reqParams = await this.props.getBaseParams();
     this.props.dispatch(directImport({
       ...reqParams,
       taskId,
     })).then((result)=>{
       const { data:taskId = '' } =result;
+      Toast.hide();
       this.props.history.push('/load/email', {taskId, loginType: ""})
       debugger;
     },(err)=>{

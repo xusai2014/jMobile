@@ -194,7 +194,10 @@ export default class Index extends React.Component {
                               bill_date ={bill_date}
                               logo_uri={logo_uri}
                               importBillType={importBillType}
-                              key={k} repay={() => this.setState({visible: true})}/>
+                              key={k} repay={(e) => {
+                                e.stopPropagation()
+                              this.setState({visible: true})}}
+             />
             })
             :
             [{

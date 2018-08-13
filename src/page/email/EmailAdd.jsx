@@ -34,7 +34,6 @@ export default class EmailAdd extends React.Component {
       password,
       ...reqParams
     }))
-    debugger;
     const {data: taskId = ''} = login;
     if (!taskId) {
       // 任务创建失败
@@ -63,8 +62,8 @@ export default class EmailAdd extends React.Component {
         ...reqParams,
         taskId
       }))
-      debugger;
     } while (this.judgeStatus(login))
+
 
     this.handleStatus(login, taskId, {loginType: ''})
 

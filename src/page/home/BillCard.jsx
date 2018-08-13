@@ -2,7 +2,7 @@ import React from 'react';
 import {withRouter} from "react-router-dom";
 import {checkToken, syncBill, verifyCode} from "../../actions/reqAction";
 import {InitDecorator} from "../../compoents/InitDecorator";
-import {Modal, Toast}  from "antd-mobile";
+import {Modal, Progress, Toast}  from "antd-mobile";
 const prompt = Modal.prompt;
 
 @withRouter
@@ -12,8 +12,18 @@ const prompt = Modal.prompt;
   }
 })
 export default class BillCard extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      syncBegin:false,
+      percent:0
+    }
+  }
 
   async callSyncBill(task_id, importBillType) {
+    await this.setState({
+      syncBegin:true
+    })
     const reqParams = await this.props.getBaseParams();
     this.props.dispatch(syncBill({
       taskId: task_id,
@@ -66,11 +76,19 @@ export default class BillCard extends React.Component {
           callback: this.verifycation.bind(this)
         })
       case "DOING":
+        if(this.state.percent < 80){
+          this.setState({
+            percent:this.state.percent + 20
+          })
+        }
+
         return;
       case "DONE_SUCC"://成功登录
-        this.props.history.push('/load/cyber', {
-          taskId, loginType
-        })
+        debugger;
+        this.setState({
+          percent:100,
+          syncBegin:false
+        });
         return;
       case "DONE_FAIL":
         Toast.info(description);
@@ -79,8 +97,16 @@ export default class BillCard extends React.Component {
         });
         return;
       case "DONE_TIMEOUT":
+        Toast.info('同步失败');
+        this.setState({
+          syncBegin:false
+        });
         return;
       default:
+        Toast.info('同步失败');
+        this.setState({
+          syncBegin:false
+        });
         return;
     }
   }
@@ -208,12 +234,24 @@ export default class BillCard extends React.Component {
       logo_uri,
       repay,
       importBillType,
+      real,
     } = this.props;
+    const {
+      percent,
+      syncBegin
+
+    }= this.state;
 
     const {day, date, des, actionName, action} = this.judgeStatus(bill_type, payment_due_date, bill_date, repay)
     return <div onClick={() => this.props.history.push(`/bill/detail/${bill_id}`)}
                 style={{background: '#FFFFFF', marginTop: '0.2rem', padding: "0.3rem 0", position: 'relative'}}>
       <div style={{display: 'flex', alignItems: 'center'}}>
+        <div style={{
+          position: 'absolute',
+          top: '0'
+        }}>
+          <img style={{width:'0.445rem'}} src="/static/img/new@2x.png" />
+        </div>
         <div style={{width:'3.24rem',display:"inline-block"}}>
           <div style={{
             margin: '0 0.14rem 0 0.28rem',
@@ -241,14 +279,26 @@ export default class BillCard extends React.Component {
           >{card_num}</span>
         </div>
         <div style={{width:'4.26rem',display:'inline-block'}}>
-          <img src="/static/img/更新@2x.png" style={{
-            height: '0.36rem',
-            float: 'right',
-            paddingRight: '0.71rem',
-          }} onClick={(e) => {
-            e.stopPropagation();
-            this.callSyncBill(task_id, importBillType)
-          }}/>
+          {
+            syncBegin?
+              <div style={{
+                fontSize: '0.22rem',
+                color: '#333333',
+                letterSpacing: '-1px',
+                marginLeft: '2.35rem'
+              }}>
+                {percent}%更新中...
+                <Progress style={{width:"1.32rem"}} percent={percent} position="normal" />
+              </div>:
+              <img src="/static/img/更新@2x.png" style={{
+                height: '0.36rem',
+                float: 'right',
+                paddingRight: '0.71rem',
+              }} onClick={(e) => {
+                e.stopPropagation();
+                this.callSyncBill(task_id, importBillType)
+              }}/>
+          }
         </div>
       </div>
       <div style={{
@@ -318,7 +368,7 @@ export default class BillCard extends React.Component {
           {actionName}
         </div>
       </div>
-      <img src="/static/img/示例@2x.png" style={{width: "0.71rem", position: 'absolute', right: '0', top: '0'}}/>
+      {real?null:<img src="/static/img/示例@2x.png" style={{width: "0.71rem", position: 'absolute', right: '0', top: '0'}}/>}
     </div>
   }
 }

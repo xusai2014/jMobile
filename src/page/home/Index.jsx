@@ -5,7 +5,7 @@ import Popup from "./components/Popup";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {loginHelper} from "../../interface/jsNative";
 import FreeItem from "./components/FreeItem";
-import {getBillList, getHUandao, getFreeInterest} from "../../actions/reqAction";
+import {getBillList, getHUandao, getFreeInterest, syncBill} from "../../actions/reqAction";
 
 
 @InitDecorator((state)=>{
@@ -102,12 +102,13 @@ export default class Index extends React.Component {
       ...reqParams
     })).then((result)=>{
       const { data = {} } = result;
-      const {telEnc,token} = data;
-      location.href = `https://lns-front-test.vbillbank.com/transitionPageService?telNo=${telEnc}&token=${token}&appId=APP20170000000271&h5Channel=MPOS_XYKHK`
+      const {telEnc,token,finId} = data;
+      location.href = `https://lns-front-test.vbillbank.com/transitionPageService?telNo=${telEnc}&token=${token}&appId=${finId}&h5Channel=MPOS_XYKHK`
     },()=>{})
 
 
   }
+
 
   render() {
     const {interestShow, visible,} = this.state;
@@ -194,6 +195,7 @@ export default class Index extends React.Component {
                               bill_date ={bill_date}
                               logo_uri={logo_uri}
                               importBillType={importBillType}
+                              real={true}
                               key={k} repay={(e) => {
                                 e.stopPropagation()
                               this.setState({visible: true})}}
@@ -211,7 +213,9 @@ export default class Index extends React.Component {
               bill_date :"2018-08-28",
               logo_uri:'/static/img/招商银行@2x.png',
               importBillType:""
-            }].map((v, k) => <BillCard {...v} key={k} repay={(e) => {
+            }].map((v, k) => <BillCard
+              real={false}
+              {...v} key={k} repay={(e) => {
               e.stopPropagation();
               e.preventDefault();
               this.loginEnter(5)

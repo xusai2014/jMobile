@@ -9,7 +9,7 @@ import {
   SYNC_BILL,
   FREE_INTEREST,
   EMAIL_LOGIN,
-  EMAIL_TASK_STATUS,
+  EMAIL_TASK_STATUS, DELETE_BILL, DIRECT_EMAIL_BILL, EMAIL_LIST, DELETE_EMAIL,
 } from '../utils/ActionsType';
 
 const initialState = {
@@ -26,7 +26,9 @@ const initialState = {
   syncBillStatus:{},
   freeIntrestData:[],
   emailLogin:{},
-  emailTaskStatus:{}
+  emailTaskStatus:{},
+  deleteBillStatus:{},
+  emailList:[]
 
 };
 //全局状态信息，数据信息存储
@@ -141,6 +143,20 @@ export default function (state = initialState, actions) {
       return {
         ...state,
         emailTaskStatus:actions.data,
+      }
+    case DELETE_BILL[1]:
+      return state;
+    case DIRECT_EMAIL_BILL[1]:
+      return state
+
+    case EMAIL_LIST[1]:
+      return {
+        ...state,
+        emailList:actions.data,
+      }
+    case DELETE_EMAIL[1]:
+      return {
+        ...state,
       }
     default:
       return state

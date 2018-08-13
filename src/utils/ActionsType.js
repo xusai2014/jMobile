@@ -50,5 +50,21 @@ export const EMAIL_LOGIN = ['REQUEST', 'CH813','FAILURE'];
 export const EMAIL_TASK_STATUS = ['REQUEST', 'CH815','FAILURE'];
 
 
+//删除账单
+
+export const DELETE_BILL = ['REQUEST','CH821','FAILURE'];
+
+//直接导入邮箱，创建任务和直接登录
+
+export const DIRECT_EMAIL_BILL = ['REQUEST','CH817','FAILURE'];
+
+//绑定邮箱列表的接口
+export const EMAIL_LIST = ['REQUEST','CH816','FAILURE'];
+
+//删除邮箱
+export const DELETE_EMAIL = ['REQUEST','CH822','FAILURE'];
+
+
+
 
 

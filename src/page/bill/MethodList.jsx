@@ -2,7 +2,7 @@ import React from 'react';
 import Header from '../../compoents/Header'
 import {connect} from "react-redux";
 import {InitDecorator} from "../../compoents/InitDecorator";
-import {getBankList} from '../../actions/reqAction';
+import {getBankList, getEmailList} from '../../actions/reqAction';
 
 @connect((state)=>{
  return {
@@ -18,6 +18,22 @@ export default class MethodList extends React.Component{
     });
   }
 
+  async enterEmail(){
+    const reqParams = await this.props.getBaseParams();
+    this.props.dispatch(getEmailList({
+      ...reqParams,
+    })).then((result)=>{
+      const { data = [] }= result;
+      if(data.length >0){
+        this.props.history.push('/email/manager');
+      } else {
+        this.props.history.push('/email/add');
+      }
+    },(err)=>{
+
+    });
+  }
+
   render(){
     const  { bankList = [] } = this.props;
     return [<Header key={'a'} title="添加账单" />,<div key={'b'} style={{
@@ -28,19 +44,28 @@ export default class MethodList extends React.Component{
         img:"/static/img/email@2x.png",
         name:"邮箱导入",
         des:"绑定账单后去邮箱，一键获取信用卡账单",
-        action:"/email/manager"
+        action:"/email/manager",
+        key:'email'
       },{
         img:"/static/img/shoushu@2x.png",
         name:"手输账单",
         des:"没有邮箱、网银账单？请手动输入账单",
-        action:"/bill/cardlist"
+        action:"/bill/cardlist",
+        key:'cyber'
       }].map((v,k)=>{
-        const { img, name, des,action} = v;
+        const { img, name, des,action, key} = v;
         return [<span key={'a1'}>{k==1?<div style={{
           border: '1PX solid #F1F1F1',
           width:'6.94rem',
           margin:'auto'
-        }}></div>:null}</span>,<div key={k} onClick={()=>{this.props.history.push(action)}}>
+        }}></div>:null}</span>,<div key={k} onClick={()=>{
+
+          if(key == 'cyber'){
+            this.props.history.push(action)
+          } else if(key == 'email'){
+            this.enterEmail()
+          }
+        }}>
           <div style={{
             margin:"0.41rem 0.31rem 0.41rem 0.28rem",
             display:'inline-block',

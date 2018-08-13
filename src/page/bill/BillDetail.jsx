@@ -3,13 +3,12 @@ import Header from '../../compoents/Header';
 import {Tabs} from "antd-mobile"
 import Popup from "../home/components/Popup";
 import {InitDecorator} from "../../compoents/InitDecorator";
-import {getBillDetail, getPayDetail} from "../../actions/reqAction";
+import {deleteBill, getBillDetail, getPayDetail} from "../../actions/reqAction";
 
 @InitDecorator((state)=>{
   return {
     billDetail:state.BillReducer.billDetail,
     payDetail:state.BillReducer.payDetail
-
   }
 })
 export default class BillDetail extends React.Component {
@@ -45,8 +44,8 @@ export default class BillDetail extends React.Component {
   }
 
   generate(payment_due_date,bill_date,credit_limit,balance){
-    const payDate = moment(payment_due_date).format('MM.DD')
-    const billDate = moment(bill_date).format('MM.DD');
+    const payDate = payment_due_date ?moment(payment_due_date).format('MM.DD'):moment().format('MM.DD')
+    const billDate = bill_date ?moment(bill_date).format('MM.DD'):moment().format('MM.DD');
     const  freeInterest = parseInt(moment(payment_due_date).diff(moment(),'days')) + parseInt(moment().daysInMonth())
     let amount= 0;
     let amountUnit = ''
@@ -141,12 +140,21 @@ export default class BillDetail extends React.Component {
     }
 
   }
+  async removeBill(billId){
+    const reqParams = await this.props.getBaseParams();
+    this.props.dispatch(deleteBill({
+      ...reqParams,
+      billId,
+    })).then((result)=>{
+      //TODO succeed to delete bill
+    })
+  }
 
   render() {
     const {title = '银行',billDetail ={},payDetail= []} = this.props;
     const {expandOne, visible} = this.state;
     const {
-      payment_due_date,
+      payment_due_date ,
       bill_date ,
       credit_limit = '',//总额度
       balance = '',//剩余额度
@@ -156,11 +164,12 @@ export default class BillDetail extends React.Component {
       min_payment = '',
       card_number = '',
     } = billDetail;
+    const { billId } = this.props.match.params;
 
     const { from , to, datalist } = this.haneleDetail(list);
     const {day, date, des} = this.judgeStatus(bill_type, payment_due_date, bill_date)
     return [<Header title={title}
-                    right={<img style={{width: "0.36rem",}} src="/static/img/删除@2x.png"/>}/>, <div>
+                    right={<img onClick={()=>this.removeBill(billId)} style={{width: "0.36rem",}} src="/static/img/删除@2x.png"/>}/>, <div>
       <div style={{
         height: '2.95rem',
         width: '7.5rem',

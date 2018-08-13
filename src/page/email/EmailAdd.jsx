@@ -4,29 +4,30 @@ import {Modal} from 'antd-mobile';
 import ModalCom from "../../compoents/ModalCom";
 import {checkEmailTask, emailLogin} from "../../actions/reqAction";
 import {InitDecorator} from "../../compoents/InitDecorator";
+import {Toast} from "antd-mobile";
 const prompt = Modal.prompt;
 
-@InitDecorator((state)=>{
+@InitDecorator((state) => {
   return {
-    emailLogin:state.BillReducer.emailLogin
+    emailLogin: state.BillReducer.emailLogin
   }
 })
-export default class EmailAdd extends React.Component{
+export default class EmailAdd extends React.Component {
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      modal:false,
-      description:'',
-      eyesOpen:true,
-      selected:true,
-      password:'',
-      account:""
+      modal: false,
+      description: '',
+      eyesOpen: true,
+      selected: true,
+      password: '',
+      account: ""
     }
   }
 
-  async loginEnter(){
-    const { account,password} = this.state;
+  async loginEnter() {
+    const {account, password} = this.state;
     const reqParams = await this.props.getBaseParams();
     const login = await this.props.dispatch(emailLogin({
       account,
@@ -34,33 +35,45 @@ export default class EmailAdd extends React.Component{
       ...reqParams
     }))
     debugger;
-    const { data='' } = login;
-    this.checkTask(data);
+    const {data: taskId = ''} = login;
+    if (!taskId) {
+      // 任务创建失败
+      Toast.info('任务创建失败', 1);
+    } else {
+      setTimeout(() => {
+        this.checkTask(taskId);
+      }, 3000)
+    }
 
   }
 
-  async checkTask(taskId){
+  /**
+   *   @author jerryxu
+   *   @methodName i
+   *   @params mod
+   *   @description 第二步流程
+   */
+  async checkTask(taskId) {
     const reqParams = await this.props.getBaseParams();
 
     let login;
 
-    do{
+    do {
       login = await this.props.dispatch(checkEmailTask({
         ...reqParams,
         taskId
       }))
       debugger;
-    }while(this.judgeStatus(login))
+    } while (this.judgeStatus(login))
 
+    this.handleStatus(login, taskId, {loginType: ''})
 
-    this.props.history.push('/load/email',{taskId,loginType:""})
   }
 
 
-
   judgeStatus(status) {
-    const { data } = status;
-    const { phase, phase_status } = data;
+    const {data} = status;
+    const {phase, phase_status} = data;
     switch (phase_status) {
       case "DOING":
         return true;
@@ -69,57 +82,123 @@ export default class EmailAdd extends React.Component{
     }
   }
 
+  /**
+   *   @author jerryxu
+   *   @params 用户信息
+   *   @description 第三步流程判断任务状态，分别处理
+   */
+  handleStatus(status, taskId, loginType) {
+    const {data = {}} = status;
+    const {phase, phase_status = '', input, description} = data;
+    switch (phase_status) {
+      case 'WAIT_CODE'://输入验证码
 
-  promptClick= () => prompt('输入验证码', '请输入手机号135****1234收到的验证码',
-    [
-      {
-        text: '取消',
-        onPress: value => new Promise((resolve) => {
-          Toast.info('onPress promise resolve', 1);
-          setTimeout(() => {
-            resolve();
-            console.log(`value:${value}`);
-          }, 1000);
-        }),
-      },
+        return this.promptClick({
+          input,
+          description,
+          taskId,
+          callback: this.verifycation.bind(this)
+        })
+      case "DOING":
+        return;
+      case "DONE_SUCC"://成功登录
+        this.props.history.push('/load/email', {taskId, loginType: ""})
+        return;
+      case "DONE_FAIL":
+        Toast.info(description);
+        return;
+      case "DONE_TIMEOUT":
+        return;
+      default:
+        return;
+    }
+  }
+
+  /**
+   *   @author jerryxu
+   *   @methodName
+   *   @params 任务编号 短信验证码
+   *   @description 第三步流程的分支流程，输入验证码检查登录状态
+   */
+  async verifycation({taskId, value: code}) {
+    let codeStatus = ''
+
+    const reqParams = await this.props.getBaseParams();
+    codeStatus = await this.props.dispatch(verifyCode({
+      taskId,
+      code,
+      ...reqParams
+    }));
+
+    const {data} = codeStatus;
+    //if(value == '200'){
+
+    //} else {
+    this.checkTask(taskId);
+    //}
+  }
+
+
+  /**
+   *   @author jerryxu
+   *   @methodName i
+   *   @params 魔蝎验证码模版 任务编号 信息描述 回调函数
+   *   @description Popup提示，输入信息，异步处理
+   */
+  promptClick({input, taskId, description, callback}) {
+    prompt('输入验证码', description, [{
+      text: '取消',
+      onPress: value => new Promise((resolve) => {
+        Toast.info('登录失败', 1);
+        setTimeout(() => {
+          resolve();
+          console.log(`value:${value}`);
+        }, 1000);
+      }),
+    },
       {
         text: '确定',
         onPress: value => new Promise((resolve, reject) => {
+          callback({taskId, value})
           resolve();
-          setTimeout(() => {
-            this.setState({modal:true,description:"您绑定的卡为借记卡，卡包只支持绑定信用卡，请您重新绑定"})
-            console.log(`value:${value}`);
-          }, 1000);
+          // setTimeout(() => {
+          //   this.setState({modal: true, description: "您绑定的卡为借记卡，卡包只支持绑定信用卡，请您重新绑定"})
+          //   console.log(`value:${value}`);
+          // }, 1000);
         }),
       },
     ], 'default', null, ['请输入验证码'])
 
-  render(){
-    const { modal,description,eyesOpen, selected } = this.state;
+  }
+
+  render() {
+    const {modal, description, eyesOpen, selected} = this.state;
     return [
       <Header title="导入账单邮箱"/>,
-       <div key={3}>
+      <div key={3}>
         {
           [{
             name: '账单邮箱', value: "",
             placeHolder: "请输入账单邮箱",
-            key:'account'
+            key: 'account'
           }, {
             name: '密码', value: '',
-            key:'password',
-            icon:true,
+            key: 'password',
+            icon: true,
             placeHolder: "请输入邮箱密码",
           },].map((v, k) => {
-            const {name, disabled, placeHolder, icon, key } = v;
+            const {name, disabled, placeHolder, icon, key} = v;
             return <div key={k} style={styles.item}>
               <div style={styles.name}>{name}</div>
-               <input onChange={(e)=>{
-                 this.setState({
-                   [key]:e.currentTarget.value
-                 })
-               }}
-                      disabled={disabled} style={styles.input} placeholder={placeHolder}/>
-              {icon ? <img onClick={()=>{this.setState({eyesOpen:!eyesOpen})}} src={eyesOpen?"/static/img/眼睛@2x.png":"/static/img/闭眼icon@2x.png"} style={ styles.img}/> : null}
+              <input onChange={(e) => {
+                this.setState({
+                  [key]: e.currentTarget.value
+                })
+              }}
+                     disabled={disabled} style={styles.input} placeholder={placeHolder}/>
+              {icon ? <img onClick={() => {
+                this.setState({eyesOpen: !eyesOpen})
+              }} src={eyesOpen ? "/static/img/眼睛@2x.png" : "/static/img/闭眼icon@2x.png"} style={ styles.img}/> : null}
             </div>
 
           })
@@ -128,12 +207,14 @@ export default class EmailAdd extends React.Component{
           paddingLeft: '0.31rem',
           display: 'flex',
           alignItems: 'center'
-        }} onClick={()=>{this.setState({selected:!selected})}}><img  style={{width:'0.23rem'}} src={selected?"/static/img/selected@2x.png":"/static/img/Oval@2x.png"} />
+        }} onClick={() => {
+          this.setState({selected: !selected})
+        }}><img style={{width: '0.23rem'}} src={selected ? "/static/img/selected@2x.png" : "/static/img/Oval@2x.png"}/>
           <span style={{
             fontSize: '0.24rem',
             color: '#999999',
             letterSpacing: '-0.77PX',
-            margin:"0 0 0 0.18rem"
+            margin: "0 0 0 0.18rem"
           }}>同意用户授权协议</span>
         </div>
         <div style={styles.finishBtn} onClick={() => this.loginEnter()}>开始登录</div>

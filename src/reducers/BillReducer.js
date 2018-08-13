@@ -6,7 +6,10 @@ import {
   VERYFY_CODE_STARUS,
   BILL_LIST, BILL_DETAIL, PAY_DETAIL,
   HUAN_DAO,
-
+  SYNC_BILL,
+  FREE_INTEREST,
+  EMAIL_LOGIN,
+  EMAIL_TASK_STATUS,
 } from '../utils/ActionsType';
 
 const initialState = {
@@ -20,6 +23,10 @@ const initialState = {
   billList:{},
   payDetail:[],
   huandaoData:{},
+  syncBillStatus:{},
+  freeIntrestData:[],
+  emailLogin:{},
+  emailTaskStatus:{}
 
 };
 //全局状态信息，数据信息存储
@@ -114,6 +121,26 @@ export default function (state = initialState, actions) {
       return {
         ...state,
         haidaoData:actions.data,
+      }
+    case SYNC_BILL[1]:
+      return {
+        ...state,
+        syncBillStatus:actions.data,
+      }
+    case FREE_INTEREST[1]:
+      return {
+        ...state,
+        freeIntrestData:actions.data
+      }
+    case EMAIL_LOGIN[1]:
+      return {
+        ...state,
+        emailLogin:actions.data
+      }
+    case EMAIL_TASK_STATUS[1]:
+      return {
+        ...state,
+        emailTaskStatus:actions.data,
       }
     default:
       return state

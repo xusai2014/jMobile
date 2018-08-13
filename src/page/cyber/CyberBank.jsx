@@ -82,16 +82,15 @@ export default class CyberBank extends React.Component {
    *   @description 第二步流程 检查任务状态并获取任务状态
    */
   async loopLogin(taskId,loginType){
-    debugger;
+
     let status = {};
     do {
-      debugger;
+
       const reqParams = await this.props.getBaseParams();
       status = await this.props.dispatch(checkToken({
         taskId,
         ...reqParams
       }))
-      debugger;
     } while (this.judgeStatus(status))
     this.handleStatus(status, taskId,loginType);
   }
@@ -144,14 +143,14 @@ export default class CyberBank extends React.Component {
   */
   async verifycation({taskId,value:code}){
     let codeStatus = ''
-    debugger;
+
     const reqParams = await this.props.getBaseParams();
     codeStatus = await this.props.dispatch(verifyCode({
       taskId,
       code,
       ...reqParams
     }));
-    debugger;
+
     const { data } = codeStatus;
     //if(value == '200'){
 

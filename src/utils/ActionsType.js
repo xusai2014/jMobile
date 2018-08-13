@@ -24,7 +24,7 @@ export const CHECK_CYBER_STATUS = ['REQUEST', 'CH805','FAILURE'];
 //账单列表
 export const BILL_LIST = ['REQUEST', 'CH807','FAILURE'];
 
-//检查邮箱导入状态
+//检查账单导入状态
 export const POLLING_CYBER = ['REQUEST', 'CH810','FAILURE'];
 
 //账单详情
@@ -36,6 +36,18 @@ export const PAY_DETAIL = ['REQUEST', 'CH819','FAILURE'];
 
 //还到
 export const HUAN_DAO = ['REQUEST', 'CH818','FAILURE'];
+
+//同步
+export const SYNC_BILL = ['REQUEST', 'CH806','FAILURE'];
+
+//免息期
+export const FREE_INTEREST = ['REQUEST', 'CH812','FAILURE'];
+
+//邮箱登录
+export const EMAIL_LOGIN = ['REQUEST', 'CH813','FAILURE'];
+
+//邮箱创建任务状态
+export const EMAIL_TASK_STATUS = ['REQUEST', 'CH815','FAILURE'];
 
 
 

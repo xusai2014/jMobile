@@ -6,7 +6,7 @@ import {
   GET_BANK_LOGIN_LIST,
   LOGIN_CYBER,
   VERYFY_CODE_STARUS,
-  BILL_LIST, BILL_DETAIL, PAY_DETAIL, HUAN_DAO
+  BILL_LIST, BILL_DETAIL, PAY_DETAIL, HUAN_DAO, SYNC_BILL, FREE_INTEREST, EMAIL_LOGIN, EMAIL_TASK_STATUS
 } from '../utils/ActionsType'
 
 export const getBankList = (data) => ActionCreator(
@@ -81,6 +81,37 @@ export const getHUandao= (data) => ActionCreator(
   'POST',
   {...data, 'TRDE_CODE': HUAN_DAO[1]}
 )();
+
+export const syncBill= (data) => ActionCreator(
+  SYNC_BILL,
+  `/api`,
+  'POST',
+  {...data, 'TRDE_CODE': SYNC_BILL[1]}
+)();
+
+export const getFreeInterest= (data) => ActionCreator(
+  FREE_INTEREST,
+  `/api`,
+  'POST',
+  {...data, 'TRDE_CODE': FREE_INTEREST[1]}
+)();
+
+
+export const emailLogin = (data) => ActionCreator(
+  EMAIL_LOGIN,
+  `/api`,
+  'POST',
+  {...data, 'TRDE_CODE': EMAIL_LOGIN[1]}
+)();
+
+export const checkEmailTask = (data) => ActionCreator(
+  EMAIL_TASK_STATUS,
+  `/api`,
+  'POST',
+  {...data, 'TRDE_CODE': EMAIL_TASK_STATUS[1]}
+)();
+
+
 
 
 

@@ -5,13 +5,14 @@ import Popup from "./components/Popup";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {loginHelper} from "../../interface/jsNative";
 import FreeItem from "./components/FreeItem";
-import {getBillList,getHUandao} from "../../actions/reqAction";
+import {getBillList, getHUandao, getFreeInterest} from "../../actions/reqAction";
 
 
 @InitDecorator((state)=>{
   return {
     billList:state.BillReducer.billList,
-    huandaoData:state.BillReducer.huandaoData
+    huandaoData:state.BillReducer.huandaoData,
+    freeIntrestData:state.BillReducer.freeIntrestData
   }
 })
 export default class Index extends React.Component {
@@ -47,6 +48,15 @@ export default class Index extends React.Component {
     this.getBillList();
   }
 
+  async getFreeData(){
+    const reqParams = await this.props.getBaseParams();
+    this.props.dispatch(getFreeInterest({
+      ...reqParams
+    })).then((result)=>{
+      debugger
+    },()=>{})
+  }
+
   async getBillList(){
     const reqParams = await this.props.getBaseParams();
     this.props.dispatch(getBillList({
@@ -55,12 +65,14 @@ export default class Index extends React.Component {
   }
 
   loginEnter(type, params) {
-    this.setState({visible:true})
     loginHelper(() => {
       switch (type) {
         case 1:
           //展示免息期
-          this.setState({interestShow: true});
+          this.setState({interestShow: true},()=>{
+            this.getFreeData()
+          });
+
           return
         case 2:
           //添加账单
@@ -78,14 +90,13 @@ export default class Index extends React.Component {
           return;
         case 5:
           //还款
-
+          this.setState({visible:true})
           return
       }
     })
   }
 
   async callHuandao(){
-    debugger
     const reqParams = await this.props.getBaseParams();
     this.props.dispatch(getHUandao({
       ...reqParams
@@ -100,7 +111,7 @@ export default class Index extends React.Component {
 
   render() {
     const {interestShow, visible,} = this.state;
-    const {isLogged,billList ={}} = this.props;
+    const {isLogged,billList ={},freeIntrestData = []} = this.props;
     const { waitPaymentAmount ='', waitPaymentNumber ='',baseResponseBillDtoList =[] } = billList
     return [<div key={'a'} style={{background: '#FFFFFF', paddingBottom: "0.7rem"}}>
       <div style={styles.top}>
@@ -170,6 +181,7 @@ export default class Index extends React.Component {
               task_id,
               bill_id,// 账单编号,
               logo_uri,
+              importBillType,//账单类型 01为网银 03为邮箱 02为手写账单
             } = v;
 
              return <BillCard card_num={card_num}
@@ -181,6 +193,7 @@ export default class Index extends React.Component {
                               bill_id = {bill_id}
                               bill_date ={bill_date}
                               logo_uri={logo_uri}
+                              importBillType={importBillType}
                               key={k} repay={() => this.setState({visible: true})}/>
             })
             :
@@ -193,7 +206,8 @@ export default class Index extends React.Component {
               task_id :"11111111111",
               bill_id :"11111111",
               bill_date :"2018-06-28",
-              logo_uri:'/static/img/招商银行@2x.png'
+              logo_uri:'/static/img/招商银行@2x.png',
+              importBillType:""
             }].map((v, k) => <BillCard {...v} key={k} repay={(e) => {
               e.stopPropagation();
               e.preventDefault();
@@ -202,7 +216,7 @@ export default class Index extends React.Component {
         }
       </div>,
       <div key={'c'} style={styles.addBtn}
-           onClick={() => this.loginEnter(1)}
+           onClick={() => this.loginEnter(2)}
       >
         <Icon type="plus" color="#999999" size="xs"/>
         <span style={styles.addText}>添加信用卡账单</span>
@@ -220,39 +234,19 @@ export default class Index extends React.Component {
       >
         <div style={{height: '5.03rem', overflow: 'scroll'}}>
           {
-            [{
-              imgSrc: "/static/img/交通银行@2x.png",
-              title: "交通银行",
-              des: "总额度1万元|剩余额度0.00",
-              cardNum: "9178"
-            }, {
-              imgSrc: "/static/img/jianshe@2x.png",
-              title: "建设银行",
-              des: "总额度1万元|剩余额度0.00",
-              cardNum: "9178"
-            }, {
-              imgSrc: "/static/img/交通银行@2x.png",
-              title: "交通银行",
-              des: "总额度1万元|剩余额度0.00",
-              cardNum: "9178"
-            }, {
-              imgSrc: "/static/img/jianshe@2x.png",
-              title: "建设银行",
-              des: "总额度1万元|剩余额度0.00",
-              cardNum: "9178"
-            }, {
-              imgSrc: "/static/img/交通银行@2x.png",
-              title: "交通银行",
-              des: "总额度1万元|剩余额度0.00",
-              cardNum: "9178"
-            }, {
-              imgSrc: "/static/img/jianshe@2x.png",
-              title: "建设银行",
-              des: "总额度1万元|剩余额度0.00",
-              cardNum: "9178"
-            },].map((v, k) => {
-              const {imgSrc, title, des, cardNum} = v;
-              return <FreeItem key={k} {...v} />
+            freeIntrestData.map((v, k) => {
+              payment_due_date
+
+              const {bank_logo:imgSrc,credit_limit,balance, bank_name, payment_due_date, card_number} = v;
+              const  freeInterest = parseInt(moment(payment_due_date).diff(moment(),'days')) + parseInt(moment().daysInMonth())
+              return <FreeItem key={k}
+                               credit_limit={credit_limit}
+                               imgSrc={imgSrc}
+                               title={bank_name}
+                               card_number={card_number}
+                               freeInterest={freeInterest}
+                               balance={balance}
+                               {...v} />
             })
           }
         </div>

@@ -95,7 +95,7 @@ export default class CardsList extends React.Component {
             level={1}
             height={document.documentElement.clientHeight / 6}
             onChange={(data) => {
-              debugger;
+
               this.props.history.push(`${method[data[0]].action}/${activeCard}`)
             }}
             multiSelect={false}

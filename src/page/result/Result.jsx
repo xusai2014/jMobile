@@ -1,39 +1,12 @@
 import React from 'react';
 import Header from "../../compoents/Header";
 
-const results = {
-  esuccess:{
-    describe:(data)=>`成功导入：招商银行信用卡 导入${data.y}笔账单北京银行信用卡 导入${data.x}笔账单`,
-    footer:()=>(<div style={styles.finishBtn}>完成</div>),
-    title:"导入成功",
-    img:"/static/img/done@2x.png",
-  },
-  efailed:{
-    describe:(data)=> JSON.stringify(data),
-    footer:()=>(<div style={styles.finishBtn}>完成</div>),
-    title:"导入失败",
-    img:"/static/img/nothing@2x.png",
-  },
-  enodata:{
-    img:"/static/img/nothing@2x.png",
-    describe:()=>"您的邮箱内没有新的交易数据，请尝试其他账单导入方式吧！",
-    footer:()=>(<div>
-      <div style={styles.actionReplace}>换一个邮箱导入</div>
-      <div style={styles.actionsImport}>网银导入</div>
-    </div>),
-    title:"无数据导入"
-  },cybersuccess:{
-    describe:(data)=>`点击完成，查看最新账单`,
-    footer:()=>(<div style={styles.finishBtn} onClick={()=>this.props.history.push('/home/index')}>完成</div>),
-    title:"导入成功",
-    img:"/static/img/done@2x.png",
-  }
 
-}
 export default class Result extends React.Component{
+
   render() {
     const  { type, data='{}'}   = this.props.match.params;
-    const { describe,footer, title, img } = results[type];
+    const { describe,footer, title, img } = this.results[type];
     return [<Header key="1" title={'导入结果'} right={
             <div onClick={()=>{
               this.props.history.push('/home/index')
@@ -44,6 +17,36 @@ export default class Result extends React.Component{
       <div style={styles.resason}>{describe(JSON.parse(data))}</div>
       {footer()}
     </div>]
+  }
+
+  results = {
+    esuccess:{
+      describe:(data)=>`成功导入：招商银行信用卡 导入${data.y}笔账单北京银行信用卡 导入${data.x}笔账单`,
+      footer:()=>(<div style={styles.finishBtn}>完成</div>),
+      title:"导入成功",
+      img:"/static/img/done@2x.png",
+    },
+    efailed:{
+      describe:(data)=> JSON.stringify(data),
+      footer:()=>(<div style={styles.finishBtn}>完成</div>),
+      title:"导入失败",
+      img:"/static/img/nothing@2x.png",
+    },
+    enodata:{
+      img:"/static/img/nothing@2x.png",
+      describe:()=>"您的邮箱内没有新的交易数据，请尝试其他账单导入方式吧！",
+      footer:()=>(<div>
+        <div style={styles.actionReplace}>换一个邮箱导入</div>
+        <div style={styles.actionsImport}>网银导入</div>
+      </div>),
+      title:"无数据导入"
+    },cybersuccess:{
+      describe:(data)=>`点击完成，查看最新账单`,
+      footer:()=>(<div style={styles.finishBtn} onClick={()=>this.props.history.push('/home/index')}>完成</div>),
+      title:"导入成功",
+      img:"/static/img/done@2x.png",
+    }
+
   }
 }
 

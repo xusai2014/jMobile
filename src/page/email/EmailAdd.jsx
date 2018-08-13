@@ -2,8 +2,15 @@ import React from 'react';
 import Header from "../../compoents/Header";
 import {Modal} from 'antd-mobile';
 import ModalCom from "../../compoents/ModalCom";
+import {checkEmailTask, emailLogin} from "../../actions/reqAction";
+import {InitDecorator} from "../../compoents/InitDecorator";
 const prompt = Modal.prompt;
 
+@InitDecorator((state)=>{
+  return {
+    emailLogin:state.BillReducer.emailLogin
+  }
+})
 export default class EmailAdd extends React.Component{
 
   constructor(props){
@@ -13,8 +20,55 @@ export default class EmailAdd extends React.Component{
       description:'',
       eyesOpen:true,
       selected:true,
+      password:'',
+      account:""
     }
   }
+
+  async loginEnter(){
+    const { account,password} = this.state;
+    const reqParams = await this.props.getBaseParams();
+    const login = await this.props.dispatch(emailLogin({
+      account,
+      password,
+      ...reqParams
+    }))
+    debugger;
+    const { data='' } = login;
+    this.checkTask(data);
+
+  }
+
+  async checkTask(taskId){
+    const reqParams = await this.props.getBaseParams();
+
+    let login;
+
+    do{
+      login = await this.props.dispatch(checkEmailTask({
+        ...reqParams,
+        taskId
+      }))
+      debugger;
+    }while(this.judgeStatus(login))
+
+
+    this.props.history.push('/load/email',{taskId,loginType:""})
+  }
+
+
+
+  judgeStatus(status) {
+    const { data } = status;
+    const { phase, phase_status } = data;
+    switch (phase_status) {
+      case "DOING":
+        return true;
+      default:
+        return false;
+    }
+  }
+
 
   promptClick= () => prompt('输入验证码', '请输入手机号135****1234收到的验证码',
     [
@@ -49,15 +103,22 @@ export default class EmailAdd extends React.Component{
           [{
             name: '账单邮箱', value: "",
             placeHolder: "请输入账单邮箱",
+            key:'account'
           }, {
             name: '密码', value: '',
+            key:'password',
             icon:true,
             placeHolder: "请输入邮箱密码",
           },].map((v, k) => {
-            const {name, disabled, placeHolder, icon, } = v;
+            const {name, disabled, placeHolder, icon, key } = v;
             return <div key={k} style={styles.item}>
               <div style={styles.name}>{name}</div>
-               <input disabled={disabled} style={styles.input} placeholder={placeHolder}/>
+               <input onChange={(e)=>{
+                 this.setState({
+                   [key]:e.currentTarget.value
+                 })
+               }}
+                      disabled={disabled} style={styles.input} placeholder={placeHolder}/>
               {icon ? <img onClick={()=>{this.setState({eyesOpen:!eyesOpen})}} src={eyesOpen?"/static/img/眼睛@2x.png":"/static/img/闭眼icon@2x.png"} style={ styles.img}/> : null}
             </div>
 
@@ -75,7 +136,7 @@ export default class EmailAdd extends React.Component{
             margin:"0 0 0 0.18rem"
           }}>同意用户授权协议</span>
         </div>
-        <div style={styles.finishBtn} onClick={() => this.promptClick()}>开始登录</div>
+        <div style={styles.finishBtn} onClick={() => this.loginEnter()}>开始登录</div>
         <ModalCom visible={modal} showAction={(v) => {
           this.setState({modal: v})
         }} description={description}/>

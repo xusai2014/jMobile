@@ -47,7 +47,7 @@ export default class BillDetail extends React.Component {
   generate(payment_due_date,bill_date,credit_limit,balance){
     const payDate = moment(payment_due_date).format('MM.DD')
     const billDate = moment(bill_date).format('MM.DD');
-    const  freeInterest = parseInt(moment(payment_due_date).diff(moment(),'days')) + 31;
+    const  freeInterest = parseInt(moment(payment_due_date).diff(moment(),'days')) + parseInt(moment().daysInMonth())
     let amount= 0;
     let amountUnit = ''
     if(credit_limit%10000){
@@ -112,10 +112,18 @@ export default class BillDetail extends React.Component {
   judgeStatus(bill_type, payment_due_date, bill_date) {
     if (bill_type == 'DONE') {
       const duM = moment(payment_due_date);
-      return {
-        day: duM.diff(moment(), 'days'),
-        date: duM.format('MM-DD'),
-        des:'天后到期'
+      if(parseInt(duM.diff(moment(), 'days')) < 0){
+        return {
+          day: "",
+          date: "",
+          des:`已逾期${moment().diff(duM, 'days')}天`
+        }
+      } else {
+        return {
+          day: duM.diff(moment(), 'days'),
+          date: duM.format('MM-DD'),
+          des:'天后到期'
+        }
       }
     } else if (bill_type == 'UNDONE') {
       const duM = moment(bill_date);

@@ -3,10 +3,14 @@ import Header from "../../compoents/Header";
 import { pollingCyber} from "../../actions/reqAction";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import Loading from "../../compoents/Loading";
+import { Toast } from 'antd-mobile';
 
 const results = {
   cyber:{
     title:"网银账单"
+  },
+  email:{
+    title:"邮箱账单"
   }
 
 }
@@ -31,7 +35,7 @@ export default class LoadingStatus extends React.Component{
   async loopCheckAlways({ taskId,loginType }) {
     let pollingStatus = '';
     do {
-      debugger;
+
       const reqParams = await this.props.getBaseParams();
       pollingStatus = await this.props.dispatch(pollingCyber({
         taskId,
@@ -45,16 +49,23 @@ export default class LoadingStatus extends React.Component{
       }
 
     } while ( pollingStatus && typeof pollingStatus.data != 'undefined' && !pollingStatus.data)
+    const {data} =pollingStatus
+    debugger;
+    if( typeof data == 'undefined'){
+      Toast.info('导入失败',1)
+      return;
+    }
     this.setState({
       progress:100
-    })
-    this.props.history.push('/result/cybersuccess')
+    },()=>this.props.history.push('/result/cybersuccess'))
+
   }
 
   async componentWillMount(){
     const {
       state = {}
-    } = this.props.match.params
+    } = this.props.location;
+    debugger;
     const {
       taskId = "586b4860-9c76-11e8-89e7-00163e0dfac7",
     } = state;

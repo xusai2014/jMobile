@@ -7,7 +7,8 @@ import {Toast} from "antd-mobile";
 
 @InitDecorator((state)=>{
   return {
-    emailList:state.BillReducer.emailList
+    emailList:state.BillReducer.emailList,
+    requestStaus:state.GlobalReducer.requestStaus
   }
 })
 export default class EmailManager extends React.Component{
@@ -15,18 +16,36 @@ export default class EmailManager extends React.Component{
   async importEmailOne(taskId){
     Toast.loading('请稍后')
     const reqParams = await this.props.getBaseParams();
+    if(this.props.requestStaus){
+      debugger;
+      return;
+    }
+    await this.waitFunc(7000)
+
     this.props.dispatch(directImport({
       ...reqParams,
       taskId,
     })).then((result)=>{
-      const { data:taskId = '' } =result;
-      Toast.hide();
-      this.props.history.push('/load/email', {taskId, loginType: ""})
       debugger;
+      const { data:taskId = '' } =result;
+      this.props.history.push('/load/email', {taskId, loginType: ""})
+      Toast.hide();
     },(err)=>{
       debugger;
     });
 
+  }
+
+  componentWillUnmount(){
+    promiseList.cancel()
+  }
+
+  waitFunc(time){
+    return new Promise((resolve,reject)=>{
+      setTimeout(()=>{
+        resolve()
+      },time)
+    })
   }
 
   async componentDidMount(){

@@ -14,7 +14,7 @@ export const ActionCreator = (type, url, method, data, key ,cancel = false) => {
         return {
             types: [...type],
             payload: key,
-            promise: ()=>fetchPromise(url, method = 'GET', data, cancel,true)
+            promise: ()=>fetchPromise(url, method = 'GET', data, true,true)
 
         }
     }
@@ -68,10 +68,7 @@ export const fetchPromise = (url, method = 'GET', data, cancel = false, isRedux 
   const isnv = 1;//是否sha256
   const encflag = 1;//是否AES
 
-  if(!isRedux){
-    Storage.dispatch({type: "REQUEST", data: true});
-  }
-
+  Storage.dispatch({type: "REQUEST", data: true});
   let queryData = '';
   const dataBody = packageReqData(data, isnv, encflag)
   Object.keys(dataBody).map((v, k) => {
@@ -88,6 +85,8 @@ export const fetchPromise = (url, method = 'GET', data, cancel = false, isRedux 
       resolve(data)
     }).catch((err) => {
       reject({err})
+    }).finally(()=>{
+      Storage.dispatch({type: "FINISH", data: false});
     })
   );
   if (cancel) {

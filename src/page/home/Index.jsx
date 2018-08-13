@@ -205,10 +205,10 @@ export default class Index extends React.Component {
               bank_name:"lee",
               bill_type :'DONE',
               current_bill_amt :"1000000",
-              payment_due_date :"2018-06-09",
+              payment_due_date :"2018-09-01",
               task_id :"11111111111",
               bill_id :"11111111",
-              bill_date :"2018-06-28",
+              bill_date :"2018-08-28",
               logo_uri:'/static/img/招商银行@2x.png',
               importBillType:""
             }].map((v, k) => <BillCard {...v} key={k} repay={(e) => {

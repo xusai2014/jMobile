@@ -29,6 +29,16 @@ export default class FreeItem extends React.Component{
           letterSpacing: '0',
         }}>总额度{credit_limit}万元|剩余额度{balance}</div>
       </div>
+      <div
+        style={{
+          display: 'inline-block',
+          float: 'right',
+          marginRight: '0.33rem',
+          fontSize: '0.32rem',
+          color:'#333333',
+          letterSpacing: '-0.89px',
+        }}
+      >{freeInterest}天</div>
     </div>)
   }
 }

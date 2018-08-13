@@ -12,12 +12,9 @@ function promiseMiddleware() {
 
     const [REQUEST, SUCCESS, FAILURE] = types;
 
-    next({...rest, type: REQUEST})
-
     return promise().then(
       (result) => {
         const {RETURNCODE, DATA} = result;
-        next({...rest, data:DATA, type: 'FINISH'})
         if (RETURNCODE == '0000') {
           return next({...rest, data:DATA, type: SUCCESS})
         } else {

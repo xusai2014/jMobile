@@ -41,7 +41,6 @@ export default class LoadingStatus extends React.Component{
         taskId,
         ...reqParams
       }));
-      debugger;
       if(this.state.progress < 80){
         this.setState({
           progress:this.state.progress+10
@@ -50,7 +49,6 @@ export default class LoadingStatus extends React.Component{
 
     } while ( pollingStatus && typeof pollingStatus.data != 'undefined' && !pollingStatus.data)
     const {data} =pollingStatus
-    debugger;
     if( typeof data == 'undefined'){
       Toast.info('导入失败',1)
       return;

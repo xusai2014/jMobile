@@ -250,7 +250,6 @@ export default class BillCard extends React.Component {
             this.callSyncBill(task_id, importBillType)
           }}/>
         </div>
-
       </div>
       <div style={{
         marginTop: '0.31rem',
@@ -259,30 +258,29 @@ export default class BillCard extends React.Component {
       }}>
         <div style={{
           display: 'inline-block',
-          marginLeft: "0.3rem"
+          marginLeft: "0.3rem",
+          width:"2.82rem"
         }}>
           <div style={{
             fontSize: '0.3rem',
             color: '#333333',
             letterSpacing: '0',
-            textAlign: 'center',
           }}>{current_bill_amt}</div>
           <div style={{
             fontSize: '0.22rem',
             color: '#999999',
             letterSpacing: '0',
-            textAlign: 'center',
           }}>本期账单
           </div>
         </div>
         <div style={{width:"2.84rem",display:'inline-block'}}>
           <div style={{
             display: 'inline-block',
-            marginLeft: "1.88rem",
             fontSize: '0.5rem',
             color: '#999999',
             letterSpacing: '0',
-            textAlign: 'center'
+            textAlign: 'center',
+            lineHeight: '0.5rem'
           }}>
             {day}
           </div>
@@ -294,12 +292,14 @@ export default class BillCard extends React.Component {
               fontSize: '0.22rem',
               color: '#999999',
               letterSpacing: '0',
+              lineHeight: '0.225rem'
             }}>{des}
             </div>
             <div style={{
               fontSize: '0.2rem',
               color: '#999999',
               letterSpacing: '0',
+              lineHeight: '0.225rem'
             }}>{date}</div>
           </div>
         </div>
@@ -311,7 +311,6 @@ export default class BillCard extends React.Component {
           color: '#FFFFFF',
           letterSpacing: '0',
           textAlign: 'center',
-          marginLeft: '1.3rem',
           width: '1.26rem',
           height: '0.53rem',
           lineHeight: '0.53rem'

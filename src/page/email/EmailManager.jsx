@@ -61,7 +61,11 @@ export default class EmailManager extends React.Component{
     this.props.dispatch(removeEmail({
       ...reqParams,
       uuid,
-    }));
+    })).then(()=>{
+      this.props.dispatch(getEmailList({
+        ...reqParams,
+      }));
+    });
 
   }
   render(){

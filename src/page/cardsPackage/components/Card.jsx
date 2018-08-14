@@ -3,8 +3,7 @@ import React from 'react';
 
 export default class Card extends React.Component {
   render() {
-    const { popupCard, id } =this.props;
-    const { bankNm,} = popupCard;
+    const { popupCard, id, bankNm,payment_due_date,card_limit,actNo } =this.props;
     return (<div style={styles.container}>
       <div>
         <div style={styles.rowItem}
@@ -15,11 +14,11 @@ export default class Card extends React.Component {
           <div style={{
             fontSize: '0.3rem', color: '#FFFFFF',
             letterSpacing: "-0.83PX", textAlign: 'center'
-          }}>{'交通银行信用卡'}</div>
+          }}>{bankNm}</div>
           <div style={{
             fontSize: '0.24rem', color: '#FFFFFF',
             textAlign: 'center', letterSpacing: '0'
-          }}>{'*胜臣'}<span style={{margin: "0 0.165rem"}}>|</span>{'尾号6537'}</div>
+          }}>{'*胜臣'}<span style={{margin: "0 0.165rem"}}>|</span>尾号{actNo}</div>
         </div>
         <div style={styles.img}>
           <img src="/static/img/设置@2x.png" style={{width:'0.3rem'}}  onClick={()=>{
@@ -40,7 +39,7 @@ export default class Card extends React.Component {
         <span style={{
         float: 'right',
         marginRight: '0.5rem'
-      }}>单笔限额：{'5'}万元</span>
+      }}>单笔限额：{card_limit}万元</span>
       </div>
 
       <div className="menu-mask" onClick={this.onMaskClick} />

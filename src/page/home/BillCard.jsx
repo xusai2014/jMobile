@@ -226,7 +226,9 @@ export default class BillCard extends React.Component {
       repay,
       importBillType,
       real,
-    } = this.props;
+      isNew='00'
+    }
+     = this.props;
     const {
       percent,
       syncBegin
@@ -237,12 +239,14 @@ export default class BillCard extends React.Component {
     return <div onClick={() => this.props.history.push(`/bill/detail/${bill_id}`)}
                 style={{background: '#FFFFFF', marginTop: '0.2rem', padding: "0.3rem 0", position: 'relative'}}>
       <div style={{display: 'flex', alignItems: 'center'}}>
-        <div style={{
-          position: 'absolute',
-          top: '0'
-        }}>
-          <img style={{width:'0.445rem'}} src="/static/img/new@2x.png" />
-        </div>
+        {
+          isNew == '01'?<div style={{
+            position: 'absolute',
+            top: '0'
+          }}>
+            <img style={{width:'0.445rem'}} src="/static/img/new@2x.png" />
+          </div>:null
+        }
         <div style={{width:'3.24rem',display:"inline-block"}}>
           <div style={{
             margin: '0 0.14rem 0 0.28rem',
@@ -252,6 +256,7 @@ export default class BillCard extends React.Component {
             height: '0.36rem',
           }}><img src={logo_uri} style={{
             height: '0.36rem',
+            borderRadius:"0.18rem"
           }}/></div>
           <span style={{
             fontSize: '0.26rem',

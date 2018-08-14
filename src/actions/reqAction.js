@@ -7,7 +7,8 @@ import {
   LOGIN_CYBER,
   VERYFY_CODE_STARUS,
   BILL_LIST, BILL_DETAIL, PAY_DETAIL, HUAN_DAO, SYNC_BILL, FREE_INTEREST, EMAIL_LOGIN, EMAIL_TASK_STATUS, DELETE_BILL,
-  DIRECT_EMAIL_BILL, EMAIL_LIST, DELETE_EMAIL, CARDS_LIST
+  DIRECT_EMAIL_BILL, EMAIL_LIST, DELETE_EMAIL, CARDS_LIST, JUDGE_SEL_CARD, IDENTITY_BNK, POST_INFO, SEND_VERIFICATION,
+  VERIFY_CODE, GET_IDENTITY_INFO, LOOSE_CARD
 } from '../utils/ActionsType'
 
 export const getBankList = (data) => ActionCreator(
@@ -148,6 +149,59 @@ export const getCardsList = (data) => ActionCreator(
   'POST',
   {...data, 'TRDE_CODE': CARDS_LIST[1]}
 )();
+
+export const judgeSelfCard = (data) => ActionCreator(
+  JUDGE_SEL_CARD,
+  `/api`,
+  'POST',
+  {...data, 'TRDE_CODE': JUDGE_SEL_CARD[1]}
+)();
+
+export const identityBank = (data) => ActionCreator(
+  IDENTITY_BNK,
+  `/api`,
+  'POST',
+  {...data, 'TRDE_CODE': IDENTITY_BNK[1]}
+)();
+
+export const postInfo = (data) => ActionCreator(
+  POST_INFO,
+  `/api`,
+  'POST',
+  {...data, 'TRDE_CODE': POST_INFO[1]}
+)();
+
+export const sendVerification = (data) => ActionCreator(
+  SEND_VERIFICATION,
+  `/api`,
+  'POST',
+  {...data, 'TRDE_CODE': SEND_VERIFICATION[1]}
+)();
+
+export const verifySMSCode = (data) => ActionCreator(
+  VERIFY_CODE,
+  `/api`,
+  'POST',
+  {...data, 'TRDE_CODE': VERIFY_CODE[1]}
+)();
+
+export const getIndetiyInfo = (data) => ActionCreator(
+  GET_IDENTITY_INFO,
+  `/api`,
+  'POST',
+  {...data, 'TRDE_CODE': GET_IDENTITY_INFO[1]}
+)();
+
+export const looseCard = (data) => ActionCreator(
+  LOOSE_CARD,
+  `/api`,
+  'POST',
+  {...data, 'TRDE_CODE': LOOSE_CARD[1]}
+)();
+
+
+
+
 
 
 

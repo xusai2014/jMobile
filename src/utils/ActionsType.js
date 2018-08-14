@@ -68,4 +68,24 @@ export const DELETE_EMAIL = ['REQUEST','CH822','FAILURE'];
 //信用卡卡包列表接口
 export const CARDS_LIST = ['REQUEST','M511','FAILURE'];
 
+//判断是否绑定了本人卡
 
+export const JUDGE_SEL_CARD = ['REQUEST','CH823','FAILURE'];
+
+//发卡行
+
+export const IDENTITY_BNK = ['REQUEST','M543','FAILURE'];
+
+//M512,M502.M503
+//提交信息
+export const POST_INFO = ['REQUEST','M512','FAILURE'];
+//发送验证码
+export const SEND_VERIFICATION = ['REQUEST','M502','FAILURE'];
+//验证验证码
+export const VERIFY_CODE = ['REQUEST','M503','FAILURE'];
+
+//实名认证接口
+export const GET_IDENTITY_INFO = ['REQUEST','M113','FAILURE'];
+
+//解绑信用卡
+export const LOOSE_CARD = ['REQUEST','M814','FAILURE'];

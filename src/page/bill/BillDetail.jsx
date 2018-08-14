@@ -1,10 +1,10 @@
 import React from 'react';
 import Header from '../../compoents/Header';
-import {Tabs} from "antd-mobile"
+import {Tabs,Modal} from "antd-mobile"
 import Popup from "../home/components/Popup";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {deleteBill, getBillDetail, getPayDetail} from "../../actions/reqAction";
-
+const alert = Modal.alert;
 @InitDecorator((state)=>{
   return {
     billDetail:state.BillReducer.billDetail,
@@ -140,6 +140,7 @@ export default class BillDetail extends React.Component {
       billId,
     })).then((result)=>{
       //TODO succeed to delete bill
+      this.props.history.go(-1)
     })
   }
 
@@ -162,7 +163,12 @@ export default class BillDetail extends React.Component {
     const { from , to, datalist } = this.haneleDetail(list);
     const {day, date, des} = this.judgeStatus(bill_type, payment_due_date, bill_date)
     return [<Header title={title}
-                    right={<img onClick={()=>this.removeBill(billId)} style={{width: "0.36rem",}} src="/static/img/删除@2x.png"/>}/>, <div>
+                    right={<img onClick={()=>{
+                      alert('', '账单删除后，如需再次查询，需要重新导入账单', [
+                        { text: '确认', onPress: () => this.removeBill(billId) },
+                        { text: '取消', onPress: () => console.log('cancel') },
+                      ])
+                    }} style={{width: "0.36rem",}} src="/static/img/删除@2x.png"/>}/>, <div>
       <div style={{
         height: '2.95rem',
         width: '7.5rem',

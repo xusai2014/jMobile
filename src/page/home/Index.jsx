@@ -5,7 +5,7 @@ import Popup from "./components/Popup";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {loginHelper} from "../../interface/jsNative";
 import FreeItem from "./components/FreeItem";
-import {getBillList, getHUandao, getFreeInterest, syncBill} from "../../actions/reqAction";
+import {getBillList, getHUandao, getFreeInterest, syncBill, getIndetiyInfo} from "../../actions/reqAction";
 
 
 @InitDecorator((state)=>{
@@ -46,6 +46,25 @@ export default class Index extends React.Component {
 
     //})
     this.getBillList();
+  }
+
+  componentWillReceiveProps(nextProps){
+    if(nextProps.isLogged && this.props.isLogged != nextProps.isLogged){
+      this.getUserInfo()
+    }
+  }
+
+  getUserInfo(){
+    this.props.dispatch(getIndetiyInfo({
+      appType:'mpos'
+    })).then((result)=>{
+      const { data }  =result;
+      const { authSts } = data;
+      this.setState({
+        authSts:authSts == '01'
+      })
+    },()=>{
+    })
   }
 
   async getFreeData(){
@@ -183,6 +202,7 @@ export default class Index extends React.Component {
               bill_id,// 账单编号,
               logo_uri,
               importBillType,//账单类型 01为网银 03为邮箱 02为手写账单
+              isNew,
             } = v;
 
              return <BillCard card_num={card_num}
@@ -196,6 +216,7 @@ export default class Index extends React.Component {
                               logo_uri={logo_uri}
                               importBillType={importBillType}
                               real={true}
+                              isNew={isNew}
                               key={k} repay={(e) => {
                                 e.stopPropagation()
                               this.setState({visible: true})}}
@@ -212,8 +233,9 @@ export default class Index extends React.Component {
               bill_id :"11111111",
               bill_date :"2018-08-28",
               logo_uri:'/static/img/招商银行@2x.png',
-              importBillType:""
-            }].map((v, k) => <BillCard
+              importBillType:"",
+              isNew:'00'
+          }].map((v, k) => <BillCard
               real={false}
               {...v} key={k} repay={(e) => {
               e.stopPropagation();

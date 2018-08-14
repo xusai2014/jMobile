@@ -3,42 +3,152 @@ import Header from '../../compoents/Header';
 import InputRadio from "./components/InputRadio";
 import { Modal, Toast } from 'antd-mobile'
 import ModalCom from "../../compoents/ModalCom";
+import {InitDecorator} from "../../compoents/InitDecorator";
+import {
+  identityBank, judgeSelfCard, postInfo, sendVerification,
+  verifySMSCode
+} from "../../actions/reqAction";
 const prompt = Modal.prompt;
 
+@InitDecorator((state)=>{
+  return {
+    bindSelfCard:state.CardsReducer.bindSelfCard,
+    fromBank:state.CardsReducer.fromBank,
+    identityInfo:state.CardsReducer.identityInfo,
+  }
+})
 export default class EditCard extends React.Component {
   constructor(props){
     super(props);
+    const { identityInfo } = this.props;
+    const { name,idCardNo} = identityInfo;
+
     this.state = {
       activeOne:0,
       modal:false,
-      description:''
+      description:'',
+      cardData:{
+        cardNum:"",
+        username:name,
+        id:idCardNo,
+        bank:'',
+        phone:"",
+        bankType:'',
+      },
+      usalCardData:{
+        cardNum:"",
+        username:'',
+        id:'',
+        bank:'',
+        phone:"",
+        bankType:'',
+      }
     }
   }
 
-  promptClick= () => prompt('输入验证码', '请输入手机号135****1234收到的验证码',
-    [
-      {
-        text: '取消',
-        onPress: value => new Promise((resolve) => {
-          Toast.info('onPress promise resolve', 1);
-          setTimeout(() => {
-            resolve();
-            console.log(`value:${value}`);
-          }, 1000);
-        }),
-      },
-      {
-        text: '确定',
-        onPress: value => new Promise((resolve, reject) => {
-          resolve();
-          setTimeout(() => {
-            this.setState({modal:true,description:"您绑定的卡为借记卡，卡包只支持绑定信用卡，请您重新绑定"})
-            console.log(`value:${value}`);
-          }, 1000);
-        }),
-      },
-    ], 'default', null, ['请输入验证码'])
+  findBank(key){
+    const cardData = this.state[key];
+    if(!cardData['cardNum']){
+      Toast.info('请先输入卡号');
+    }
+    //M543
+    const {cardNum:cardNo} = cardData
+    this.props.dispatch(identityBank({
+      cardNo,
+      type:'2'
+    })).then((result)=>{
+      const { data } = result;
+      const { bankNm,type } = data;
+      if(bankNm){
+        this.setDeepState(key,'bank',bankNm)
+        this.setDeepState(key,'bankType',type)
+      }
+    })
+  }
 
+  async bindCard(key){
+
+    const {
+      cardNum:cardNo ='6221560486792149',
+      username:idName,
+      id:idNo,
+      bank,
+      phone:resvPhoneNo = '18800102517',
+      bankType:bankNo,
+    } = this.state[key]
+    debugger
+    let r = await this.props.dispatch(postInfo({
+      cardNo,
+      idName,
+      idNo,
+      resvPhoneNo,
+      bankNo
+    }))
+    debugger
+    const { data } = r;
+
+    const { result, resultMsg,bindType } = data;
+    if(result != '00'){
+      Toast.info(resultMsg)
+    } else {
+      debugger;
+      this.props.dispatch(sendVerification({
+        channelNo:'01',
+        busineType:'04',
+        phone:resvPhoneNo
+      })).then(()=>{
+        prompt('输入验证码', `请输入手机号${resvPhoneNo}收到的验证码`, [{
+          text: '取消',
+          onPress: value => new Promise((resolve) => {
+            resolve();
+          }),
+        },
+          {
+            text: '确定',
+            onPress: value => new Promise((resolve, reject) => {
+              const { MERC_SN } = this.props.identityInfo;
+              this.props.dispatch(verifySMSCode({
+                channelNo:'01',
+                busineType:"04",
+                phone:resvPhoneNo,
+                verifyCode:value,
+                mno:MERC_SN,
+                bankNo,
+                cardNo,
+                resvPhoneNo:resvPhoneNo,
+                bindType,
+              })).then((result)=>{
+                debugger
+                resolve();
+              },()=>{
+                reject();
+              })
+            }),
+          },
+        ], 'default', null, ['请输入验证码'])
+      },()=>{
+
+      })
+    }
+
+
+  }
+
+  componentWillMount(){
+    this.props.dispatch(judgeSelfCard());
+  }
+
+  setDeepState(property,key,value) {
+    const s = this.state[property]
+
+    this.setState({
+      [property]:{
+        ...s,
+        [key]:value
+      }
+
+    })
+  }
 
   render() {
     const { activeOne,modal,description } = this.state;
@@ -56,37 +166,75 @@ export default class EditCard extends React.Component {
 
       <div style={{background: '#FFFFFF'}}>
         <div style={styles.typeDes}>信用卡类型</div>
-        <InputRadio activeOne={ activeOne } setActiveOne={(v)=>{this.setState({activeOne:v})}}/>
+        <InputRadio activeOne={ activeOne } setActiveOne={(v)=>{
+          if(!this.props.bindSelfCard && v == 1){
+
+          } else {
+            this.setState({activeOne:v})
+          }
+        }
+        }/>
       </div>
       {
         [{
+          key:"cardNum",
           name: '信用卡卡号', value: "",
           placeHolder: "请输入卡号", icon: "/static/img/扫一扫@2x.png"
         },{
           name: '姓名', value: "",
           placeHolder: "请输入姓名",
           disabled:activeOne==0?true:false,
+          key:"username"
         },{
           name: '持卡人身份证', value: "",
           placeHolder: "请输入身份证号码",
           disabled:activeOne==0?true:false,
+          key:"id"
         },{
+          key:"bank",
           name: '发卡行', value: "",
           placeHolder: "请输入发卡行",
         },{
+          key:"phone",
           name: '手机号', value: "",
           placeHolder: "请输入发卡行预留手机号",
         }].map((v, k) => {
-            const {name,disabled, value, placeHolder, icon} = v;
+            const {name,disabled,key, value, placeHolder, icon} = v;
+            const { cardData = []} = this.state;
+            let property = activeOne == 1?'usalCardData':"cardData"
           return <div key={k} style={styles.item}><div style={styles.name}>{name}</div>
-            <input disabled={disabled} style={styles.input} placeholder={placeHolder}/>
+            <input
+              onClick={()=>{
+
+                if(key == 'bank'){
+                  if(activeOne == 1){
+                    this.findBank('usalCardData')
+                  } else {
+                    this.findBank('cardData')
+                  }
+                }
+              }}
+              onChange={(e)=>{
+                if(activeOne == 1){
+                  this.setDeepState('usalCardData',key,e.currentTarget.value)
+                } else {
+                  this.setDeepState('cardData',key,e.currentTarget.value)
+                }
+
+            }} value={this.state[property][key]} disabled={disabled} style={styles.input} placeholder={placeHolder}/>
             {icon ? <img src={icon} style={ styles.img}/> : null}
           </div>
 
         })
       }
       <div style={styles.tips}>请核对卡号信息，确认无误</div>
-      <div style={styles.finishBtn} onClick={()=>this.promptClick()}>确认</div>
+      <div style={styles.finishBtn} onClick={()=>{
+        if(activeOne == 1){
+          this.bindCard('usalCardData')
+        } else {
+          this.bindCard('cardData')
+        }
+      }}>确认</div>
       <ModalCom visible={modal} showAction={(v)=>{this.setState({modal:v})}} description={description}/>
 
     </div>];

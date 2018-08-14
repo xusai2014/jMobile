@@ -79,7 +79,7 @@ export default class EmailManager extends React.Component{
                 {
                   text: '删除',
                   onPress: () => {
-                    alert('', '账单删除后，如需再次查询，需要重新导入账单', [
+                    alert('', '确定删除邮箱', [
                       { text: '确认', onPress: () => this.removeEmailOne(uuid) },
                       { text: '取消', onPress: () => console.log('cancel') },
                     ])

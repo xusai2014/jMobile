@@ -19,6 +19,12 @@ function promiseMiddleware() {
           if(SUCCESS == 'M511'){
             const { bindList } = result;
             return next({...rest, data:bindList, type: SUCCESS})
+          } else if(SUCCESS == 'M543' ){
+            debugger;
+            const { bankNm,type } = result;
+            return next({...rest, data:{bankNm,type}, type: SUCCESS})
+          }else  if( SUCCESS == 'M814'|| SUCCESS == 'M113'||SUCCESS == 'M512' ||SUCCESS == 'M502'|| SUCCESS == 'M503'){
+            return next({...rest, data:result, type: SUCCESS})
           } else {
             return next({...rest, data:DATA, type: SUCCESS})
           }

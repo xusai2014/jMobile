@@ -3,19 +3,9 @@ import Header from "../../compoents/Header";
 import Card from "./components/Card";
 import {Menu, Icon} from "antd-mobile";
 import {InitDecorator} from "../../compoents/InitDecorator";
-import {getCardsList} from "../../actions/reqAction";
+import {getCardsList, looseCard} from "../../actions/reqAction";
 
-const method = [
-  {
-    value: '0',
-    label: '手写账单',
-    action: "/manual/add"
-  }, {
-    value: '1',
-    label: '查看账单',
-    action: "/bill/detail"
-  },
-];
+
 
 @InitDecorator(
   (state)=>{
@@ -29,8 +19,23 @@ export default class CardsList extends React.Component {
     super(props);
     this.state = {
       activeCard: -1,// -1不选择，其它值选择
+      activeData:{}
     };
   }
+
+  methodList = [
+      {
+        value: '0',
+        label: '手写账单',
+      }, {
+      value: '1',
+      label: '查看账单',
+    },{
+      value: '3',
+      label: '解绑',
+      action: ()=>this.removeCard()
+    },
+  ]
 
   async getCards(){
     this.props.dispatch(getCardsList({
@@ -41,6 +46,14 @@ export default class CardsList extends React.Component {
       debugger;
     });
 
+  }
+
+  async removeCard(cardNo){
+    await this.props.dispatch(looseCard({
+      isQuick:"00",
+      cardNo
+    }))
+    this.getCards()
   }
 
   componentWillMount(){
@@ -73,7 +86,8 @@ export default class CardsList extends React.Component {
       </div>
       <div>
         {cardsList.map((v, k) => {
-          return <Card id={k} key={k} popupCard={(v) => this.setState({activeCard: parseInt(v)})}></Card>
+          const { actNo } = v;
+          return <Card id={k} {...v} key={k} popupCard={(v) => this.setState({activeCard: parseInt(v),activeData:actNo})}></Card>
         })}
       </div>
 
@@ -115,12 +129,19 @@ export default class CardsList extends React.Component {
       `}</style>, <Menu
             key={'c'}
             className="single-foo-menu"
-            data={method}
+            data={this.methodList}
             level={1}
             height={document.documentElement.clientHeight / 6}
             onChange={(data) => {
-
-              this.props.history.push(`${method[data[0]].action}/${activeCard}`)
+              const {activeData} = this.state;
+              const index = data[0]
+              if(parseInt(index) == 1 ){
+                this.props.history.push("/manual/add")
+              } else if(parseInt(index) == 2 ){
+                this.props.history.push("/bill/detail")
+              } else if(parseInt(index) == 3 ){
+                this.removeCard(activeData)
+              }
             }}
             multiSelect={false}
           />,

@@ -30,8 +30,9 @@ export default class BillCard extends React.Component {
       ...reqParams
     })).then((result) => {
       const {data} = result;
-      this.loopLogin(data, importBillType)
-      debugger;
+      if(typeof data != 'undefined'){
+        this.loopLogin(data, importBillType)
+      }
     }, () => {
       debugger;
     })
@@ -84,7 +85,7 @@ export default class BillCard extends React.Component {
 
         return;
       case "DONE_SUCC"://成功登录
-        debugger;
+        Toast.success('同步成功');
         this.setState({
           percent:100,
           syncBegin:false
@@ -146,11 +147,7 @@ export default class BillCard extends React.Component {
     prompt('输入验证码', description, [{
       text: '取消',
       onPress: value => new Promise((resolve) => {
-        Toast.info('登录失败', 1);
-        setTimeout(() => {
-          resolve();
-          console.log(`value:${value}`);
-        }, 1000);
+        resolve();
       }),
     },
       {

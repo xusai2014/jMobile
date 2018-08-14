@@ -15,21 +15,17 @@ const alert = Modal.alert;
 export default class EmailManager extends React.Component{
 
   async importEmailOne(taskId){
-    Toast.loading('请稍后')
-    const reqParams = await this.props.getBaseParams();
+    Toast.loading('请稍后',0,null,true)
     if(this.props.requestStaus){
-      debugger;
       return;
     }
-    await this.waitFunc(7000)
 
     this.props.dispatch(directImport({
-      ...reqParams,
       taskId,
     })).then((result)=>{
       debugger;
       const { data:taskId = '' } =result;
-      this.props.history.push('/load/email', {taskId, loginType: ""})
+      this.props.history.push('/load/email', {taskId, loginType: "03"})
       Toast.hide();
     },(err)=>{
       debugger;
@@ -50,22 +46,15 @@ export default class EmailManager extends React.Component{
   }
 
   async componentDidMount(){
-    const reqParams = await this.props.getBaseParams();
-    this.props.dispatch(getEmailList({
-      ...reqParams,
-    }));
+    this.props.dispatch(getEmailList());
 
   }
 
   async removeEmailOne(uuid){
-    const reqParams = await this.props.getBaseParams();
     this.props.dispatch(removeEmail({
-      ...reqParams,
       uuid,
     })).then(()=>{
-      this.props.dispatch(getEmailList({
-        ...reqParams,
-      }));
+      this.props.dispatch(getEmailList());
     });
 
   }

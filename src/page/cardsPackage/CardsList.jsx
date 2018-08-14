@@ -33,10 +33,12 @@ export default class CardsList extends React.Component {
   }
 
   async getCards(){
-    const reqParams = await this.props.getBaseParams();
     this.props.dispatch(getCardsList({
+      type:'01',
     })).then((result) => {
+      debugger;
     }, (err) => {
+      debugger;
     });
 
   }
@@ -47,6 +49,7 @@ export default class CardsList extends React.Component {
 
   render() {
     const {activeCard} = this.state;
+    const { cardsList } = this.props;
     return <div>
       <Header title="卡包" hide={false}
               right={(<Icon type="plus" onClick={() => {
@@ -69,7 +72,7 @@ export default class CardsList extends React.Component {
         </div>
       </div>
       <div>
-        {[1, 2].map((v, k) => {
+        {cardsList.map((v, k) => {
           return <Card id={k} key={k} popupCard={(v) => this.setState({activeCard: parseInt(v)})}></Card>
         })}
       </div>

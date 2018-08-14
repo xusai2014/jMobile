@@ -24,10 +24,8 @@ export default class BillCard extends React.Component {
     await this.setState({
       syncBegin:true
     })
-    const reqParams = await this.props.getBaseParams();
     this.props.dispatch(syncBill({
       taskId: task_id,
-      ...reqParams
     })).then((result) => {
       const {data} = result;
       if(typeof data != 'undefined'){
@@ -49,10 +47,8 @@ export default class BillCard extends React.Component {
     let status = {};
     do {
 
-      const reqParams = await this.props.getBaseParams();
       status = await this.props.dispatch(checkToken({
         taskId,
-        ...reqParams
       }))
 
     } while (this.judgeTaskStatus(status))
@@ -122,11 +118,9 @@ export default class BillCard extends React.Component {
   async verifycation({taskId, value: code}) {
     let codeStatus = ''
 
-    const reqParams = await this.props.getBaseParams();
     codeStatus = await this.props.dispatch(verifyCode({
       taskId,
       code,
-      ...reqParams
     }));
 
     const {data} = codeStatus;
@@ -282,9 +276,9 @@ export default class BillCard extends React.Component {
                 fontSize: '0.22rem',
                 color: '#333333',
                 letterSpacing: '-1px',
-                marginLeft: '2.35rem'
+                marginLeft: '2.57rem'
               }}>
-                {percent}%更新中...
+                {percent > 0?`${percent}%更新中...`:'登录中...'}
                 <Progress style={{width:"1.32rem"}} percent={percent} position="normal" />
               </div>:
               <img src="/static/img/更新@2x.png" style={{

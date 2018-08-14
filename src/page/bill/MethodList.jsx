@@ -12,16 +12,13 @@ import {getBankList, getEmailList} from '../../actions/reqAction';
 @InitDecorator()
 export default class MethodList extends React.Component{
   async componentWillMount(){
-    const reqParams = await this.props.getBaseParams();
     this.props.dispatch(getBankList()).then((result)=>{
     },(err)=>{
     });
   }
 
   async enterEmail(){
-    const reqParams = await this.props.getBaseParams();
     this.props.dispatch(getEmailList({
-      ...reqParams,
     })).then((result)=>{
       const { data = [] }= result;
       if(data.length >0){

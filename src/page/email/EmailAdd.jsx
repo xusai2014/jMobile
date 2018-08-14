@@ -28,11 +28,9 @@ export default class EmailAdd extends React.Component {
 
   async loginEnter() {
     const {account, password} = this.state;
-    const reqParams = await this.props.getBaseParams();
     const login = await this.props.dispatch(emailLogin({
       account,
       password,
-      ...reqParams
     }))
     const {data: taskId = ''} = login;
     if (!taskId) {

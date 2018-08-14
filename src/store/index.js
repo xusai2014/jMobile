@@ -14,10 +14,15 @@ function promiseMiddleware() {
 
     return promise().then(
       (result) => {
-        const {RETURNCODE, DATA} = result;
-        if (RETURNCODE == '0000') {
-          return next({...rest, data:DATA, type: SUCCESS})
-        } else {
+        const {RETURNCODE, DATA, RESULTCODE} = result;
+        if (RETURNCODE == '0000' || RESULTCODE == '0000') {
+          if(SUCCESS == 'M511'){
+            const { bindList } = result;
+            return next({...rest, data:bindList, type: SUCCESS})
+          } else {
+            return next({...rest, data:DATA, type: SUCCESS})
+          }
+        } else{
           next({...rest, data: null, type: SUCCESS});
           next({...rest, result, type: FAILURE})
           throw Error('接口失败')

@@ -4,6 +4,7 @@ import React from 'react';
 export default class Card extends React.Component {
   render() {
     const { popupCard, id } =this.props;
+    const { bankNm,} = popupCard;
     return (<div style={styles.container}>
       <div>
         <div style={styles.rowItem}

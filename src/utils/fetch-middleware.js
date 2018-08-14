@@ -1,14 +1,17 @@
-import Storage from '../store';
-import {packageReqData, aesDecrypt} from './encrypt-util'
-import {Toast} from 'antd-mobile';
-import { apiUrl,isMock } from '../config/api'
-/*
+/**
 *   @author jerryxu
 *   @methodName ActionCreator
 *   @params type
 *   @description 事件生成器
 *
 */
+import Storage from '../store';
+import {packageReqData, aesDecrypt} from './encrypt-util'
+import {Toast} from 'antd-mobile';
+import { apiUrl,isMock } from '../config/api'
+import {nativeLogin, nativeQuitLogon, nativeRequestBaseParams} from "../interface/jsNative";
+import {showSingleBtnModal} from "../compoents/ModalAlert";
+
 export const ActionCreator = (type, url, method, data, key ,cancel = false) => {
     return () => {
         return {
@@ -21,7 +24,7 @@ export const ActionCreator = (type, url, method, data, key ,cancel = false) => {
 }
 
 
-/*
+/**
  *   @author jerryxu
  *   Create a Class PromiseList
  *   @description 异步请求管理类
@@ -46,12 +49,21 @@ export class PromiseList {
   }
 };
 
-/*
+/**
  *   @author jerryxu
  *   @description 网络请求方法
  *
  */
-export const fetchPromise = (url, method = 'GET', data, cancel = false, isRedux =false) => {
+export const  fetchPromise = async (url, method = 'GET', data, cancel = false, isRedux =false) => {
+  const reqParams = await nativeRequestBaseParams().then((reqParams) => {
+    Storage.dispatch({type:'syncData',data:reqParams})
+    return {
+      APPVERSION: reqParams['APP_VERSIONS'],
+      OSVERSION: reqParams['PHONE_VERSIONS'],
+      PLATFORM: reqParams['PHONE_PLATFORM'],
+      TOKEN_ID: reqParams['token'],
+      CHANNEL_NO: reqParams['channelNo'],
+    }})
   if(isMock){
     return fetchMockData(data);
   }
@@ -70,7 +82,7 @@ export const fetchPromise = (url, method = 'GET', data, cancel = false, isRedux 
 
   Storage.dispatch({type: "REQUEST", data: true});
   let queryData = '';
-  const dataBody = packageReqData(data, isnv, encflag)
+  const dataBody = packageReqData({...data,...reqParams}, isnv, encflag)
   Object.keys(dataBody).map((v, k) => {
     queryData = queryData + v + '=' + dataBody[v] + '&'
   })
@@ -129,7 +141,7 @@ const fetchMockData = (data)=>new Promise((resolve,reject)=>{
 })
 
 
-/*
+/**
  *   @author jerryxu
  *   @description 检查响应状态
  *
@@ -164,7 +176,7 @@ export function checkStatus(response) {
   }
 }
 
-/*
+/**
  *   @author jerryxu
  *   @description 解析response
  *
@@ -177,7 +189,7 @@ export function parseJSON(response) {
   }
 }
 
-/*
+/***
  *   @author jerryxu
  *   @description 请求头部设置
  */
@@ -188,7 +200,7 @@ export const headers = {
   "Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"
 }
 
-/*
+/**
  *   @author jerryxu
  *   @description 统一处理网络请求数据
  */
@@ -223,3 +235,25 @@ export const packagePublicParams = (nativeParams, TRDE_CODE) => ({
   CHANNEL_NO: nativeParams['CHANNEL_NO'],
   TRDE_CODE,
 });
+
+/**
+ * 处理重新登录回调
+ * @param message
+ * @param successCall
+ * @param cancelCall
+ */
+export const reLoginFlow = (message, successCall = () => {}, cancelCall = () => {}) => {
+  showSingleBtnModal({
+    title: message, onOk: () => {
+      nativeQuitLogon();
+      nativeLogin((params) => {
+        if (params.errorCode == '0000') { // 登录成功
+          successCall(params);
+        } else {
+          /* 登录取消 */
+          cancelCall();
+        }
+      });
+    }
+  });
+}

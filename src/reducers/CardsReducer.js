@@ -9,7 +9,7 @@ export default function (state = initialState, actions) {
     case CARDS_LIST[1]:
       return {
         ...state,
-        cardsList:state.cardsList
+        cardsList:actions.data
       }
 
     default:

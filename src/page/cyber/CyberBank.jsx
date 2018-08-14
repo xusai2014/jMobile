@@ -26,12 +26,10 @@ export default class CyberBank extends React.Component {
   }
 
   async componentWillMount() {
-    const reqParams = await this.props.getBaseParams();
     const {bankId: abbr} = this.props.match.params;
     this.props.dispatch(getLoginList({
       abbr,
       cardType: cardType,
-      ...reqParams
     })).then((result) => {
     }, (err) => {
     });
@@ -47,14 +45,12 @@ export default class CyberBank extends React.Component {
      const {inputData} = this.state;
      const {username: account, password} = inputData[loginType];
      const {bankId: abbr} = this.props.match.params;
-     const reqParams = await this.props.getBaseParams();
      const data = await this.props.dispatch(loginCyber({
        password,
        abbr,
        account,
        loginType,
        loginTarget: cardType,
-       ...reqParams
      }))
      const { data:taskId ='' } = data;
     if(!taskId){

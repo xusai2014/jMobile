@@ -23,24 +23,19 @@ export default class BillDetail extends React.Component {
   }
 
   async componentDidMount(){
-    const reqParams = await this.props.getBaseParams();
     const { billId } = this.props.match.params;
     this.props.dispatch(getBillDetail({
       billId,
-      ...reqParams
     }))
   }
 
   async getPayDetailInfo(bankId = '0308',cardNumber = '4443'){
-    const reqParams = await this.props.getBaseParams();
     const { billDetail } =this.props;
     const {} = billDetail;
     this.props.dispatch(getPayDetail({
       bankId,
       cardNumber,
-      ...reqParams
     }))
-
   }
 
   generate(payment_due_date,bill_date,credit_limit,balance){
@@ -141,9 +136,7 @@ export default class BillDetail extends React.Component {
 
   }
   async removeBill(billId){
-    const reqParams = await this.props.getBaseParams();
     this.props.dispatch(deleteBill({
-      ...reqParams,
       billId,
     })).then((result)=>{
       //TODO succeed to delete bill

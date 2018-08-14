@@ -34,7 +34,6 @@ export default class LoadingStatus extends React.Component{
    *   @description 第二步流程
    */
   async checkTask(taskId,) {
-    const reqParams = await this.props.getBaseParams();
     const {
       state = {}
     } = this.props.location;
@@ -47,26 +46,28 @@ export default class LoadingStatus extends React.Component{
     do {
       if(loginType == '03'){
         login = await this.props.dispatch(checkEmailTask({
-          ...reqParams,
           taskId
         }))
       } else if(loginType == '01'){
         login = await this.props.dispatch(checkToken({
           taskId,
-          ...reqParams
         }))
       }
+
       debugger;
     } while (this.judgeStatus(login))
 
-
+    if(typeof login.data == 'undefined'){
+      Toast.fail('导入失败');
+      return;
+    }
     this.handleStatus(login, taskId, loginType)
 
   }
 
 
   judgeStatus(status) {
-    const {data} = status;
+    const {data = {} } = status;
     const {phase, phase_status} = data;
     switch (phase_status) {
       case "DOING":
@@ -118,11 +119,9 @@ export default class LoadingStatus extends React.Component{
   async verifycation({taskId, value: code}) {
     let codeStatus = ''
 
-    const reqParams = await this.props.getBaseParams();
     codeStatus = await this.props.dispatch(verifyCode({
       taskId,
       code,
-      ...reqParams
     }));
 
     const {data} = codeStatus;
@@ -176,10 +175,8 @@ export default class LoadingStatus extends React.Component{
     let pollingStatus = '';
     do {
 
-      const reqParams = await this.props.getBaseParams();
       pollingStatus = await this.props.dispatch(pollingCyber({
         taskId,
-        ...reqParams
       }));
       if(this.state.progress < 80){
         this.setState({
@@ -216,7 +213,7 @@ export default class LoadingStatus extends React.Component{
     const { progress } = this.state;
     return [<Header key="1" title={`正在导入${title}`} ></Header>,<div key={2} style={{width:"7.5rem",position:'absolute',textAlign:'center',backgroundColor:"#FFFFFF",paddingBottom:"0.5rem"}}>
       <Loading />
-      {`正在导入${title}…已完成${progress}%`}
+      {progress >0?`正在导入${title}…已完成${progress}%`:'登录中，请耐心等待'}
     </div>]
   }
 }

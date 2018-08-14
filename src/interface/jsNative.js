@@ -43,6 +43,14 @@ const nativeGoBindDevice = (request = {}) => {
 };
 
 /**
+ * 跳转到原生刷卡界面
+ * @param request
+ */
+const nativeGoSwipingCard = (request = {}) => {
+  JSBridge.invoke('leaveForSwipingcard', null, request);
+};
+
+/**
  * 调用原生刷卡交易
  * @param request
  * @returns {Promise<any>}
@@ -76,20 +84,19 @@ const nativeOpenNewWebView = (request = {}) => {
 
 /*
  * 打开原生登录界面，登录成功后回到web页面
- * @returns {Promise<any>}
  */
-const nativeLogin = (request = {}) => new Promise((resolve, reject) => {
+const nativeLogin = (call) => {
   JSBridge.invoke('nativeLogin', response => {
-    resolve(response);
-  }, request);
-});
+    call(response);
+  }, {});
+};
 
 /**
- * 同步基本数据，用户Token 、用户状态、APP版本号
+ * 调用原生退出登录方法,清空原生登录状态数据
  * FIXME 待调试
  */
-const syncData = (request = {}) => {
-  JSBridge.invoke('syncData', response => {}, request)
+const nativeQuitLogon = () => {
+  JSBridge.invoke('quitLogon', response => {}, {});
 }
 
 /**
@@ -157,24 +164,20 @@ const nativeIsShowOpenVipButton = (request = {}) => new Promise((resolve, reject
  * @param callback          已登录状态回调
  * @param loginResultCall   登录成功后回调(不传默认会执行: 已登录状态回调)
  */
-const loginHelper = (callback, loginResultCall) => {
+const loginHelper = (callback = () => {}, loginResultCall) => {
   checkNativeLoginStatus().then(params => {
     // 已登录状态
     callback(params);
   }, () => {
     // 未登录状态
-    nativeLogin().then(params => {
+    nativeLogin((params) => {
       if (params.errorCode == '0000') { // 登录成功
         loginResultCall ? loginResultCall(params) : callback(params);
       } else {
         /* 登录取消 */
+        Toast.hide();
       }
-    }).catch((err) => {
-      Toast.show(`登录失败, 请重新尝试!`, 2, false);
     });
-  }).catch((err) => {
-    // 异常情况
-    Toast.show(`程序异常, 请重新尝试!`, 2, false);
   });
 };
 
@@ -194,4 +197,6 @@ export {
   nativeIsShowOpenVipButton,
   nativeWebShare,
   nativeSaveWebView2Png,
+  nativeGoSwipingCard,
+  nativeQuitLogon,
 }

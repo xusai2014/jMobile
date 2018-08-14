@@ -1,9 +1,10 @@
 import React from 'react';
 import Header from "../../compoents/Header";
-import {Icon, SwipeAction, List} from "antd-mobile";
+import {Icon, SwipeAction, List, Modal} from "antd-mobile";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {directImport, getEmailList, removeEmail} from "../../actions/reqAction";
 import {Toast} from "antd-mobile";
+const alert = Modal.alert;
 
 @InitDecorator((state)=>{
   return {
@@ -88,7 +89,12 @@ export default class EmailManager extends React.Component{
               right={[
                 {
                   text: '删除',
-                  onPress: () => this.removeEmailOne(uuid),
+                  onPress: () => {
+                    alert('', '账单删除后，如需再次查询，需要重新导入账单', [
+                      { text: '确认', onPress: () => this.removeEmailOne(uuid) },
+                      { text: '取消', onPress: () => console.log('cancel') },
+                    ])
+                  },
                   style: { width:"1.73rem",backgroundColor: '#FF2D55', color: 'white' },
                 },
               ]}

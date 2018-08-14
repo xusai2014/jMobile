@@ -65,6 +65,7 @@ export const EMAIL_LIST = ['REQUEST','CH816','FAILURE'];
 export const DELETE_EMAIL = ['REQUEST','CH822','FAILURE'];
 
 
-
+//卡包列表接口
+export const CARDS_LIST = ['REQUEST','M175','FAILURE'];
 
 

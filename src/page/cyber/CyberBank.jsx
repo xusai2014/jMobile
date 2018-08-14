@@ -1,9 +1,8 @@
 import React from 'react';
 import Header from "../../compoents/Header";
-import {Modal} from 'antd-mobile';
 import ModalCom from "../../compoents/ModalCom";
 import {Tabs,Toast} from "antd-mobile"
-import {checkToken, getLoginList, loginCyber, verifyCode, pollingCyber} from "../../actions/reqAction";
+import { getLoginList, loginCyber, } from "../../actions/reqAction";
 import {InitDecorator} from "../../compoents/InitDecorator";
 
 

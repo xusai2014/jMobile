@@ -2,6 +2,8 @@ import React from 'react';
 import Header from "../../compoents/Header";
 import Card from "./components/Card";
 import {Menu, Icon} from "antd-mobile";
+import {InitDecorator} from "../../compoents/InitDecorator";
+import {getCardsList} from "../../actions/reqAction";
 
 const method = [
   {
@@ -15,13 +17,32 @@ const method = [
   },
 ];
 
-
+@InitDecorator(
+  (state)=>{
+    return {
+      cardsList:state.CardsReducer.cardsList
+    }
+  }
+)
 export default class CardsList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       activeCard: -1,// -1不选择，其它值选择
     };
+  }
+
+  async getCards(){
+    const reqParams = await this.props.getBaseParams();
+    this.props.dispatch(getCardsList({
+    })).then((result) => {
+    }, (err) => {
+    });
+
+  }
+
+  componentWillMount(){
+    this.getCards();
   }
 
   render() {

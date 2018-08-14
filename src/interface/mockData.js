@@ -3,7 +3,7 @@ export default {
     "APP_VERSIONS": "3.0.0",
     "PHONE_VERSIONS": "11.4",
     "PHONE_PLATFORM": "iOS",
-    "token": "04b7b3cb5f6543a9b89f27bc02071884",
+    "token": "a74ff5e4c3ed4b2e93633acd4fa8bcd5",
     "channelNo": "01",
     "PHONE_LANGUAGE": "en",
     "PHONE_FIRM": "Apple",

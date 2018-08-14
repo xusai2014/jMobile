@@ -7,7 +7,7 @@ import {
   LOGIN_CYBER,
   VERYFY_CODE_STARUS,
   BILL_LIST, BILL_DETAIL, PAY_DETAIL, HUAN_DAO, SYNC_BILL, FREE_INTEREST, EMAIL_LOGIN, EMAIL_TASK_STATUS, DELETE_BILL,
-  DIRECT_EMAIL_BILL, EMAIL_LIST, DELETE_EMAIL
+  DIRECT_EMAIL_BILL, EMAIL_LIST, DELETE_EMAIL, CARDS_LIST
 } from '../utils/ActionsType'
 
 export const getBankList = (data) => ActionCreator(
@@ -140,6 +140,13 @@ export const removeEmail = (data) => ActionCreator(
   `/api`,
   'POST',
   {...data, 'TRDE_CODE': DELETE_EMAIL[1]}
+)();
+
+export const getCardsList = (data) => ActionCreator(
+  CARDS_LIST,
+  `/api`,
+  'POST',
+  {...data, 'TRDE_CODE': CARDS_LIST[1]}
 )();
 
 

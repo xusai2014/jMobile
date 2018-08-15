@@ -8,7 +8,7 @@ import {
   VERYFY_CODE_STARUS,
   BILL_LIST, BILL_DETAIL, PAY_DETAIL, HUAN_DAO, SYNC_BILL, FREE_INTEREST, EMAIL_LOGIN, EMAIL_TASK_STATUS, DELETE_BILL,
   DIRECT_EMAIL_BILL, EMAIL_LIST, DELETE_EMAIL, CARDS_LIST, JUDGE_SEL_CARD, IDENTITY_BNK, POST_INFO, SEND_VERIFICATION,
-  VERIFY_CODE, GET_IDENTITY_INFO, LOOSE_CARD, HANDLE_BILL, GET_BILL_ID
+  VERIFY_CODE, GET_IDENTITY_INFO, LOOSE_CARD, HANDLE_BILL, GET_BILL_ID, ACTIVITY_CARD
 } from '../utils/ActionsType'
 
 export const getBankList = (data) => ActionCreator(
@@ -212,6 +212,15 @@ export const getBillId = (data) => ActionCreator(
   'POST',
   {...data, 'TRDE_CODE': GET_BILL_ID[1]}
 )();
+
+export const getActivities = (data) => ActionCreator(
+  ACTIVITY_CARD,
+  `/api`,
+  'POST',
+  {...data, 'TRDE_CODE': ACTIVITY_CARD[1]}
+)();
+
+
 
 
 

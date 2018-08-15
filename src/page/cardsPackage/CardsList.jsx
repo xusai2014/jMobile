@@ -145,7 +145,7 @@ export default class CardsList extends React.Component {
                   bankNo,cardNum:num
                 })).then((result)=>{
                   debugger;
-                  this.props.history.push("/bill/detail")
+                  this.props.history.push(`/bill/detail/${result.data}`)
                 })
               } else if(parseInt(index) == 2 ){
                 this.removeCard(actNo)

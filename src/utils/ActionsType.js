@@ -95,3 +95,6 @@ export const HANDLE_BILL = ['REQUEST','CH811','FAILURE'];
 
 //查看账单编号
 export const GET_BILL_ID = ['REQUEST','CH824','FAILURE'];
+
+//活动列表
+export const ACTIVITY_CARD = ['REQUEST','CH820','FAILURE'];

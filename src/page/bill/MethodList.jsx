@@ -95,7 +95,7 @@ export default class MethodList extends React.Component{
         bankList.map((v,k)=>{
           const {abbr, name, logo_uri} = v
           return [<div key={k} onClick={()=>this.props.history.push(`/cyber/login/${abbr}`,{name})} style={{background: '#FFFFFF',padding:"0.18rem 0 0.18rem 0.28rem",display:'flex', alignItems: 'center'}}>
-            <span style={{width:'0.6rem',height:'0.6rem',borderRadius:'0.3rem'}}><img src={logo_uri} style={{width:'0.6rem'}}/></span>
+            <span style={{width:'0.6rem',height:'0.6rem',borderRadius:'0.3rem'}}><img src={logo_uri} style={{width:'0.6rem',borderRadius:'0.3rem'}}/></span>
             <span style={{
               fontSize: '0.32rem',
               color: '#333333',

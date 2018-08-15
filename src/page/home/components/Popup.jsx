@@ -1,6 +1,9 @@
 import React from 'react';
 import {Icon} from "antd-mobile";
+import {getHUandao} from "../../../actions/reqAction";
+import { connect } from "react-redux";
 
+@connect()
 export default class Popup extends React.Component{
   constructor(props){
     super(props);
@@ -12,7 +15,7 @@ export default class Popup extends React.Component{
 
   renderList(){
     const {type,selectData} = this.state;
-    const { data } = this.props;
+    const data = this.methodList();
     switch(type) {
       case '0':
         return data.map((v,k)=>{
@@ -71,12 +74,35 @@ export default class Popup extends React.Component{
             margin:'auto'
           }}></div>]
         })
-
     }
 
   }
+
+  async callHuandao(){
+    this.props.dispatch(getHUandao({
+    })).then((result)=>{
+      const { data = {} } = result;
+      const {telEnc,token,finId} = data;
+      location.href = `https://lns-front-test.vbillbank.com/transitionPageService?telNo=${telEnc}&token=${token}&appId=${finId}&h5Channel=MPOS_XYKHK`
+    },()=>{})
+
+
+  }
+
+  methodList() {
+    return [
+      {imgSrc: "/static/img/还@2x.png", name: '还到', action:this.callHuandao.bind(this), type: '0', des: '（授信额度30000元）', color: '#4d7cfe'},
+      {
+        imgSrc: "/static/img/qita@2x.png", name: '其它', action:()=>{}, type: '1', des: '', color: '', node: [
+        {imgSrc: "/static/img/微信@2x.png", name: '微信', action: ()=>{}, type: '0', des: '', color: ''},
+        {imgSrc: "/static/img/支付宝@2x.png", name: '支付宝', action: ()=>{}, type: '0', des: '', color: ''}
+      ]
+      },
+    ]
+  }
+
   render(){
-    const { visible, setVisible, title = '选择还款方式', data ,style = {} } = this.props;
+    const { visible, setVisible, title = '选择还款方式' ,style = {} } = this.props;
     return <div style={{
       position:'absolute',
       bottom: '0rem',

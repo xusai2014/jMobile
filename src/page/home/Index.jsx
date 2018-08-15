@@ -5,14 +5,18 @@ import Popup from "./components/Popup";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {loginHelper} from "../../interface/jsNative";
 import FreeItem from "./components/FreeItem";
-import {getBillList, getHUandao, getFreeInterest, syncBill, getIndetiyInfo} from "../../actions/reqAction";
+import {
+  getBillList, getFreeInterest, getIndetiyInfo,
+  getActivities
+} from "../../actions/reqAction";
 
 
 @InitDecorator((state)=>{
   return {
     billList:state.BillReducer.billList,
     huandaoData:state.BillReducer.huandaoData,
-    freeIntrestData:state.BillReducer.freeIntrestData
+    freeIntrestData:state.BillReducer.freeIntrestData,
+    activities:state.CardsReducer.activities
   }
 })
 export default class Index extends React.Component {
@@ -35,17 +39,13 @@ export default class Index extends React.Component {
     }
   }
 
-  async componentWillMount() {
-    //const params = await this.props.getBaseParams();
-
-    //fetchPromise('/api', 'POST', {
-      //'TRDE_CODE': "M113",
-      //...params
-    //}, true).then((data) => {
-    //}, () => {
-
-    //})
+  componentWillMount() {
     this.getBillList();
+    this.props.dispatch(getActivities()).then(()=>{
+      debugger
+    },()=>{
+      debugger
+    });
   }
 
   componentWillReceiveProps(nextProps){
@@ -115,18 +115,6 @@ export default class Index extends React.Component {
     })
   }
 
-  async callHuandao(){
-    const reqParams = await this.props.getBaseParams();
-    this.props.dispatch(getHUandao({
-      ...reqParams
-    })).then((result)=>{
-      const { data = {} } = result;
-      const {telEnc,token,finId} = data;
-      location.href = `https://lns-front-test.vbillbank.com/transitionPageService?telNo=${telEnc}&token=${token}&appId=${finId}&h5Channel=MPOS_XYKHK`
-    },()=>{})
-
-
-  }
 
 
   render() {
@@ -284,7 +272,6 @@ export default class Index extends React.Component {
         <Popup
           key="e"
           title="选择还款方式"
-          data={this.methodList(this)}
           visible={visible}
           setVisible={(v) => {
             this.setState({visible: v})
@@ -294,17 +281,7 @@ export default class Index extends React.Component {
     ]
   }
 
-  methodList(HUAN_DAO) {
-    return [
-      {imgSrc: "/static/img/还@2x.png", name: '还到', action:this.callHuandao.bind(this), type: '0', des: '（授信额度30000元）', color: '#4d7cfe'},
-      {
-        imgSrc: "/static/img/qita@2x.png", name: '其它', action:()=>{}, type: '1', des: '', color: '', node: [
-        {imgSrc: "/static/img/微信@2x.png", name: '微信', action: ()=>{}, type: '0', des: '', color: ''},
-        {imgSrc: "/static/img/支付宝@2x.png", name: '支付宝', action: ()=>{}, type: '0', des: '', color: ''}
-      ]
-      },
-    ]
-  }
+
   icons = [{
     img: "/static/img/kabao@2x.png",
     text: "卡包",

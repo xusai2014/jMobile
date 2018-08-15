@@ -1,9 +1,9 @@
 import React from 'react';
 import Header from '../../compoents/Header';
-import {Tabs,Modal} from "antd-mobile"
+import {Tabs,Modal,Toast} from "antd-mobile"
 import Popup from "../home/components/Popup";
 import {InitDecorator} from "../../compoents/InitDecorator";
-import {deleteBill, getBillDetail, getPayDetail} from "../../actions/reqAction";
+import {checkToken, deleteBill, getBillDetail, getPayDetail, syncBill, verifyCode} from "../../actions/reqAction";
 const alert = Modal.alert;
 @InitDecorator((state)=>{
   return {
@@ -17,7 +17,193 @@ export default class BillDetail extends React.Component {
     super(props);
     this.state = {
       expandOne: "-1",
-      visible:false
+      visible:false,
+      syncBegin:false
+    }
+
+  }
+
+  async callSyncBill(task_id, importBillType) {
+
+    await this.setState({
+      syncBegin:true
+    })
+    this.props.dispatch(syncBill({
+      taskId: task_id,
+    })).then((result) => {
+      const {data} = result;
+      if(typeof data != 'undefined'){
+        this.loopLogin(data, importBillType)
+      }
+    }, () => {
+      debugger;
+    })
+
+  }
+
+  /**
+   *   @author jerryxu
+   *   @params 用户信息
+   *   @description 第二步流程 检查任务状态并获取任务状态
+   */
+  async loopLogin(taskId, loginType) {
+
+    let status = {};
+    do {
+
+      status = await this.props.dispatch(checkToken({
+        taskId,
+      }))
+
+    } while (this.judgeTaskStatus(status))
+    this.handleStatus(status, taskId, loginType);
+  }
+
+  /**
+   *   @author jerryxu
+   *   @params 用户信息
+   *   @description 第三步流程判断任务状态，分别处理
+   */
+  handleStatus(status, taskId, loginType) {
+    const {data = {}} = status;
+    const {phase, phase_status = '', input, description} = data;
+    switch (phase_status) {
+      case 'WAIT_CODE'://输入验证码
+
+        return this.promptClick({
+          input,
+          description,
+          taskId,
+          callback: this.verifycation.bind(this)
+        })
+      case "DOING":
+        return;
+      case "DONE_SUCC"://成功登录
+        this.setState({
+          syncBegin:false
+        })
+        Toast.success('同步成功');
+        return;
+      case "DONE_FAIL":
+        this.setState({
+          syncBegin:false
+        })
+        Toast.info(description);
+        return;
+      case "DONE_TIMEOUT":
+        this.setState({
+          syncBegin:false
+        })
+        Toast.info('同步失败');
+        return;
+      default:
+        this.setState({
+          syncBegin:false
+        })
+        Toast.info('同步失败');
+        return;
+    }
+  }
+
+
+  /**
+   *   @author jerryxu
+   *   @methodName
+   *   @params 任务编号 短信验证码
+   *   @description 第三步流程的分支流程，输入验证码检查登录状态
+   */
+  async verifycation({taskId, value: code}) {
+    let codeStatus = ''
+
+    codeStatus = await this.props.dispatch(verifyCode({
+      taskId,
+      code,
+    }));
+
+    const {data} = codeStatus;
+    //if(value == '200'){
+
+    //} else {
+    this.loopLogin(taskId);
+    //}
+  }
+
+  /**
+   *   @author jerryxu
+   *   @methodName i
+   *   @params 魔蝎验证码模版 任务编号 信息描述 回调函数
+   *   @description Popup提示，输入信息，异步处理
+   */
+  promptClick({input, taskId, description, callback}) {
+    prompt('输入验证码', description, [{
+      text: '取消',
+      onPress: value => new Promise((resolve) => {
+        resolve();
+      }),
+    },
+      {
+        text: '确定',
+        onPress: value => new Promise((resolve, reject) => {
+          callback({taskId, value})
+          resolve();
+          // setTimeout(() => {
+          //   this.setState({modal: true, description: "您绑定的卡为借记卡，卡包只支持绑定信用卡，请您重新绑定"})
+          //   console.log(`value:${value}`);
+          // }, 1000);
+        }),
+      },
+    ], 'default', null, ['请输入验证码'])
+
+  }
+
+  judgeTaskStatus(status) {
+    const {data} = status;
+    const {phase, phase_status} = data;
+    switch (phase_status) {
+      case "DOING":
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  judgeStatus(bill_type, payment_due_date, bill_date, action) {
+    if (bill_type == 'DONE') {
+      const duM = moment(payment_due_date);
+      if (parseInt(duM.diff(moment(), 'days')) < 0) {
+        return {
+          day: " ",
+          date: " ",
+          des: `已逾期${moment().diff(duM, 'days')}天`,
+          actionName: "立即还款",
+          action
+        }
+      } else {
+        return {
+          day: duM.diff(moment(), 'days'),
+          date: duM.format('MM-DD'),
+          des: '天后到期',
+          actionName: "立即还款",
+          action
+        }
+      }
+    } else if (bill_type == 'UNDONE') {
+      const duM = moment(bill_date);
+      return {
+        day: duM.diff(moment(), 'days'),
+        date: duM.format('MM-DD'),
+        des: '天后到期',
+        actionName: "更新未出",
+        action
+      }
+    } else {
+      return {
+        day: "",
+        date: '',
+        des: '',
+        actionName: "",
+        action
+      }
     }
 
   }
@@ -146,7 +332,7 @@ export default class BillDetail extends React.Component {
 
   render() {
     const {title = '银行',billDetail ={},payDetail= []} = this.props;
-    const {expandOne, visible} = this.state;
+    const {expandOne, visible, syncBegin} = this.state;
     const {
       payment_due_date ,
       bill_date ,
@@ -365,7 +551,23 @@ export default class BillDetail extends React.Component {
           background: '#FFFFFF',
           height: '1.02rem',
           width:'2.17rem'
-        }}><span style={{margin:'auto 0.13rem auto 0',height:'0.5rem'}}><img style={{height:'0.5rem'}} src="/static/img/更新@2x.png"/>
+        }} onClick={()=>this.callSyncBill()}><span style={{margin:'auto 0.13rem auto 0',height:'0.5rem'}}>
+          <style>{
+          `@-webkit-keyframes rotation{
+            from {-webkit-transform: rotate(0deg);}
+            to {-webkit-transform: rotate(360deg);}
+           }
+
+           .Rotation{
+            -webkit-transform: rotate(360deg);
+            animation: rotation 3s linear infinite;
+            -moz-animation: rotation 3s linear infinite;
+            -webkit-animation: rotation 3s linear infinite;
+            -o-animation: rotation 3s linear infinite;
+           }
+           `
+          }</style>
+          <img className={syncBegin?"Rotation":""} style={{height:'0.5rem',}} src="/static/img/更新@2x.png"/>
         </span>更新</div><div style={{
           fontSize: '0.36rem',
           color: '#FFFFFF',
@@ -375,7 +577,7 @@ export default class BillDetail extends React.Component {
           background: '#4C7BFE',
           alignItems: 'center',
           justifyContent: 'center'
-        }} onClick={()=>this.props.history.push('/manual/handlebill')}>立即还款</div>
+        }} onClick={()=>this.setState({visible:true})}>立即还款</div>
         </div>
 
       </div>

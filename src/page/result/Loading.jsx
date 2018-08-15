@@ -54,7 +54,7 @@ export default class LoadingStatus extends React.Component{
         }))
       }
 
-      debugger;
+
     } while (this.judgeStatus(login))
 
     if(typeof login.data == 'undefined'){
@@ -183,7 +183,7 @@ export default class LoadingStatus extends React.Component{
           progress:this.state.progress+10
         })
       }
-      debugger;
+
 
     } while ( pollingStatus && typeof pollingStatus.data != 'undefined' && !pollingStatus.data)
     const {data} =pollingStatus
@@ -201,7 +201,7 @@ export default class LoadingStatus extends React.Component{
     const {
       state = {}
     } = this.props.location;
-    debugger;
+
     const {
       taskId = "586b4860-9c76-11e8-89e7-00163e0dfac7",
     } = state;

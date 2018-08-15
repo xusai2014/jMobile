@@ -36,7 +36,7 @@ export default class BillDetail extends React.Component {
         this.loopLogin(data, importBillType)
       }
     }, () => {
-      debugger;
+
     })
 
   }

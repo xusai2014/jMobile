@@ -32,7 +32,7 @@ export default class BillCard extends React.Component {
         this.loopLogin(data, importBillType)
       }
     }, () => {
-      debugger;
+
     })
 
   }
@@ -81,7 +81,7 @@ export default class BillCard extends React.Component {
 
         return;
       case "DONE_SUCC"://成功登录
-        Toast.success('同步成功');
+        Toast.success('账单信息同步完成');
         this.setState({
           percent:100,
           syncBegin:false

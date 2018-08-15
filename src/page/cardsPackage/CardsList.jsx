@@ -41,9 +41,9 @@ export default class CardsList extends React.Component {
     this.props.dispatch(getCardsList({
       type:'01',
     })).then((result) => {
-      debugger;
+
     }, (err) => {
-      debugger;
+
     });
 
   }
@@ -87,7 +87,7 @@ export default class CardsList extends React.Component {
       <div>
         {cardsList.map((v, k) => {
           const { actNo,bankNo } = v;
-          debugger
+
           return <Card id={k} {...v} key={k} popupCard={(v) => this.setState({activeCard: parseInt(v),activeData:{actNo,bankNo}})}></Card>
         })}
       </div>
@@ -144,7 +144,7 @@ export default class CardsList extends React.Component {
                 this.props.dispatch(getBillId({
                   bankNo,cardNum:num
                 })).then((result)=>{
-                  debugger;
+
                   this.props.history.push(`/bill/detail/${result.data}`)
                 })
               } else if(parseInt(index) == 2 ){

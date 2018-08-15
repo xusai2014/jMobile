@@ -69,7 +69,7 @@ export default class HandleBill extends React.Component {
       newBalance,
       bankNo,
     })).then(()=>{
-      debugger;
+
       this.props.history.push('/home/index')
     })
   }

@@ -23,12 +23,12 @@ export default class EmailManager extends React.Component{
     this.props.dispatch(directImport({
       taskId,
     })).then((result)=>{
-      debugger;
+
       const { data:taskId = '' } =result;
       this.props.history.push('/load/email', {taskId, loginType: "03"})
       Toast.hide();
     },(err)=>{
-      debugger;
+
     });
 
   }

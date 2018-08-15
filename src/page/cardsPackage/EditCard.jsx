@@ -76,7 +76,7 @@ export default class EditCard extends React.Component {
       phone:resvPhoneNo = '18800102517',
       bankType:bankNo,
     } = this.state[key]
-    debugger
+
     let r = await this.props.dispatch(postInfo({
       cardNo,
       idName,
@@ -84,14 +84,14 @@ export default class EditCard extends React.Component {
       resvPhoneNo,
       bankNo
     }))
-    debugger
+
     const { data } = r;
 
     const { result, resultMsg,bindType } = data;
     if(result != '00'){
       Toast.info(resultMsg)
     } else {
-      debugger;
+
       this.props.dispatch(sendVerification({
         channelNo:'01',
         busineType:'04',
@@ -118,7 +118,7 @@ export default class EditCard extends React.Component {
                 resvPhoneNo:resvPhoneNo,
                 bindType,
               })).then((result)=>{
-                debugger
+
                 resolve();
               },()=>{
                 reject();

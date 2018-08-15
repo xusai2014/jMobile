@@ -42,9 +42,9 @@ export default class Index extends React.Component {
   componentWillMount() {
     this.getBillList();
     this.props.dispatch(getActivities()).then(()=>{
-      debugger
+
     },()=>{
-      debugger
+
     });
   }
 
@@ -72,7 +72,7 @@ export default class Index extends React.Component {
     this.props.dispatch(getFreeInterest({
       ...reqParams
     })).then((result)=>{
-      debugger
+
     },()=>{})
   }
 

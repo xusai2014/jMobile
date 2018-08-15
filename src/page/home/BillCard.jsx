@@ -296,7 +296,7 @@ export default class BillCard extends React.Component {
                 letterSpacing: '-1px',
                 marginLeft: '2.57rem'
               }}>
-                {percent > 0?`${percent}%更新中...`:inputSmsCode?'请输入验证码':'登录中...'}
+                {percent > 0?`${percent}%更新中...`:'登录中...'}
                 <Progress style={{width:"1.32rem"}} percent={percent} position="normal" />
               </div>:
               <img src="/static/img/更新@2x.png" style={{

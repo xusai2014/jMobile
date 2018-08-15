@@ -24,3 +24,12 @@ export const registerOpenInvitationFriendQRCodePage = (context, params) => {
     params
   });
 };
+
+/**
+ * 原生调用 web 推荐好友 分享流程
+ */
+export const registerShareInvitationFriend = (shareMethod) => {
+  JSBridge && JSBridge.register("shareInvitationFriend", () => {
+    shareMethod && shareMethod();
+  });
+};

@@ -96,7 +96,7 @@ const nativeLogin = (call) => {
  * FIXME 待调试
  */
 const nativeQuitLogon = () => {
-  JSBridge.invoke('quitLogon', response => {}, {});
+  JSBridge.invoke('logout', response => {}, {});
 }
 
 /**
@@ -106,7 +106,7 @@ const nativeQuitLogon = () => {
  */
 const checkNativeLoginStatus = (request = {}) => new Promise((resolve, reject) => {
   nativeRequestBaseParams(request).then(result => {
-    result['token'] ? resolve(result) : reject(result);
+    result['TOKEN_ID'] ? resolve(result) : reject(result);
   });
 });
 
@@ -134,6 +134,24 @@ const nativeShare = (request = {}) => {
  */
 const nativeWebShare = (request = {}) => {
   JSBridge.invoke('nativeWebShare', response => {}, request);
+};
+
+/**
+ * native 右上角展示 按钮类型 ['SHARE', 'FAQ']
+ * @param request
+ */
+const nativeSetNavRightBtn = (type) => {
+  JSBridge.invoke('nativeSetNavRightBtn', response => {}, { type });
+};
+
+// 原生展示NAV 右侧分享按钮
+const nativeSetNavRightShareBtn = () => {
+  nativeSetNavRightBtn('SHARE');
+};
+
+// 原生展示NAV 右侧FAQ按钮
+const nativeSetNavRightFAQBtn = () => {
+  nativeSetNavRightBtn('FAQ');
 };
 
 /**
@@ -199,4 +217,6 @@ export {
   nativeSaveWebView2Png,
   nativeGoSwipingCard,
   nativeQuitLogon,
+  nativeSetNavRightFAQBtn,
+  nativeSetNavRightShareBtn,
 }

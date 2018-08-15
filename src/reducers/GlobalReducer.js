@@ -19,9 +19,10 @@ const initialState = {
 export default function (state = initialState, actions) {
     switch (actions.type) {
       case 'syncData':
+        const { token =''} = actions.data
         return {
           ...state,
-          isLogged:!!actions.data['token'],
+          isLogged:!!token,
           reqParams:{
             ...state.reqParams,
             APPVERSION: actions.data['APP_VERSIONS'],
@@ -29,6 +30,7 @@ export default function (state = initialState, actions) {
             PLATFORM: actions.data['PHONE_PLATFORM'],
             TOKEN_ID: actions.data['token'],
             CHANNEL_NO: actions.data['channelNo'],
+
           }
         };
       case 'REQUEST':

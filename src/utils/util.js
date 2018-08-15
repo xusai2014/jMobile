@@ -156,3 +156,6 @@ export const getSearch = (props) => {
 export const trim = (str = '') =>{ //删除左右两端的空格
     return str.replace(/(^\s*)|(\s*$)/g, "");
 }
+
+export const regEmail = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/
+export const reg = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/

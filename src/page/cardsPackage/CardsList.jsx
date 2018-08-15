@@ -157,7 +157,7 @@ export default class CardsList extends React.Component {
             this.setState({activeCard: -1,})
           }}/>
         ] : null
-      }}
+      }
 
     </div>
   }

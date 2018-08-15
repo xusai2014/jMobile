@@ -40,17 +40,19 @@ export default class Index extends React.Component {
   }
 
   componentWillMount() {
-    this.getBillList();
-    this.props.dispatch(getActivities()).then(()=>{
 
-    },()=>{
-
-    });
   }
+
 
   componentWillReceiveProps(nextProps){
     if(nextProps.isLogged && this.props.isLogged != nextProps.isLogged){
-      this.getUserInfo()
+      this.getUserInfo();
+      this.getBillList();
+      this.props.dispatch(getActivities()).then(()=>{
+        debugger;
+      },()=>{
+        debugger;
+      });
     }
   }
 
@@ -72,7 +74,6 @@ export default class Index extends React.Component {
     this.props.dispatch(getFreeInterest({
       ...reqParams
     })).then((result)=>{
-
     },()=>{})
   }
 
@@ -114,8 +115,6 @@ export default class Index extends React.Component {
       }
     })
   }
-
-
 
   render() {
     const {interestShow, visible,} = this.state;
@@ -180,20 +179,19 @@ export default class Index extends React.Component {
           isLogged ?
             baseResponseBillDtoList.map((v, k) => {
             const {
-              card_num,
-              bank_name,
-              bill_type,//账单状态
-              current_bill_amt,//本期账单总金额
-              payment_due_date,//还款日
-              bill_date,
-              task_id,
-              bill_id,// 账单编号,
-              logo_uri,
-              importBillType,//账单类型 01为网银 03为邮箱 02为手写账单
-              isNew,
+                card_num,
+                bank_name,
+                bill_type,//账单状态
+                current_bill_amt,//本期账单总金额
+                payment_due_date,//还款日
+                bill_date,
+                task_id,
+                bill_id,// 账单编号,
+                logo_uri,
+                importBillType,//账单类型 01为网银 03为邮箱 02为手写账单
+                isNew,
             } = v;
-
-             return <BillCard card_num={card_num}
+            return <BillCard card_num={card_num}
                               bank_name = {bank_name}
                               bill_type = {bill_type}
                               current_bill_amt = {current_bill_amt}
@@ -222,7 +220,7 @@ export default class Index extends React.Component {
               bill_date :"2018-08-28",
               logo_uri:'/static/img/招商银行@2x.png',
               importBillType:"",
-              isNew:'00'
+              isNew:'00',
           }].map((v, k) => <BillCard
               real={false}
               {...v} key={k} repay={(e) => {

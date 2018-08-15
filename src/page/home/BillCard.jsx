@@ -3,6 +3,7 @@ import {withRouter} from "react-router-dom";
 import {checkToken, syncBill, verifyCode} from "../../actions/reqAction";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {Modal, Progress, Toast}  from "antd-mobile";
+import {loginHelper} from "../../interface/jsNative";
 const prompt = Modal.prompt;
 
 @withRouter
@@ -212,6 +213,12 @@ export default class BillCard extends React.Component {
 
   }
 
+  callLogin(){
+    loginHelper(() => {
+      return;
+    })
+  }
+
   render() {
     const {
       card_num,
@@ -232,11 +239,17 @@ export default class BillCard extends React.Component {
     const {
       percent,
       syncBegin
-
     }= this.state;
 
     const {day, date, des, actionName, action} = this.judgeStatus(bill_type, payment_due_date, bill_date, repay)
-    return <div onClick={() => this.props.history.push(`/bill/detail/${bill_id}`)}
+    return <div onClick={(e) =>{
+                 if(!real){
+                   e.stopPropagation();
+                   e.preventDefault();
+                   this.callLogin()
+                   return
+                 }
+                this.props.history.push(`/bill/detail/${bill_id}`)}}
                 style={{background: '#FFFFFF', marginTop: '0.2rem', padding: "0.3rem 0", position: 'relative'}}>
       <div style={{display: 'flex', alignItems: 'center'}}>
         {
@@ -283,7 +296,7 @@ export default class BillCard extends React.Component {
                 letterSpacing: '-1px',
                 marginLeft: '2.57rem'
               }}>
-                {percent > 0?`${percent}%更新中...`:'登录中...'}
+                {percent > 0?`${percent}%更新中...`:inputSmsCode?'请输入验证码':'登录中...'}
                 <Progress style={{width:"1.32rem"}} percent={percent} position="normal" />
               </div>:
               <img src="/static/img/更新@2x.png" style={{
@@ -292,6 +305,10 @@ export default class BillCard extends React.Component {
                 paddingRight: '0.71rem',
               }} onClick={(e) => {
                 e.stopPropagation();
+                if(!real){
+                  this.callLogin()
+                  return
+                }
                 this.callSyncBill(task_id, importBillType)
               }}/>
           }
@@ -360,7 +377,13 @@ export default class BillCard extends React.Component {
           width: '1.26rem',
           height: '0.53rem',
           lineHeight: '0.53rem'
-        }} onClick={(e) => action(e)}>
+        }} onClick={(e) => {
+          if(!real){
+            this.callLogin()
+            return
+          }
+          action(e)
+        }}>
           {actionName}
         </div>
       </div>

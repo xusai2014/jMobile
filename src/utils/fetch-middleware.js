@@ -61,7 +61,7 @@ export const  fetchPromise = async (url, method = 'GET', data, cancel = false, i
       APPVERSION: reqParams['APP_VERSIONS'],
       OSVERSION: reqParams['PHONE_VERSIONS'],
       PLATFORM: reqParams['PHONE_PLATFORM'],
-      TOKEN_ID: reqParams['token'],
+      TOKEN_ID: reqParams['TOKEN_ID'],
       CHANNEL_NO: reqParams['channelNo'],
     }})
   if(isMock){

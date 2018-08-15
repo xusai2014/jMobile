@@ -3,7 +3,7 @@ import Header from "../../compoents/Header";
 import Card from "./components/Card";
 import {Menu, Icon} from "antd-mobile";
 import {InitDecorator} from "../../compoents/InitDecorator";
-import {getCardsList, looseCard} from "../../actions/reqAction";
+import {getBillId, getCardsList, looseCard} from "../../actions/reqAction";
 
 
 
@@ -86,8 +86,9 @@ export default class CardsList extends React.Component {
       </div>
       <div>
         {cardsList.map((v, k) => {
-          const { actNo } = v;
-          return <Card id={k} {...v} key={k} popupCard={(v) => this.setState({activeCard: parseInt(v),activeData:actNo})}></Card>
+          const { actNo,bankNo } = v;
+          debugger
+          return <Card id={k} {...v} key={k} popupCard={(v) => this.setState({activeCard: parseInt(v),activeData:{actNo,bankNo}})}></Card>
         })}
       </div>
 
@@ -133,14 +134,21 @@ export default class CardsList extends React.Component {
             level={1}
             height={document.documentElement.clientHeight / 6}
             onChange={(data) => {
-              const {activeData} = this.state;
+              const {activeData = {}} = this.state;
+              const { actNo,bankNo} = activeData
               const index = data[0]
-              if(parseInt(index) == 1 ){
+              if(parseInt(index) == 0 ){
                 this.props.history.push("/manual/add")
+              } else if(parseInt(index) == 1 ){
+                const num = actNo.substr(-4,4)
+                this.props.dispatch(getBillId({
+                  bankNo,cardNum:num
+                })).then((result)=>{
+                  debugger;
+                  this.props.history.push("/bill/detail")
+                })
               } else if(parseInt(index) == 2 ){
-                this.props.history.push("/bill/detail")
-              } else if(parseInt(index) == 3 ){
-                this.removeCard(activeData)
+                this.removeCard(actNo)
               }
             }}
             multiSelect={false}
@@ -149,7 +157,7 @@ export default class CardsList extends React.Component {
             this.setState({activeCard: -1,})
           }}/>
         ] : null
-      }
+      }}
 
     </div>
   }

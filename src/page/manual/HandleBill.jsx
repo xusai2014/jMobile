@@ -2,8 +2,17 @@ import React from 'react';
 import Header from '../../compoents/Header';
 import {Modal, Toast, DatePicker} from 'antd-mobile'
 import ModalCom from "../../compoents/ModalCom";
+import {InitDecorator} from "../../compoents/InitDecorator";
+import {handleBillForm, identityBank} from "../../actions/reqAction";
 const prompt = Modal.prompt;
 
+@InitDecorator(
+  (state) => {
+    return {
+      handeBill: state.BillReducer.handeBill
+    }
+  }
+)
 export default class HandleBill extends React.Component {
   constructor(props) {
     super(props);
@@ -13,37 +22,71 @@ export default class HandleBill extends React.Component {
       description: '',
       visible: false,
       accountDate: '',
-      repayDate: ''
+      repayDate: '',
+      bankName: "",
+      fullCardNum: "",
+      nameOnCard: "",
+      creditLimit: "",
+      newBalance: "",
+      bankNo:"",
     }
   }
 
-  promptClick = () => prompt('输入验证码', '请输入手机号135****1234收到的验证码',
-    [
-      {
-        text: '取消',
-        onPress: value => new Promise((resolve) => {
-          Toast.info('onPress promise resolve', 1);
-          setTimeout(() => {
-            resolve();
-            console.log(`value:${value}`);
-          }, 1000);
-        }),
-      },
-      {
-        text: '确定',
-        onPress: value => new Promise((resolve, reject) => {
-          resolve();
-          setTimeout(() => {
-            this.setState({modal: true, description: "您绑定的卡为借记卡，卡包只支持绑定信用卡，请您重新绑定"})
-            console.log(`value:${value}`);
-          }, 1000);
-        }),
-      },
-    ], 'default', null, ['请输入验证码'])
+  findBank() {
+    const {fullCardNum} = this.state
 
+    this.props.dispatch(identityBank({
+      cardNo: fullCardNum,
+      type: '2'
+    })).then((result) => {
+      const {data} = result;
+      const {bankNm, type} = data;
+      this.setState({
+        bankName: bankNm,
+        bankNo: type,
+      })
+    })
+  }
+
+  commitForm() {
+    const {
+      bankName,
+      accountDate: billDate,
+      fullCardNum,
+      repayDate: paymentDueDate,
+      nameOnCard,
+      creditLimit,
+      newBalance,
+      bankNo,
+    } = this.state
+    this.props.dispatch(handleBillForm({
+      bankName,
+      billDate:moment(billDate).format('YYYY-MM-DD'),
+      fullCardNum,
+      paymentDueDate:moment(paymentDueDate).format('YYYY-MM-DD'),
+      nameOnCard,
+      creditLimit,
+      newBalance,
+      bankNo,
+    })).then(()=>{
+      debugger;
+      this.props.history.push('/home/index')
+    })
+  }
 
   render() {
-    const {activeOne, modal, description} = this.state;
+    const {
+      activeOne,
+      modal,
+      description,
+      bankName,
+      accountDate,
+      fullCardNum,
+      repayDate,
+      nameOnCard,
+      creditLimit,
+      newBalance,
+    } = this.state;
 
     return [<Header key={1} title="手写账单"/>, <style key={2}>
       {
@@ -57,12 +100,15 @@ export default class HandleBill extends React.Component {
     </style>, <div key={3}>
       {
         [{
+          key: "fullCardNum",
           name: '卡号', value: "",
           placeHolder: "请输入完整卡号",
         }, {
+          key: "bankName",
           name: '发卡行', value: "",
           placeHolder: "点击此处识别发卡行",
         }, {
+          key: "nameOnCard",
           name: '持卡人', value: "",
           placeHolder: "请输入持卡人姓名",
         }, {
@@ -78,9 +124,11 @@ export default class HandleBill extends React.Component {
         }, {
           name: '信用额度', value: "",
           placeHolder: "请输入信用额度",
+          key: "creditLimit"
         }, {
           name: '账单金额', value: "",
           placeHolder: "请输入账单金额",
+          key: "newBalance"
         }].map((v, k) => {
           const {name, disabled, value, key, placeHolder, icon, code = '0'} = v;
           return <div key={k} style={styles.item}>
@@ -95,15 +143,25 @@ export default class HandleBill extends React.Component {
               >
                 <div
                   style={styles.input}>{this.state[key] ? moment(this.state[key]).format('YYYY-MM') : placeHolder}
-                  </div>
-              </DatePicker> : <input disabled={disabled} style={styles.input} placeholder={placeHolder}/>
+                </div>
+              </DatePicker> : <input onChange={(e) => this.setState({[key]: e.currentTarget.value})}
+                                     onClick={()=>{
+                                       if(key == 'bankName'){
+                                         this.findBank()
+                                       }
+                                     }}
+                                     value={this.state[key]}
+                                     disabled={disabled}
+                                     style={styles.input}
+                                     placeholder={placeHolder}
+              />
             }
             {icon ? <img src={icon} style={ styles.img}/> : null}
           </div>
 
         })
       }
-      <div style={styles.finishBtn} onClick={() => this.promptClick()}>保存</div>
+      <div style={styles.finishBtn} onClick={() => this.commitForm()}>保存</div>
       <ModalCom visible={modal} showAction={(v) => {
         this.setState({modal: v})
       }} description={description}/>

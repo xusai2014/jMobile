@@ -89,3 +89,9 @@ export const GET_IDENTITY_INFO = ['REQUEST','M113','FAILURE'];
 
 //解绑信用卡
 export const LOOSE_CARD = ['REQUEST','M814','FAILURE'];
+
+//手写账单
+export const HANDLE_BILL = ['REQUEST','CH811','FAILURE'];
+
+//查看账单编号
+export const GET_BILL_ID = ['REQUEST','CH824','FAILURE'];

@@ -1,4 +1,7 @@
-import {CARDS_LIST, GET_IDENTITY_INFO, IDENTITY_BNK, JUDGE_SEL_CARD, LOOSE_CARD} from "../utils/ActionsType";
+import {
+  CARDS_LIST, GET_BILL_ID, GET_IDENTITY_INFO, IDENTITY_BNK, JUDGE_SEL_CARD,
+  LOOSE_CARD
+} from "../utils/ActionsType";
 
 const initialState = {
   cardsList:[],
@@ -6,6 +9,7 @@ const initialState = {
   fromBank:{},
   identityInfo:{},
   looseCard:{},
+  haveBill:{},
 };
 //全局状态信息，数据信息存储
 export default function (state = initialState, actions) {
@@ -34,6 +38,11 @@ export default function (state = initialState, actions) {
       return {
         ...state,
         looseCard:actions.data
+      }
+    case GET_BILL_ID[1]:
+      return {
+        ...state,
+        haveBill:actions.data,
       }
     default:
       return state

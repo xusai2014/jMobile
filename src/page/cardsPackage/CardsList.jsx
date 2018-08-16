@@ -86,7 +86,7 @@ export default class CardsList extends React.Component {
       </div>
       <div>
         {cardsList.map((v, k) => {
-          const { actNo,bankNo } = v;
+          const { actNo,bankNo,actName } = v;
 
           return <Card id={k} {...v} key={k} popupCard={(v) => this.setState({activeCard: parseInt(v),activeData:{actNo,bankNo}})}></Card>
         })}
@@ -144,8 +144,12 @@ export default class CardsList extends React.Component {
                 this.props.dispatch(getBillId({
                   bankNo,cardNum:num
                 })).then((result)=>{
+                  if(result.data){
+                    this.props.history.push(`/bill/detail/${result.data}`)
+                  } else {
+                    // TODO  跳转逻辑 jerry
+                  }
 
-                  this.props.history.push(`/bill/detail/${result.data}`)
                 })
               } else if(parseInt(index) == 2 ){
                 this.removeCard(actNo)

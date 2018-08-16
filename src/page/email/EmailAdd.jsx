@@ -22,12 +22,33 @@ export default class EmailAdd extends React.Component {
       eyesOpen: true,
       selected: true,
       password: '',
-      account: ""
+      account: "",
+      btnDisabled:true,
+    }
+  }
+
+  enableBtn(){
+    const { password, selected,account } = this.state;
+    if( password && selected && account){
+      this.setState({btnDisabled:false})
+    } else {
+      this.setState({btnDisabled:true})
     }
   }
 
   async loginEnter() {
-    const {account, password} = this.state;
+    const {account, password, selected} = this.state;
+    if(!account){
+      Toast.info('请输入账号')
+      return;
+    } else if(!password ){
+      Toast.info('请输入密码')
+      return;
+    } else if( !selected){
+      Toast.info('请勾选协议')
+      return;
+    }
+
     const login = await this.props.dispatch(emailLogin({
       account,
       password,
@@ -45,7 +66,7 @@ export default class EmailAdd extends React.Component {
 
 
   render() {
-    const {modal, description, eyesOpen, selected} = this.state;
+    const {modal, description, eyesOpen,btnDisabled, selected} = this.state;
     return [
       <Header title="导入账单邮箱"/>,
       <div key={3}>
@@ -66,7 +87,7 @@ export default class EmailAdd extends React.Component {
               <input onChange={(e) => {
                 this.setState({
                   [key]: e.currentTarget.value
-                })
+                },()=>this.enableBtn())
               }}
                      disabled={disabled} style={styles.input} placeholder={placeHolder}/>
               {icon ? <img onClick={() => {
@@ -81,7 +102,7 @@ export default class EmailAdd extends React.Component {
           display: 'flex',
           alignItems: 'center'
         }} onClick={() => {
-          this.setState({selected: !selected})
+          this.setState({selected: !selected},()=>()=>this.enableBtn())
         }}><img style={{width: '0.23rem'}} src={selected ? "/static/img/selected@2x.png" : "/static/img/Oval@2x.png"}/>
           <span style={{
             fontSize: '0.24rem',
@@ -90,7 +111,7 @@ export default class EmailAdd extends React.Component {
             margin: "0 0 0 0.18rem"
           }}>同意用户授权协议</span>
         </div>
-        <div style={styles.finishBtn} onClick={() => this.loginEnter()}>开始登录</div>
+        <div style={btnDisabled?styles.disfinishBtn:styles.finishBtn} onClick={() => this.loginEnter()}>开始登录</div>
         <ModalCom visible={modal} showAction={(v) => {
           this.setState({modal: v})
         }} description={description}/>
@@ -143,6 +164,17 @@ const styles = {
   finishBtn: {
     background: '#4C7BFE',
     boxShadow: '0 0.06rem 0.12rem 0 #9BB5FF',
+    borderRadius: "0.08rem",
+    margin: "0.78rem 0.16rem 0 0.16rem",
+    lineHeight: "1.18rem",
+    textAlign: 'center',
+    fontSize: "0.34rem",
+    color: "#FFFFFF",
+    letterSpacing: '-0.011rem',
+  },
+  disfinishBtn:{
+    background: 'rgb(130, 125, 125)',
+    boxShadow: '0 0.06rem 0.12rem 0 rgb(130, 125, 125)',
     borderRadius: "0.08rem",
     margin: "0.78rem 0.16rem 0 0.16rem",
     lineHeight: "1.18rem",

@@ -43,12 +43,24 @@ export default class CyberBank extends React.Component {
   async loginCyber(v) {
      const {login_type: loginType} = v;
      const {inputData} = this.state;
-     const {username: account, password} = inputData[loginType];
+     const stateData = inputData[loginType]?inputData[loginType]:{}
+     const {username, password,protocolSelected} = stateData;
      const {bankId: abbr} = this.props.match.params;
-     const data = await this.props.dispatch(loginCyber({
+    if(!username){
+      Toast.info('请输入账号')
+      return;
+    } else if(!password ){
+      Toast.info('请输入密码')
+      return;
+    } else if( !protocolSelected){
+      Toast.info('请勾选协议')
+      return;
+    }
+
+    const data = await this.props.dispatch(loginCyber({
        password,
        abbr,
-       account,
+       account:username,
        loginType,
        loginTarget: cardType,
      }))
@@ -66,7 +78,7 @@ export default class CyberBank extends React.Component {
 
 
   //For Object
-  setDeepState(property,key,obj) {
+  setDeepState(property,key,obj,callback) {
     const s = this.state[property]
 
     this.setState({
@@ -78,7 +90,21 @@ export default class CyberBank extends React.Component {
         }
       }
 
-    })
+    },callback)
+  }
+
+  enableBtn(key){
+    const data = this.state.inputData[key]?this.state.inputData[key]:{}
+    const { password, protocolSelected,username,disableBtn } = data;
+    if( password && protocolSelected && username){
+      this.setDeepState('inputData',key,{
+        disableBtn:false
+      })
+    } else {
+      this.setDeepState('inputData',key,{
+        disableBtn:true
+      })
+    }
   }
 
 
@@ -105,6 +131,7 @@ export default class CyberBank extends React.Component {
               eyesOpen = false,
               protocolSelected = false,
               passSelected = false,
+              disableBtn = true
             } = inputData[login_type] ? inputData[login_type] : {}
             return <div key={3}>
               {
@@ -118,14 +145,13 @@ export default class CyberBank extends React.Component {
                              if (k == 0) {
                                this.setDeepState('inputData',login_type,{
                                  username: e.currentTarget.value
-                               })
+                               },()=>this.enableBtn(login_type))
 
                              } else {
                                this.setDeepState('inputData',login_type,{
                                  password: e.currentTarget.value
-                               });
+                               },()=>this.enableBtn(login_type))
                              }
-
                            }}
                            disabled={disabled}
                            style={styles.input}
@@ -152,7 +178,7 @@ export default class CyberBank extends React.Component {
                 display: 'flex',
                 alignItems: 'center'
               }} onClick={() => {
-                this.setDeepState('inputData',login_type,{protocolSelected:!protocolSelected})
+                this.setDeepState('inputData',login_type,{protocolSelected:!protocolSelected},()=>this.enableBtn(login_type));
               }}><img style={{width: '0.23rem'}}
                       src={protocolSelected ? "/static/img/selected@2x.png" : "/static/img/Oval@2x.png"}/>
                 <span style={{
@@ -161,15 +187,20 @@ export default class CyberBank extends React.Component {
                   letterSpacing: '-0.77PX',
                   margin: "0 0 0 0.18rem"
                 }}>同意用户授权协议</span>
-                <img style={{width: '0.23rem'}}
+                <img style={{width: '0.23rem',marginLeft:'3.3rem'}}
                      onClick={()=>{
                        this.setDeepState('inputData',login_type,{
                        passSelected:!passSelected
                      })}}
                      src={passSelected ? "/static/img/square@2x.png" : "/static/img/squareno@2x.png"}/>
-                <span>记住密码</span>
+                <span style={{
+                  fontSize: '0.24rem',
+                  color:'rgb(153, 153, 153)',
+                  letterSpacing: '-0.77px',
+                  margin: '0px 0px 0px 0.18rem'
+                }}>记住密码</span>
               </div>
-              <button disabled={disabled}  style={styles.finishBtn} onClick={() =>{
+              <button  style={disableBtn?styles.disfinishBtn:styles.finishBtn} onClick={() =>{
                 this.setDeepState('inputData',login_type,{
                   disabled:true
                 });
@@ -228,6 +259,18 @@ const styles = {
   finishBtn: {
     background: '#4C7BFE',
     boxShadow: '0 0.06rem 0.12rem 0 #9BB5FF',
+    borderRadius: "0.08rem",
+    margin: "0.78rem 0.16rem 0 0.16rem",
+    lineHeight: "1.18rem",
+    textAlign: 'center',
+    fontSize: "0.34rem",
+    color: "#FFFFFF",
+    letterSpacing: '-0.011rem',
+    width: '7.18rem',
+  },
+  disfinishBtn:{
+    background: 'rgb(130, 125, 125)',
+    boxShadow: '0 0.06rem 0.12rem 0 rgb(130, 125, 125)',
     borderRadius: "0.08rem",
     margin: "0.78rem 0.16rem 0 0.16rem",
     lineHeight: "1.18rem",

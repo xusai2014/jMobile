@@ -23,6 +23,7 @@ export default class BillCard extends React.Component {
   }
 
   async callSyncBill(task_id, importBillType) {
+    // TODO 仅支持网银
     await this.setState({
       syncBegin:true
     })

@@ -102,12 +102,32 @@ export default class LoadingStatus extends React.Component{
         return;
       case "DONE_FAIL":
         Toast.info(description);
+        this.goResult(loginType,false,description)
         return;
       case "DONE_TIMEOUT":
+        this.goResult(loginType,false,description)
+        Toast.info(description);
         return;
       default:
         return;
     }
+  }
+
+  goResult(loginType,success = false,description){
+    if(success){
+
+    } else {
+      if(loginType == '01'){
+        this.props.history.push('/result/cyberfailed',{
+          result:description
+        })
+      } else if(loginType == '03'){
+        this.props.history.push('/result/efailed',{
+          result:description
+        })
+      }
+    }
+
   }
 
   /**
@@ -172,7 +192,8 @@ export default class LoadingStatus extends React.Component{
    */
 
   async loopCheckAlways({ taskId,loginType }) {
-    let pollingStatus = '';
+    let pollingStatus = {};
+    let continueLoop = false
     do {
 
       pollingStatus = await this.props.dispatch(pollingCyber({
@@ -183,17 +204,23 @@ export default class LoadingStatus extends React.Component{
           progress:this.state.progress+10
         })
       }
-
-
-    } while ( pollingStatus && typeof pollingStatus.data != 'undefined' && !pollingStatus.data)
-    const {data} =pollingStatus
+      const { data = {}} = pollingStatus;
+      const { isFinish =false } = data;
+      continueLoop = !isFinish
+    } while (continueLoop)
+    const {data = {}} =pollingStatus;
+    const { resultList = []} = data;
     if( typeof data == 'undefined'){
       Toast.info('导入失败',1)
+      this.goResult(loginType,false)
       return;
     }
+
     this.setState({
       progress:100
-    },()=>this.props.history.push('/result/cybersuccess'))
+    },()=>{
+      debugger;
+      this.goResult(loginType,true,resultList)})
 
   }
 
@@ -206,6 +233,8 @@ export default class LoadingStatus extends React.Component{
       taskId = "586b4860-9c76-11e8-89e7-00163e0dfac7",
     } = state;
     this.checkTask(taskId);
+    debugger;
+
   }
   render() {
     const  { type,}   = this.props.match.params;

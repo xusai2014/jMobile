@@ -18,7 +18,9 @@ export default class BillDetail extends React.Component {
     this.state = {
       expandOne: "-1",
       visible:false,
-      syncBegin:false
+      syncBegin:false,
+      currentNum:'1',
+      pageSize:'20',
     }
 
   }
@@ -210,9 +212,14 @@ export default class BillDetail extends React.Component {
 
   async componentDidMount(){
     const { billId } = this.props.match.params;
+    const { currentNum, pageSize:totalPage} = this.state;
     this.props.dispatch(getBillDetail({
       billId,
-    }))
+      currentNum,
+      totalPage
+    })).then((result)=>{
+      debugger;
+    })
   }
 
   async getPayDetailInfo(bankId = '0308',cardNumber = '4443'){

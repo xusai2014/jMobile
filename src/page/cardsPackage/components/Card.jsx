@@ -3,7 +3,7 @@ import React from 'react';
 
 export default class Card extends React.Component {
   render() {
-    const { popupCard, id, bankNm,payment_due_date,card_limit,actNo } =this.props;
+    const { popupCard,actName, id, bankNm,payment_due_date,card_limit,actNo,bankNo } =this.props;
     return (<div style={styles.container}>
       <div>
         <div style={styles.rowItem}
@@ -18,7 +18,7 @@ export default class Card extends React.Component {
           <div style={{
             fontSize: '0.24rem', color: '#FFFFFF',
             textAlign: 'center', letterSpacing: '0'
-          }}>{'*胜臣'}<span style={{margin: "0 0.165rem"}}>|</span>尾号{actNo}</div>
+          }}>{actName}<span style={{margin: "0 0.165rem"}}>|</span>尾号{actNo.substr(-4,4)}</div>
         </div>
         <div style={styles.img}>
           <img src="/static/img/设置@2x.png" style={{width:'0.3rem'}}  onClick={()=>{

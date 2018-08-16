@@ -45,9 +45,7 @@ export default class Index extends React.Component {
       this.getUserInfo();
       this.getBillList();
       this.props.dispatch(getActivities()).then(() => {
-        debugger;
-      }, () => {
-        debugger;
+        }, () => {
       });
     }
   }

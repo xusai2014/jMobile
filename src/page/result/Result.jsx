@@ -7,6 +7,10 @@ export default class Result extends React.Component{
   render() {
     const  { type, data='{}'}   = this.props.match.params;
     const { describe,footer, title, img } = this.results[type];
+
+    const { state } = this.props.location;
+    const { result } = state;
+
     return [<Header key="1" title={'导入结果'} right={
             <div onClick={()=>{
               this.props.history.push('/home/index')
@@ -14,20 +18,20 @@ export default class Result extends React.Component{
     ></Header>,<div key={2} style={{backgroundColor:"#FFFFFF",paddingBottom:"0.5rem"}}>
       <img src={img} style={{width:'1rem',margin:"0.3rem 3.25rem"}}/>
       <div style={styles.describe}>{title}</div>
-      <div style={styles.resason}>{describe(JSON.parse(data))}</div>
+      <div style={styles.resason}>{describe(result)}</div>
       {footer()}
     </div>]
   }
 
   results = {
     esuccess:{
-      describe:(data)=>`成功导入：招商银行信用卡 导入${data.y}笔账单北京银行信用卡 导入${data.x}笔账单`,
+      describe:(data)=><div>成功导入：{data.map((v,k)=><div>{v.bankName}信用卡 导入{v.count}笔账单</div>)}</div>,
       footer:()=>(<div style={styles.finishBtn}>完成</div>),
       title:"导入成功",
       img:"/static/img/done@2x.png",
     },
     efailed:{
-      describe:(data)=> JSON.stringify(data),
+      describe:(data)=> data,
       footer:()=>(<div style={styles.finishBtn}>完成</div>),
       title:"导入失败",
       img:"/static/img/nothing@2x.png",
@@ -41,10 +45,15 @@ export default class Result extends React.Component{
       </div>),
       title:"无数据导入"
     },cybersuccess:{
-      describe:(data)=>`点击完成，查看最新账单`,
+      describe:(data)=><div>成功导入：{data.map((v,k)=><div>{v.bankName}信用卡 导入{v.count}笔账单</div>)}</div>,
       footer:()=>(<div style={styles.finishBtn} onClick={()=>this.props.history.push('/home/index')}>完成</div>),
       title:"导入成功",
       img:"/static/img/done@2x.png",
+    },cyberfailed:{
+      describe:(data)=> JSON.stringify(data),
+      footer:()=>(<div style={styles.finishBtn}>完成</div>),
+      title:"导入失败",
+      img:"/static/img/nothing@2x.png",
     }
 
   }

@@ -4,6 +4,7 @@ import {checkToken, syncBill, verifyCode} from "../../actions/reqAction";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {Modal, Progress, Toast}  from "antd-mobile";
 import { jsNative } from "sx-jsbridge";
+import {waitFunc} from "../../utils/util";
 const  { loginHelper } = jsNative;
 const prompt = Modal.prompt;
 
@@ -49,11 +50,10 @@ export default class BillCard extends React.Component {
 
     let status = {};
     do {
-
+      await waitFunc(3000)
       status = await this.props.dispatch(checkToken({
         taskId,
       }))
-
     } while (this.judgeTaskStatus(status))
     this.handleStatus(status, taskId, loginType);
   }

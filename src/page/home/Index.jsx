@@ -257,8 +257,6 @@ export default class Index extends React.Component {
         <div style={{height: '5.03rem', overflow: 'scroll'}}>
           {
             freeIntrestData.map((v, k) => {
-              payment_due_date
-
               const {bank_logo: imgSrc, credit_limit, balance, bank_name, payment_due_date, card_number} = v;
               const freeInterest = parseInt(moment(payment_due_date).diff(moment(), 'days')) + parseInt(moment().daysInMonth())
               return <FreeItem key={k}
@@ -268,7 +266,8 @@ export default class Index extends React.Component {
                                card_number={card_number}
                                freeInterest={freeInterest}
                                balance={balance}
-                               {...v} />
+                               {...v}
+              />
             })
           }
         </div>

@@ -157,5 +157,14 @@ export const trim = (str = '') =>{ //删除左右两端的空格
     return str.replace(/(^\s*)|(\s*$)/g, "");
 }
 
+export const waitFunc = (time)=>{
+  return new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+      resolve()
+    },time)
+  })
+}
 export const regEmail = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/
-export const reg = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/
+export const regBankCard = /^([1-9]{1})(\d{14}|\d{18})$/
+export const regMobile = /^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\d{8}$/
+export const regIdCard = /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/

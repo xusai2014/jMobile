@@ -4,6 +4,7 @@ import {Tabs,Modal,Toast} from "antd-mobile"
 import Popup from "../home/components/Popup";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {checkToken, deleteBill, getBillDetail, getPayDetail, syncBill, verifyCode} from "../../actions/reqAction";
+import {waitFunc} from "../../utils/util";
 const alert = Modal.alert;
 @InitDecorator((state)=>{
   return {
@@ -52,11 +53,10 @@ export default class BillDetail extends React.Component {
 
     let status = {};
     do {
-
+      await waitFunc(3000)
       status = await this.props.dispatch(checkToken({
         taskId,
       }))
-
     } while (this.judgeTaskStatus(status))
     this.handleStatus(status, taskId, loginType);
   }

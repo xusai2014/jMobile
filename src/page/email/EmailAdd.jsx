@@ -2,11 +2,12 @@ import React from 'react';
 import Header from "../../compoents/Header";
 import {Modal} from 'antd-mobile';
 import ModalCom from "../../compoents/ModalCom";
-import {checkEmailTask, emailLogin} from "../../actions/reqAction";
+import { emailLogin} from "../../actions/reqAction";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {Toast} from "antd-mobile";
-const prompt = Modal.prompt;
-
+import {
+  regEmail
+} from '../../utils/util'
 @InitDecorator((state) => {
   return {
     emailLogin: state.BillReducer.emailLogin
@@ -39,7 +40,7 @@ export default class EmailAdd extends React.Component {
   async loginEnter() {
     const {account, password, selected} = this.state;
     if(!account){
-      Toast.info('请输入账号')
+      Toast.info('请输入邮箱')
       return;
     } else if(!password ){
       Toast.info('请输入密码')
@@ -47,6 +48,9 @@ export default class EmailAdd extends React.Component {
     } else if( !selected){
       Toast.info('请勾选协议')
       return;
+    }
+    if(!regEmail.test(account)){
+      Toast.info('请检查您的输入邮箱')
     }
 
     const login = await this.props.dispatch(emailLogin({

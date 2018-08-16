@@ -37,14 +37,6 @@ export default class EmailManager extends React.Component{
     promiseList.cancel()
   }
 
-  waitFunc(time){
-    return new Promise((resolve,reject)=>{
-      setTimeout(()=>{
-        resolve()
-      },time)
-    })
-  }
-
   async componentDidMount(){
     this.props.dispatch(getEmailList());
 

@@ -4,6 +4,7 @@ import {checkEmailTask, checkToken, pollingCyber, verifyCode} from "../../action
 import {InitDecorator} from "../../compoents/InitDecorator";
 import Loading from "../../compoents/Loading";
 import { Toast,Modal } from 'antd-mobile';
+import {waitFunc} from "../../utils/util";
 const prompt = Modal.prompt;
 
 const results = {
@@ -44,6 +45,7 @@ export default class LoadingStatus extends React.Component{
     let login;
 
     do {
+      await waitFunc(3000)
       if(loginType == '03'){
         login = await this.props.dispatch(checkEmailTask({
           taskId
@@ -53,8 +55,6 @@ export default class LoadingStatus extends React.Component{
           taskId,
         }))
       }
-
-
     } while (this.judgeStatus(login))
 
     if(typeof login.data == 'undefined'){
@@ -195,7 +195,7 @@ export default class LoadingStatus extends React.Component{
     let pollingStatus = {};
     let continueLoop = false
     do {
-
+      await waitFunc(3000)
       pollingStatus = await this.props.dispatch(pollingCyber({
         taskId,
       }));

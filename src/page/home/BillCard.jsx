@@ -25,6 +25,12 @@ export default class BillCard extends React.Component {
 
   async callSyncBill(task_id, importBillType) {
     // TODO 仅支持网银
+    if(importBillType == '01'){
+
+    } else {
+      this.props.importModal()
+      return
+    }
     await this.setState({
       syncBegin:true
     })
@@ -199,7 +205,7 @@ export default class BillCard extends React.Component {
       return {
         day: duM.diff(moment(), 'days'),
         date: duM.format('MM-DD'),
-        des: '天后到期',
+        des: `天后出账`,
         actionName: "更新未出",
         action
       }

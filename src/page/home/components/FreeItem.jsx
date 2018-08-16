@@ -13,7 +13,7 @@ export default class FreeItem extends React.Component{
     } = this.props;
     return (<div style={{textAlign: 'left', margin: "0.23rem 0"}}>
                 <span style={{width: '0.6rem', borderRadius: '0.3rem'}}>
-                  <img style={{width: '0.6rem'}} src={imgSrc}/>
+                  <img style={{width: '0.6rem',borderRadius:"0.3rem"}} src={imgSrc}/>
                 </span>
       <div style={{display: "inline-block", margin: "0 0 0 0.14rem"}}>
         <div style={{

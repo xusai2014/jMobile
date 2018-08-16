@@ -22,8 +22,8 @@ export default class BillDetail extends React.Component {
       syncBegin:false,
       currentNum:'1',
       pageSize:'20',
+      totalPages:'1',
     }
-
   }
 
   async callSyncBill(task_id, importBillType) {
@@ -211,13 +211,27 @@ export default class BillDetail extends React.Component {
   }
 
   async componentDidMount(){
+    // TODO 账单明细的下拉加载
     const { billId } = this.props.match.params;
-    const { currentNum, pageSize:totalPage} = this.state;
+    const { currentNum, pageSize} = this.state;
     this.props.dispatch(getBillDetail({
       billId,
       currentNum,
-      totalPage
+      pageSize
     })).then((result)=>{
+      const { data = {}} = result;
+      const { pageResponseDto } = data;
+      const {
+        currentPage,
+        size,
+        totalPages,
+      } = pageResponseDto;
+      this.setState({
+        currentNum:currentPage,
+        pageSize:size,
+        totalPages,
+      })
+
       debugger;
     })
   }
@@ -345,12 +359,13 @@ export default class BillDetail extends React.Component {
       bill_date ,
       credit_limit = '',//总额度
       balance = '',//剩余额度
-      baseShoppingSheetsList:list= [],//账单明细
+      pageResponseDto ={},//账单明细
       name_on_card = '',
       bill_type = '',
       min_payment = '',
       card_number = '',
     } = billDetail;
+    const { pageList:list = [],} = pageResponseDto
     const { billId } = this.props.match.params;
 
     const { from , to, datalist } = this.haneleDetail(list);

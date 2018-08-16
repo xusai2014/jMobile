@@ -177,9 +177,10 @@ export default class CyberBank extends React.Component {
                 paddingLeft: '0.31rem',
                 display: 'flex',
                 alignItems: 'center'
-              }} onClick={() => {
-                this.setDeepState('inputData',login_type,{protocolSelected:!protocolSelected},()=>this.enableBtn(login_type));
               }}><img style={{width: '0.23rem'}}
+                      onClick={() => {
+                        this.setDeepState('inputData',login_type,{protocolSelected:!protocolSelected},()=>this.enableBtn(login_type));
+                      }}
                       src={protocolSelected ? "/static/img/selected@2x.png" : "/static/img/Oval@2x.png"}/>
                 <span style={{
                   fontSize: '0.24rem',

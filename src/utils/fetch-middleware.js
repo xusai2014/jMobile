@@ -207,19 +207,28 @@ export const headers = {
  */
 export function filterResponse(data) {
   data = JSON.parse(aesDecrypt(data));
-  if (data["RETURNCODE"] === "0000" || data["RESULTCODE"] === "0000") {
-    return data;
-  } else {
-    let error = null;
-    if(data['RESULTMSG']){
-      error = new Error(data['RESULTMSG'])
+  const { RETURNCODE , RESULTCODE} = data;
+  if(typeof  RESULTCODE != 'undefined'){
+    const { RESULTMSG } = data;
+    if (RESULTCODE === "0000" ) {
+      return data;
     } else {
-      error = new Error(data['RETURNCON'])
+      let error = null;
+      error = new Error(RESULTMSG)
+      Toast.info(error.message, 2)
+      throw error
     }
-    Toast.info(error.message, 2)
-    throw error
+  } else if(typeof RETURNCODE != 'undefined'){
+    const { RETURNCON } = data;
+    if (RESULTCODE === "0000" ) {
+      return data;
+    } else {
+      let error = null;
+      error = new Error(RETURNCON)
+      Toast.info(error.message, 2)
+      throw error
+    }
   }
-
 }
 
 /**

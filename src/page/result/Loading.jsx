@@ -115,6 +115,18 @@ export default class LoadingStatus extends React.Component{
 
   goResult(loginType,success = false,description){
     if(success){
+      if(loginType == '01'){
+        this.props.history.push('/result/cybersuccess',{
+          result:description
+        })
+      } else if(loginType == '03'){
+        this.props.history.push('/result/esuccess',{
+          result:description
+        })
+
+      }
+
+
 
     } else {
       if(loginType == '01'){

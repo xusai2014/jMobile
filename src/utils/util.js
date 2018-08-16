@@ -168,3 +168,20 @@ export const regEmail = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA
 export const regBankCard = /^([1-9]{1})(\d{14}|\d{18})$/
 export const regMobile = /^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\d{8}$/
 export const regIdCard = /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/
+
+export const judgeEnv = ()=>{
+  let env = '-test';
+  if(window.location.host.indexOf('mpmw.vbill.cn')>-1 ){
+    env = ''
+  }  else if(window.location.host.indexOf('mpmw-rc.vbill.cn')>-1){
+    env ='-rc'
+  } else if(window.location.host.indexOf('mpmw-alpha.vbill.cn')>-1){
+    env ='-alpha'
+  } else if(window.location.host.indexOf('mpmw-test.vbill.cn')>-1){
+    env ='-test'
+  } else if(window.location.host.indexOf('mpmw-dev.vbill.cn')>-1) {
+    env = '-dev'
+  }
+  return env;
+
+}

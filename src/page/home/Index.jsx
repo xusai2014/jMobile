@@ -8,8 +8,9 @@ import {
   getBillList, getFreeInterest, getIndetiyInfo,
   getActivities
 } from "../../actions/reqAction";
-import {jsNative} from "sx-jsbridge";
-const {loginHelper} = jsNative;
+import {jsNative, } from "sx-jsbridge";
+import {judgeEnv} from "../../utils/util";
+const {loginHelper, nativeOpenNewWebView} = jsNative;
 
 
 @InitDecorator((state) => {
@@ -26,6 +27,7 @@ export default class Index extends React.Component {
     this.state = {
       interestShow: false, //免息期弹窗展示,
       visible: false,//弹出框
+      sycnModal:false
     }
   }
 
@@ -88,6 +90,13 @@ export default class Index extends React.Component {
     }))
   }
 
+  openCardMarket(){
+    nativeOpenNewWebView({
+      url:`https://mpcw${judgeEnv()}.vbill.cn/cca/home`
+    })
+    //https://mpcw-test.vbill.cn/cca/home
+  }
+
   loginEnter(type, params) {
     loginHelper(() => {
       switch (type) {
@@ -109,8 +118,7 @@ export default class Index extends React.Component {
           return
         case 4:
           //进入办卡中心
-          const {action} = params;
-          window.location.href = action;
+          this.openCardMarket();
           return;
         case 5:
           //还款
@@ -121,7 +129,7 @@ export default class Index extends React.Component {
   }
 
   render() {
-    const {interestShow, visible,} = this.state;
+    const {interestShow, visible, sycnModal} = this.state;
     const {isLogged, billList = {}, freeIntrestData = [], activities = []} = this.props;
     const {waitPaymentAmount = '', waitPaymentNumber = '', baseResponseBillDtoList = []} = billList
     return [<div key={'a'} style={{background: '#FFFFFF', paddingBottom: "0.7rem"}}>
@@ -209,10 +217,12 @@ export default class Index extends React.Component {
                                importBillType={importBillType}
                                real={true}
                                isNew={isNew}
-                               key={k} repay={(e) => {
-                e.stopPropagation()
-                this.setState({visible: true})
-              }}
+                               key={k}
+                               repay={(e) => {
+                                  e.stopPropagation()
+                                  this.setState({visible: true})
+                               }}
+                               importModal={()=>{this.setState({sycnModal:true})}}
               />
             })
             :
@@ -270,6 +280,23 @@ export default class Index extends React.Component {
               />
             })
           }
+        </div>
+      </Modal>,
+      <Modal
+        key="z"
+        visible={sycnModal}
+        transparent
+        maskClosable={true}
+        onClose={()=>{this.setState({sycnModal:false})}}
+        wrapProps={{ onTouchStart: this.onWrapTouchStart }}
+      >
+        <div style={{ height: 100, overflow: 'scroll' }}>
+          scoll content...<br />
+          scoll content...<br />
+          scoll content...<br />
+          scoll content...<br />
+          scoll content...<br />
+          scoll content...<br />
         </div>
       </Modal>
       , visible ?

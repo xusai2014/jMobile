@@ -28,7 +28,7 @@ export default function (state = initialState, actions) {
             APPVERSION: actions.data['APP_VERSIONS'],
             OSVERSION: actions.data['PHONE_VERSIONS'],
             PLATFORM: actions.data['PHONE_PLATFORM'],
-            TOKEN_ID: actions.data['token'],
+            TOKEN_ID: actions.data['TOKEN_ID'],
             CHANNEL_NO: actions.data['channelNo'],
 
           }

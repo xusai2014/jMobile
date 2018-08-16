@@ -142,7 +142,7 @@ export default class HandleBill extends React.Component {
                 onChange={date => this.setState({[key]: date})}
               >
                 <div
-                  style={styles.input}>{this.state[key] ? moment(this.state[key]).format('YYYY-MM') : placeHolder}
+                  style={styles.input}>{this.state[key] ? moment(this.state[key]).format('YYYY-MM-DD') : placeHolder}
                 </div>
               </DatePicker> : <input onChange={(e) => this.setState({[key]: e.currentTarget.value})}
                                      onClick={()=>{

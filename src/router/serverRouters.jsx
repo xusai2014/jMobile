@@ -29,7 +29,7 @@ export default ()=>(<Switch><Route exact={false} path={'/home/index'} component=
 <Route exact={false} path={'/bill/method'} component={BillMethodList} />
 <Route exact={false} path={'/bill/cardlist'} component={BankCardList} />
 <Route exact={false} path={'/manual/handlebill'} component={HandleBill} />
-<Route exact={false} path={'/manual/add/:bankId'} component={BankCardList} />
+<Route exact={false} path={'/manual/add'} component={BankCardList} />
 <Route exact={false} path={'/email/manager'} component={EmailManager} />
 <Route exact={false} path={'/email/add'} component={EmailAdd} />
 <Route exact={false} path={'/bill/detail/:billId'} component={BillDetail} />

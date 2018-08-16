@@ -36,7 +36,7 @@ export default [{
 
   },{
     component:"../page/manual/AddBill.jsx",
-    path:"/manual/add/:bankId",
+    path:"/manual/add",
     name:"BankCardList"
 
   },{

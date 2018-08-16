@@ -220,7 +220,7 @@ export function filterResponse(data) {
     }
   } else if(typeof RETURNCODE != 'undefined'){
     const { RETURNCON } = data;
-    if (RESULTCODE === "0000" ) {
+    if (RETURNCODE === "0000" ) {
       return data;
     } else {
       let error = null;

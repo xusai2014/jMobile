@@ -3,7 +3,8 @@ import {withRouter} from "react-router-dom";
 import {checkToken, syncBill, verifyCode} from "../../actions/reqAction";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {Modal, Progress, Toast}  from "antd-mobile";
-import {loginHelper} from "../../interface/jsNative";
+import { jsNative } from "sx-jsbridge";
+const  { loginHelper } = jsNative;
 const prompt = Modal.prompt;
 
 @withRouter

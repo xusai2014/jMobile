@@ -3,20 +3,21 @@ import {Modal, Icon} from 'antd-mobile'
 import BillCard from "./BillCard";
 import Popup from "./components/Popup";
 import {InitDecorator} from "../../compoents/InitDecorator";
-import {loginHelper} from "../../interface/jsNative";
 import FreeItem from "./components/FreeItem";
 import {
   getBillList, getFreeInterest, getIndetiyInfo,
   getActivities
 } from "../../actions/reqAction";
+import {jsNative} from "sx-jsbridge";
+const {loginHelper} = jsNative;
 
 
-@InitDecorator((state)=>{
+@InitDecorator((state) => {
   return {
-    billList:state.BillReducer.billList,
-    huandaoData:state.BillReducer.huandaoData,
-    freeIntrestData:state.BillReducer.freeIntrestData,
-    activities:state.CardsReducer.activities
+    billList: state.BillReducer.billList,
+    huandaoData: state.BillReducer.huandaoData,
+    freeIntrestData: state.BillReducer.freeIntrestData,
+    activities: state.CardsReducer.activities
   }
 })
 export default class Index extends React.Component {
@@ -40,44 +41,49 @@ export default class Index extends React.Component {
   }
 
   componentWillMount() {
-
-  }
-
-
-  componentWillReceiveProps(nextProps){
-    if(nextProps.isLogged && this.props.isLogged != nextProps.isLogged){
+    if (this.props.isLogged) {
       this.getUserInfo();
       this.getBillList();
-      this.props.dispatch(getActivities()).then(()=>{
+      this.props.dispatch(getActivities()).then(() => {
         debugger;
-      },()=>{
+      }, () => {
         debugger;
       });
     }
   }
 
-  getUserInfo(){
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.isLogged && this.props.isLogged != nextProps.isLogged) {
+      this.getUserInfo();
+      this.getBillList();
+      this.props.dispatch(getActivities())
+    }
+  }
+
+  getUserInfo() {
     this.props.dispatch(getIndetiyInfo({
-      appType:'mpos'
-    })).then((result)=>{
-      const { data }  =result;
-      const { authSts } = data;
+      appType: 'mpos'
+    })).then((result) => {
+      const {data} = result;
+      const {authSts} = data;
       this.setState({
-        authSts:authSts == '01'
+        authSts: authSts == '01'
       })
-    },()=>{
+    }, () => {
     })
   }
 
-  async getFreeData(){
+  async getFreeData() {
     const reqParams = await this.props.getBaseParams();
     this.props.dispatch(getFreeInterest({
       ...reqParams
-    })).then((result)=>{
-    },()=>{})
+    })).then((result) => {
+    }, () => {
+    })
   }
 
-  async getBillList(){
+  async getBillList() {
     const reqParams = await this.props.getBaseParams();
     this.props.dispatch(getBillList({
       ...reqParams
@@ -89,7 +95,7 @@ export default class Index extends React.Component {
       switch (type) {
         case 1:
           //展示免息期
-          this.setState({interestShow: true},()=>{
+          this.setState({interestShow: true}, () => {
             this.getFreeData()
           });
 
@@ -110,7 +116,7 @@ export default class Index extends React.Component {
           return;
         case 5:
           //还款
-          this.setState({visible:true})
+          this.setState({visible: true})
           return
       }
     })
@@ -118,8 +124,8 @@ export default class Index extends React.Component {
 
   render() {
     const {interestShow, visible,} = this.state;
-    const {isLogged,billList ={},freeIntrestData = []} = this.props;
-    const { waitPaymentAmount ='', waitPaymentNumber ='',baseResponseBillDtoList =[] } = billList
+    const {isLogged, billList = {}, freeIntrestData = [], activities = []} = this.props;
+    const {waitPaymentAmount = '', waitPaymentNumber = '', baseResponseBillDtoList = []} = billList
     return [<div key={'a'} style={{background: '#FFFFFF', paddingBottom: "0.7rem"}}>
       <div style={styles.top}>
         <div style={styles.topText}>7日内待还
@@ -164,11 +170,13 @@ export default class Index extends React.Component {
         }
       </div>
       <div style={styles.activity}>
-        {isLogged ? this.activity.map((v, k) => {
-          const {imgSrc, action, title} = v;
-          return <div key={k} style={{display: "inline-block"}}>
-            <img style={{width: '0.74rem'}} src={imgSrc}/>
-            <div>{title}</div>
+        {isLogged ? activities.map((v, k) => {
+          const {logoUri, gameUri, gameName} = v;
+          return <div onClick={() => {
+            window.location.href = gameUri
+          }} key={k} style={{display: "inline-block", textAlign: 'center'}}>
+            <img style={{width: '0.74rem'}} src={logoUri}/>
+            <div>{gameName}</div>
           </div>
         }) : null
         }
@@ -178,7 +186,7 @@ export default class Index extends React.Component {
         {
           isLogged ?
             baseResponseBillDtoList.map((v, k) => {
-            const {
+              const {
                 card_num,
                 bank_name,
                 bill_type,//账单状态
@@ -190,38 +198,39 @@ export default class Index extends React.Component {
                 logo_uri,
                 importBillType,//账单类型 01为网银 03为邮箱 02为手写账单
                 isNew,
-            } = v;
-            return <BillCard card_num={card_num}
-                              bank_name = {bank_name}
-                              bill_type = {bill_type}
-                              current_bill_amt = {current_bill_amt}
-                              payment_due_date = {payment_due_date}
-                              task_id = {task_id}
-                              bill_id = {bill_id}
-                              bill_date ={bill_date}
-                              logo_uri={logo_uri}
-                              importBillType={importBillType}
-                              real={true}
-                              isNew={isNew}
-                              key={k} repay={(e) => {
-                                e.stopPropagation()
-                              this.setState({visible: true})}}
-             />
+              } = v;
+              return <BillCard card_num={card_num}
+                               bank_name={bank_name}
+                               bill_type={bill_type}
+                               current_bill_amt={current_bill_amt}
+                               payment_due_date={payment_due_date}
+                               task_id={task_id}
+                               bill_id={bill_id}
+                               bill_date={bill_date}
+                               logo_uri={logo_uri}
+                               importBillType={importBillType}
+                               real={true}
+                               isNew={isNew}
+                               key={k} repay={(e) => {
+                e.stopPropagation()
+                this.setState({visible: true})
+              }}
+              />
             })
             :
             [{
-              card_num:"29999",
-              bank_name:"lee",
-              bill_type :'DONE',
-              current_bill_amt :"1000000",
-              payment_due_date :"2018-09-01",
-              task_id :"11111111111",
-              bill_id :"11111111",
-              bill_date :"2018-08-28",
-              logo_uri:'/static/img/招商银行@2x.png',
-              importBillType:"",
-              isNew:'00',
-          }].map((v, k) => <BillCard
+              card_num: "29999",
+              bank_name: "lee",
+              bill_type: 'DONE',
+              current_bill_amt: "1000000",
+              payment_due_date: "2018-09-01",
+              task_id: "11111111111",
+              bill_id: "11111111",
+              bill_date: "2018-08-28",
+              logo_uri: '/static/img/招商银行@2x.png',
+              importBillType: "",
+              isNew: '00',
+            }].map((v, k) => <BillCard
               real={false}
               {...v} key={k} repay={(e) => {
               e.stopPropagation();
@@ -252,8 +261,8 @@ export default class Index extends React.Component {
             freeIntrestData.map((v, k) => {
               payment_due_date
 
-              const {bank_logo:imgSrc,credit_limit,balance, bank_name, payment_due_date, card_number} = v;
-              const  freeInterest = parseInt(moment(payment_due_date).diff(moment(),'days')) + parseInt(moment().daysInMonth())
+              const {bank_logo: imgSrc, credit_limit, balance, bank_name, payment_due_date, card_number} = v;
+              const freeInterest = parseInt(moment(payment_due_date).diff(moment(), 'days')) + parseInt(moment().daysInMonth())
               return <FreeItem key={k}
                                credit_limit={credit_limit}
                                imgSrc={imgSrc}

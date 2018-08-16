@@ -34,15 +34,6 @@ export default {
         options: {
           babelrc:true
         },
-      }, {
-        test: /\.scss?$/,
-        use: [
-          "style-loader", // creates style nodes from JS strings,
-          "css-loader?modules&localIdentName=[path][name]---[local]---[hash:base64:5]", // translates CSS into CommonJS
-          'postcss-loader',
-          "sass-loader", // compiles Sass to CSS
-        ],
-        exclude: /node_modules[\\/](?!(antd-mobile)[\\/]).*/,
       },
       {
         test: /\.css?$/,

@@ -1,6 +1,7 @@
 import React from 'react';
-import { nativeRequestBaseParams } from "../interface/jsNative";
 import { connect } from 'react-redux';
+import { jsNative } from "sx-jsbridge";
+const  { nativeRequestBaseParams } = jsNative;
 
 export const InitDecorator = (mergeStateToprops  = ()=>{ return {} }) => (Coms) => {
   return connect((state)=>{

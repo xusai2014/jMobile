@@ -11,7 +11,7 @@ const initialState = {
   identityInfo:{},
   looseCard:{},
   haveBill:{},
-  activities:{},
+  activities:[],
 };
 //全局状态信息，数据信息存储
 export default function (state = initialState, actions) {

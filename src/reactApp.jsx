@@ -16,7 +16,7 @@ import sa from 'sa-sdk-javascript';
 import 'whatwg-fetch';
 
 import Promise from 'promise-polyfill';
-import { initJSBridge } from './utils/jsBridge';
+import { initJSBridge } from 'sx-jsbridge';
 
 // To add to window, 定义全局变量
 if (!window.Promise) {

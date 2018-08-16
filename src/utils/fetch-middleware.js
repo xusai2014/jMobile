@@ -9,8 +9,9 @@ import Storage from '../store';
 import {packageReqData, aesDecrypt} from './encrypt-util'
 import {Toast} from 'antd-mobile';
 import { apiUrl,isMock } from '../config/api'
-import {nativeLogin, nativeQuitLogon, nativeRequestBaseParams} from "../interface/jsNative";
 import {showSingleBtnModal} from "../compoents/ModalAlert";
+import { jsNative } from "sx-jsbridge";
+const  { nativeLogin, nativeQuitLogon, nativeRequestBaseParams } = jsNative;
 
 export const ActionCreator = (type, url, method, data, key ,cancel = false) => {
     return () => {

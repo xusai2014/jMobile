@@ -8,7 +8,7 @@ import {
   getBillList, getFreeInterest, getIndetiyInfo,
   getActivities
 } from "../../actions/reqAction";
-import {jsNative, } from "sx-jsbridge";
+import {jsNative, nativeGoRealName,} from "sx-jsbridge";
 import {judgeEnv} from "../../utils/util";
 const {loginHelper, nativeOpenNewWebView} = jsNative;
 
@@ -27,7 +27,8 @@ export default class Index extends React.Component {
     this.state = {
       interestShow: false, //免息期弹窗展示,
       visible: false,//弹出框
-      sycnModal:false
+      sycnModal:false,
+      authSts:'-1'
     }
   }
 
@@ -68,7 +69,7 @@ export default class Index extends React.Component {
       const {data} = result;
       const {authSts} = data;
       this.setState({
-        authSts: authSts == '01'
+        authSts: authSts
       })
     }, () => {
     })
@@ -130,7 +131,7 @@ export default class Index extends React.Component {
   }
 
   render() {
-    const {interestShow, visible, sycnModal} = this.state;
+    const {interestShow, visible, sycnModal,authSts} = this.state;
     const {isLogged, billList = {}, freeIntrestData = [], activities = []} = this.props;
     const {waitPaymentAmount = '', waitPaymentNumber = '', baseResponseBillDtoList = []} = billList
     return [<div key={'a'} style={{background: '#FFFFFF', paddingBottom: "0.7rem"}}>
@@ -162,7 +163,14 @@ export default class Index extends React.Component {
             return <div key={k}>
               <span style={styles.iconItem} onClick={() => {
                 if (type == '0') {
-                  this.loginEnter(3, {action})
+                  if(authSts == '01'){
+                    this.loginEnter(3, {action})
+                  } else if( authSts == '-1') {
+                    //数据尚未装载完毕不处理
+                  } else {
+                    nativeGoRealName()
+                  }
+
                 } else if (type == '1') {
                   this.loginEnter(4, {action})
                 }

@@ -8,7 +8,7 @@ import {
   getBillList, getFreeInterest, getIndetiyInfo,
   getActivities
 } from "../../actions/reqAction";
-import {jsNative, nativeGoRealName,} from "sx-jsbridge";
+import {jsNative,} from "sx-jsbridge";
 import {judgeEnv} from "../../utils/util";
 const {loginHelper, nativeOpenNewWebView} = jsNative;
 
@@ -168,7 +168,7 @@ export default class Index extends React.Component {
                   } else if( authSts == '-1') {
                     //数据尚未装载完毕不处理
                   } else {
-                    nativeGoRealName()
+                    jsNative.nativeGoRealName()
                   }
 
                 } else if (type == '1') {

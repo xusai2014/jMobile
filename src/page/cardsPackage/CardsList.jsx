@@ -3,8 +3,9 @@ import Header from "../../compoents/Header";
 import Card from "./components/Card";
 import {Menu, Icon} from "antd-mobile";
 import {InitDecorator} from "../../compoents/InitDecorator";
-import {getBillId, getCardsList, looseCard} from "../../actions/reqAction";
-
+import {getBillId, getCardsList, getIndetiyInfo, looseCard} from "../../actions/reqAction";
+import {jsNative, nativeOpenNewWebView} from 'sx-jsbridge'
+import {judgeEnv} from "../../utils/util";
 
 
 @InitDecorator(
@@ -58,6 +59,23 @@ export default class CardsList extends React.Component {
 
   componentWillMount(){
     this.getCards();
+    this.getIdentityInfo()
+  }
+
+  getIdentityInfo(){
+    this.props.dispatch(getIndetiyInfo({
+      appType: 'mpos'
+    })).then(()=>{
+
+    })
+  }
+
+  openCardMarket(){
+    nativeOpenNewWebView({
+      url:`https://mpcw${judgeEnv()}.vbill.cn/cca/home`
+      //url:'http://172.16.40.34:3100/cca/home'
+    })
+    //https://mpcw-test.vbill.cn/cca/home
   }
 
   render() {
@@ -66,7 +84,7 @@ export default class CardsList extends React.Component {
     return <div>
       <Header title="卡包" hide={false}
               right={(<Icon type="plus" onClick={() => {
-                this.props.history.push('/cards/edit')
+                this.props.history.push('/cards/edit');
               }}/>)}
       />
       <div style={{
@@ -76,7 +94,7 @@ export default class CardsList extends React.Component {
         justifyContent: 'center',
       }}
       >
-        <div>
+        <div onClick={()=>this.openCardMarket()}>
           <img src="/static/img/信用卡@2x.png" style={{width: "0.3rem"}}/>
           <span style={{margin: '0.08rem', fontSize: '0.24rem', color: '#4C7BFE', letterSpacing: '0'}}>
           办信用卡

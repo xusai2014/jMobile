@@ -93,6 +93,7 @@ export default class Index extends React.Component {
   openCardMarket(){
     nativeOpenNewWebView({
       url:`https://mpcw${judgeEnv()}.vbill.cn/cca/home`
+      //url:'http://172.16.40.34:3100/cca/home'
     })
     //https://mpcw-test.vbill.cn/cca/home
   }
@@ -289,14 +290,11 @@ export default class Index extends React.Component {
         maskClosable={true}
         onClose={()=>{this.setState({sycnModal:false})}}
         wrapProps={{ onTouchStart: this.onWrapTouchStart }}
+        footer={[{ text: '我知道了', onPress: () => {  } }]}
       >
         <div style={{ height: 100, overflow: 'scroll' }}>
-          scoll content...<br />
-          scoll content...<br />
-          scoll content...<br />
-          scoll content...<br />
-          scoll content...<br />
-          scoll content...<br />
+          暂不支持邮箱同步<br/>
+          <span onClick={()=>this.props.history.push('/bill/method')}>请使用网银同步</span>
         </div>
       </Modal>
       , visible ?

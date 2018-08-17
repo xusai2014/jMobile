@@ -30,7 +30,7 @@ window.sa = sa;
 if (module.hot) {
   module.hot.accept();
 }
-initJSBridge(false);
+initJSBridge(true,{TOKEN_ID:"8251149f3cc34a368b2a48730b0b3f67"});
 
 sa.init({
   server_url: process.env.mode != 'production' ? 'https://sc.suixingpay.com/sa?project=MPOS_TEST' : 'https://sc.suixingpay.com/sa?project=MPOS_PROD',

@@ -118,7 +118,8 @@ export default class EditCard extends React.Component {
                 resvPhoneNo:resvPhoneNo,
                 bindType,
               })).then((result)=>{
-
+                Toast.info('绑卡成功')
+                this.props.history.push('/cards/cardslist')
                 resolve();
               },()=>{
                 reject();

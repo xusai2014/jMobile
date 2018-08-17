@@ -222,9 +222,10 @@ export default class LoadingStatus extends React.Component{
     } while (continueLoop)
     const {data = {}} =pollingStatus;
     const { resultList = []} = data;
+    debugger;
     if( typeof data == 'undefined'){
       Toast.info('导入失败',1)
-      this.goResult(loginType,false)
+      this.goResult(loginType,false,'')
       return;
     }
 

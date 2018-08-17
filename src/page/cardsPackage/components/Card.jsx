@@ -10,14 +10,14 @@ export default class Card extends React.Component {
         >
           <img style={{width: '0.4rem', margin: '0.16rem', height: "0.4rem"}} src="/static/img/交通银行@2x.png"/>
         </div>
-        <div style={{width: '2.2rem', display: 'inline-block', marginLeft: '0.21rem', marginTop: '0.47rem',}}>
+        <div style={{width: '3rem', display: 'inline-block', marginLeft: '0.21rem', marginTop: '0.47rem',}}>
           <div style={{
             fontSize: '0.3rem', color: '#FFFFFF',
-            letterSpacing: "-0.83PX", textAlign: 'center'
+            letterSpacing: "-0.83PX",
           }}>{bankNm}</div>
           <div style={{
             fontSize: '0.24rem', color: '#FFFFFF',
-            textAlign: 'center', letterSpacing: '0'
+            letterSpacing: '0'
           }}>{actName}<span style={{margin: "0 0.165rem"}}>|</span>尾号{actNo.substr(-4,4)}</div>
         </div>
         <div style={styles.img}>

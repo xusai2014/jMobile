@@ -222,7 +222,12 @@ export function filterResponse(data) {
     const { RETURNCON } = data;
     if (RETURNCODE === "0000" ) {
       return data;
-    } else {
+    } else if(RETURNCODE === "1004"){
+      checkReLoginFlow({message:'请重新登录'})
+      let error = null;
+      error = new Error(RETURNCON)
+      throw error
+    }else {
       let error = null;
       error = new Error(RETURNCON)
       Toast.info(error.message, 2)
@@ -252,18 +257,24 @@ export const packagePublicParams = (nativeParams, TRDE_CODE) => ({
  * @param successCall
  * @param cancelCall
  */
-export const reLoginFlow = (message, successCall = () => {}, cancelCall = () => {}) => {
-  showSingleBtnModal({
-    title: message, onOk: () => {
-      nativeQuitLogon();
-      nativeLogin((params) => {
-        if (params.errorCode == '0000') { // 登录成功
-          successCall(params);
-        } else {
-          /* 登录取消 */
-          cancelCall();
-        }
-      });
+export const checkReLoginFlow = (err, successCall = () => {}, cancelCall = () => {}) => {
+    if(window.loginAlert){
+      return
     }
-  });
-}
+    window.loginAlert =true;
+    showSingleBtnModal({
+      title: err.message, onOk: () => {
+        window.loginAlert = false;
+        nativeQuitLogon();
+        nativeLogin((params) => {
+          if (params.errorCode == '0000') { // 登录成功
+            successCall(params);
+          } else {
+            /* 登录取消 */
+            cancelCall();
+          }
+        });
+      }
+    });
+    return true;
+};

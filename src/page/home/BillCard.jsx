@@ -25,6 +25,7 @@ export default class BillCard extends React.Component {
 
   async callSyncBill(task_id, importBillType, abbr) {
     // TODO 仅支持网银
+    Toast.loading('请稍候',0);
     if (importBillType == '01') {
 
     } else {
@@ -32,6 +33,7 @@ export default class BillCard extends React.Component {
         abbr,
         cardType: 'CREDITCARD',
       })).then((result) => {
+        Toast.hide();
         const {data} = result;
         const {subtype = ''} = data;
         if (subtype) {
@@ -46,6 +48,7 @@ export default class BillCard extends React.Component {
         }
 
       }, (err) => {
+        Toast.hide()
       });
 
       return
@@ -59,6 +62,8 @@ export default class BillCard extends React.Component {
       const {data} = result;
       if (typeof data != 'undefined') {
         this.loopLogin(data, importBillType)
+      } else {
+        Toast.hide()
       }
     }, () => {
 
@@ -93,7 +98,7 @@ export default class BillCard extends React.Component {
     const {phase, phase_status = '', input, description} = data;
     switch (phase_status) {
       case 'WAIT_CODE'://输入验证码
-
+        Toast.hide();
         return this.promptClick({
           input,
           description,
@@ -113,6 +118,8 @@ export default class BillCard extends React.Component {
         this.setState({
           percent: 100,
           syncBegin: false
+        },()=>{
+          this.props.updateData();
         });
         return;
       case "DONE_FAIL":
@@ -144,7 +151,8 @@ export default class BillCard extends React.Component {
    *   @description 第三步流程的分支流程，输入验证码检查登录状态
    */
   async verifycation({taskId, value: code}) {
-    let codeStatus = ''
+    let codeStatus = '';
+    Toast.loading('请稍候',0)
 
     codeStatus = await this.props.dispatch(verifyCode({
       taskId,

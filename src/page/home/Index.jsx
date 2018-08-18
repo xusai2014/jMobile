@@ -45,14 +45,17 @@ export default class Index extends React.Component {
 
   componentWillMount() {
     if (this.props.isLogged) {
-      this.getUserInfo();
-      this.getBillList();
-      this.props.dispatch(getActivities()).then(() => {
-        }, () => {
-      });
+      this.initData()
     }
   }
 
+  initData(){
+    this.getUserInfo();
+    this.getBillList();
+    this.props.dispatch(getActivities()).then(() => {
+    }, () => {
+    });
+  }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.isLogged && this.props.isLogged != nextProps.isLogged) {
@@ -234,6 +237,7 @@ export default class Index extends React.Component {
                                   this.setState({visible: true})
                                }}
                                importModal={()=>{this.setState({sycnModal:true})}}
+                               updateData = {()=>this.initData()}
               />
             })
             :

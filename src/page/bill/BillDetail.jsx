@@ -113,6 +113,7 @@ export default class BillDetail extends React.Component {
           syncBegin:false
         })
         Toast.success('同步成功');
+        this.initData();
         return;
       case "DONE_FAIL":
         this.setState({
@@ -238,8 +239,12 @@ export default class BillDetail extends React.Component {
 
   }
 
-  async componentDidMount(){
+  componentDidMount(){
     // TODO 账单明细的下拉加载
+    this.initData()
+  }
+
+  initData(){
     const { billId } = this.props.match.params;
     const { currentNum, pageSize} = this.state;
     this.props.dispatch(getBillDetail({
@@ -260,6 +265,7 @@ export default class BillDetail extends React.Component {
         totalPages,
       })
     })
+
   }
 
   async getPayDetailInfo(bankId = '0308',cardNumber = '4443'){

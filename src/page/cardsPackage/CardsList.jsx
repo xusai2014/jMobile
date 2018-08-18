@@ -108,7 +108,6 @@ export default class CardsList extends React.Component {
           return <Card id={k} {...v} key={k} popupCard={(v) => this.setState({activeCard: parseInt(v),activeData:{bankNm,actName,actNo,bankNo}})}></Card>
         })}
       </div>
-
       {
         activeCard > -1 ? [
           <style key={'a'}>{`
@@ -163,7 +162,7 @@ export default class CardsList extends React.Component {
                 this.props.dispatch(getBillId({
                   bankNo,cardNum:num
                 })).then((result)=>{
-                  if(result.data){
+                  if(Object.keys(result.data).length!= 0){
                     this.props.history.push(`/bill/detail/${result.data}`)
                   } else {
                     // TODO  跳转逻辑 jerry
@@ -181,7 +180,6 @@ export default class CardsList extends React.Component {
           }}/>
         ] : null
       }
-
     </div>
   }
 }

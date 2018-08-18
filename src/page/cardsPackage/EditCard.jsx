@@ -8,6 +8,7 @@ import {
   identityBank, judgeSelfCard, postInfo, sendVerification,
   verifySMSCode
 } from "../../actions/reqAction";
+import { regBankCard,regIdCard,regMobile} from '../../utils/util'
 const prompt = Modal.prompt;
 
 @InitDecorator((state)=>{
@@ -34,6 +35,7 @@ export default class EditCard extends React.Component {
         bank:'',
         phone:"",
         bankType:'',
+        enableBtn:false
       },
       usalCardData:{
         cardNum:"",
@@ -42,6 +44,7 @@ export default class EditCard extends React.Component {
         bank:'',
         phone:"",
         bankType:'',
+        enableBtn:false
       }
     }
   }
@@ -69,13 +72,40 @@ export default class EditCard extends React.Component {
   async bindCard(key){
 
     const {
-      cardNum:cardNo ='6221560486792149',
+      cardNum:cardNo ='',
       username:idName,
       id:idNo,
       bank,
-      phone:resvPhoneNo = '18800102517',
+      phone:resvPhoneNo = '',
       bankType:bankNo,
-    } = this.state[key]
+    } = this.state[key];
+    if(!cardNo){
+      Toast.info('请输入银行卡号');
+      return;
+    }else if(!idName){
+      Toast.info('请输入用户名');
+      return;
+    } else  if(!idNo){
+      Toast.info('请输入身份证号码');
+      return;
+    }else if(!bank){
+      Toast.info('请点击识别银行');
+      return;
+    }else if(!resvPhoneNo){
+      Toast.info('请输入预留手机号')
+      return;
+    } else {
+    }
+    if(!regBankCard.test(cardNo)){
+      Toast.info('请输入正确的银行卡号')
+      return;
+    } else if(!regIdCard.test(idNo)){
+      Toast.info('请输入正确的身份证号码')
+      return;
+    }else if(!regMobile.test(resvPhoneNo)){
+      Toast.info('请输入正确的手机号码')
+      return;
+    }
 
     let r = await this.props.dispatch(postInfo({
       cardNo,
@@ -139,7 +169,7 @@ export default class EditCard extends React.Component {
     this.props.dispatch(judgeSelfCard());
   }
 
-  setDeepState(property,key,value) {
+  setDeepState(property,key,value,callback = ()=>{}) {
     const s = this.state[property]
 
     this.setState({
@@ -148,11 +178,39 @@ export default class EditCard extends React.Component {
         [key]:value
       }
 
-    })
+    },callback)
+  }
+  enableBtn(key){
+    const {
+      cardNum:cardNo ='',
+      username:idName,
+      id:idNo,
+      bank,
+      phone:resvPhoneNo = '',
+      bankType:bankNo,
+    } = this.state[key];
+    if( cardNo && idName &&idNo && bank && resvPhoneNo && bankNo){
+      this.setState({
+        [key]:{
+          ...this.state[key],
+          enableBtn:true
+        }
+      })
+    } else {
+      this.setState({
+        [key]:{
+          ...this.state[key],
+          enableBtn:false
+        }
+      })
+    }
+
   }
 
   render() {
     const { activeOne,modal,description } = this.state;
+    let property = activeOne == 1?'usalCardData':"cardData";
+    const { enableBtn =false} = this.state[property];
 
     return [<Header key={1} title="信用卡信息"/>, <style key={2}>
       {
@@ -202,11 +260,10 @@ export default class EditCard extends React.Component {
         }].map((v, k) => {
             const {name,disabled,key, value, placeHolder, icon} = v;
             const { cardData = []} = this.state;
-            let property = activeOne == 1?'usalCardData':"cardData"
+            let property = activeOne == 1?'usalCardData':"cardData";
           return <div key={k} style={styles.item}><div style={styles.name}>{name}</div>
             <input
               onClick={()=>{
-
                 if(key == 'bank'){
                   if(activeOne == 1){
                     this.findBank('usalCardData')
@@ -215,12 +272,16 @@ export default class EditCard extends React.Component {
                   }
                 }
               }}
+
               onChange={(e)=>{
                 if(activeOne == 1){
-                  this.setDeepState('usalCardData',key,e.currentTarget.value)
+                  this.setDeepState('usalCardData',key,e.currentTarget.value,()=>this.enableBtn('usalCardData'))
+
                 } else {
-                  this.setDeepState('cardData',key,e.currentTarget.value)
+                  this.setDeepState('cardData',key,e.currentTarget.value,()=>this.enableBtn('cardData'))
+
                 }
+
 
             }} value={this.state[property][key]} disabled={disabled} style={styles.input} placeholder={placeHolder}/>
             {icon ? <img src={icon} style={ styles.img}/> : null}
@@ -229,7 +290,7 @@ export default class EditCard extends React.Component {
         })
       }
       <div style={styles.tips}>请核对卡号信息，确认无误</div>
-      <div style={styles.finishBtn} onClick={()=>{
+      <div style={enableBtn?styles.finishBtn:styles.disabelBtn} onClick={()=>{
         if(activeOne == 1){
           this.bindCard('usalCardData')
         } else {
@@ -286,6 +347,17 @@ const styles = {
   finishBtn:{
     background:'#4C7BFE',
     boxShadow: '0 0.06rem 0.12rem 0 #9BB5FF',
+    borderRadius: "0.08rem",
+    margin:"1.4rem 0.16rem 0 0.16rem",
+    lineHeight:"1.18rem",
+    textAlign:'center',
+    fontSize: "0.34rem",
+    color: "#FFFFFF",
+    letterSpacing: '-0.011rem',
+  },
+  disabelBtn:{
+    background: 'rgb(130, 125, 125)',
+    boxShadow: '0 0.06rem 0.12rem 0 rgb(130, 125, 125)',
     borderRadius: "0.08rem",
     margin:"1.4rem 0.16rem 0 0.16rem",
     lineHeight:"1.18rem",

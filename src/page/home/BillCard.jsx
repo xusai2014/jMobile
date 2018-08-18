@@ -50,7 +50,6 @@ export default class BillCard extends React.Component {
       }, (err) => {
         Toast.hide()
       });
-
       return
     }
     await this.setState({
@@ -178,6 +177,12 @@ export default class BillCard extends React.Component {
       text: '取消',
       onPress: value => new Promise((resolve) => {
         resolve();
+        alert('是否退出当前认证流程',`选择“是”将退出当前认证流程已填写信息将丢失`,[
+          {text:"是",onPress:()=>{}},
+          {text:"否",onPress:()=>{
+            this.promptClick({input, taskId, description, callback})
+          }}
+        ])
       }),
     },
       {

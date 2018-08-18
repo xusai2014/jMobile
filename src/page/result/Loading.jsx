@@ -5,7 +5,7 @@ import {InitDecorator} from "../../compoents/InitDecorator";
 import Loading from "../../compoents/Loading";
 import { Toast,Modal } from 'antd-mobile';
 import {waitFunc} from "../../utils/util";
-const prompt = Modal.prompt;
+const {prompt,alert} = Modal;
 
 const results = {
   cyber:{
@@ -175,11 +175,13 @@ export default class LoadingStatus extends React.Component{
     prompt('输入验证码', description, [{
       text: '取消',
       onPress: value => new Promise((resolve) => {
-        Toast.info('登录失败', 1);
-        setTimeout(() => {
-          resolve();
-          console.log(`value:${value}`);
-        }, 1000);
+        resolve();
+        alert('是否退出当前认证流程',`选择“是”将退出当前认证流程已填写信息将丢失`,[
+          {text:"是",onPress:()=>{}},
+          {text:"否",onPress:()=>{
+            this.promptClick({input, taskId, description, callback})
+          }}
+        ])
       }),
     },
       {

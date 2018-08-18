@@ -59,9 +59,7 @@ export default class Index extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.isLogged && this.props.isLogged != nextProps.isLogged) {
-      this.getUserInfo();
-      this.getBillList();
-      this.props.dispatch(getActivities())
+      this.initData();
     }
   }
 

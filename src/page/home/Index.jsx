@@ -298,11 +298,10 @@ export default class Index extends React.Component {
         maskClosable={true}
         onClose={()=>{this.setState({sycnModal:false})}}
         wrapProps={{ onTouchStart: this.onWrapTouchStart }}
-        footer={[{ text: '我知道了', onPress: () => {  } }]}
+        footer={[{ text: '我知道了', onPress: () => { this.setState({sycnModal:false})}}]}
       >
         <div style={{ height: 100, overflow: 'scroll' }}>
-          暂不支持邮箱同步<br/>
-          <span onClick={()=>this.props.history.push('/bill/method')}>请使用网银同步</span>
+          <div style={{marginTop:"0.5rem",fontSize:"0.35rem",color:"#000"}} onClick={()=>this.props.history.push('/bill/method')}>请使用网银同步</div>
         </div>
       </Modal>
       , visible ?

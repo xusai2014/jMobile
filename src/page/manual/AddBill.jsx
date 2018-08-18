@@ -67,7 +67,7 @@ export default class AddBill extends React.Component {
       newBalance,
       bankNo,
     })).then(()=>{
-
+      Toast.info('手写账单成功');
       this.props.history.push('/home/index')
     })
   }

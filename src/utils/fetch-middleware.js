@@ -223,7 +223,7 @@ export function filterResponse(data) {
     if (RETURNCODE === "0000" ) {
       return data;
     } else if(RETURNCODE === "1004"){
-      checkReLoginFlow({message:'请重新登录'})
+      checkReLoginFlow({message:'请重新登录'},()=>{},()=>{window.location.href = '/home/index'})
       let error = null;
       error = new Error(RETURNCON)
       throw error

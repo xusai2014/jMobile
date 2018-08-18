@@ -133,12 +133,12 @@ export default class Index extends React.Component {
   render() {
     const {interestShow, visible, sycnModal,authSts} = this.state;
     const {isLogged, billList = {}, freeIntrestData = [], activities = []} = this.props;
-    const {waitPaymentAmount = '', waitPaymentNumber = '', baseResponseBillDtoList = []} = billList
+    const {waitPaymentAmount = '0.00', waitPaymentNumber = '0', baseResponseBillDtoList = []} = billList
     return [<div key={'a'} style={{background: '#FFFFFF', paddingBottom: "0.7rem"}}>
       <div style={styles.top}>
         <div style={styles.topText}>7日内待还
           <span style={styles.topSubText}>
-          {isLogged ? waitPaymentNumber : '0'}笔
+          {isLogged ? waitPaymentNumber : '--'}笔
           </span>
         </div>
         <img onClick={() => {
@@ -185,8 +185,8 @@ export default class Index extends React.Component {
         }
       </div>
       <div style={styles.activity}>
-        {isLogged ? activities.map((v, k) => {
-          const {logoUri, gameUri, gameName} = v;
+        {isLogged ? [1,2,3,4].map((v, k) => {
+          const {logoUri = '', gameUri, gameName = ''} = activities[v]?activities[v]:{};
           return <div onClick={() => {
             window.location.href = gameUri
           }} key={k} style={{display: "inline-block", textAlign: 'center'}}>
@@ -213,6 +213,7 @@ export default class Index extends React.Component {
                 logo_uri,
                 importBillType,//账单类型 01为网银 03为邮箱 02为手写账单
                 isNew,
+                abbr,
               } = v;
               return <BillCard card_num={card_num}
                                bank_name={bank_name}
@@ -226,6 +227,7 @@ export default class Index extends React.Component {
                                importBillType={importBillType}
                                real={true}
                                isNew={isNew}
+                               abbr={abbr}
                                key={k}
                                repay={(e) => {
                                   e.stopPropagation()
@@ -247,6 +249,7 @@ export default class Index extends React.Component {
               logo_uri: '/static/img/招商银行@2x.png',
               importBillType: "",
               isNew: '00',
+              abbr:"CMB"
             }].map((v, k) => <BillCard
               real={false}
               {...v} key={k} repay={(e) => {

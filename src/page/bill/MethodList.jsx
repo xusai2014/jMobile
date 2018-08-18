@@ -31,6 +31,12 @@ export default class MethodList extends React.Component{
     });
   }
 
+  componentDidMount(){
+    const { state ={} } = this.props.location;
+    const { anchor ='' } = state;
+    anchor && window.scrollTo(0,220)
+  }
+
   render(){
     const  { bankList = [] } = this.props;
     return [<Header key={'a'} title="添加账单" />,<div key={'b'} style={{
@@ -85,7 +91,7 @@ export default class MethodList extends React.Component{
 
         </div>]
       })}
-    </div>,<div key={'c'} style={{
+    </div>,<div key={'c'} id="cyberId" style={{
       fontSize: '0.24rem',
       color: '#999999',
       letterSpacing: '0',

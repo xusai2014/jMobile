@@ -104,7 +104,7 @@ export default class Popup extends React.Component{
   render(){
     const { visible, setVisible, title = '选择还款方式' ,style = {} } = this.props;
     return <div style={{
-      position:'absolute',
+      position:'fixed',
       bottom: '0rem',
       width:'7.5rem',
       height:document.documentElement.clientHeight,

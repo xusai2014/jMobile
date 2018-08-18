@@ -6,8 +6,7 @@ export default class Card extends React.Component {
     const { popupCard,actName, id, bankNm,payment_due_date,card_limit,actNo,bankNo } =this.props;
     return (<div style={styles.container}>
       <div>
-        <div style={styles.rowItem}
-        >
+        <div style={styles.rowItem}>
           <img style={{width: '0.4rem', margin: '0.16rem', height: "0.4rem"}} src="/static/img/交通银行@2x.png"/>
         </div>
         <div style={{width: '3rem', display: 'inline-block', marginLeft: '0.21rem', marginTop: '0.47rem',}}>

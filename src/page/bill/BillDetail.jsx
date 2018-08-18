@@ -3,9 +3,12 @@ import Header from '../../compoents/Header';
 import {Tabs,Modal,Toast} from "antd-mobile"
 import Popup from "../home/components/Popup";
 import {InitDecorator} from "../../compoents/InitDecorator";
-import {checkToken, deleteBill, getBillDetail, getPayDetail, syncBill, verifyCode} from "../../actions/reqAction";
+import {
+  checkToken, deleteBill, getBillDetail, getLoginList, getPayDetail, syncBill,
+  verifyCode
+} from "../../actions/reqAction";
 import {waitFunc} from "../../utils/util";
-const alert = Modal.alert;
+const {operation,alert,prompt} = Modal;
 @InitDecorator((state)=>{
   return {
     billDetail:state.BillReducer.billDetail,
@@ -26,7 +29,32 @@ export default class BillDetail extends React.Component {
     }
   }
 
-  async callSyncBill(task_id, importBillType) {
+  async callSyncBill(task_id, importBillType,abbr) {
+    if(importBillType == '01'){
+
+    } else {
+      this.props.dispatch(getLoginList({
+        abbr,
+        cardType: 'CREDITCARD',
+      })).then((result) => {
+        const {data} = result;
+        const {subtype = ''} = data;
+        if (subtype) {
+          alert('暂时无法获取账单的最新状态', <div>如果您已通过其导入它平台还款，建议您通过网银导入</div>, [
+            {text: '暂不需要', onPress: () => console.log('置顶聊天被点击了'), },
+            {text: '通过网银导入', onPress: () => this.props.history.push('/bill/method', {anchor: '#cyberId'}), }
+          ]);
+        } else {
+          alert('该银行暂不支持同步您的账单数据', '', [
+            {text: '我知道了', onPress: () => console.log('置顶聊天被点击了'), style: {textAlign: "center", paddingLeft: '0'}}
+          ]);
+        }
+
+      }, (err) => {
+      });
+
+      return
+    }
 
     await this.setState({
       syncBegin:true
@@ -231,8 +259,6 @@ export default class BillDetail extends React.Component {
         pageSize:size,
         totalPages,
       })
-
-      debugger;
     })
   }
 
@@ -364,6 +390,10 @@ export default class BillDetail extends React.Component {
       bill_type = '',
       min_payment = '',
       card_number = '',
+      importBillType,
+      abbr='',
+      taskId,
+      current_bill_amt = '0.00'
     } = billDetail;
     const { pageList:list = [],} = pageResponseDto
     const { billId } = this.props.match.params;
@@ -406,7 +436,7 @@ export default class BillDetail extends React.Component {
               fontSize: '0.62rem',
               color: '#FFFFFF',
               letterSpacing: '0',
-            }}>4074.65
+            }}>{current_bill_amt}
             </div>
             <div style={{
               opacity: '0.5',
@@ -484,7 +514,7 @@ export default class BillDetail extends React.Component {
                 </div>
                 {expandOne == v ? <div >
                   {
-                    datalist.map((v, k) => {
+                    list.map((v, k) => {
                       const { description,trans_date,amount_money } = v;
                       return <div style={{
                         display:'flex',
@@ -555,7 +585,6 @@ export default class BillDetail extends React.Component {
           })}</div>
         </Tabs>
         </div>
-
         <div style={{display: 'flex',position: 'fixed',bottom: '0'}}>
           <div style={{
             width:'0.58rem',
@@ -573,7 +602,7 @@ export default class BillDetail extends React.Component {
           background: '#FFFFFF',
           height: '1.02rem',
           width:'2.17rem'
-        }} onClick={()=>this.callSyncBill()}><span style={{margin:'auto 0.13rem auto 0',height:'0.5rem'}}>
+        }} onClick={()=>this.callSyncBill(taskId,importBillType,abbr)}><span style={{margin:'auto 0.13rem auto 0',height:'0.5rem'}}>
           <style>{
           `@-webkit-keyframes rotation{
             from {-webkit-transform: rotate(0deg);}

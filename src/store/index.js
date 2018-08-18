@@ -14,7 +14,7 @@ function promiseMiddleware() {
 
     return promise().then(
       (result) => {
-        const {RETURNCODE, DATA, RESULTCODE} = result;
+        const {RETURNCODE, DATA ={}, RESULTCODE} = result;
         if (RETURNCODE == '0000' || RESULTCODE == '0000') {
           if(SUCCESS == 'M511'){
             const { bindList } = result;

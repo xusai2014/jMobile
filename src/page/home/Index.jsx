@@ -215,6 +215,7 @@ export default class Index extends React.Component {
                 importBillType,//账单类型 01为网银 03为邮箱 02为手写账单
                 isNew,
                 abbr,
+                update_time,
               } = v;
               return <BillCard card_num={card_num}
                                bank_name={bank_name}
@@ -234,6 +235,7 @@ export default class Index extends React.Component {
                                   e.stopPropagation()
                                   this.setState({visible: true})
                                }}
+                               update_time ={ update_time }
                                importModal={()=>{this.setState({sycnModal:true})}}
                                updateData = {()=>this.initData()}
               />
@@ -251,7 +253,8 @@ export default class Index extends React.Component {
               logo_uri: '/static/img/招商银行@2x.png',
               importBillType: "",
               isNew: '00',
-              abbr:"CMB"
+              abbr:"CMB",
+              update_time:"2018-06-06"
             }].map((v, k) => <BillCard
               real={false}
               {...v} key={k} repay={(e) => {

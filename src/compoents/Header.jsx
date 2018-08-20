@@ -25,7 +25,7 @@ class AllHeader extends React.Component {
   backStart() {
     jsNative.nativeCallBindCreditCard({},(data)=>{
       const { TaskCenter = '' } = data;
-      if( parseInt(TaskCenter) == 1){
+      if( window.location.href.indexOf('/cards/cardslist') >0 && parseInt(TaskCenter) == 1 ){
         jsNative.nativeCloseWebview({},()=>{})
       } else {
         window.history.go(-1);

@@ -4,8 +4,7 @@ import {Modal, Toast, DatePicker} from 'antd-mobile'
 import ModalCom from "../../compoents/ModalCom";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {handleBillForm, identityBank} from "../../actions/reqAction";
-const prompt = Modal.prompt;
-
+import { regBankCard } from '../../utils/util'
 @InitDecorator(
   (state) => {
     return {
@@ -29,6 +28,7 @@ export default class HandleBill extends React.Component {
       creditLimit: "",
       newBalance: "",
       bankNo:"",
+      enabelBtn:false
     }
   }
 
@@ -58,7 +58,33 @@ export default class HandleBill extends React.Component {
       creditLimit,
       newBalance,
       bankNo,
-    } = this.state
+    } = this.state;
+    if(!fullCardNum){
+      Toast.info('请输入银行卡号');
+      return;
+    }else if(!bankName){
+      Toast.info('请点击识别所属银行');
+      return;
+    } else if(!billDate){
+      Toast.info('请填写账单日');
+      return;
+    } else if(!paymentDueDate){
+      Toast.info('请填写还款日');
+      return;
+    } else if(!paymentDueDate){
+      Toast.info('请填写姓名');
+      return;
+    } else if(!creditLimit){
+      Toast.info('请填写信用额度');
+      return;
+    } else if(!newBalance){
+      Toast.info('请填写剩余额度');
+      return;
+    }
+    if(!regBankCard.test(fullCardNum)){
+      Toast.info('请填写正确的银行卡号码');
+      return;
+    }
     this.props.dispatch(handleBillForm({
       bankName,
       billDate:moment(billDate).format('YYYY-MM-DD'),
@@ -74,6 +100,28 @@ export default class HandleBill extends React.Component {
     })
   }
 
+  enableBtn(){
+    const {
+      bankName,
+      accountDate: billDate,
+      fullCardNum,
+      repayDate: paymentDueDate,
+      nameOnCard,
+      creditLimit,
+      newBalance,
+      bankNo,
+    } = this.state;
+    if(bankName && billDate && fullCardNum
+      && paymentDueDate && nameOnCard && creditLimit &&  newBalance
+    ){
+      this.setState({enabelBtn:true})
+    } else {
+
+      this.setState({enabelBtn:false})
+    }
+
+  }
+
   render() {
     const {
       activeOne,
@@ -86,6 +134,7 @@ export default class HandleBill extends React.Component {
       nameOnCard,
       creditLimit,
       newBalance,
+      enabelBtn
     } = this.state;
 
     return [<Header key={1} title="手写账单"/>, <style key={2}>
@@ -139,12 +188,14 @@ export default class HandleBill extends React.Component {
                 title={name}
                 extra="Optional"
                 value={this.state[key]}
-                onChange={date => this.setState({[key]: date})}
+                onChange={date => this.setState({[key]: date},()=>{this.enableBtn()})}
               >
                 <div
                   style={styles.input}>{this.state[key] ? moment(this.state[key]).format('YYYY-MM-DD') : placeHolder}
                 </div>
-              </DatePicker> : <input onChange={(e) => this.setState({[key]: e.currentTarget.value})}
+              </DatePicker> :
+                <input onChange={(e) =>
+                          this.setState({[key]: e.currentTarget.value},()=>{this.enableBtn()})}
                                      onClick={()=>{
                                        if(key == 'bankName'){
                                          this.findBank()
@@ -161,7 +212,7 @@ export default class HandleBill extends React.Component {
 
         })
       }
-      <div style={styles.finishBtn} onClick={() => this.commitForm()}>保存</div>
+      <div style={enabelBtn?styles.finishBtn:styles.disabelBtn} onClick={() => this.commitForm()}>保存</div>
       <ModalCom visible={modal} showAction={(v) => {
         this.setState({modal: v})
       }} description={description}/>
@@ -214,6 +265,17 @@ const styles = {
   finishBtn: {
     background: '#4C7BFE',
     boxShadow: '0 0.06rem 0.12rem 0 #9BB5FF',
+    borderRadius: "0.08rem",
+    margin: "1.4rem 0.16rem 0 0.16rem",
+    lineHeight: "1.18rem",
+    textAlign: 'center',
+    fontSize: "0.34rem",
+    color: "#FFFFFF",
+    letterSpacing: '-0.011rem',
+  },
+  disabelBtn:{
+    background: 'rgb(130, 125, 125)',
+    boxShadow: '0 0.06rem 0.12rem 0 rgb(130, 125, 125)',
     borderRadius: "0.08rem",
     margin: "1.4rem 0.16rem 0 0.16rem",
     lineHeight: "1.18rem",

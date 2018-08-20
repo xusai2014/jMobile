@@ -9,7 +9,7 @@ import {
   SYNC_BILL,
   FREE_INTEREST,
   EMAIL_LOGIN,
-  EMAIL_TASK_STATUS, DELETE_BILL, DIRECT_EMAIL_BILL, EMAIL_LIST, DELETE_EMAIL, HANDLE_BILL,
+  EMAIL_TASK_STATUS, DELETE_BILL, DIRECT_EMAIL_BILL, EMAIL_LIST, DELETE_EMAIL, HANDLE_BILL, REMOVE_BILL_ALL_STATUS,
 } from '../utils/ActionsType';
 
 const initialState = {
@@ -34,6 +34,9 @@ const initialState = {
     pageResponseDto:{
       pageList:[]
     }
+  },
+  billAllStatus:{
+
   }
 
 };
@@ -179,6 +182,11 @@ export default function (state = initialState, actions) {
       return {
         ...state,
         handeBill:actions.data
+      }
+    case REMOVE_BILL_ALL_STATUS[1]:
+      return {
+        ...state,
+        billAllStatus:actions.data
       }
     default:
       return state

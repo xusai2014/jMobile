@@ -1,10 +1,10 @@
 import React from 'react';
 import Header from "../../compoents/Header";
 import ModalCom from "../../compoents/ModalCom";
-import {Tabs,Toast} from "antd-mobile"
-import { getLoginList, loginCyber, } from "../../actions/reqAction";
+import { Tabs, Toast, Modal} from "antd-mobile"
+import {getLoginList, loginCyber, removeBillAllStatus,} from "../../actions/reqAction";
 import {InitDecorator} from "../../compoents/InitDecorator";
-
+const { alert } = Modal
 
 const cardType = 'CREDITCARD'
 
@@ -57,14 +57,27 @@ export default class CyberBank extends React.Component {
       return;
     }
 
-    const data = await this.props.dispatch(loginCyber({
+    const loginStatus = await this.props.dispatch(loginCyber({
        password,
        abbr,
        account:username,
        loginType,
        loginTarget: cardType,
      }))
-     const { data:taskId ='' } = data;
+
+     const { data } = loginStatus;
+    const { DATA:taskId,RESULTCODE} = data;
+    if( RESULTCODE == '1001'){
+      alert('','再次登录将会覆盖掉您原有的登录信息，您确定再次登录吗？',[
+        { text: '取消', onPress: () => console.log('cancel'), style: 'default' },
+        { text: '确认', onPress: () => {
+        debugger;
+          this.props.dispatch(removeBillAllStatus({taskId}))
+        } },
+      ])
+      return;
+    }
+
     if(!taskId){
       // 任务创建失败
       Toast.info('任务创建失败', 1);

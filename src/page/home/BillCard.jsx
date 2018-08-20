@@ -23,7 +23,7 @@ export default class BillCard extends React.Component {
     }
   }
 
-  async callSyncBill(task_id, importBillType, abbr) {
+  async callSyncBill(task_id, importBillType, abbr,cardNum) {
     // TODO 仅支持网银
     Toast.loading('请稍候',0);
     if (importBillType == '01') {
@@ -57,6 +57,7 @@ export default class BillCard extends React.Component {
     })
     this.props.dispatch(syncBill({
       taskId: task_id,
+      cardNum,
     })).then((result) => {
       const {data} = result;
       if (typeof data != 'undefined') {
@@ -353,7 +354,7 @@ export default class BillCard extends React.Component {
                   this.callLogin()
                   return
                 }
-                this.callSyncBill(task_id, importBillType, abbr)
+                this.callSyncBill(task_id, importBillType, abbr,card_num)
               }}/>)
               :
               <div>已同步至最新</div>

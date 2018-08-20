@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from "../../compoents/Header";
-import {checkEmailTask, checkToken, pollingCyber, verifyCode} from "../../actions/reqAction";
+import {checkEmailTask, checkToken, pollingCyber, removeLoginStatus, verifyCode} from "../../actions/reqAction";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import Loading from "../../compoents/Loading";
 import { Toast,Modal } from 'antd-mobile';
@@ -102,7 +102,11 @@ export default class LoadingStatus extends React.Component{
         return;
       case "DONE_FAIL":
         Toast.info(description);
-        this.goResult(loginType,false,description)
+        // TODO 添加参数 uuid
+        this.props.dispatch(removeLoginStatus({taskId})).then(()=>{
+          this.goResult(loginType,false,description)
+        })
+
         return;
       case "DONE_TIMEOUT":
         this.goResult(loginType,false,description)

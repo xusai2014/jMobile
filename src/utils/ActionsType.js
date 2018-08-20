@@ -98,3 +98,9 @@ export const GET_BILL_ID = ['REQUEST','CH824','FAILURE'];
 
 //活动列表
 export const ACTIVITY_CARD = ['REQUEST','CH820','FAILURE'];
+
+//删除登录状态
+export const REMOVE_LOGIN_STATUS = ['REQUEST','CH826','FAILURE'];
+
+//删除账单及任务状态
+export const REMOVE_BILL_ALL_STATUS = ['REQUEST','CH827','FAILURE'];

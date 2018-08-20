@@ -1,13 +1,13 @@
 import React from 'react';
 import Header from "../../compoents/Header";
-import {Modal} from 'antd-mobile';
 import ModalCom from "../../compoents/ModalCom";
-import { emailLogin} from "../../actions/reqAction";
+import {emailLogin, removeBillAllStatus} from "../../actions/reqAction";
 import {InitDecorator} from "../../compoents/InitDecorator";
-import {Toast} from "antd-mobile";
+import {Toast,Modal} from "antd-mobile";
 import {
   regEmail
-} from '../../utils/util'
+} from '../../utils/util';
+const { alert } = Modal
 @InitDecorator((state) => {
   return {
     emailLogin: state.BillReducer.emailLogin
@@ -57,7 +57,15 @@ export default class EmailAdd extends React.Component {
       account,
       password,
     }))
-    const {data: taskId = ''} = login;
+    const { data } = login;
+    const { DATA:taskId,RESULTCODE} = data;
+    if( RESULTCODE == '1001'){
+      alert('','再次登录将会覆盖掉您原有的登录信息，您确定再次登录吗？',[
+        { text: '取消', onPress: () => console.log('cancel'), style: 'default' },
+        { text: '确认', onPress: () => this.props.dispatch(removeBillAllStatus({taskId})) },
+      ])
+      return;
+    }
     if (!taskId) {
       // 任务创建失败
       Toast.info('任务创建失败', 1);

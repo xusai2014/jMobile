@@ -7,7 +7,7 @@
 */
 import Storage from '../store';
 import {packageReqData, aesDecrypt} from './encrypt-util'
-import {Toast} from 'antd-mobile';
+import {Toast,} from 'antd-mobile';
 import { apiUrl,isMock } from '../config/api'
 import {showSingleBtnModal} from "../compoents/ModalAlert";
 import { jsNative } from "sx-jsbridge";
@@ -210,9 +210,9 @@ export function filterResponse(data) {
   const { RETURNCODE , RESULTCODE} = data;
   if(typeof  RESULTCODE != 'undefined'){
     const { RESULTMSG } = data;
-    if (RESULTCODE === "0000" ) {
+    if (RESULTCODE === "0000" || RESULTCODE === "1001") {
       return data;
-    } else {
+    }  else {
       let error = null;
       error = new Error(RESULTMSG)
       Toast.info(error.message, 2)

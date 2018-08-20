@@ -23,7 +23,8 @@ function promiseMiddleware() {
             debugger;
             const { bankNm,type } = result;
             return next({...rest, data:{bankNm,type}, type: SUCCESS})
-          }else  if( SUCCESS == 'M814'|| SUCCESS == 'M113'||SUCCESS == 'M512' ||SUCCESS == 'M502'|| SUCCESS == 'M503'){
+          }else  if( SUCCESS == 'M814'|| SUCCESS == 'M113'||SUCCESS == 'M512'
+            ||SUCCESS == 'M502'|| SUCCESS == 'M503' || SUCCESS == 'CH803' || SUCCESS == 'CH813'){
             return next({...rest, data:result, type: SUCCESS})
           } else {
             return next({...rest, data:DATA, type: SUCCESS})

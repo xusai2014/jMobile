@@ -30,7 +30,7 @@ export default class BillDetail extends React.Component {
     }
   }
 
-  async callSyncBill(task_id, importBillType,abbr) {
+  async callSyncBill(task_id, importBillType,abbr,cardNum) {
     if(importBillType == '01'){
 
     } else {
@@ -62,6 +62,7 @@ export default class BillDetail extends React.Component {
     })
     this.props.dispatch(syncBill({
       taskId: task_id,
+      cardNum
     })).then((result) => {
       const {data} = result;
       if(typeof data != 'undefined'){
@@ -642,7 +643,7 @@ export default class BillDetail extends React.Component {
           background: '#FFFFFF',
           height: '1.02rem',
           width:'2.17rem'
-        }} onClick={()=>this.callSyncBill(taskId,importBillType,abbr)}><span style={{margin:'auto 0.13rem auto 0',height:'0.5rem'}}>
+        }} onClick={()=>this.callSyncBill(taskId,importBillType,abbr,card_number)}><span style={{margin:'auto 0.13rem auto 0',height:'0.5rem'}}>
           <style>{
           `@-webkit-keyframes rotation{
             from {-webkit-transform: rotate(0deg);}

@@ -1,7 +1,7 @@
 import {
   ACTIVITY_CARD,
   CARDS_LIST, GET_BILL_ID, GET_IDENTITY_INFO, IDENTITY_BNK, JUDGE_SEL_CARD,
-  LOOSE_CARD
+  LOOSE_CARD, REMOVE_LOGIN_STATUS
 } from "../utils/ActionsType";
 
 const initialState = {
@@ -12,6 +12,7 @@ const initialState = {
   looseCard:{},
   haveBill:{},
   activities:[],
+  removeLoginStatus:{}
 };
 //全局状态信息，数据信息存储
 export default function (state = initialState, actions) {
@@ -50,6 +51,11 @@ export default function (state = initialState, actions) {
       return {
         ...state,
         activities:actions.data
+      }
+    case REMOVE_LOGIN_STATUS[1]:
+      return {
+        ...state,
+        removeLoginStatus:actions.data
       }
     default:
       return state

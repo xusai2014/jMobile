@@ -8,6 +8,7 @@ import {
   verifyCode
 } from "../../actions/reqAction";
 import {waitFunc} from "../../utils/util";
+import LoadCom from "../../compoents/LoadCom";
 const {operation,alert,prompt} = Modal;
 @InitDecorator((state)=>{
   return {
@@ -383,9 +384,37 @@ export default class BillDetail extends React.Component {
     })
   }
 
+  loadMoreDataFn(currentNum,pageSize,callback){
+    const { billId } = this.props.match.params;
+    const { currentNum:num, pageSize:size} = this.state;
+    if(parseInt(currentNum) == parseInt(num+1)){
+      this.props.dispatch(getBillDetail({
+        billId,
+        currentNum,
+        pageSize
+      })).then((result)=>{
+        const { data = {}} = result;
+        const { pageResponseDto } = data;
+        const {
+          currentPage,
+          size,
+          totalPages,
+        } = pageResponseDto;
+        this.setState({
+          currentNum:currentPage,
+          pageSize:size,
+          totalPages,
+        })
+      }).finally(()=>callback())
+    }
+
+  }
+
   render() {
     const {title = '银行',billDetail ={},payDetail= []} = this.props;
-    const {expandOne, visible, syncBegin} = this.state;
+    const {expandOne, visible, syncBegin,
+      currentNum, pageSize,totalPages
+    } = this.state;
     const {
       payment_due_date ,
       bill_date ,
@@ -518,7 +547,7 @@ export default class BillDetail extends React.Component {
                     }}><span>{from}</span>至<span>{to}</span></div>
                   </div>
                 </div>
-                {expandOne == v ? <div >
+                {expandOne == v ? [<div id="load" style={{overflow:'scroll'}}>
                   {
                     list.map((v, k) => {
                       const { description,trans_date,amount_money } = v;
@@ -554,7 +583,12 @@ export default class BillDetail extends React.Component {
 
                     })
                   }
-                </div> : null}</div>
+                  <LoadCom loadMoreDataFn={(c,p,callback)=>this.loadMoreDataFn(c,p,callback)}
+                           currentNum={currentNum}
+                           pageSize ={pageSize}
+                           totalPages={totalPages}
+                  />
+                </div>] : null}</div>
             })}
           </div>
           <div style={{background: '#FFFFFF'}}>{payDetail.map((v,k) => {

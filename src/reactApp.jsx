@@ -31,7 +31,7 @@ window.sa = sa;
 if (module.hot) {
   module.hot.accept();
 }
-initJSBridge(true,{TOKEN_ID:"d43079be0f074de9ac41abe84484079c"});
+initJSBridge(true,{TOKEN_ID:"aa5ada65ddac4feeaf3b0a6cd45027a1"});
 
 nativeJs.informLoginStatus(() => {
   jsNative.nativeRequestBaseParams().then((reqParams) => {

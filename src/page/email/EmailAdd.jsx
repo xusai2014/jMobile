@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from "../../compoents/Header";
 import ModalCom from "../../compoents/ModalCom";
-import {emailLogin, removeBillAllStatus} from "../../actions/reqAction";
+import {emailLogin, removeBillAllStatus, removeLoginStatus} from "../../actions/reqAction";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {Toast,Modal} from "antd-mobile";
 import {
@@ -62,7 +62,15 @@ export default class EmailAdd extends React.Component {
     if( RESULTCODE == '1001'){
       alert('','再次登录将会覆盖掉您原有的登录信息，您确定再次登录吗？',[
         { text: '取消', onPress: () => console.log('cancel'), style: 'default' },
-        { text: '确认', onPress: () => this.props.dispatch(removeBillAllStatus({taskId})) },
+        { text: '确认', onPress: () => {
+          this.props.dispatch(removeLoginStatus({taskId})).then(()=>{
+            this.props.dispatch(removeBillAllStatus({taskId})).then(()=>{
+              Toast.hide();
+            },()=>{
+              Toast.hide();
+            })
+          },()=>Toast.hide())
+        } },
       ])
       return;
     }

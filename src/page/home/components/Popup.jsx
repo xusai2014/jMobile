@@ -2,6 +2,7 @@ import React from 'react';
 import {Icon} from "antd-mobile";
 import {getHUandao} from "../../../actions/reqAction";
 import { connect } from "react-redux";
+import { jsNative } from 'sx-jsbridge';
 
 @connect()
 export default class Popup extends React.Component{
@@ -83,7 +84,7 @@ export default class Popup extends React.Component{
     })).then((result)=>{
       const { data = {} } = result;
       const {telEnc,token,finId} = data;
-      location.href = `https://lns-front-test.vbillbank.com/transitionPageService?telNo=${telEnc}&token=${token}&appId=${finId}&h5Channel=MPOS_XYKHK`
+      jsNative.nativeOpenOldWebView({url:`https://lns-front-test.vbillbank.com/transitionPageService?telNo=${telEnc}&token=${token}&appId=${finId}&h5Channel=MPOS_XYKHK`},()=>{})
     },()=>{})
 
 

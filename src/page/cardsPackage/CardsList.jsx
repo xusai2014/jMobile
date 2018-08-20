@@ -1,10 +1,10 @@
 import React from 'react';
 import Header from "../../compoents/Header";
 import Card from "./components/Card";
-import {Menu, Icon} from "antd-mobile";
+import {Menu, Icon, Toast} from "antd-mobile";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {getBillId, getCardsList, getIndetiyInfo, looseCard} from "../../actions/reqAction";
-import {jsNative, nativeOpenNewWebView} from 'sx-jsbridge'
+import {jsNative} from 'sx-jsbridge'
 import {judgeEnv} from "../../utils/util";
 
 
@@ -32,7 +32,7 @@ export default class CardsList extends React.Component {
       value: '1',
       label: '查看账单',
     },{
-      value: '3',
+      value: '2',
       label: '解绑',
       action: ()=>this.removeCard()
     },
@@ -53,7 +53,9 @@ export default class CardsList extends React.Component {
     await this.props.dispatch(looseCard({
       isQuick:"00",
       cardNo
-    }))
+    })).then(()=>{
+      Toast.info('解绑成功');
+    })
     this.getCards()
   }
 
@@ -71,7 +73,7 @@ export default class CardsList extends React.Component {
   }
 
   openCardMarket(){
-    nativeOpenNewWebView({
+    jsNative.nativeOpenNewWebView({
       url:`https://mpcw${judgeEnv()}.vbill.cn/cca/home`
       //url:'http://172.16.40.34:3100/cca/home'
     })

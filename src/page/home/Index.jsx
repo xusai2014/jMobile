@@ -94,7 +94,7 @@ export default class Index extends React.Component {
 
   openCardMarket(){
     nativeOpenNewWebView({
-      url:`https://mpcw${judgeEnv()}.vbill.cn/cca/home`
+      url:`https://mpcw${judgeEnv()}.vbill.cn/cca/home?channelId=1000&source=creditCard`
       //url:'http://172.16.40.34:3100/cca/home'
     })
     //https://mpcw-test.vbill.cn/cca/home

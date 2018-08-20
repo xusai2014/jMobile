@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {Icon} from "antd-mobile";
+import {jsNative} from "sx-jsbridge";
 
 class AllHeader extends React.Component {
   componentWillMount() {
@@ -22,8 +23,16 @@ class AllHeader extends React.Component {
   }
 
   backStart() {
-    const {startPage} = this.props;
-    startPage ? this.props.history.push(startPage) : window.history.back();
+    jsNative.nativeCallBindCreditCard({},(data)=>{
+      const { TaskCenter = '' } = data;
+      if( parseInt(TaskCenter) == 1){
+        jsNative.nativeCloseWebview({},()=>{})
+      } else {
+        window.history.go(-1);
+      }
+
+    })
+
   }
 
   render() {
@@ -40,7 +49,7 @@ class AllHeader extends React.Component {
                 position:'absolute',
                 left:'0.11rem',
                 width: '1rem'
-              }} onClick={()=>{window.history.go(-1);}}>
+              }} onClick={()=>{this.backStart();}}>
                 <Icon color="#666666" type="left" size={'md'} />
               </div>
               <span style={{

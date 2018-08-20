@@ -287,7 +287,7 @@ export default class EditCard extends React.Component {
                 }
 
 
-              }} value={this.state[property][key]} disabled={disabled} style={styles.input} placeholder={placeHolder}/>
+              }} value={this.state[property][key]}  style={styles.input} placeholder={placeHolder}/>
             {icon ? <img onClick={() => {  jsNative.nativeOcrBankCard().then((data)=>{
                               const {
                                 cardType,

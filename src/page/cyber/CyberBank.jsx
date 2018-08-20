@@ -2,7 +2,7 @@ import React from 'react';
 import Header from "../../compoents/Header";
 import ModalCom from "../../compoents/ModalCom";
 import { Tabs, Toast, Modal} from "antd-mobile"
-import {getLoginList, loginCyber, removeBillAllStatus,} from "../../actions/reqAction";
+import {getLoginList, loginCyber, removeBillAllStatus, removeLoginStatus,} from "../../actions/reqAction";
 import {InitDecorator} from "../../compoents/InitDecorator";
 const { alert } = Modal
 
@@ -72,8 +72,15 @@ export default class CyberBank extends React.Component {
         { text: '取消', onPress: () => console.log('cancel'), style: 'default' },
         { text: '确认', onPress: () => {
         debugger;
-          this.props.dispatch(removeBillAllStatus({taskId}))
-        } },
+        Toast.loading('请稍候',0);
+          this.props.dispatch(removeLoginStatus({taskId})).then(()=>{
+            this.props.dispatch(removeBillAllStatus({taskId})).then(()=>{
+              Toast.hide();
+            },()=>{
+              Toast.hide();
+            })
+          },()=>Toast.hide())
+        }},
       ])
       return;
     }

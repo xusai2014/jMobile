@@ -3,7 +3,7 @@ import React from 'react';
 
 export default class Card extends React.Component {
   render() {
-    const { popupCard,actName, id, bankNm,payment_due_date,card_limit,actNo,bankNo } =this.props;
+    const { popupCard,actName, id, bankNm,payment_due_date,card_limit = '--',actNo,bankNo } =this.props;
     return (<div style={styles.container}>
       <div>
         <div style={styles.rowItem}>
@@ -34,11 +34,11 @@ export default class Card extends React.Component {
           letterSpacing: '0',
           marginTop: '0.66rem',
         }}
-      ><span style={{marginLeft: '0.53rem'}}>免息期：{'50'}天</span>
+      ><span style={{marginLeft: '0.53rem'}}>免息期：{payment_due_date?parseInt(moment(payment_due_date).diff(moment(), 'days')) + parseInt(moment().daysInMonth())+'天':'--'}</span>
         <span style={{
         float: 'right',
         marginRight: '0.5rem'
-      }}>单笔限额：{card_limit}万元</span>
+      }}>单笔限额：{card_limit?card_limit:'--'}元</span>
       </div>
 
       <div className="menu-mask" onClick={this.onMaskClick} />

@@ -520,20 +520,20 @@ export default class BillDetail extends React.Component {
                   display: 'flex',
                   alignItems: 'center',
                   padding: '0.16rem 0'
-                }}>
+                }}
+                     onClick={() => {
+                       if (v == expandOne) {
+                         this.setState({expandOne: '-1'})
+                       } else {
+                         this.setState({expandOne: v})
+                       }
+
+                     }}>
                   <img style={{
                     width: '0.19rem',
                     margin: '0 0.17rem 0 0.28rem',
                     height: '0.132rem',
-                  }} src={expandOne == v ? "/static/img/triangleup@2x.png" : "/static/img/triangle@2x.png"}
-                       onClick={() => {
-                         if (v == expandOne) {
-                           this.setState({expandOne: '-1'})
-                         } else {
-                           this.setState({expandOne: v})
-                         }
-
-                       }}/>
+                  }} src={expandOne == v ? "/static/img/triangleup@2x.png" : "/static/img/triangle@2x.png"}/>
                   <div style={{display: 'inline-block'}}>
                     <div style={{
                       fontSize: '0.26rem',

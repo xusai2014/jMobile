@@ -150,7 +150,7 @@ export default class CardsList extends React.Component {
             className="single-foo-menu"
             data={this.methodList}
             level={1}
-            height={document.documentElement.clientHeight / 6}
+            height={document.documentElement.clientHeight / 5}
             onChange={(data) => {
               const {activeData = {}} = this.state;
               const { actNo,bankNo,actName,bankNm} = activeData

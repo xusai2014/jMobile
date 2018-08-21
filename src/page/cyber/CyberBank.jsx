@@ -40,7 +40,7 @@ export default class CyberBank extends React.Component {
   *   @params 用户信息
   *   @description 第一步流程 输入用户信息，创建任务
   */
-  async loginCyber(v) {
+  async loginCyberFunc(v) {
      const {login_type: loginType} = v;
      const {inputData} = this.state;
      const stateData = inputData[loginType]?inputData[loginType]:{}
@@ -76,6 +76,7 @@ export default class CyberBank extends React.Component {
           this.props.dispatch(removeLoginStatus({taskId})).then(()=>{
             this.props.dispatch(removeBillAllStatus({taskId})).then(()=>{
               Toast.hide();
+              this.loginCyberFunc(v)
             },()=>{
               Toast.hide();
             })
@@ -225,7 +226,7 @@ export default class CyberBank extends React.Component {
                 this.setDeepState('inputData',login_type,{
                   disabled:true
                 });
-                this.loginCyber(v)}}>开始登录</button>
+                this.loginCyberFunc(v)}}>开始登录</button>
               <ModalCom visible={modal} showAction={(v) => {
                 this.setState({modal: v})
               }} description={description}/>

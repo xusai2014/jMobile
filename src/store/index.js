@@ -15,7 +15,7 @@ function promiseMiddleware() {
     return promise().then(
       (result) => {
         const {RETURNCODE, DATA ={}, RESULTCODE} = result;
-        if(RESULTCODE == '1001'){
+        if(RESULTCODE == '1001' || RESULTCODE == "1000"){
           return next({...rest, data:result, type: SUCCESS})
         }
         if (RETURNCODE == '0000' || RESULTCODE == '0000') {

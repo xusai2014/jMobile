@@ -210,7 +210,7 @@ export function filterResponse(data) {
   const { RETURNCODE , RESULTCODE} = data;
   if(typeof  RESULTCODE != 'undefined'){
     const { RESULTMSG } = data;
-    if (RESULTCODE === "0000" || RESULTCODE === "1001") {
+    if (RESULTCODE === "0000" || RESULTCODE === "1001" || RESULTCODE == "1000") {
       return data;
     }  else {
       let error = null;

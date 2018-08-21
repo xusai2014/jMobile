@@ -20,8 +20,8 @@ export default class EmailAdd extends React.Component {
     this.state = {
       modal: false,
       description: '',
-      eyesOpen: true,
-      selected: true,
+      eyesOpen: false,
+      selected: false,
       password: '',
       account: "",
       btnDisabled:true,

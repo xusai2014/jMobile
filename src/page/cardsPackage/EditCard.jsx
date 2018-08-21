@@ -33,6 +33,8 @@ export default class EditCard extends React.Component {
         cardNum: "",
         username: name,
         id: idCardNo,
+        specialname:name,
+        specialId:idCardNo,
         bank: '',
         phone: "",
         bankType: '',
@@ -41,6 +43,8 @@ export default class EditCard extends React.Component {
       usalCardData: {
         cardNum: "",
         username: '',
+        specialname:name,
+        specialId:idCardNo,
         id: '',
         bank: '',
         phone: "",
@@ -79,6 +83,8 @@ export default class EditCard extends React.Component {
       bank,
       phone: resvPhoneNo = '',
       bankType: bankNo,
+      specialname,
+      specialId,
     } = this.state[key];
     if (!cardNo) {
       Toast.info('请输入银行卡号');
@@ -110,8 +116,10 @@ export default class EditCard extends React.Component {
 
     let r = await this.props.dispatch(postInfo({
       cardNo,
-      idName,
-      idNo,
+      idNameByUser:idName,
+      idNoByUser:idNo,
+      idName:specialname,
+      idNo:specialId,
       resvPhoneNo,
       bankNo
     }))

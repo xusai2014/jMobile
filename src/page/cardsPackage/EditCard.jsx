@@ -73,6 +73,8 @@ export default class EditCard extends React.Component {
         this.setDeepState(key, 'bank', bankNm)
         this.setDeepState(key, 'bankType', type)
         this.setDeepState(key,'disableBank',true)
+      } else {
+        Toast.info('请检查您输入的信用卡号')
       }
     })
   }
@@ -221,6 +223,21 @@ export default class EditCard extends React.Component {
 
   }
 
+  inputLimit(key,val){
+    switch (key){
+      case 'cardNum':
+        return !/^[0-9]*$/.test(val) || val.length >25
+      case 'username':
+        return /^[0-9]*$/.test(val) || val.length >40
+      case 'id':
+        return !/^[0-9]*$/.test(val) || val.length >18
+      case 'phone':
+        return !/^[0-9]*$/.test(val) || val.length >11
+      default:
+        return false;
+    }
+  }
+
 
   render() {
     const {activeOne, modal, description} = this.state;
@@ -292,6 +309,9 @@ export default class EditCard extends React.Component {
               disabled={key =='bank'?this.state[property]['disableBank']:false}
 
               onChange={(e) => {
+                if(this.inputLimit(key,e.currentTarget.value.trim())){
+                  return;
+                }
                 if (activeOne == 1) {
                   this.setDeepState('usalCardData', key, e.currentTarget.value.trim(), () => this.enableBtn('usalCardData'))
 

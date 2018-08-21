@@ -16,4 +16,7 @@ export default {
   '306':"/static/img/bank/gf@1x.png",
   '307':"/static/img/bank/pa@1x.png",
   '401':"/static/img/bank/sh@1x.png",
+  '610':"/static/img/bank/pa@1x.png",
+  '510':"/static/img/bank/pa@1x.png",
+  '410':"/static/img/bank/pa@1x.png",
 }

@@ -38,7 +38,8 @@ export default class EditCard extends React.Component {
         bank: '',
         phone: "",
         bankType: '',
-        enableBtn: false
+        enableBtn: false,
+        disableBank:false
       },
       usalCardData: {
         cardNum: "",
@@ -49,7 +50,8 @@ export default class EditCard extends React.Component {
         bank: '',
         phone: "",
         bankType: '',
-        enableBtn: false
+        enableBtn: false,
+        disableBank:false
       }
     }
   }
@@ -70,6 +72,7 @@ export default class EditCard extends React.Component {
       if (bankNm) {
         this.setDeepState(key, 'bank', bankNm)
         this.setDeepState(key, 'bankType', type)
+        this.setDeepState(key,'disableBank',true)
       }
     })
   }
@@ -218,6 +221,7 @@ export default class EditCard extends React.Component {
 
   }
 
+
   render() {
     const {activeOne, modal, description} = this.state;
     let property = activeOne == 1 ? 'usalCardData' : "cardData";
@@ -285,6 +289,7 @@ export default class EditCard extends React.Component {
                   }
                 }
               }}
+              disabled={key =='bank'?this.state[property]['disableBank']:false}
 
               onChange={(e) => {
                 if (activeOne == 1) {
@@ -294,8 +299,6 @@ export default class EditCard extends React.Component {
                   this.setDeepState('cardData', key, e.currentTarget.value.trim(), () => this.enableBtn('cardData'))
 
                 }
-
-
               }}
               value={
                 activeOne == 0?(key=='username'?`*${val.slice(1)}`

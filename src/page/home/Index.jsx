@@ -187,7 +187,7 @@ export default class Index extends React.Component {
       </div>
       <div style={styles.activity}>
         {isLogged ? [1,2,3,4].map((v, k) => {
-          const {logoUri = '', gameUri, gameName = ''} = activities[v]?activities[v]:{};
+          const {logoUri = '', gameUri, gameName = ''} = activities[k]?activities[k]:{};
           return <div onClick={() => {
             window.location.href = gameUri
           }} key={k} style={{display: "inline-block", textAlign: 'center'}}>
@@ -270,6 +270,18 @@ export default class Index extends React.Component {
         <Icon type="plus" color="#999999" size="xs"/>
         <span style={styles.addText}>添加信用卡账单</span>
 
+      </div>,
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        margin:'0.82rem 0 1.56rem 0'
+      }} onClick={()=>this.openCardMarket()}>
+        <img src="/static/img/信用卡2x.png" style={{width: "0.41rem"}}/>
+        <span style={{margin: '0.08rem', fontSize: '0.28rem', color: '#4C7BFE', letterSpacing: '0'}}>
+          办信用卡
+        </span>
+        <img src="/static/img/Path 3@2x.png" style={{width: "0.1rem"}}/>
       </div>,
       <Modal
         style={{width:'6rem'}}

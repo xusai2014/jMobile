@@ -1,4 +1,5 @@
 import React from 'react';
+import bankIcon from '../../../utils/bank';
 
 
 export default class Card extends React.Component {
@@ -7,7 +8,7 @@ export default class Card extends React.Component {
     return (<div style={styles.container}>
       <div>
         <div style={styles.rowItem}>
-          <img style={{width: '0.4rem', margin: '0.16rem', height: "0.4rem"}} src="/static/img/交通银行@2x.png"/>
+          <img style={{width: '0.76rem', height: "0.76rem"}} src={bankIcon[bankNo]}/>
         </div>
         <div style={{width: '3rem', display: 'inline-block', marginLeft: '0.21rem', marginTop: '0.47rem',}}>
           <div style={{

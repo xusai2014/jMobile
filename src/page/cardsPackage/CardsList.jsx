@@ -96,9 +96,13 @@ export default class CardsList extends React.Component {
         justifyContent: 'center',
       }}
       >
-        <div onClick={()=>this.openCardMarket()}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center'
+        }} onClick={()=>this.openCardMarket()}>
           <img src="/static/img/信用卡@2x.png" style={{width: "0.3rem"}}/>
           <span style={{margin: '0.08rem', fontSize: '0.24rem', color: '#4C7BFE', letterSpacing: '0'}}>
+
           办信用卡
         </span>
           <img src="/static/img/Path 3@2x.png" style={{width: "0.1rem"}}/>

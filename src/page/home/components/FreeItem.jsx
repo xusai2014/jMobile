@@ -27,7 +27,7 @@ export default class FreeItem extends React.Component{
           fontSize: '0.2rem',
           color: '#999999',
           letterSpacing: '0',
-        }}>总额度{credit_limit}万元|剩余额度{balance}</div>
+        }}>总额度{credit_limit}元|剩余额度{balance}元</div>
       </div>
       <div
         style={{

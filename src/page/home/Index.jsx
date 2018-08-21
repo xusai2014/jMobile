@@ -272,6 +272,7 @@ export default class Index extends React.Component {
 
       </div>,
       <Modal
+        style={{width:'6rem'}}
         key={'d'}
         visible={interestShow}
         transparent

@@ -272,6 +272,7 @@ export default class EditCard extends React.Component {
           const {name, disabled, key, value, placeHolder, icon} = v;
           const {cardData = []} = this.state;
           let property = activeOne == 1 ? 'usalCardData' : "cardData";
+          const val = this.state[property][key]?this.state[property][key]:''
           return <div key={k} style={styles.item}>
             <div style={styles.name}>{name}</div>
             <input
@@ -287,17 +288,22 @@ export default class EditCard extends React.Component {
 
               onChange={(e) => {
                 if (activeOne == 1) {
-                  this.setDeepState('usalCardData', key, e.currentTarget.value, () => this.enableBtn('usalCardData'))
+                  this.setDeepState('usalCardData', key, e.currentTarget.value.trim(), () => this.enableBtn('usalCardData'))
 
                 } else {
-                  this.setDeepState('cardData', key, e.currentTarget.value, () => this.enableBtn('cardData'))
+                  this.setDeepState('cardData', key, e.currentTarget.value.trim(), () => this.enableBtn('cardData'))
 
                 }
 
 
               }}
-              value={key=='username'?this.state[property][key]
-                :key=='id'?this.state[property][key]:this.state[property][key]
+              value={
+                activeOne == 0?(key=='username'?`*${val.slice(1)}`
+                  :key=='id'?
+                    (val?`${val.slice(0,4)}${new Array(val.length-7).join('*')}${val.slice(-4,val.length)}`:"")
+                    :val)
+                  :val
+
               }
               style={styles.input} placeholder={placeHolder}/>
             {icon ? <img onClick={() => {  jsNative.nativeOcrBankCard().then((data)=>{

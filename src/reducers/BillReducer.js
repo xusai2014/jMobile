@@ -48,10 +48,7 @@ export default function (state = initialState, actions) {
       const {bank_list = []} = creditCard
       return {
         ...state,
-        bankList: [
-          ...state.bankList,
-          ...bank_list
-        ]
+        bankList: bank_list
       }
 
     case GET_BANK_LOGIN_LIST[1]:

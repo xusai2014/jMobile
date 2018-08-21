@@ -104,12 +104,12 @@ export default class LoadingStatus extends React.Component{
         Toast.info(description);
         // TODO 添加参数 uuid
         this.props.dispatch(removeLoginStatus({taskId})).then(()=>{
-          this.goResult(loginType,false,description)
+          this.goResult(loginType,3,description)
         })
 
         return;
       case "DONE_TIMEOUT":
-        this.goResult(loginType,false,description)
+        this.goResult(loginType,3,description)
         Toast.info(description);
         return;
       default:
@@ -117,8 +117,10 @@ export default class LoadingStatus extends React.Component{
     }
   }
 
-  goResult(loginType,success = false,description){
-    if(success){
+  goResult(loginType,status = 3,description){
+
+    // 1 是成功 2是无数据 3是失败
+    if(status == 1){
       if(loginType == '01'){
         this.props.history.push('/result/cybersuccess',{
           result:description
@@ -129,10 +131,17 @@ export default class LoadingStatus extends React.Component{
         })
 
       }
-
-
-
-    } else {
+    } else if(status == 2){
+      if(loginType == '01'){
+        this.props.history.push('/result/cybernodata',{
+          result:description
+        })
+      } else if(loginType == '03'){
+        this.props.history.push('/result/enodata',{
+          result:description
+        })
+      }
+    }else if(status == 3) {
       if(loginType == '01'){
         this.props.history.push('/result/cyberfailed',{
           result:description
@@ -229,18 +238,13 @@ export default class LoadingStatus extends React.Component{
     const {data = {}} =pollingStatus;
     const { resultList = []} = data;
     debugger;
-    if( typeof data == 'undefined'){
-      Toast.info('导入失败',1)
-      this.goResult(loginType,false,'')
+    if( typeof data == 'undefined' || resultList.length == 0 ){
+      this.goResult(loginType,2,'无账单数据')
       return;
     }
-
     this.setState({
       progress:100
-    },()=>{
-      debugger;
-      this.goResult(loginType,true,resultList)})
-
+    },()=>{ this.goResult(loginType,1,resultList)})
   }
 
   async componentWillMount(){

@@ -150,15 +150,7 @@ export default class EditCard extends React.Component {
                 bindType,
               })).then((result) => {
                 Toast.info('绑卡成功')
-                jsNative.nativeCallBindCreditCard({},(data)=>{
-                  const { TaskCenter } = data;
-                  if(parseInt(TaskCenter) == 1){
-                    jsNative.nativeCloseWebview({},()=>{})
-                  } else {
-                    this.props.history.push('/cards/cardslist')
-                  }
-                })
-
+                this.props.history.push('/cards/cardslist')
                 resolve();
               }, () => {
                 reject();

@@ -18,7 +18,7 @@ export default class Card extends React.Component {
           <div style={{
             fontSize: '0.24rem', color: '#FFFFFF',
             letterSpacing: '0'
-          }}>{actName}<span style={{margin: "0 0.165rem"}}>|</span>尾号{actNo.substr(-4,4)}</div>
+          }}>{`*${actName.slice(1)}`}<span style={{margin: "0 0.165rem"}}>|</span>尾号{actNo.substr(-4,4)}</div>
         </div>
         <div style={styles.img}>
           <img src="/static/img/设置@2x.png" style={{width:'0.3rem'}}  onClick={()=>{

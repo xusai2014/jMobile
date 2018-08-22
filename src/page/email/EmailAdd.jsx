@@ -110,6 +110,7 @@ export default class EmailAdd extends React.Component {
                   [key]: e.currentTarget.value
                 },()=>this.enableBtn())
               }}
+                     type={icon?(!eyesOpen?'password':'text'):'text'}
                      disabled={disabled} style={styles.input} placeholder={placeHolder}/>
               {icon ? <img onClick={() => {
                 this.setState({eyesOpen: !eyesOpen})

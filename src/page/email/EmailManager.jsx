@@ -62,7 +62,8 @@ export default class EmailManager extends React.Component{
             const {
               account,
               task_id,
-              uuid = ''
+              uuid = '',
+              lastTime
             } = v;
             return<SwipeAction
               style={{ backgroundColor: 'gray' }}

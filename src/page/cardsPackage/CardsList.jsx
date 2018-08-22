@@ -1,11 +1,12 @@
 import React from 'react';
 import Header from "../../compoents/Header";
 import Card from "./components/Card";
-import {Menu, Icon, Toast} from "antd-mobile";
+import {Menu, Icon, Toast, Modal} from "antd-mobile";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {getBillId, getCardsList, getIndetiyInfo, looseCard} from "../../actions/reqAction";
 import {jsNative} from 'sx-jsbridge'
 import {judgeEnv} from "../../utils/util";
+const { alert } = Modal;
 
 
 @InitDecorator(
@@ -50,13 +51,18 @@ export default class CardsList extends React.Component {
   }
 
   async removeCard(cardNo){
-    await this.props.dispatch(looseCard({
-      isQuick:"00",
-      cardNo
-    })).then(()=>{
-      Toast.info('解绑成功');
-    })
-    this.getCards()
+    alert('','是否确认解绑该信用卡',[
+      {text:"确认",onPress:()=>{
+        this.props.dispatch(looseCard({
+          isQuick:"00",
+          cardNo
+        })).then(()=>{
+          Toast.info('解绑成功');
+          this.getCards()
+        })
+      },style: 'default'},
+      { text: '取消', onPress: () => console.log('cancel'), style: 'default' },
+    ])
   }
 
   componentWillMount(){
@@ -160,6 +166,7 @@ export default class CardsList extends React.Component {
               const { actNo,bankNo,actName,bankNm} = activeData
               const index = data[0]
               if(parseInt(index) == 0 ){
+
                 this.props.history.push("/manual/add",{
                   fullCardNum:actNo, nameOnCard:actName, bankNo,bankName:bankNm
                 })
@@ -178,6 +185,7 @@ export default class CardsList extends React.Component {
               } else if(parseInt(index) == 2 ){
                 this.removeCard(actNo)
               }
+              this.setState({activeCard:-1})
             }}
             multiSelect={false}
           />,

@@ -95,8 +95,8 @@ export default class Popup extends React.Component{
       {imgSrc: "/static/img/还@2x.png", name: '还到', action:this.callHuandao.bind(this), type: '0', des: '（授信额度30000元）', color: '#4d7cfe'},
       {
         imgSrc: "/static/img/qita@2x.png", name: '其它', action:()=>{}, type: '1', des: '', color: '', node: [
-        {imgSrc: "/static/img/微信@2x.png", name: '微信', action: ()=>{}, type: '0', des: '', color: ''},
-        {imgSrc: "/static/img/支付宝@2x.png", name: '支付宝', action: ()=>{}, type: '0', des: '', color: ''}
+        {imgSrc: "/static/img/微信@2x.png", name: '微信', action: ()=>{jsNative.openOtherApp({name:'webchat'},()=>{})}, type: '0', des: '', color: ''},
+        {imgSrc: "/static/img/支付宝@2x.png", name: '支付宝', action: ()=>{jsNative.openOtherApp({name:'alipay'},()=>{})}, type: '0', des: '', color: ''}
       ]
       },
     ]

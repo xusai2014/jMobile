@@ -39,7 +39,6 @@ export default class EditCard extends React.Component {
         phone: "",
         bankType: '',
         enableBtn: false,
-        disableBank:false
       },
       usalCardData: {
         cardNum: "",
@@ -51,7 +50,6 @@ export default class EditCard extends React.Component {
         phone: "",
         bankType: '',
         enableBtn: false,
-        disableBank:false
       }
     }
   }
@@ -60,6 +58,7 @@ export default class EditCard extends React.Component {
     const cardData = this.state[key];
     if (!cardData['cardNum']) {
       Toast.info('请先输入卡号');
+      return;
     }
     //M543
     const {cardNum: cardNo} = cardData
@@ -72,7 +71,6 @@ export default class EditCard extends React.Component {
       if (bankNm) {
         this.setDeepState(key, 'bank', bankNm)
         this.setDeepState(key, 'bankType', type)
-        this.setDeepState(key,'disableBank',true)
       } else {
         Toast.info('请检查您输入的信用卡号')
       }
@@ -224,6 +222,9 @@ export default class EditCard extends React.Component {
   }
 
   inputLimit(key,val){
+    if(!val){
+      return false
+    }
     switch (key){
       case 'cardNum':
         return !/^[0-9]*$/.test(val) || val.length >25
@@ -284,51 +285,66 @@ export default class EditCard extends React.Component {
         }, {
           key: "bank",
           name: '发卡行', value: "",
-          placeHolder: "请输入发卡行",
+          placeHolder: "点击识别发卡行",
+          btnTag:true,
+          disabled:true,
         }, {
           key: "phone",
           name: '手机号', value: "",
           placeHolder: "请输入发卡行预留手机号",
         }].map((v, k) => {
-          const {name, disabled, key, value, placeHolder, icon} = v;
+          const {name, disabled =false, btnTag=false, key, value, placeHolder, icon} = v;
           const {cardData = []} = this.state;
           let property = activeOne == 1 ? 'usalCardData' : "cardData";
           const val = this.state[property][key]?this.state[property][key]:''
           return <div key={k} style={styles.item}>
             <div style={styles.name}>{name}</div>
-            <input
-              onClick={() => {
-                if (key == 'bank') {
-                  if (activeOne == 1) {
-                    this.findBank('usalCardData')
-                  } else {
-                    this.findBank('cardData')
+            {
+              !btnTag? <input
+                onClick={() => {
+                  if (key == 'bank') {
+                    if (activeOne == 1) {
+                      this.findBank('usalCardData')
+                    } else {
+                      this.findBank('cardData')
+                    }
                   }
+                }}
+                disabled={disabled}
+                onChange={(e) => {
+                  if(this.inputLimit(key,e.currentTarget.value.trim())){
+                    return;
+                  }
+                  if (activeOne == 1) {
+                    this.setDeepState('usalCardData', key, e.currentTarget.value.trim(), () => this.enableBtn('usalCardData'))
+
+                  } else {
+                    this.setDeepState('cardData', key, e.currentTarget.value.trim(), () => this.enableBtn('cardData'))
+                  }
+                }}
+                value={
+                  activeOne == 0?(key=='username'?`*${val.slice(1)}`
+                    :key=='id'?
+                      (val?`${val.slice(0,4)}${new Array(val.length-7).join('*')}${val.slice(-4,val.length)}`:"")
+                      :val)
+                    :val
                 }
-              }}
-              disabled={key =='bank'?this.state[property]['disableBank']:false}
+                style={styles.input} placeholder={placeHolder}/>
+                :<div  onClick={() => {
+                          if (key == 'bank') {
+                            if (activeOne == 1) {
+                              this.findBank('usalCardData')
+                            } else {
+                              this.findBank('cardData')
+                            }
+                          }
+                        }}
+                       style={styles.input} placeholder={placeHolder}
+                >
+                {placeHolder}
+              </div>
+            }
 
-              onChange={(e) => {
-                if(this.inputLimit(key,e.currentTarget.value.trim())){
-                  return;
-                }
-                if (activeOne == 1) {
-                  this.setDeepState('usalCardData', key, e.currentTarget.value.trim(), () => this.enableBtn('usalCardData'))
-
-                } else {
-                  this.setDeepState('cardData', key, e.currentTarget.value.trim(), () => this.enableBtn('cardData'))
-
-                }
-              }}
-              value={
-                activeOne == 0?(key=='username'?`*${val.slice(1)}`
-                  :key=='id'?
-                    (val?`${val.slice(0,4)}${new Array(val.length-7).join('*')}${val.slice(-4,val.length)}`:"")
-                    :val)
-                  :val
-
-              }
-              style={styles.input} placeholder={placeHolder}/>
             {icon ? <img onClick={() => {  jsNative.nativeOcrBankCard().then((data)=>{
                               const {
                                 cardType,

@@ -64,6 +64,20 @@ export default class AddBill extends React.Component {
 
   }
 
+  inputLimit(key, val) {
+    if (!val) {
+      return false
+    }
+    switch (key) {
+      case 'creditLimit':
+        return !/^[0-9]*$/.test(val) || val.length > 13
+      case 'newBalance':
+        return !/^[0-9]*$/.test(val) || val.length > 13
+      default:
+        return false;
+    }
+  }
+
   commitForm() {
     const {
       accountDate: billDate,
@@ -77,14 +91,19 @@ export default class AddBill extends React.Component {
     } else if(!paymentDueDate){
       Toast.info('请填写还款日');
       return;
-    } else if(!paymentDueDate){
-      Toast.info('请填写姓名');
-      return;
-    } else if(!creditLimit){
+    }  else if(!creditLimit){
       Toast.info('请填写信用额度');
       return;
     } else if(!newBalance){
       Toast.info('请填写剩余额度');
+      return;
+    }
+    if(parseInt(creditLimit)<parseInt(newBalance)){
+      Toast.info('账单金额不能大于信用额度');
+      return;
+    }
+    if(moment(paymentDueDate).diff(moment(billDate),'days') <=0){
+      Toast.info('还款日不能大于账单日');
       return;
     }
 
@@ -164,7 +183,12 @@ export default class AddBill extends React.Component {
                 <div
                   style={styles.input}>{this.state[key] ? moment(this.state[key]).format('YYYY-MM-DD') : placeHolder}
                 </div>
-              </DatePicker> : <input onChange={(e) => this.setState({[key]: e.currentTarget.value},()=>this.enableBtn())}
+              </DatePicker> : <input onChange={(e) =>{
+                if (this.inputLimit(key, e.currentTarget.value.trim())) {
+                  return;
+                }
+                this.setState({[key]: e.currentTarget.value},()=>this.enableBtn())
+              }}
                                      onClick={()=>{
                                        if(key == 'bankName'){
                                          this.findBank()

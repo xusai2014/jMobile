@@ -36,7 +36,7 @@ class AllHeader extends React.Component {
   }
 
   render() {
-    const {title, hide, right ,color="#FFFFFF"} = this.props;
+    const {title, hide, right ,color="#FFFFFF", backStart = this.backStart} = this.props;
     const ua = window.navigator.userAgent;
     return (<div style={{height:'0.81rem',width:'7.4rem',background: color,border:"1px solid #F1F1F1"}}>
       {
@@ -49,7 +49,7 @@ class AllHeader extends React.Component {
                 position:'absolute',
                 left:'0.11rem',
                 width: '1rem'
-              }} onClick={()=>{this.backStart();}}>
+              }} onClick={()=>{backStart();}}>
                 <img src="/static/img/back.png" style={{ width:"0.15rem",height:'0.3rem',marginLeft:'0.32rem'}} />
               </div>
               <span style={{

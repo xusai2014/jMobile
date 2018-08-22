@@ -7,11 +7,9 @@ export default class LoadCom extends React.Component{
       isLoading:false,
     }
   }
-
+  timer = null
   componentDidMount(){
-     const loadNode = document.getElementById('load')
-    loadNode.addEventListener('scroll', this.scrollLoad, false);
-
+    window.addEventListener('scroll', this.scrollLoad, false);
   }
 
 
@@ -54,7 +52,7 @@ export default class LoadCom extends React.Component{
 
     return(<div id="wrapper" style={{
       textAlign: 'center',
-      marginBottom: '0.5rem',
+      marginBottom: '1.5rem',
     }}>{
       isLoading?'正在加载中...':(
         parseInt(totalPages)>parseInt(currentNum)?'下拉加载':"没有更多了"

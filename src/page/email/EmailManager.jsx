@@ -101,7 +101,7 @@ export default class EmailManager extends React.Component{
                   color: '#999999',
                   letterSpacing: '-0.77PX',
                   margin:"0 0 0.2rem 0 "
-                }}>上次导入时间 {'2018-07-15 11:05:48'}</div>
+                }}>上次导入时间 {lastTime?lastTime:""}</div>
               </List.Item>
             </SwipeAction>
           })

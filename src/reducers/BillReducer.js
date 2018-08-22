@@ -62,6 +62,9 @@ export default function (state = initialState, actions) {
           ...state.loginList,
           [subtype]: _.values(
             logins.map((v, k) => {
+              if(k > 2){
+                return;
+              }
               const {
                 login_type, password_desc, username_desc,
                 username_regex, password_regex, ...rest
@@ -78,10 +81,7 @@ export default function (state = initialState, actions) {
               },]
 
               return {
-                title: login_type == "IDCARD" ?
-                  "身份证" : (
-                    login_type == "CREDITCARDNO" ? "用户名" : "手机号"
-                  ),
+                title: `${username_desc}`,
                 items,
                 login_type,
                 ...rest

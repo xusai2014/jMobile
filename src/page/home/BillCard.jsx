@@ -273,7 +273,7 @@ export default class BillCard extends React.Component {
       logo_uri,
       repay,
       importBillType,
-      real,
+      real=true,
       isNew = '00',
       abbr,
       update_time,

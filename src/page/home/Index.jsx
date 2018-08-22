@@ -233,7 +233,7 @@ export default class Index extends React.Component {
                 importBillType,//账单类型 01为网银 03为邮箱 02为手写账单
                 isNew,
                 abbr,
-                real= false,
+                real= true,
                 update_time,
               } = v;
               return <BillCard card_num={card_num}

@@ -231,7 +231,7 @@ export default class EditCard extends React.Component {
       case 'username':
         return /^[0-9]*$/.test(val) || val.length >40
       case 'id':
-        return !/^[0-9]*$/.test(val) || val.length >18
+        return val.length >18
       case 'phone':
         return !/^[0-9]*$/.test(val) || val.length >11
       default:

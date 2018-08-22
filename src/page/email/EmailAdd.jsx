@@ -125,7 +125,7 @@ export default class EmailAdd extends React.Component {
           display: 'flex',
           alignItems: 'center'
         }} onClick={() => {
-          this.setState({selected: !selected},()=>()=>this.enableBtn())
+          this.setState({selected: !selected},()=>this.enableBtn())
         }}><img style={{width: '0.23rem'}} src={selected ? "/static/img/selected@2x.png" : "/static/img/Oval@2x.png"}/>
           <span style={{
             fontSize: '0.24rem',

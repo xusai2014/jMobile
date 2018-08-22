@@ -315,11 +315,28 @@ export default class EditCard extends React.Component {
                   if(this.inputLimit(key,e.currentTarget.value.trim())){
                     return;
                   }
+
                   if (activeOne == 1) {
-                    this.setDeepState('usalCardData', key, e.currentTarget.value.trim(), () => this.enableBtn('usalCardData'))
+                    this.setDeepState('usalCardData', key, e.currentTarget.value.trim(), () => {
+                      if(key == 'cardNum'){
+                        this.setDeepState('usalCardData', 'bank', '',
+                          ()=>this.setDeepState('usalCardData', 'bankType', '',()=>this.enableBtn('usalCardData')))
+                        return
+
+                      }
+                      this.enableBtn('usalCardData')
+                    })
 
                   } else {
-                    this.setDeepState('cardData', key, e.currentTarget.value.trim(), () => this.enableBtn('cardData'))
+                    this.setDeepState('cardData', key, e.currentTarget.value.trim(), () => {
+                      if(key == 'cardNum'){
+                        this.setDeepState('cardData', 'bank', '',
+                          ()=>this.setDeepState('cardData', 'bankType', '',()=>this.enableBtn('cardData')))
+                        return
+
+                      }
+                      this.enableBtn('cardData')
+                    })
                   }
                 }}
                 value={

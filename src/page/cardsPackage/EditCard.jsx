@@ -355,13 +355,15 @@ export default class EditCard extends React.Component {
         })
       }
       <div style={styles.tips}>请核对卡号信息，确认无误</div>
-      <div style={enableBtn ? styles.finishBtn : styles.disabelBtn} onClick={() => {
-        if (activeOne == 1) {
-          this.bindCard('usalCardData')
-        } else {
-          this.bindCard('cardData')
-        }
-      }}>确认
+      <div className={enableBtn?'enableBtn':'disableBtn'}
+           onClick={() => {
+            if (activeOne == 1) {
+              this.bindCard('usalCardData')
+            } else {
+              this.bindCard('cardData')
+            }
+           }}
+      >确认
       </div>
       <ModalCom visible={modal} showAction={(v) => {
         this.setState({modal: v})
@@ -412,26 +414,4 @@ const styles = {
     letterSpacing: '-0.77PX',
     margin: "0.31rem 0 0 0.31rem"
   },
-  finishBtn: {
-    background: '#4C7BFE',
-    boxShadow: '0 0.06rem 0.12rem 0 #9BB5FF',
-    borderRadius: "0.08rem",
-    margin: "1.4rem 0.16rem 0 0.16rem",
-    lineHeight: "1.18rem",
-    textAlign: 'center',
-    fontSize: "0.34rem",
-    color: "#FFFFFF",
-    letterSpacing: '-0.011rem',
-  },
-  disabelBtn: {
-    background: 'rgb(130, 125, 125)',
-    boxShadow: '0 0.06rem 0.12rem 0 rgb(130, 125, 125)',
-    borderRadius: "0.08rem",
-    margin: "1.4rem 0.16rem 0 0.16rem",
-    lineHeight: "1.18rem",
-    textAlign: 'center',
-    fontSize: "0.34rem",
-    color: "#FFFFFF",
-    letterSpacing: '-0.011rem',
-  }
 }

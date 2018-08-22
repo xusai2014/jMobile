@@ -18,6 +18,7 @@ import 'whatwg-fetch';
 
 import Promise from 'promise-polyfill';
 import {initJSBridge, jsNative, nativeJs} from 'sx-jsbridge';
+import './style.less';
 
 // To add to window, 定义全局变量
 if (!window.Promise) {
@@ -31,7 +32,7 @@ window.sa = sa;
 if (module.hot) {
   module.hot.accept();
 }
-initJSBridge(true,{TOKEN_ID:"d43109696f5e406fa6f8b961b6066ff5"});
+initJSBridge(true,{TOKEN_ID:""});
 
 nativeJs.informLoginStatus(() => {
   jsNative.nativeRequestBaseParams().then((reqParams) => {

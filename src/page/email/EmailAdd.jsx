@@ -51,6 +51,7 @@ export default class EmailAdd extends React.Component {
     }
     if(!regEmail.test(account)){
       Toast.info('请检查您的输入邮箱')
+      return;
     }
 
     const login = await this.props.dispatch(emailLogin({
@@ -133,7 +134,8 @@ export default class EmailAdd extends React.Component {
             margin: "0 0 0 0.18rem"
           }}>同意用户授权协议</span>
         </div>
-        <div style={btnDisabled?styles.disfinishBtn:styles.finishBtn} onClick={() => this.loginEnter()}>开始登录</div>
+        <div className={!btnDisabled?'enableBtn':'disableBtn'}
+             onClick={() => this.loginEnter()}>开始登录</div>
         <ModalCom visible={modal} showAction={(v) => {
           this.setState({modal: v})
         }} description={description}/>
@@ -183,26 +185,4 @@ const styles = {
     letterSpacing: '-0.77PX',
     margin: "0.31rem 0 0 0.31rem"
   },
-  finishBtn: {
-    background: '#4C7BFE',
-    boxShadow: '0 0.06rem 0.12rem 0 #9BB5FF',
-    borderRadius: "0.08rem",
-    margin: "0.78rem 0.16rem 0 0.16rem",
-    lineHeight: "1.18rem",
-    textAlign: 'center',
-    fontSize: "0.34rem",
-    color: "#FFFFFF",
-    letterSpacing: '-0.011rem',
-  },
-  disfinishBtn:{
-    background: 'rgb(130, 125, 125)',
-    boxShadow: '0 0.06rem 0.12rem 0 rgb(130, 125, 125)',
-    borderRadius: "0.08rem",
-    margin: "0.78rem 0.16rem 0 0.16rem",
-    lineHeight: "1.18rem",
-    textAlign: 'center',
-    fontSize: "0.34rem",
-    color: "#FFFFFF",
-    letterSpacing: '-0.011rem',
-  }
 }

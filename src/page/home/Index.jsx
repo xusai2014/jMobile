@@ -131,6 +131,23 @@ export default class Index extends React.Component {
     })
   }
 
+  example = [{
+    card_num: "29999",
+    bank_name: "lee",
+    bill_type: 'DONE',
+    current_bill_amt: "1000000",
+    payment_due_date: "2018-09-01",
+    task_id: "11111111111",
+    bill_id: "11111111",
+    bill_date: "2018-08-28",
+    logo_uri: '/static/img/招商银行@2x.png',
+    importBillType: "",
+    isNew: '00',
+    abbr:"CMB",
+    update_time:"2018-06-06",
+    real:false,
+  }]
+
   render() {
     const {interestShow, visible, sycnModal,authSts} = this.state;
     const {isLogged, billList = {}, freeIntrestData = [], activities = []} = this.props;
@@ -139,18 +156,18 @@ export default class Index extends React.Component {
       <div style={styles.top}>
         <div style={styles.topText}>7日内待还
           <span style={styles.topSubText}>
-          {isLogged ? waitPaymentNumber : '--'}笔
+          {isLogged ? (waitPaymentNumber?waitPaymentNumber:0) : '--'}笔
           </span>
         </div>
         <img onClick={() => {
           this.loginEnter(1)
         }} style={styles.img} src="/static/img/canlendar@2x.png"/>
-        <span onClick={() => {
+        <div onClick={() => {
           this.loginEnter(2)
-        }} style={styles.icon}><Icon type="plus" size="sm" color="#000"/></span>
+        }} style={styles.icon}><Icon style={{height: '0.36rem',}} type="plus" color="#000"/></div>
       </div>
       <div style={{marginTop: "0.19rem"}}>
-        <span style={styles.moneyStyle}>{isLogged ? waitPaymentAmount : '--'}
+        <span style={styles.moneyStyle}>{isLogged ? (waitPaymentAmount?waitPaymentAmount:0.00) : '--'}
           <span style={styles.unitStyle}>元</span>
         </span>
       </div>
@@ -201,7 +218,8 @@ export default class Index extends React.Component {
       <div key={'b'}>
         {
           isLogged ?
-            baseResponseBillDtoList.map((v, k) => {
+            (baseResponseBillDtoList.length == 0?
+              this.example:baseResponseBillDtoList).map((v, k) => {
               const {
                 card_num,
                 bank_name,
@@ -215,6 +233,7 @@ export default class Index extends React.Component {
                 importBillType,//账单类型 01为网银 03为邮箱 02为手写账单
                 isNew,
                 abbr,
+                real= false,
                 update_time,
               } = v;
               return <BillCard card_num={card_num}
@@ -227,7 +246,8 @@ export default class Index extends React.Component {
                                bill_date={bill_date}
                                logo_uri={logo_uri}
                                importBillType={importBillType}
-                               real={true}
+                               real={real}
+                               isLogged={isLogged}
                                isNew={isNew}
                                abbr={abbr}
                                key={k}
@@ -241,22 +261,8 @@ export default class Index extends React.Component {
               />
             })
             :
-            [{
-              card_num: "29999",
-              bank_name: "lee",
-              bill_type: 'DONE',
-              current_bill_amt: "1000000",
-              payment_due_date: "2018-09-01",
-              task_id: "11111111111",
-              bill_id: "11111111",
-              bill_date: "2018-08-28",
-              logo_uri: '/static/img/招商银行@2x.png',
-              importBillType: "",
-              isNew: '00',
-              abbr:"CMB",
-              update_time:"2018-06-06"
-            }].map((v, k) => <BillCard
-              real={false}
+            this.example.map((v, k) => <BillCard
+              isLogged={isLogged}
               {...v} key={k} repay={(e) => {
               e.stopPropagation();
               e.preventDefault();
@@ -378,12 +384,13 @@ const styles = {
     fontSize: '0.3rem',
     color: '#999999',
     letterSpacing: "0",
-    margin: '0.38rem 0 0 0.26rem',
+    margin: '0rem 0 0 0.26rem',
     display: 'inline-block'
   },
   img: {
     width: '0.33rem',
-    margin: '0.38rem 0.48rem 0 3.725rem '
+    margin: '0rem 0.48rem 0 3.725rem ',
+    height: '0.36rem',
   },
   topSubText: {
     color: '#151515',
@@ -394,9 +401,12 @@ const styles = {
   top: {
     display: 'flex',
     alignItems: 'center',
+    paddingTop: '0.38rem',
   },
   icon: {
-    margin: '0.38rem 0 0 0 '
+    margin: '0rem 0 0 0 ',
+    display:'inline-block',
+    height: '0.36rem',
   },
   cover: {
     backgroundImage: 'linear-gradient(-141deg, #5E86FF 6%, #564CFE 88%)',

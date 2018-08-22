@@ -181,7 +181,8 @@ export default class AddBill extends React.Component {
 
         })
       }
-      <div style={enabelBtn?styles.finishBtn:styles.disabelBtn} onClick={() => this.commitForm()}>保存</div>
+      <div className={enabelBtn?'enableBtn':'disableBtn'}
+           onClick={() => this.commitForm()}>保存</div>
       <ModalCom visible={modal} showAction={(v) => {
         this.setState({modal: v})
       }} description={description}/>
@@ -231,26 +232,4 @@ const styles = {
     letterSpacing: '-0.77PX',
     margin: "0.31rem 0 0 0.31rem"
   },
-  finishBtn: {
-    background: '#4C7BFE',
-    boxShadow: '0 0.06rem 0.12rem 0 #9BB5FF',
-    borderRadius: "0.08rem",
-    margin: "1.4rem 0.16rem 0 0.16rem",
-    lineHeight: "1.18rem",
-    textAlign: 'center',
-    fontSize: "0.34rem",
-    color: "#FFFFFF",
-    letterSpacing: '-0.011rem',
-  },
-  disabelBtn:{
-    background: 'rgb(130, 125, 125)',
-    boxShadow: '0 0.06rem 0.12rem 0 rgb(130, 125, 125)',
-    borderRadius: "0.08rem",
-    margin: "1.4rem 0.16rem 0 0.16rem",
-    lineHeight: "1.18rem",
-    textAlign: 'center',
-    fontSize: "0.34rem",
-    color: "#FFFFFF",
-    letterSpacing: '-0.011rem',
-  }
 }

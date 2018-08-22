@@ -276,7 +276,8 @@ export default class BillCard extends React.Component {
       real,
       isNew = '00',
       abbr,
-      update_time
+      update_time,
+      isLogged
     }
       = this.props;
     const {
@@ -288,6 +289,10 @@ export default class BillCard extends React.Component {
     const {day, date, des, actionName, action} = this.judgeStatus(bill_type, payment_due_date, bill_date, repay)
     return <div onClick={(e) => {
       if (!real) {
+        if(isLogged){
+          this.props.history.push('/bill/method')
+          return
+        }
         e.stopPropagation();
         e.preventDefault();
         this.callLogin()

@@ -85,7 +85,7 @@ export default class CardsList extends React.Component {
     const { cardsList } = this.props;
     return <div>
       <Header title="卡包" hide={false}
-              right={(<Icon type="plus" onClick={() => {
+              right={(<Icon style={{height:'0.3rem'}} type="plus" onClick={() => {
                 this.props.history.push('/cards/edit');
               }}/>)}
       />

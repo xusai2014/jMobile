@@ -341,7 +341,7 @@ export default class EditCard extends React.Component {
                         }}
                        style={styles.input} placeholder={placeHolder}
                 >
-                {placeHolder}
+                {val?val:placeHolder}
               </div>
             }
 

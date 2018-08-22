@@ -41,10 +41,19 @@ export default class HandleBill extends React.Component {
     })).then((result) => {
       const {data} = result;
       const {bankNm, type} = data;
-      this.setState({
-        bankName: bankNm,
-        bankNo: type,
-      })
+      if(bankNm && type){
+        this.setState({
+          bankName: bankNm,
+          bankNo: type,
+        })
+      } else {
+        Toast.info('请检查您输入的信用卡号')
+        this.setState({
+          bankName: '',
+          bankNo: '',
+        })
+      }
+
     })
   }
 
@@ -101,7 +110,7 @@ export default class HandleBill extends React.Component {
       Toast.info('请填写正确的银行卡号码');
       return;
     }
-    if(parseInt(creditLimit)<parseInt(newBalance)){
+    if (parseInt(creditLimit) < parseInt(newBalance)) {
       Toast.info('账单金额不能大于信用额度');
       return;
     }
@@ -176,6 +185,7 @@ export default class HandleBill extends React.Component {
           key: "bankName",
           name: '发卡行', value: "",
           placeHolder: "点击此处识别发卡行",
+          divTag: true
         }, {
           key: "nameOnCard",
           name: '持卡人', value: "",
@@ -199,7 +209,7 @@ export default class HandleBill extends React.Component {
           placeHolder: "请输入账单金额",
           key: "newBalance"
         }].map((v, k) => {
-          const {name, disabled, value, key, placeHolder, icon, code = '0'} = v;
+          const {name, disabled, value, divTag = false, key, placeHolder, icon, code = '0'} = v;
           return <div key={k} style={styles.item}>
             <div style={styles.name}>{name}</div>
             {
@@ -216,24 +226,33 @@ export default class HandleBill extends React.Component {
                   style={styles.input}>{this.state[key] ? moment(this.state[key]).format('YYYY-MM-DD') : placeHolder}
                 </div>
               </DatePicker> :
-                <input onChange={(e) => {
-                  if (this.inputLimit(key, e.currentTarget.value.trim())) {
-                    return;
-                  }
-                  this.setState({[key]: e.currentTarget.value}, () => {
-                    this.enableBtn()
-                  })
-                }}
-                       onClick={() => {
-                         if (key == 'bankName') {
-                           this.findBank()
-                         }
-                       }}
-                       value={this.state[key]}
-                       disabled={disabled}
-                       style={styles.input}
-                       placeholder={placeHolder}
-                />
+                (divTag ? <div onClick={() => {
+                                  if (key == 'bankName') {
+                                    this.findBank()
+                                  }
+                                }}
+                               style={styles.input}>{this.state[key] ? this.state[key] : placeHolder}</div> :
+                    <input onChange={(e) => {
+                              if (this.inputLimit(key, e.currentTarget.value.trim())) {
+                                return;
+                              }
+                              this.setState({[key]: e.currentTarget.value.trim()}, () => {
+                                if(key == 'fullCardNum'){
+                                  this.setState({
+                                    bankName: '',
+                                    bankNo: '',
+                                  },()=>this.enableBtn());
+                                }
+                                this.enableBtn()
+                              })
+                            }}
+                           value={this.state[key]}
+                           disabled={disabled}
+                           style={styles.input}
+                           placeholder={placeHolder}
+                    />
+                )
+
             }
             {icon ? <img src={icon} style={ styles.img}/> : null}
           </div>

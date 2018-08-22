@@ -73,6 +73,9 @@ export default class EditCard extends React.Component {
         this.setDeepState(key, 'bankType', type)
       } else {
         Toast.info('请检查您输入的信用卡号')
+        this.setDeepState(key, 'bank', '')
+        this.setDeepState(key, 'bankType', '')
+
       }
     })
   }

@@ -151,7 +151,7 @@ export default class CyberBank extends React.Component {
               password = '',
               eyesOpen = false,
               protocolSelected = false,
-              passSelected = false,
+              passSelected = true,
               disableBtn = true
             } = inputData[login_type] ? inputData[login_type] : {}
             return <div key={3}>

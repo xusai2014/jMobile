@@ -3,6 +3,7 @@ import Header from "../../compoents/Header";
 import { Icon } from "antd-mobile";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {getCardsList} from "../../actions/reqAction";
+import bankData from '../../utils/bank';
 
 @InitDecorator(
   (state)=>{
@@ -48,7 +49,8 @@ export default class BankCardList extends React.Component{
           return [<div key={k} onClick={()=>{this.props.history.push('/manual/add',{
             fullCardNum:actNo, nameOnCard:actName, bankNo,bankName:bankNm,
           })}} style={{margin:"0 0.3rem 0 0",background: '#FFFFFF',width:'7.5rem',height:'1rem',display:'flex',alignItems:'center'}}>
-            <span style={{width:'0.58rem',borderRadius:'0.29rem',margin:"0 0.47rem 0 0.33rem"}}><img style={{width:'0.58rem'}} src={imgSrc} /></span>
+            <span style={{width:'0.58rem',borderRadius:'0.29rem',margin:"0 0.47rem 0 0.33rem"}}>
+              <img style={{width:'0.58rem'}} src={bankData[bankNo]?bankData[bankNo]:""} /></span>
             <div style={{width:"5.45rem",
               fontSize: '0.31rem',
               color: '#999999',

@@ -12,7 +12,8 @@ export default class Result extends React.Component {
     const {state ={}} = this.props.location;
     const {result } = state;
 
-    return [<Header key="1" title={'导入结果'}
+    return [<Header backStart={()=>this.props.history.go(-2)}
+                    key="1" title={'导入结果'}
                     right={<div onClick={() => {
                       this.props.history.push('/home/index')
                     }}>完成</div>}

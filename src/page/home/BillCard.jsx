@@ -298,7 +298,7 @@ export default class BillCard extends React.Component {
         this.callLogin()
         return
       }
-      this.props.history.push(`/bill/detail/${bill_id}`)
+      this.props.history.push(`/bill/detail/${bill_id}`,{bank_name})
     }}
                 style={{background: '#FFFFFF', marginTop: '0.2rem', padding: "0.3rem 0", position: 'relative'}}>
       <div style={{display: 'flex', alignItems: 'center'}}>

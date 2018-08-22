@@ -412,10 +412,12 @@ export default class BillDetail extends React.Component {
   }
 
   render() {
-    const {title = '银行',billDetail ={},payDetail= []} = this.props;
+    const {billDetail ={},payDetail= []} = this.props;
     const {expandOne, visible, syncBegin,
       currentNum, pageSize,totalPages
     } = this.state;
+    const { state } = this.props.location;
+    const { bank_name = '银行' } = state;
     const {
       payment_due_date ,
       bill_date ,
@@ -436,7 +438,7 @@ export default class BillDetail extends React.Component {
 
     const { from , to, datalist } = this.haneleDetail(list);
     const {day, date, des} = this.judgeStatus(bill_type, payment_due_date, bill_date)
-    return [<Header title={title}
+    return [<Header title={`${bank_name}`}
                     right={<img onClick={()=>{
                       alert('', '账单删除后，如需再次查询，需要重新导入账单', [
                         { text: '确认', onPress: () => this.removeBill(billId) },

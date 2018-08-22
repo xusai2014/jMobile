@@ -151,7 +151,7 @@ export default class Index extends React.Component {
   render() {
     const {interestShow, visible, sycnModal,authSts} = this.state;
     const {isLogged, billList = {}, freeIntrestData = [], activities = []} = this.props;
-    const {waitPaymentAmount = '0.00', waitPaymentNumber = '0', baseResponseBillDtoList = []} = billList
+    const {waitPaymentAmount = '0.00', waitPaymentNumber = '0', baseResponseBillDtoList} = billList
     return [<div key={'a'} style={{background: '#FFFFFF', paddingBottom: "0.7rem"}}>
       <div style={styles.top}>
         <div style={styles.topText}>7日内待还
@@ -218,6 +218,7 @@ export default class Index extends React.Component {
       <div key={'b'}>
         {
           isLogged ?
+            (baseResponseBillDtoList?
             (baseResponseBillDtoList.length == 0?
               this.example:baseResponseBillDtoList).map((v, k) => {
               const {
@@ -259,7 +260,7 @@ export default class Index extends React.Component {
                                importModal={()=>{this.setState({sycnModal:true})}}
                                updateData = {()=>this.initData()}
               />
-            })
+            }):null)
             :
             this.example.map((v, k) => <BillCard
               isLogged={isLogged}

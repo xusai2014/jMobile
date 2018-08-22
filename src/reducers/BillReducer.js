@@ -10,6 +10,7 @@ import {
   FREE_INTEREST,
   EMAIL_LOGIN,
   EMAIL_TASK_STATUS, DELETE_BILL, DIRECT_EMAIL_BILL, EMAIL_LIST, DELETE_EMAIL, HANDLE_BILL, REMOVE_BILL_ALL_STATUS,
+  ADTIVITY_DATA,
 } from '../utils/ActionsType';
 
 const initialState = {
@@ -37,7 +38,8 @@ const initialState = {
   },
   billAllStatus:{
 
-  }
+  },
+  activityData:{}
 
 };
 //全局状态信息，数据信息存储
@@ -184,6 +186,11 @@ export default function (state = initialState, actions) {
       return {
         ...state,
         billAllStatus:actions.data
+      }
+    case ADTIVITY_DATA[1]:
+      return {
+        ...state,
+        activityData:actions.data
       }
     default:
       return state

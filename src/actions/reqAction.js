@@ -9,7 +9,7 @@ import {
   BILL_LIST, BILL_DETAIL, PAY_DETAIL, HUAN_DAO, SYNC_BILL, FREE_INTEREST, EMAIL_LOGIN, EMAIL_TASK_STATUS, DELETE_BILL,
   DIRECT_EMAIL_BILL, EMAIL_LIST, DELETE_EMAIL, CARDS_LIST, JUDGE_SEL_CARD, IDENTITY_BNK, POST_INFO, SEND_VERIFICATION,
   VERIFY_CODE, GET_IDENTITY_INFO, LOOSE_CARD, HANDLE_BILL, GET_BILL_ID, ACTIVITY_CARD, REMOVE_LOGIN_STATUS,
-  REMOVE_BILL_ALL_STATUS
+  REMOVE_BILL_ALL_STATUS, ADTIVITY_DATA
 } from '../utils/ActionsType'
 
 export const getBankList = (data) => ActionCreator(
@@ -233,6 +233,13 @@ export const removeBillAllStatus = (data) => ActionCreator(
   `/api`,
   'POST',
   {...data, 'TRDE_CODE': REMOVE_BILL_ALL_STATUS[1]}
+)();
+
+export const getActivityData = (data) => ActionCreator(
+  ADTIVITY_DATA,
+  `/api`,
+  'POST',
+  {...data, 'TRDE_CODE': ADTIVITY_DATA[1]}
 )();
 
 

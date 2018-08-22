@@ -104,3 +104,6 @@ export const REMOVE_LOGIN_STATUS = ['REQUEST','CH826','FAILURE'];
 
 //删除账单及任务状态
 export const REMOVE_BILL_ALL_STATUS = ['REQUEST','CH827','FAILURE'];
+
+//广告位接口
+export const ADTIVITY_DATA = ['REQUEST','MP013','FAILURE'];

@@ -1,5 +1,6 @@
 import React from 'react';
 import Header from "../../compoents/Header";
+import Adtivity from "./Adtivity";
 
 
 export default class Result extends React.Component {
@@ -8,8 +9,8 @@ export default class Result extends React.Component {
     const {type, data = '{}'} = this.props.match.params;
     const {describe, footer, title, img} = this.results[type];
 
-    const {state} = this.props.location;
-    const {result} = state;
+    const {state ={}} = this.props.location;
+    const {result } = state;
 
     return [<Header key="1" title={'导入结果'}
                     right={<div onClick={() => {
@@ -21,13 +22,14 @@ export default class Result extends React.Component {
       <div style={styles.describe}>{title}</div>
       <div style={styles.resason}>{describe(result)}</div>
       {footer()}
+        <Adtivity/>
     </div>]
   }
 
   results = {
     esuccess: {
-      describe: (data) => <div>成功导入：{data.map((v, k) => <div>{v.bankName}信用卡 导入{v.count}笔账单</div>)}</div>,
-      footer: () => (<div onClick={() => this.props.history.push('/home/index')} className="enableBtn">完成</div>),
+      describe: (data =[]) => <div>成功导入：{data.map((v, k) => <div>{v.bankName}信用卡 导入{v.count}笔账单</div>)}</div>,
+      footer: () => ([<div onClick={() => this.props.history.push('/home/index')} className="enableBtn">完成</div>,]),
       title: "导入成功",
       img: "/static/img/done@2x.png",
     },

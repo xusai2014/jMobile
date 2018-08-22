@@ -114,6 +114,11 @@ export default class HandleBill extends React.Component {
       Toast.info('账单金额不能大于信用额度');
       return;
     }
+    if(moment(paymentDueDate).diff(moment(billDate),'days') <=0){
+      Toast.info('还款日不能大于账单日');
+      return;
+    }
+
     this.props.dispatch(handleBillForm({
       bankName,
       billDate: moment(billDate).format('YYYY-MM-DD'),

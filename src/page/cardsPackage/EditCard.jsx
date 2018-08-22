@@ -119,7 +119,7 @@ export default class EditCard extends React.Component {
       Toast.info('请输入正确的手机号码')
       return;
     }
-
+    Toast.loading('请稍候...',0)
     let r = await this.props.dispatch(postInfo({
       cardNo,
       idNameByUser: idName,
@@ -146,6 +146,7 @@ export default class EditCard extends React.Component {
         prompt('输入验证码', `请输入手机号${resvPhoneNo ? `${resvPhoneNo.slice(0, 3)}****${resvPhoneNo.slice(-4, len)}` : ''}收到的验证码`, [{
           text: '取消',
           onPress: value => new Promise((resolve) => {
+            Toast.hide()
             resolve();
           }),
         },
@@ -169,7 +170,7 @@ export default class EditCard extends React.Component {
                 resolve();
               }, () => {
                 reject();
-              })
+              }).finally(()=>Toast.hide())
             }),
           },
         ], 'default', null, ['请输入验证码'])
@@ -179,8 +180,7 @@ export default class EditCard extends React.Component {
           })
         }
 
-
-      }
+  }
 
       componentWillMount() {
         this.props.dispatch(judgeSelfCard());

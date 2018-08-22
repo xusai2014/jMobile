@@ -53,14 +53,15 @@ export default class EmailAdd extends React.Component {
       Toast.info('请检查您的输入邮箱')
       return;
     }
-
+    Toast.loading('请稍候',0)
     const login = await this.props.dispatch(emailLogin({
       account,
       password,
-    }))
+    })).finally(()=>Toast.hide())
     const { data } = login;
     const { DATA:taskId,RESULTCODE} = data;
     if( RESULTCODE == "1000"){
+
       alert('','再次登录将会覆盖掉您原有的登录信息，您确定再次登录吗？',[
         { text: '取消', onPress: () => console.log('cancel'), style: 'default' },
         { text: '确认', onPress: () => {

@@ -191,7 +191,7 @@ export default class CardsList extends React.Component {
                   bankNo,cardNum:num
                 })).then((result)=>{
                   if(Object.keys(result.data).length!= 0){
-                    this.props.history.push(`/bill/detail/${result.data}`)
+                    this.props.history.push(`/bill/detail/${result.data}`,{bank_name:bankNm})
                   } else {
                     // TODO  跳转逻辑 jerry
                     this.props.history.push('/bill/method')

@@ -177,7 +177,7 @@ export default class EditCard extends React.Component {
       }
     , () => {
 
-          })
+          }).finally(()=>Toast.hide())
         }
 
   }

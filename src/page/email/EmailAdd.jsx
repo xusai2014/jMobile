@@ -71,7 +71,7 @@ export default class EmailAdd extends React.Component {
     const login = await this.props.dispatch(emailLogin({
       account,
       password,
-    })).finally(()=>Toast.hide())
+    }))
     const { data } = login;
     const { DATA:taskId,RESULTCODE} = data;
     if( RESULTCODE == "1000"){

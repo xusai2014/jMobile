@@ -129,7 +129,7 @@ export default class EditCard extends React.Component {
       idNo: specialId,
       resvPhoneNo,
       bankNo
-    })).finally(()=>Toast.hide())
+    }))
 
     const {data} = r;
 
@@ -178,13 +178,13 @@ export default class EditCard extends React.Component {
                 this.props.history.go(-1)
 
               }, () => {
-              }).finally(()=>Toast.hide())
-              resolve();
+              })
+
             }),
           },
         ], 'default', null, ['请输入验证码'])
       }
-      , () => {}).finally(()=>Toast.hide())
+      , () => {})
     }
 
   }

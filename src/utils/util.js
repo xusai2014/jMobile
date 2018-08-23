@@ -87,59 +87,6 @@ export const getChannelId = () => {
     return ''
 }
 
-export const getDataFromApp = () => {
-    return new Promise(function (resolve, reject) {
-        setupWebViewJavascriptBridge(function (bridge) {
-            bridge.callHandler('getAuthInfo', function (response) {
-                let resObj = {}
-
-                if(typeof(response) =='string'){
-                    resObj = JSON.parse(response);
-
-                } else if(typeof(response) == 'object'){
-                    resObj = response;
-
-                } else if(typeof(response) == 'undefined'){
-
-                    Toast.fail('请升级APP!',3,()=>{
-                        reject({err:'err'})
-                    });
-
-                }
-                if(resObj.STATUS == '02'){
-                    Toast.fail('请先进行实名认证！',3,()=>{
-                        reject({err:'err'})
-                    });
-
-                }else{
-                    try {
-                        console.log('JS got response', response)
-                        typeof response == 'string' ? response = JSON.parse(response) : response
-                        let username = response.name
-                        let phone = response.mobile
-                        fetchPromise('/api', 'POST', {
-                            "TRDE_CODE": 'M0315',
-                            applyName: username,
-                            channelId: getChannelId(),
-                            applyPhone: phone,
-                            isEnc: true,
-                        }).then((data) => {
-                            sessionStorage.setItem("mobileNo", phone)
-                            sessionStorage.setItem("uuid", data.UUID)
-                            sessionStorage.setItem("getChannelId", getChannelId())
-                            resolve(response)
-                        },(err)=>{
-                            reject(err)
-                        })
-                    } catch (e) {
-                        console.log('error======>', e)
-                    }
-                }
-
-            })
-        })
-    })
-}
 
 export const getSearch = (props) => {
     let search = ""

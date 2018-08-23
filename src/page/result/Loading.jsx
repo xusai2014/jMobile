@@ -263,9 +263,23 @@ export default class LoadingStatus extends React.Component{
     const  { type,}   = this.props.match.params;
     const { title } = results[type];
     const { progress } = this.state;
-    return [<Header key="1" title={`正在导入${title}`} ></Header>,<div key={2} style={{width:"7.5rem",position:'absolute',textAlign:'center',backgroundColor:"#FFFFFF",paddingBottom:"0.5rem"}}>
+    return [<Header key="1" title={`正在导入${title}`} ></Header>,
+      <div key={2} style={{
+        width:"7.5rem",position:'absolute',textAlign:'center',
+        backgroundColor:"#FFFFFF",paddingBottom:"0.5rem",
+        fontSize: '0.31rem',
+        color: '#333333',
+        letterSpacing: '0'
+      }}>
       <Loading />
       {progress >0?`正在导入${title}…已完成${progress}%`:'登录中，请耐心等待'}
+      <div style={{
+        fontSize: '0.31rem',
+        color: '#4C7BFE',
+        letterSpacing: '0',
+        textAlign:'center',
+        marginTop:'6.56rem'
+      }}>{progress >0?'':'登录时间大约30秒'}</div>
     </div>]
   }
 }

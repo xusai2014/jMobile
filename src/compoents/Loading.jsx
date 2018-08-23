@@ -1,25 +1,8 @@
 import React from 'react';
 export default class Loading extends React.Component{
   render(){
-    return (<div className="spinner">
-      <div className="spinner-container container1">
-        <div className="circle1"></div>
-        <div className="circle2"></div>
-        <div className="circle3"></div>
-        <div className="circle4"></div>
-      </div>
-      <div className="spinner-container container2">
-        <div className="circle1"></div>
-        <div className="circle2"></div>
-        <div className="circle3"></div>
-        <div className="circle4"></div>
-      </div>
-      <div className="spinner-container container3">
-        <div className="circle1"></div>
-        <div className="circle2"></div>
-        <div className="circle3"></div>
-        <div className="circle4"></div>
-      </div>
+    return (<div style={{margin:'0.15rem 0 0.29rem 0'}}>
+      <img style={{width:'2.4rem'}} src="/static/img/loading.gif" />
     </div>)
   }
 }

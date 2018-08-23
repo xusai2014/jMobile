@@ -130,7 +130,7 @@ export default class CardsList extends React.Component {
             textAlign:'center'
           }}>您暂未绑定信用卡</div>
           <div className="enableBtn" onClick={()=>{
-            this.props.history.push('/bill/method', {anchor: '#cyberId'})
+            this.props.history.push('/cards/edit');
           }}>添加信用卡</div>
           </div>:null
         }

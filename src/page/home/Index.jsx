@@ -33,6 +33,19 @@ export default class Index extends React.Component {
     }
   }
 
+  generateStr(v){
+    let unit = '';
+    let ba = v;
+    if(v/10000 >= 1){
+      ba =v/10000
+      unit= '万';
+    } else if(v/1000>=1){
+      ba =v/1000;
+      unit= '千';
+    }
+    return <span>{ba.toFixed(2)}<span style = {styles.unitStyle}>{unit}</span></span>
+  }
+
   onWrapTouchStart = (e) => {
     // fix touch to scroll background page on iOS
     if (!/iPhone|iPod|iPad/i.test(navigator.userAgent)) {
@@ -169,7 +182,7 @@ export default class Index extends React.Component {
         }} style={styles.icon}><Icon style={{height: '0.36rem',}} type="plus" color="#000"/></div>
       </div>
       <div style={{marginTop: "0.19rem"}}>
-        <span style={styles.moneyStyle}>{isLogged ? (waitPaymentAmount?waitPaymentAmount:0.00) : '--'}
+        <span style={styles.moneyStyle}>{isLogged ? (waitPaymentAmount?this.generateStr(parseInt(waitPaymentAmount)):0.00) : '--'}
           <span style={styles.unitStyle}>元</span>
         </span>
       </div>

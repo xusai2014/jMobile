@@ -278,27 +278,38 @@ export default class BillDetail extends React.Component {
       cardNumber,
     }))
   }
-
+  generateStr(v){
+    let unit = '';
+    let ba = v;
+    if(v/10000 >= 1){
+      ba =v/10000
+      unit= '万';
+    } else if(v/1000>=1){
+      ba =v/1000;
+      unit= '千';
+    }
+    return ba.toFixed(2)+unit
+  }
   generate(payment_due_date,bill_date,credit_limit,balance){
     const payDate = payment_due_date ?moment(payment_due_date).format('MM.DD'):moment().format('MM.DD')
     const billDate = bill_date ?moment(bill_date).format('MM.DD'):moment().format('MM.DD');
     const  freeInterest = parseInt(moment(payment_due_date).diff(moment(),'days')) + parseInt(moment().daysInMonth())
     let amount= 0;
     let amountUnit = ''
-    if(credit_limit%10000){
+    if(credit_limit/10000>=1){
       amount =credit_limit/10000
       amountUnit= '万';
-    } else if(credit_limit%1000){
+    } else if(credit_limit/1000>=1){
       amount =credit_limit/1000;
       amountUnit= '千';
     }
 
     let ba= 0;
     let baUnit = ''
-    if(balance%10000){
+    if(balance/10000>=1){
       ba =balance/10000
       baUnit= '万';
-    } else if(balance%1000){
+    } else if(balance/1000>=1){
       ba =balance/1000;
       baUnit= '千';
     }
@@ -310,9 +321,9 @@ export default class BillDetail extends React.Component {
     }, {
       title: "免息期", value: freeInterest, unit: "天"
     }, {
-      title: "总额度", value: amount, unit: amountUnit
+      title: "总额度", value: amount.toFixed(2), unit: amountUnit
     }, {
-      title: "剩余额度", value: ba , unit: baUnit
+      title: "剩余额度约", value: ba.toFixed(2) , unit: baUnit
     }]
   }
 
@@ -460,7 +471,7 @@ export default class BillDetail extends React.Component {
         >{name_on_card} {card_number}
         </div>
         <div style={{paddingBottom: "0.38rem"}}>
-          <div style={{width: "5rem", padding: '0.43rem 0 0 0.31rem', display: 'inline-block'}}>
+          <div style={{width: "4.5rem", padding: '0.43rem 0 0 0.31rem', display: 'inline-block'}}>
             <div
               style={{
                 opacity: '0.5',
@@ -490,7 +501,8 @@ export default class BillDetail extends React.Component {
             color: '#FFFFFF',
             letterSpacing: '0',
             textAlign: 'right',
-            display: 'inline-block'
+            display: 'inline-block',
+            width: '2.5rem'
           }}>
             {this.generate(payment_due_date,bill_date,credit_limit, balance).map((v, k) => {
               const {title, value, unit} = v;

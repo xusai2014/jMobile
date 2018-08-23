@@ -1,6 +1,18 @@
 import React from 'react';
 
 export default class FreeItem extends React.Component{
+  generateStr(v){
+    let unit = '';
+    let ba = v;
+    if(v/10000 >= 1){
+      ba =v/10000
+      unit= '万';
+    } else if(v/1000>=1){
+      ba =v/1000;
+      unit= '千';
+    }
+    return ba.toFixed(2)+unit
+  }
   render(){
     const {
 
@@ -27,7 +39,7 @@ export default class FreeItem extends React.Component{
           fontSize: '0.2rem',
           color: '#999999',
           letterSpacing: '0',
-        }}>总额度{credit_limit}元|剩余额度{balance}元</div>
+        }}>总额度{this.generateStr(parseInt(credit_limit))}元|剩余额度约{this.generateStr(parseInt(balance))}元</div>
       </div>
       <div
         style={{

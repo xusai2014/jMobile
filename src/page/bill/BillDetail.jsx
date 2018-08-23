@@ -177,6 +177,14 @@ export default class BillDetail extends React.Component {
       {
         text: '确定',
         onPress: value => new Promise((resolve, reject) => {
+          if(!/^[0-9]/.test(value.trim())){
+            Toast.info('请检查您输入的验证码')
+            return;
+          }
+          if(value.trim().length>6){
+            Toast.info('请检查您输入的验证码位数')
+            return;
+          }
           callback({taskId, value})
           resolve();
           // setTimeout(() => {

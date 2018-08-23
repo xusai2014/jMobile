@@ -311,7 +311,7 @@ export default class Index extends React.Component {
         key={'d'}
         visible={interestShow}
         transparent
-        maskClosable={false}
+        maskClosable={true}
         onClose={() => this.setState({interestShow: false})}
         title={<div style={{textAlign: 'left'}}>最长免息期</div>}
         wrapProps={{onTouchStart: this.onWrapTouchStart}}

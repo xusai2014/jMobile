@@ -188,6 +188,14 @@ export default class LoadingStatus extends React.Component{
     prompt('输入验证码', description, [{
       text: '取消',
       onPress: value => new Promise((resolve) => {
+        if(!/^[0-9]/.test(value.trim())){
+          Toast.info('请检查您输入的验证码')
+          return;
+        }
+        if(value.trim().length>6){
+          Toast.info('请检查您输入的验证码位数')
+          return;
+        }
         resolve();
         alert('是否退出当前认证流程',`选择“是”将退出当前认证流程已填写信息将丢失`,[
           {text:"是",onPress:()=>{this.props.history.go(-1)}},
@@ -200,6 +208,14 @@ export default class LoadingStatus extends React.Component{
       {
         text: '确定',
         onPress: value => new Promise((resolve, reject) => {
+          if(!/^[0-9]/.test(value.trim())){
+            Toast.info('请检查您输入的验证码')
+            return;
+          }
+          if(value.trim().length>6){
+            Toast.info('请检查您输入的验证码位数')
+            return;
+          }
           callback({taskId, value})
           resolve();
           // setTimeout(() => {

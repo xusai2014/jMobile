@@ -21,7 +21,8 @@ export default class CardsList extends React.Component {
     super(props);
     this.state = {
       activeCard: -1,// -1不选择，其它值选择
-      activeData:{}
+      activeData:{},
+      cardStatus:false
     };
   }
 
@@ -43,7 +44,9 @@ export default class CardsList extends React.Component {
     this.props.dispatch(getCardsList({
       type:'01',
     })).then((result) => {
-
+      this.setState({
+        cardStatus:true
+      })
     }, (err) => {
 
     });
@@ -87,7 +90,7 @@ export default class CardsList extends React.Component {
   }
 
   render() {
-    const {activeCard} = this.state;
+    const {activeCard,cardStatus} = this.state;
     const { cardsList } = this.props;
     return <div>
       <Header title="卡包" hide={false}
@@ -115,10 +118,19 @@ export default class CardsList extends React.Component {
         </div>
       </div>
       <div>
-        {cardsList.map((v, k) => {
+        {cardStatus?cardsList.length != 0?cardsList.map((v, k) => {
           const { actNo,bankNo,actName,bankNm } = v;
           return <Card id={k} {...v} key={k} popupCard={(v) => this.setState({activeCard: parseInt(v),activeData:{bankNm,actName,actNo,bankNo}})}></Card>
-        })}
+        }):<div>
+          <img src='/static/img/Bitmap2@1x.png' style={{width:'2.02rem', margin: '3rem 0rem 0.32rem 2.74rem'}} />
+          <div style={{
+            fontSize: '0.26rem',
+            color: '#999999',
+            letterSpacing: '0',
+            textAlign:'center'
+          }}>您暂未绑定信用卡</div>
+          </div>:null
+        }
       </div>
       {
         activeCard > -1 ? [

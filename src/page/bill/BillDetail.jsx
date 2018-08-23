@@ -295,11 +295,11 @@ export default class BillDetail extends React.Component {
 
     let ba= 0;
     let baUnit = ''
-    if(credit_limit%10000){
-      ba =credit_limit/10000
+    if(balance%10000){
+      ba =balance/10000
       baUnit= '万';
-    } else if(credit_limit%1000){
-      ba =credit_limit/1000;
+    } else if(balance%1000){
+      ba =balance/1000;
       baUnit= '千';
     }
     return [{

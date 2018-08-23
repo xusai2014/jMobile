@@ -65,9 +65,9 @@ export default class HandleBill extends React.Component {
       case 'fullCardNum':
         return !/^[0-9]*$/.test(val) || val.length > 25
       case 'creditLimit':
-        return !/^[0-9]*$/.test(val) || val.length > 13
+        return !/^[0-9]*(.)?[0-9]*$/.test(val) || val.length > 13
       case 'newBalance':
-        return !/^[0-9]*$/.test(val) || val.length > 13
+        return !/^[0-9]*(.)?[0-9]*$/.test(val) || val.length > 13
       default:
         return false;
     }
@@ -106,6 +106,7 @@ export default class HandleBill extends React.Component {
       Toast.info('请填写剩余额度');
       return;
     }
+
     if (!regBankCard.test(fullCardNum)) {
       Toast.info('请填写正确的银行卡号码');
       return;
@@ -116,6 +117,14 @@ export default class HandleBill extends React.Component {
     }
     if(moment(paymentDueDate).diff(moment(billDate),'days') <=0){
       Toast.info('还款日不能大于账单日');
+      return;
+    }
+    if(!/^[0-9]+(.[0-9])?$/.test(creditLimit)){
+      Toast.info('输入信用额度不合法');
+      return;
+    }
+    if(!/^[0-9]+(.[0-9])?$/.test(newBalance)){
+      Toast.info('输入账单金额不合法');
       return;
     }
 

@@ -222,11 +222,13 @@ export default class CyberBank extends React.Component {
                   margin: '0px 0px 0px 0.18rem'
                 }}>记住密码</span>
               </div>
-              <button  style={disableBtn?styles.disfinishBtn:styles.finishBtn} onClick={() =>{
-                this.setDeepState('inputData',login_type,{
-                  disabled:true
-                });
-                this.loginCyberFunc(v)}}>开始登录</button>
+              <div className={!disableBtn?'enableBtn':'disableBtn'}
+                   onClick={() => {
+                     this.setDeepState('inputData',login_type,{
+                       disabled:true
+                     });
+                     this.loginCyberFunc(v)
+                   }}>开始登录</div>
               <ModalCom visible={modal} showAction={(v) => {
                 this.setState({modal: v})
               }} description={description}/>
@@ -278,28 +280,4 @@ const styles = {
     letterSpacing: '-0.77PX',
     margin: "0.31rem 0 0 0.31rem"
   },
-  finishBtn: {
-    background: '#4C7BFE',
-    boxShadow: '0 0.06rem 0.12rem 0 #9BB5FF',
-    borderRadius: "0.08rem",
-    margin: "0.78rem 0.16rem 0 0.16rem",
-    lineHeight: "1.18rem",
-    textAlign: 'center',
-    fontSize: "0.34rem",
-    color: "#FFFFFF",
-    letterSpacing: '-0.011rem',
-    width: '7.18rem',
-  },
-  disfinishBtn:{
-    background: 'rgb(130, 125, 125)',
-    boxShadow: '0 0.06rem 0.12rem 0 rgb(130, 125, 125)',
-    borderRadius: "0.08rem",
-    margin: "0.78rem 0.16rem 0 0.16rem",
-    lineHeight: "1.18rem",
-    textAlign: 'center',
-    fontSize: "0.34rem",
-    color: "#FFFFFF",
-    letterSpacing: '-0.011rem',
-    width: '7.18rem',
-  }
 }

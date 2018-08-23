@@ -37,6 +37,20 @@ export default class EmailAdd extends React.Component {
     }
   }
 
+  inputLimit(key,val){
+    if(!val){
+      return false
+    }
+    switch (key){
+      case 'account':
+        return  val.length >40
+      case 'password':
+        return  val.length >16
+      default:
+        return false;
+    }
+  }
+
   async loginEnter() {
     const {account, password, selected} = this.state;
     if(!account){
@@ -50,7 +64,7 @@ export default class EmailAdd extends React.Component {
       return;
     }
     if(!regEmail.test(account)){
-      Toast.info('请检查您的输入邮箱')
+      Toast.info('请输入正确的邮箱地址')
       return;
     }
     Toast.loading('请稍候',0)
@@ -108,8 +122,9 @@ export default class EmailAdd extends React.Component {
             return <div key={k} style={styles.item}>
               <div style={styles.name}>{name}</div>
               <input onChange={(e) => {
+                this.inputLimit(key,e.currentTarget.value.trim())
                 this.setState({
-                  [key]: e.currentTarget.value
+                  [key]: e.currentTarget.value.trim()
                 },()=>this.enableBtn())
               }}
                      type={icon?(!eyesOpen?'password':'text'):'text'}

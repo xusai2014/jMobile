@@ -128,7 +128,7 @@ export default class EditCard extends React.Component {
       idNo: specialId,
       resvPhoneNo,
       bankNo
-    }))
+    })).finally(()=>Toast.hide())
 
     const {data} = r;
 
@@ -136,23 +136,24 @@ export default class EditCard extends React.Component {
     if (result != '00') {
       Toast.info(resultMsg)
     } else {
-
+      Toast.loading('请稍候...',0)
       this.props.dispatch(sendVerification({
         channelNo: '01',
         busineType: '04',
         phone: resvPhoneNo
       })).then(() => {
+          Toast.hide()
         const len = resvPhoneNo.length
         prompt('输入验证码', `请输入手机号${resvPhoneNo ? `${resvPhoneNo.slice(0, 3)}****${resvPhoneNo.slice(-4, len)}` : ''}收到的验证码`, [{
           text: '取消',
           onPress: value => new Promise((resolve) => {
-            Toast.hide()
             resolve();
           }),
         },
           {
             text: '确定',
             onPress: value => new Promise((resolve, reject) => {
+
               const {MERC_SN} = this.props.identityInfo;
               this.props.dispatch(verifySMSCode({
                 channelNo: '01',
@@ -167,18 +168,16 @@ export default class EditCard extends React.Component {
               })).then((result) => {
                 Toast.info('绑卡成功')
                 this.props.history.go(-1)
-                resolve();
+
               }, () => {
-                reject();
               }).finally(()=>Toast.hide())
+              resolve();
             }),
           },
         ], 'default', null, ['请输入验证码'])
       }
-    , () => {
-
-          }).finally(()=>Toast.hide())
-        }
+      , () => {}).finally(()=>Toast.hide())
+    }
 
   }
 

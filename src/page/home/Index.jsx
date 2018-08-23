@@ -131,8 +131,16 @@ export default class Index extends React.Component {
           return
         case 3:
           //进入卡包
-          const {action: url} = params
-          this.props.history.push(url);
+          const {authSts} = this.state;
+          if(authSts == '01'){
+            const {action: url} = params
+            this.props.history.push(url);
+          } else if( authSts == '-1') {
+            //数据尚未装载完毕不处理
+          } else {
+            jsNative.nativeGoRealName()
+          }
+
           return
         case 4:
           //进入办卡中心
@@ -196,14 +204,7 @@ export default class Index extends React.Component {
             return <div key={k}>
               <span style={styles.iconItem} onClick={() => {
                 if (type == '0') {
-                  if(authSts == '01'){
-                    this.loginEnter(3, {action})
-                  } else if( authSts == '-1') {
-                    //数据尚未装载完毕不处理
-                  } else {
-                    jsNative.nativeGoRealName()
-                  }
-
+                  this.loginEnter(3, {action})
                 } else if (type == '1') {
                   this.loginEnter(4, {action})
                 }

@@ -50,7 +50,7 @@ class AllHeader extends React.Component {
                 left:'0.11rem',
                 width: '1rem'
               }} onClick={()=>{backStart();}}>
-                <img src="/static/img/back.png" style={{ width:"0.15rem",height:'0.3rem',marginLeft:'0.32rem'}} />
+                <img src="/static/img/back.png" style={{ width:"0.19rem",height:'0.34rem',marginLeft:'0.31rem'}} />
               </div>
               <span style={{
                 fontSize: '0.31rem',

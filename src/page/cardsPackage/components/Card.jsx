@@ -3,8 +3,21 @@ import bankIcon from '../../../utils/bank';
 
 
 export default class Card extends React.Component {
+  generateStr(v){
+    let unit = '';
+    let ba = v;
+    if(v/10000 >= 1){
+      ba =v/10000
+      unit= '万';
+    } else if(v/1000>=1){
+      ba =v/1000;
+      unit= '千';
+    }
+    return ba.toFixed(2)+unit
+  }
+
   render() {
-    const { popupCard,actName, id, bankNm,payment_due_date,card_limit = '--',actNo,bankNo } =this.props;
+    const { popupCard,actName, id, bankNm,payment_due_date,card_limit,actNo,bankNo } =this.props;
     return (<div style={styles.container}>
       <div>
         <div style={styles.rowItem}>
@@ -39,7 +52,7 @@ export default class Card extends React.Component {
         <span style={{
         float: 'right',
         marginRight: '0.5rem'
-      }}>单笔限额：{card_limit?card_limit:'--'}元</span>
+      }}>单笔限额：{card_limit?this.generateStr(parseInt(card_limit)):'--'}元</span>
       </div>
 
       <div className="menu-mask" onClick={this.onMaskClick} />

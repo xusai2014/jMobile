@@ -285,7 +285,8 @@ export default class BillCard extends React.Component {
       isNew = '00',
       abbr,
       update_time,
-      isLogged
+      isLogged,
+      authSts
     }
       = this.props;
     const {
@@ -298,7 +299,13 @@ export default class BillCard extends React.Component {
     return <div onClick={(e) => {
       if (!real) {
         if(isLogged){
-          this.props.history.push('/bill/method')
+          if(authSts == '01'){
+            this.props.history.push('/bill/method');
+          } else if( authSts == '-1') {
+            //数据尚未装载完毕不处理
+          } else {
+            jsNative.nativeGoRealName()
+          }
           return
         }
         e.stopPropagation();

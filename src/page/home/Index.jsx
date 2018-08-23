@@ -127,7 +127,14 @@ export default class Index extends React.Component {
           return
         case 2:
           //添加账单
-          this.props.history.push('/bill/method');
+          const {authSts} = this.state;
+          if(authSts == '01'){
+            this.props.history.push('/bill/method');
+          } else if( authSts == '-1') {
+            //数据尚未装载完毕不处理
+          } else {
+            jsNative.nativeGoRealName()
+          }
           return
         case 3:
           //进入卡包
@@ -272,6 +279,7 @@ export default class Index extends React.Component {
                                   e.stopPropagation()
                                   this.setState({visible: true})
                                }}
+                               authSts={authSts}
                                update_time ={ update_time }
                                importModal={()=>{this.setState({sycnModal:true})}}
                                updateData = {()=>this.initData()}
@@ -279,6 +287,7 @@ export default class Index extends React.Component {
             }):null)
             :
             this.example.map((v, k) => <BillCard
+              authSts={authSts}
               isLogged={isLogged}
               {...v} key={k} repay={(e) => {
               e.stopPropagation();

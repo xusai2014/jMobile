@@ -117,6 +117,7 @@ export default class Index extends React.Component {
 
   loginEnter(type, params) {
     loginHelper(() => {
+      const {authSts} = this.state;
       switch (type) {
         case 1:
           //展示免息期
@@ -127,7 +128,6 @@ export default class Index extends React.Component {
           return
         case 2:
           //添加账单
-          const {authSts} = this.state;
           if(authSts == '01'){
             this.props.history.push('/bill/method');
           } else if( authSts == '-1') {
@@ -138,7 +138,7 @@ export default class Index extends React.Component {
           return
         case 3:
           //进入卡包
-          const {authSts} = this.state;
+
           if(authSts == '01'){
             const {action: url} = params
             this.props.history.push(url);

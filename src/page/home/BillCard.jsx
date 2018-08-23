@@ -292,7 +292,7 @@ export default class BillCard extends React.Component {
       percent,
       syncBegin
     } = this.state;
-    const update =  moment(update_time).diff(moment(),'days')
+    const update =  moment().diff(moment(update_time),'minutes')
 
     const {day, date, des, actionName, action} = this.judgeStatus(bill_type, payment_due_date, bill_date, repay)
     return <div onClick={(e) => {
@@ -347,7 +347,7 @@ export default class BillCard extends React.Component {
         </div>
         <div style={{width: '4.26rem', display: 'inline-block'}}>
           {
-            update <= 9?(syncBegin ?
+            !(update <= 10 && update>=0)?(syncBegin ?
               <div style={{
                 fontSize: '0.22rem',
                 color: '#333333',
@@ -370,7 +370,12 @@ export default class BillCard extends React.Component {
                 this.callSyncBill(task_id, importBillType, abbr,card_num)
               }}/>)
               :
-              <div>已同步至最新</div>
+              <div style={{
+                fontSize:'0.24rem',
+                color: '#41C72F',
+                letterSpacing: '0',
+                marginLeft: '2.57rem'
+              }}>已同步至最新</div>
           }
         </div>
       </div>

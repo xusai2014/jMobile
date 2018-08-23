@@ -45,12 +45,16 @@ export default class HandleBill extends React.Component {
         this.setState({
           bankName: bankNm,
           bankNo: type,
+        },()=>{
+          this.enableBtn()
         })
       } else {
         Toast.info('请检查您输入的信用卡号')
         this.setState({
           bankName: '',
           bankNo: '',
+        },()=>{
+          this.enableBtn()
         })
       }
 

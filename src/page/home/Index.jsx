@@ -28,7 +28,8 @@ export default class Index extends React.Component {
       interestShow: false, //免息期弹窗展示,
       visible: false,//弹出框
       sycnModal:false,
-      authSts:'-1'
+      authSts:'-1',
+      freeItems:false
     }
   }
 
@@ -81,6 +82,7 @@ export default class Index extends React.Component {
     this.props.dispatch(getFreeInterest({
       ...reqParams
     })).then((result) => {
+      this.setState({freeItems:true})
     }, () => {
     })
   }
@@ -149,7 +151,7 @@ export default class Index extends React.Component {
   }]
 
   render() {
-    const {interestShow, visible, sycnModal,authSts} = this.state;
+    const {interestShow, visible,freeItems, sycnModal,authSts} = this.state;
     const {isLogged, billList = {}, freeIntrestData = [], activities = []} = this.props;
     const {waitPaymentAmount = '0.00', waitPaymentNumber = '0', baseResponseBillDtoList} = billList
     return [<div key={'a'} style={{background: '#FFFFFF', paddingBottom: "0.7rem"}}>
@@ -304,7 +306,12 @@ export default class Index extends React.Component {
       >
         <div style={{height: '5.03rem', overflow: 'scroll'}}>
           {
-            freeIntrestData.map((v, k) => {
+            freeItems?(freeIntrestData.length == 0?<div style={{marginTop: '0.6rem'}}>
+              <img style={{width:'1.55rem'}} src="/static/img/Bitmap@1x.png" />
+              <div>未导入信用卡账单</div>
+              <div>无记录查看</div>
+            </div>
+              :freeIntrestData.map((v, k) => {
               const {bank_logo: imgSrc, credit_limit, balance, bank_name, payment_due_date, card_number,bill_type} = v;
               const freeInterest = bill_type == 'DONE'? parseInt(moment(payment_due_date).diff(moment(), 'days')) + parseInt(moment().daysInMonth()):
                 parseInt(moment(payment_due_date).diff(moment(), 'days'))
@@ -317,7 +324,7 @@ export default class Index extends React.Component {
                                balance={balance}
                                {...v}
               />
-            })
+            })):null
           }
         </div>
       </Modal>,

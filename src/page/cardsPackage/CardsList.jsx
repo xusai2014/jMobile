@@ -129,6 +129,9 @@ export default class CardsList extends React.Component {
             letterSpacing: '0',
             textAlign:'center'
           }}>您暂未绑定信用卡</div>
+          <div className="enableBtn" onClick={()=>{
+            this.props.history.push('/bill/method', {anchor: '#cyberId'})
+          }}>添加信用卡</div>
           </div>:null
         }
       </div>

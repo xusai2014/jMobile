@@ -11,6 +11,7 @@ import {
 import {jsNative,} from "sx-jsbridge";
 import {judgeEnv} from "../../utils/util";
 const {loginHelper, nativeOpenNewWebView} = jsNative;
+const { alert } = Modal;
 
 
 @InitDecorator((state) => {
@@ -115,6 +116,23 @@ export default class Index extends React.Component {
     //https://mpcw-test.vbill.cn/cca/home
   }
 
+  identifyFunc(callback){
+    const {authSts} = this.state;
+    //  authSts 99:未认证，01：已认证，02：驳回，00：审核中
+    if(authSts == '01'){
+      callback();
+    } else if( authSts == '-1') {
+      //数据尚未装载完毕不处理
+    } else if(authSts == '99') {
+      alert('使用前请先进行实名认证','',[
+        {text:"取消",onPress:()=>{},style: 'default'},
+        {text:"确定",onPress:()=>{jsNative.nativeGoRealName();},style: 'default'},
+      ])
+    } else {
+      jsNative.nativeGoRealName();
+    }
+  }
+
   loginEnter(type, params) {
     loginHelper(() => {
       const {authSts} = this.state;
@@ -124,31 +142,18 @@ export default class Index extends React.Component {
           this.setState({interestShow: true}, () => {
             this.getFreeData()
           });
-
-          return
+          return;
         case 2:
           //添加账单
-          if(authSts == '01'){
-            this.props.history.push('/bill/method');
-          } else if( authSts == '-1') {
-            //数据尚未装载完毕不处理
-          } else {
-            jsNative.nativeGoRealName()
-          }
-          return
+          this.identifyFunc(()=>this.props.history.push('/bill/method'))
+          return;
         case 3:
           //进入卡包
-
-          if(authSts == '01'){
+          this.identifyFunc(()=>{
             const {action: url} = params
             this.props.history.push(url);
-          } else if( authSts == '-1') {
-            //数据尚未装载完毕不处理
-          } else {
-            jsNative.nativeGoRealName()
-          }
-
-          return
+          })
+          return;
         case 4:
           //进入办卡中心
           this.openCardMarket();
@@ -156,7 +161,7 @@ export default class Index extends React.Component {
         case 5:
           //还款
           this.setState({visible: true})
-          return
+          return;
       }
     })
   }

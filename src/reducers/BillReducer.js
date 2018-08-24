@@ -62,9 +62,6 @@ export default function (state = initialState, actions) {
           ...state.loginList,
           [subtype]: _.values(
             logins.map((v, k) => {
-              if(k > 2){
-                return;
-              }
               const {
                 login_type, password_desc, username_desc,
                 username_regex, password_regex, ...rest

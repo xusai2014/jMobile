@@ -117,20 +117,31 @@ export default class Index extends React.Component {
   }
 
   identifyFunc(callback){
-    const {authSts} = this.state;
-    //  authSts 99:未认证，01：已认证，02：驳回，00：审核中
-    if(authSts == '01'){
-      callback();
-    } else if( authSts == '-1') {
-      //数据尚未装载完毕不处理
-    } else if(authSts == '99') {
-      alert('使用前请先进行实名认证','',[
-        {text:"取消",onPress:()=>{},style: 'default'},
-        {text:"确定",onPress:()=>{jsNative.nativeGoRealName();},style: 'default'},
-      ])
-    } else {
-      jsNative.nativeGoRealName();
-    }
+    this.props.dispatch(getIndetiyInfo({
+      appType: 'mpos'
+    })).then((result) => {
+      const {data} = result;
+      const {authSts} = data;
+      //  authSts 99:未认证，01：已认证，02：驳回，00：审核中
+      if(authSts == '01'){
+        callback();
+      } else if( authSts == '-1') {
+        //数据尚未装载完毕不处理
+      } else if(authSts == '99') {
+        alert('使用前请先进行实名认证','',[
+          {text:"取消",onPress:()=>{},style: 'default'},
+          {text:"确定",onPress:()=>{jsNative.nativeGoRealName();},style: 'default'},
+        ])
+      } else {
+        jsNative.nativeGoRealName();
+      }
+      this.setState({
+        authSts: authSts
+      })
+    }, () => {
+    })
+
+
   }
 
   loginEnter(type, params) {

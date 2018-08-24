@@ -176,9 +176,9 @@ export default class EditCard extends React.Component {
               })).then((result) => {
                 Toast.info('绑卡成功')
                 this.props.history.go(-1)
-
               }, () => {
               })
+              resolve()
 
             }),
           },

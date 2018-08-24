@@ -199,10 +199,7 @@ export default class BillCard extends React.Component {
           }
           callback({taskId, value})
           resolve();
-          // setTimeout(() => {
-          //   this.setState({modal: true, description: "您绑定的卡为借记卡，卡包只支持绑定信用卡，请您重新绑定"})
-          //   console.log(`value:${value}`);
-          // }, 1000);
+
         }),
       },
     ], 'default', null, ['请输入验证码'])

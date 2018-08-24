@@ -31,6 +31,7 @@ export default class BillDetail extends React.Component {
   }
 
   async callSyncBill(task_id, importBillType,abbr,cardNum) {
+    Toast.loading('请稍候...');
     if(importBillType == '01'){
 
     } else {
@@ -52,7 +53,7 @@ export default class BillDetail extends React.Component {
         }
 
       }, (err) => {
-      });
+      }).finally(()=>this.setState({syncBegin:false}));
 
       return
     }
@@ -68,7 +69,9 @@ export default class BillDetail extends React.Component {
       if(typeof data != 'undefined'){
         this.loopLogin(data, importBillType)
       }
+      this.setState({syncBegin:false})
     }, () => {
+      this.setState({syncBegin:false})
 
     })
 
@@ -697,7 +700,7 @@ export default class BillDetail extends React.Component {
       </div>
     </div>,visible?<Popup style={{top:'0.81rem'}} title="选择还款方式"  data={
       [
-        {imgSrc:"/static/img/还@2x.png",name:'还到',action:"",type:'0',des:'（授信额度30000元）',color:'#4d7cfe'},
+        {imgSrc:"/static/img/还@2x.png",name:'还到',action:"",type:'0',des:'',color:''},
         {imgSrc:"/static/img/qita@2x.png",name:'其它',action:"",type:'1',des:'',color:'',node:[
           {imgSrc:"/static/img/微信@2x.png",name:'微信',action:"",type:'0',des:'',color:''},
           {imgSrc:"/static/img/支付宝@2x.png",name:'支付宝',action:"",type:'0',des:'',color:''}

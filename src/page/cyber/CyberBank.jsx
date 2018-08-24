@@ -41,7 +41,7 @@ export default class CyberBank extends React.Component {
   *   @description 第一步流程 输入用户信息，创建任务
   */
   async loginCyberFunc(v) {
-     const {login_type: loginType} = v;
+     const {login_type: loginType,items} = v;
      const {inputData} = this.state;
      const stateData = inputData[loginType]?inputData[loginType]:{}
      const {username, password,protocolSelected} = stateData;
@@ -56,7 +56,19 @@ export default class CyberBank extends React.Component {
       Toast.info('请勾选协议')
       return;
     }
-
+    const [ one,two] = items;
+    const { reg , name} = one;
+    const regE = new RegExp(reg)
+    if(!regE.test(username)){
+      Toast.info(`请检查输入${name}`)
+      return
+    }
+    const { reg:reg2 , name:name2} = two;
+    const regE2 = new RegExp(reg2)
+    if(!regE2.test(password)){
+      Toast.info(`请检查输入${name2}`)
+      return
+    }
     const loginStatus = await this.props.dispatch(loginCyber({
        password,
        abbr,

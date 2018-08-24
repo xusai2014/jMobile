@@ -280,13 +280,14 @@ export default class LoadingStatus extends React.Component{
         letterSpacing: '0'
       }}>
       <Loading />
-      <div style={{
-        fontSize: '0.31rem',
-        color: '#4C7BFE',
-        letterSpacing: '0',
-        textAlign:'center',
-        marginTop:'5rem'
-      }}>{progress >0?`正在导入${title}…已完成${progress}%`:'登录时间大约30秒'}</div>
+        {progress >0?`正在导入${title}…已完成${progress}%`:'登录中，请耐心等待'}
+        <div style={{
+          fontSize: '0.31rem',
+          color: '#4C7BFE',
+          letterSpacing: '0',
+          textAlign:'center',
+          marginTop:'5rem'
+        }}>{progress >0?'':'登录时间大约30秒'}</div>
     </div>]
   }
 }

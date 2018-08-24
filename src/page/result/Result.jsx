@@ -54,7 +54,7 @@ export default class Result extends React.Component {
       title: "导入成功",
       img: "/static/img/done@2x.png",
     }, cyberfailed: {
-      describe: (data) => JSON.stringify(data),
+      describe: (data) => data,
       footer: () => (<div onClick={() => this.props.history.push('/home/index')} className="enableBtn">完成</div>),
       title: "导入失败",
       img: "/static/img/nothing@2x.png",

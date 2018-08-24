@@ -44,8 +44,8 @@ export default class Result extends React.Component {
       img: "/static/img/done@2x.png",
       describe: () => "您的邮箱内没有新的交易数据，请尝试其他账单导入方式吧！",
       footer: () => (<div>
-        <div style={styles.actionReplace} onClick={()=>this.props.history.push('/bill/method')} >换一个邮箱导入</div>
-        <div className="enableBtn" onClick={()=>this.props.history.push('/bill/method', {anchor: '#cyberId'})}>网银导入</div>
+        <div style={styles.actionReplace} onClick={()=>this.props.history.push('/email/add')} >换一个邮箱导入</div>
+        <div style={styles.actionReplace} onClick={()=>this.props.history.push('/bill/method', {anchor: '#cyberId'})}>网银导入</div>
       </div>),
       title: "无数据导入"
     }, cybersuccess: {

@@ -279,7 +279,9 @@ export default class LoadingStatus extends React.Component{
         color: '#333333',
         letterSpacing: '0'
       }}>
-      <Loading />
+        <div style={{margin:'0.15rem 0 0.29rem 0'}}>
+          <img style={{width:'2.4rem'}} src="/static/img/loading.gif" />
+        </div>
         {progress >0?`正在导入${title}…已完成${progress}%`:'登录中，请耐心等待'}
         <div style={{
           fontSize: '0.31rem',

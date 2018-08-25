@@ -1,6 +1,6 @@
 import React from 'react';
 import {withRouter} from "react-router-dom";
-import {checkToken, getLoginList, syncBill, verifyCode} from "../../actions/reqAction";
+import {checkToken, getIndetiyInfo, getLoginList, syncBill, verifyCode} from "../../actions/reqAction";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {Modal, Progress, Toast}  from "antd-mobile";
 import {jsNative} from "sx-jsbridge";
@@ -265,6 +265,35 @@ export default class BillCard extends React.Component {
     })
   }
 
+  identifyFunc(callback){
+    this.props.dispatch(getIndetiyInfo({
+      appType: 'mpos'
+    })).then((result) => {
+      const {data} = result;
+      const {authSts} = data;
+      //  authSts 99:未认证，01：已认证，02：驳回，00：审核中
+      if(authSts == '01'){
+        callback();
+      } else if( authSts == '-1') {
+        //数据尚未装载完毕不处理
+      } else if(authSts == '99') {
+        alert('使用前请先进行实名认证','',[
+          {text:"取消",onPress:()=>{},style: 'default'},
+          {text:"确定",onPress:()=>{jsNative.nativeGoRealName();},style: 'default'},
+        ])
+      } else {
+        jsNative.nativeGoRealName();
+      }
+      this.setState({
+        authSts: authSts
+      })
+    }, () => {
+    })
+
+
+  }
+
+
   render() {
     const {
       card_num,
@@ -296,13 +325,7 @@ export default class BillCard extends React.Component {
     return <div onClick={(e) => {
       if (!real) {
         if(isLogged){
-          if(authSts == '01'){
-            this.props.history.push('/bill/method');
-          } else if( authSts == '-1') {
-            //数据尚未装载完毕不处理
-          } else {
-            jsNative.nativeGoRealName()
-          }
+          this.identifyFunc(()=>this.props.history.push('/bill/method'))
           return
         }
         e.stopPropagation();

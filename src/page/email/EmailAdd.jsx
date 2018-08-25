@@ -95,6 +95,7 @@ export default class EmailAdd extends React.Component {
       // 任务创建失败
       Toast.info('任务创建失败', 1);
     } else {
+      Toast.hide();
       this.props.history.push('/load/email', {taskId, loginType: "03"})
     }
 

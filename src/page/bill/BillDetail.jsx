@@ -451,6 +451,7 @@ export default class BillDetail extends React.Component {
       min_payment = '',
       card_number = '',
       importBillType,
+      bank_id,
       abbr='',
       taskId,
       current_bill_amt = '0.00'
@@ -533,7 +534,7 @@ export default class BillDetail extends React.Component {
           onTabClick={(v)=>{
             const { sub} = v
               if(sub == '1'){
-                this.getPayDetailInfo()
+                this.getPayDetailInfo(bank_id,card_number)
               }
             }
           }

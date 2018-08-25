@@ -634,7 +634,7 @@ export default class BillDetail extends React.Component {
                 <div style={{
                   color: '#999999',
                   fontSize: "0.24rem",
-                }}>2018-07-09 09:21
+                }}>{moment(repaymentTime).format('YYYY-MM-DD')}
                 </div>
               </div>
               <div style={{

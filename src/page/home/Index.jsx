@@ -30,7 +30,8 @@ export default class Index extends React.Component {
       visible: false,//弹出框
       sycnModal:false,
       authSts:'-1',
-      freeItems:false
+      freeItems:false,
+      examineAccount:true
     }
   }
 
@@ -83,9 +84,10 @@ export default class Index extends React.Component {
       appType: 'mpos'
     })).then((result) => {
       const {data} = result;
-      const {authSts} = data;
+      const {authSts,MERC_SN = ''} = data;
       this.setState({
-        authSts: authSts
+        authSts: authSts,
+        examineAccount:MERC_SN == '700000000620451'
       })
     }, () => {
     })
@@ -224,6 +226,9 @@ export default class Index extends React.Component {
             if (!isLogged && type == '1') {
               return null
             }
+            if(examineAccount && type == '1'){
+              return null
+            }
             return <div key={k}>
               <span style={styles.iconItem} onClick={() => {
                 if (type == '0') {
@@ -295,6 +300,7 @@ export default class Index extends React.Component {
                                   e.stopPropagation()
                                   this.setState({visible: true})
                                }}
+                               examineAccount={examineAccount}
                                authSts={authSts}
                                update_time ={ update_time }
                                importModal={()=>{this.setState({sycnModal:true})}}
@@ -304,6 +310,7 @@ export default class Index extends React.Component {
             :
             this.example.map((v, k) => <BillCard
               authSts={authSts}
+              examineAccount={examineAccount}
               isLogged={isLogged}
               {...v} key={k} repay={(e) => {
               e.stopPropagation();
@@ -319,7 +326,7 @@ export default class Index extends React.Component {
         <span style={styles.addText}>添加信用卡账单</span>
 
       </div>,<div>{
-        isLogged?<div style={{
+        (isLogged && !examineAccount)?<div style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

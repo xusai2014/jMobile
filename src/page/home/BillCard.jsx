@@ -219,6 +219,7 @@ export default class BillCard extends React.Component {
 
 
   judgeStatus(bill_type, payment_due_date, bill_date, action) {
+    const { examineAccount } = this.props;
     if (bill_type == 'DONE') {
       const duM = moment(payment_due_date);
       if (parseInt(duM.diff(moment(), 'days')) < 0) {
@@ -226,16 +227,16 @@ export default class BillCard extends React.Component {
           day: " ",
           date: " ",
           des: `已逾期${moment().diff(duM, 'days')}天`,
-          actionName: "立即还款",
-          action
+          actionName: examineAccount?"":"立即还款",
+          action:examineAccount?()=>{}:action
         }
       } else {
         return {
           day: duM.diff(moment(), 'days'),
           date: duM.format('MM-DD'),
           des: '天后到期',
-          actionName: "立即还款",
-          action
+          actionName: examineAccount?"":"立即还款",
+          action:examineAccount?()=>{}:action
         }
       }
     } else if (bill_type == 'UNDONE') {
@@ -245,7 +246,7 @@ export default class BillCard extends React.Component {
         date: duM.format('MM-DD'),
         des: `天后出账`,
         actionName: "更新未出",
-        action
+        action:()=>{}
       }
     } else {
       return {
@@ -253,7 +254,7 @@ export default class BillCard extends React.Component {
         date: '',
         des: '',
         actionName: "",
-        action
+        action:()=>{}
       }
     }
 
@@ -312,7 +313,8 @@ export default class BillCard extends React.Component {
       abbr,
       update_time,
       isLogged,
-      authSts
+      authSts,
+      examineAccount
     }
       = this.props;
     const {
@@ -331,6 +333,9 @@ export default class BillCard extends React.Component {
         e.stopPropagation();
         e.preventDefault();
         this.callLogin()
+        return
+      }
+      if(examineAccount){
         return
       }
       this.props.history.push(`/bill/detail/${bill_id}`,{bank_name})

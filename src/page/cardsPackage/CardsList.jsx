@@ -22,7 +22,8 @@ export default class CardsList extends React.Component {
     this.state = {
       activeCard: -1,// -1不选择，其它值选择
       activeData:{},
-      cardStatus:false
+      cardStatus:false,
+      examineAccount:true,
     };
   }
 
@@ -76,12 +77,19 @@ export default class CardsList extends React.Component {
   getIdentityInfo(){
     this.props.dispatch(getIndetiyInfo({
       appType: 'mpos'
-    })).then(()=>{
-
+    })).then((result)=>{
+      const {data} = result;
+      const {MERC_SN = ''} = data;
+      this.setState({
+        examineAccount:MERC_SN == '700000000620451'
+      })
     })
   }
 
   openCardMarket(){
+    if(this.state.examineAccount){
+      return
+    }
     jsNative.nativeOpenNewWebView({
       url:`https://mpcw${judgeEnv()}.vbill.cn/cca/home`
       //url:'http://172.16.40.34:3100/cca/home'
@@ -90,7 +98,7 @@ export default class CardsList extends React.Component {
   }
 
   render() {
-    const {activeCard,cardStatus} = this.state;
+    const {activeCard,cardStatus,examineAccount} = this.state;
     const { cardsList } = this.props;
     return <div>
       <Header title="卡包" hide={false}
@@ -111,8 +119,7 @@ export default class CardsList extends React.Component {
         }} onClick={()=>this.openCardMarket()}>
           <img src="/static/img/信用卡@2x.png" style={{width: "0.3rem"}}/>
           <span style={{margin: '0.08rem', fontSize: '0.24rem', color: '#4C7BFE', letterSpacing: '0'}}>
-
-          办信用卡
+            {examineAccount?'':'办信用卡'}
         </span>
           <img src="/static/img/Path 3@2x.png" style={{width: "0.1rem"}}/>
         </div>

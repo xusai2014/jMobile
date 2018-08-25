@@ -97,6 +97,7 @@ export default class Popup extends React.Component{
         imgSrc: "/static/img/qita@2x.png", name: '其它', action:()=>{}, type: '1', des: '', color: '', node: [
         {imgSrc: "/static/img/微信@2x.png", name: '微信', action:()=>{
           debugger;
+          console.log('111111111111')
           jsNative.openOtherApp({name:'webchat'},()=>{})
         }
         , type: '0', des: '', color: ''},

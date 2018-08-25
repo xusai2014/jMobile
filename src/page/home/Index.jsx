@@ -197,7 +197,7 @@ export default class Index extends React.Component {
   }]
 
   render() {
-    const {interestShow, visible,freeItems, sycnModal,authSts} = this.state;
+    const {interestShow, visible,freeItems, sycnModal,authSts,examineAccount} = this.state;
     const {isLogged, billList = {}, freeIntrestData = [], activities = []} = this.props;
     const {waitPaymentAmount = '0.00', waitPaymentNumber = '0', baseResponseBillDtoList} = billList
     return [<div key={'a'} style={{background: '#FFFFFF', paddingBottom: "0.7rem"}}>

@@ -181,7 +181,7 @@ export default class Index extends React.Component {
     card_num: "29999",
     bank_name: "lee",
     bill_type: 'DONE',
-    current_bill_amt: "1000000",
+    current_bill_remain_amt: "1000000",
     payment_due_date: "2018-09-01",
     task_id: "11111111111",
     bill_id: "11111111",
@@ -264,7 +264,7 @@ export default class Index extends React.Component {
                 card_num,
                 bank_name,
                 bill_type,//账单状态
-                current_bill_amt,//本期账单总金额
+                current_bill_remain_amt,//本期账单总金额
                 payment_due_date,//还款日
                 bill_date,
                 task_id,
@@ -279,7 +279,7 @@ export default class Index extends React.Component {
               return <BillCard card_num={card_num}
                                bank_name={bank_name}
                                bill_type={bill_type}
-                               current_bill_amt={current_bill_amt}
+                               current_bill_remain_amt={current_bill_remain_amt}
                                payment_due_date={payment_due_date}
                                task_id={task_id}
                                bill_id={bill_id}

@@ -299,7 +299,7 @@ export default class BillCard extends React.Component {
       card_num,
       bank_name,
       bill_type,
-      current_bill_amt,
+      current_bill_remain_amt,
       payment_due_date = moment().format('YYYY-MM-DD'),
       task_id,
       bill_id,
@@ -420,7 +420,7 @@ export default class BillCard extends React.Component {
             fontSize: '0.3rem',
             color: '#333333',
             letterSpacing: '0',
-          }}>{current_bill_amt}</div>
+          }}>{current_bill_remain_amt}</div>
           <div style={{
             fontSize: '0.22rem',
             color: '#999999',

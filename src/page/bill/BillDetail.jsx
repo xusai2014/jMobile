@@ -454,7 +454,7 @@ export default class BillDetail extends React.Component {
       bank_id,
       abbr='',
       taskId,
-      current_bill_amt = '0.00'
+      current_bill_remain_amt = '0.00'
     } = billDetail;
     const { pageList:list = [],} = pageResponseDto
     const { billId } = this.props.match.params;
@@ -497,7 +497,7 @@ export default class BillDetail extends React.Component {
               fontSize: '0.62rem',
               color: '#FFFFFF',
               letterSpacing: '0',
-            }}>{current_bill_amt}
+            }}>{current_bill_remain_amt}
             </div>
             <div style={{
               opacity: '0.5',

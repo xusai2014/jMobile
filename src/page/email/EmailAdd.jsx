@@ -123,7 +123,9 @@ export default class EmailAdd extends React.Component {
             return <div key={k} style={styles.item}>
               <div style={styles.name}>{name}</div>
               <input onChange={(e) => {
-                this.inputLimit(key,e.currentTarget.value.trim())
+                if(this.inputLimit(key,e.currentTarget.value.trim())){
+                  return;
+                }
                 this.setState({
                   [key]: e.currentTarget.value.trim()
                 },()=>this.enableBtn())

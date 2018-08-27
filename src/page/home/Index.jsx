@@ -251,7 +251,7 @@ export default class Index extends React.Component {
           const {logoUri = '', gameUri, gameName = ''} = activities[k]?activities[k]:{};
           return <div onClick={() => {
             if(gameUri.indexOf('site=oldweb')>0){
-              jsNative.nativeOpenOldWebView({url:gameUri})
+              jsNative.nativeOpenOldWebView({url:gameUri},()=>{})
             } else {
               jsNative.nativeOpenNewWebView({url:gameUri},()=>{})
             }

@@ -42,13 +42,13 @@ export default class BillDetail extends React.Component {
         const {data} = result;
         const {subtype = ''} = data;
         if (subtype) {
-          alert('暂时无法获取账单的最新状态', <div>如果您已通过其导入它平台还款，建议您通过网银导入</div>, [
-            {text: '暂不需要', onPress: () => console.log('置顶聊天被点击了'), },
-            {text: '通过网银导入', onPress: () => this.props.history.push('/bill/method', {anchor: '#cyberId'}), }
+          alert(<span className="alert_title">暂时无法获取账单的最新状态</span>, <span className="alert_content">如果您已通过其导入它平台还款，建议您通过网银导入</span>, [
+            {text: '暂不需要', onPress: () => console.log('置顶聊天被点击了'),style: {fontSize: '0.32rem',color: '#333333', letterSpacing: '-0.89PX', textAlign: 'center'} },
+            {text: '通过网银导入', onPress: () => this.props.history.push('/bill/method', {anchor: '#cyberId'}),style: {fontSize: '0.32rem',color: '#4C7BFE', letterSpacing: '-0.89PX', textAlign: 'center'} }
           ]);
         } else {
-          alert('该银行暂不支持同步您的账单数据', '', [
-            {text: '我知道了', onPress: () => console.log('置顶聊天被点击了'), style: {textAlign: "center", paddingLeft: '0'}}
+          alert(<span className="alert_title">该银行暂不支持同步您的账单数据</span>, '', [
+            {text: '我知道了', onPress: () => console.log('置顶聊天被点击了'), style: {fontSize: '0.32rem',textAlign: "center", paddingLeft: '0'}}
           ]);
         }
 
@@ -463,9 +463,9 @@ export default class BillDetail extends React.Component {
     const {day, date, des} = this.judgeStatus(bill_type, payment_due_date, bill_date)
     return [<Header title={`${bank_name}`}
                     right={<img onClick={()=>{
-                      alert('', '账单删除后，如需再次查询，需要重新导入账单', [
-                        { text: '确认', onPress: () => this.removeBill(billId) },
-                        { text: '取消', onPress: () => console.log('cancel') },
+                      alert('', <span className="alert_content">账单删除后，如需再次查询，需要重新导入账单</span>, [
+                        { text: '确认', onPress: () => this.removeBill(billId),style: {fontSize: '0.32rem',color: '#333333', letterSpacing: '-0.89PX', textAlign: 'center'} },
+                        { text: '取消', onPress: () => console.log('cancel'),style: {fontSize: '0.32rem',color: '#4C7BFE', letterSpacing: '-0.89PX', textAlign: 'center'} },
                       ])
                     }} style={{width: "0.36rem",}} src="/static/img/删除@2x.png"/>}/>, <div>
       <div style={{

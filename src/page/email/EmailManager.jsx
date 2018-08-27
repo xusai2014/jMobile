@@ -72,9 +72,9 @@ export default class EmailManager extends React.Component{
                 {
                   text: '删除',
                   onPress: () => {
-                    alert('', '确定删除邮箱', [
-                      { text: '确认', onPress: () => this.removeEmailOne(uuid) },
-                      { text: '取消', onPress: () => console.log('cancel') },
+                    alert('', <span className="alert_content">确定删除邮箱</span>, [
+                      { text: '确认', onPress: () => this.removeEmailOne(uuid),style: {fontSize: '0.32rem',color: '#333333', letterSpacing: '-0.89PX', textAlign: 'center'} },
+                      { text: '取消', onPress: () => console.log('cancel'),style: {fontSize: '0.32rem',color: '#4C7BFE', letterSpacing: '-0.89PX', textAlign: 'center'} },
                     ])
                   },
                   style: { width:"1.73rem",backgroundColor: '#FF2D55', color: 'white' },

@@ -37,13 +37,13 @@ export default class BillCard extends React.Component {
         const {data} = result;
         const {subtype = ''} = data;
         if (subtype) {
-          alert('暂时无法获取账单的最新状态', <div>如果您已通过其导入它平台还款，建议您通过网银导入</div>, [
-              {text: '暂不需要', onPress: () => console.log('置顶聊天被点击了'), },
-              {text: '通过网银导入', onPress: () => this.props.history.push('/bill/method', {anchor: '#cyberId'}), }
+          alert(<span className="alert_title">暂时无法获取账单的最新状态</span>, <span className="alert_content">如果您已通过其导入它平台还款，建议您通过网银导入</span>, [
+              {text: '暂不需要', onPress: () => console.log('置顶聊天被点击了'),style: {fontSize: '0.32rem',color: '#333333', letterSpacing: '-0.89PX', textAlign: 'center'} },
+              {text: '通过网银导入', onPress: () => this.props.history.push('/bill/method', {anchor: '#cyberId'}),style: {fontSize: '0.32rem',color: '#4C7BFE', letterSpacing: '-0.89PX', textAlign: 'center'} }
             ]);
         } else {
-          alert('该银行暂不支持同步您的账单数据', '', [
-            {text: '我知道了', onPress: () => console.log('置顶聊天被点击了'), style: {textAlign: "center", paddingLeft: '0'}}
+          alert(<span className="alert_title">该银行暂不支持同步您的账单数据</span>, '', [
+            {text: '我知道了', onPress: () => console.log('置顶聊天被点击了'), style: {fontSize: '0.32rem',textAlign: "center", paddingLeft: '0'}}
           ]);
         }
 
@@ -178,11 +178,11 @@ export default class BillCard extends React.Component {
       text: '取消',
       onPress: value => new Promise((resolve) => {
         resolve();
-        alert('是否退出当前认证流程',`选择“是”将退出当前认证流程已填写信息将丢失`,[
-          {text:"是",onPress:()=>{}},
+        alert(<span className="alert_title">是否退出当前认证流程</span>,<span className="alert_content">选择“是”将退出当前认证流程已填写信息将丢失</span>,[
+          {text:"是",onPress:()=>{},style: {fontSize: '0.32rem',color: '#333333', letterSpacing: '-0.89PX', textAlign: 'center'}},
           {text:"否",onPress:()=>{
             this.promptClick({input, taskId, description, callback})
-          }}
+          },style: {fontSize: '0.32rem',color: '#4C7BFE', letterSpacing: '-0.89PX', textAlign: 'center'}}
         ])
       }),
     },
@@ -278,9 +278,9 @@ export default class BillCard extends React.Component {
       } else if( authSts == '-1') {
         //数据尚未装载完毕不处理
       } else if(authSts == '99') {
-        alert('您尚未通过实名认证，请先进行实名认证','',[
-          {text:"取消",onPress:()=>{},style: 'default'},
-          {text:"去认证",onPress:()=>{jsNative.nativeGoRealName();},style: 'default'},
+        alert(<span className="alert_title">您尚未通过实名认证，请先进行实名认证</span>,'',[
+          {text:"取消",onPress:()=>{},style: {fontSize: '0.32rem',color: '#333333', letterSpacing: '-0.89PX', textAlign: 'center'}},
+          {text:"去认证",onPress:()=>{jsNative.nativeGoRealName();},style: {fontSize: '0.32rem',color: '#4C7BFE', letterSpacing: '-0.89PX', textAlign: 'center'}},
         ])
       } else {
         jsNative.nativeGoRealName();

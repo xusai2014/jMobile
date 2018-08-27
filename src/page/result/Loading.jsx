@@ -189,11 +189,11 @@ export default class LoadingStatus extends React.Component{
       text: '取消',
       onPress: value => new Promise((resolve) => {
         resolve();
-        alert('是否退出当前认证流程',`选择“是”将退出当前认证流程已填写信息将丢失`,[
-          {text:"是",onPress:()=>{this.props.history.go(-1)}},
+        alert(<span className="alert_title">是否退出当前认证流程</span>, <span className="alert_content">选择“是”将退出当前认证流程已填写信息将丢失</span>,[
+          {text:"是",onPress:()=>{this.props.history.go(-1)},style: {fontSize: '0.32rem',color: '#333333', letterSpacing: '-0.89PX', textAlign: 'center'}},
           {text:"否",onPress:()=>{
             this.promptClick({input, taskId, description, callback})
-          }}
+          },style: {fontSize: '0.32rem',color: '#4C7BFE', letterSpacing: '-0.89PX', textAlign: 'center'}}
         ])
       }),
     },

@@ -19,7 +19,8 @@ const { alert } = Modal;
     billList: state.BillReducer.billList,
     huandaoData: state.BillReducer.huandaoData,
     freeIntrestData: state.BillReducer.freeIntrestData,
-    activities: state.CardsReducer.activities
+    activities: state.CardsReducer.activities,
+    examineAccount:state.CardsReducer.examineAccount,
   }
 })
 export default class Index extends React.Component {
@@ -87,7 +88,7 @@ export default class Index extends React.Component {
       const {authSts,MERC_SN = ''} = data;
       this.setState({
         authSts: authSts,
-        examineAccount:MERC_SN == '700000000620451'
+        examineAccount:MERC_SN != '700000000620451'
       })
     }, () => {
     })
@@ -130,7 +131,7 @@ export default class Index extends React.Component {
       } else if( authSts == '-1') {
         //数据尚未装载完毕不处理
       } else if(authSts == '99') {
-        alert(<span className="alert_title">您尚未通过实名认证，请先进行实名认证</span>,'',[
+        alert(<span className="alert_title">您尚未通过实名认证，<br/>请先进行实名认证</span>,'',[
           {text:"取消",onPress:()=>{},style: {fontSize: '0.32rem',color: '#333333', letterSpacing: '-0.89PX', textAlign: 'center'}},
           {text:"去认证",onPress:()=>{jsNative.nativeGoRealName();},style: {fontSize: '0.32rem',color: '#4C7BFE', letterSpacing: '-0.89PX', textAlign: 'center'}},
         ])
@@ -180,14 +181,14 @@ export default class Index extends React.Component {
   }
 
   example = [{
-    card_num: "29999",
-    bank_name: "*强",
-    bill_type: 'DONE',
-    current_bill_remain_amt: "1000000",
+    card_num: "2886",
+    bank_name: "招商银行",
+    bill_type: 'UNDONE',
+    current_bill_remain_amt: "4800.56",
     payment_due_date: moment().format('YYYY-MM-DD'),
     task_id: "11111111111",
     bill_id: "11111111",
-    bill_date: "2018-08-28",
+    bill_date: moment().format('YYYY-MM-DD'),
     logo_uri: '/static/img/招商银行@2x.png',
     importBillType: "",
     isNew: '00',
@@ -197,7 +198,8 @@ export default class Index extends React.Component {
   }]
 
   render() {
-    const {interestShow, visible,freeItems, sycnModal,authSts,examineAccount} = this.state;
+    const {interestShow, visible,freeItems, sycnModal,authSts,} = this.state;
+    const { examineAccount } =this.props;
     const {isLogged, billList = {}, freeIntrestData = [], activities = []} = this.props;
     const {waitPaymentAmount = '0.00', waitPaymentNumber = '0', baseResponseBillDtoList} = billList
     return [<div key={'a'} style={{background: '#FFFFFF', paddingBottom: "0.7rem"}}>
@@ -212,7 +214,7 @@ export default class Index extends React.Component {
         }} style={styles.img} src="/static/img/canlendar@2x.png"/>
         <div onClick={() => {
           this.loginEnter(2)
-        }} style={styles.icon}><Icon style={{height: '0.36rem',}} type="plus" color="#000"/></div>
+        }} style={styles.icon}><img src="/static/img/indexadd@2x.png" style={{height: '0.36rem',color:'#000'}} /></div>
       </div>
       <div style={{marginTop: "0.19rem"}}>
         <span style={styles.moneyStyle}>{isLogged ? (waitPaymentAmount?this.generateStr(parseInt(waitPaymentAmount)):0.00) : '--'}
@@ -258,7 +260,7 @@ export default class Index extends React.Component {
 
           }} key={k} style={{display: "inline-block", textAlign: 'center'}}>
             <img style={{width: '0.74rem'}} src={logoUri}/>
-            <div>{gameName}</div>
+            <div style={{fontWeight: 'bold',}}>{gameName}</div>
           </div>
         }) : null
         }
@@ -327,7 +329,7 @@ export default class Index extends React.Component {
       <div key={'c'} style={styles.addBtn}
            onClick={() => this.loginEnter(2)}
       >
-        <Icon type="plus" color="#999999" size="xs"/>
+        <img style={{ color:"#999999",height:"0.25rem"}} src="/static/img/addCard@2x.png" />
         <span style={styles.addText}>添加信用卡账单</span>
 
       </div>,<div>{
@@ -338,7 +340,7 @@ export default class Index extends React.Component {
           margin:'0.82rem 0 1.56rem 0'
         }} onClick={()=>this.openCardMarket()}>
           <img src="/static/img/信用卡2x.png" style={{width: "0.41rem"}}/>
-          <span style={{margin: '0.08rem', fontSize: '0.28rem', color: '#4C7BFE', letterSpacing: '0'}}>
+          <span style={{fontWeight: 'bold', lineHeight:'0.28rem',margin: '0.08rem', fontSize: '0.28rem', color: '#4C7BFE', letterSpacing: '0'}}>
           办信用卡
         </span>
           <img src="/static/img/Path 3@2x.png" style={{width: "0.1rem"}}/>
@@ -445,7 +447,8 @@ const styles = {
     color: '#999999',
     letterSpacing: "0",
     margin: '0rem 0 0 0.26rem',
-    display: 'inline-block'
+    display: 'inline-block',
+    fontWeight: 'bold',
   },
   img: {
     width: '0.33rem',
@@ -457,6 +460,7 @@ const styles = {
     textAlign: 'center',
     lineHeight: '0.42rem',
     marginLeft: '0.1rem',
+    fontWeight: 'bold',
   },
   top: {
     display: 'flex',
@@ -489,10 +493,11 @@ const styles = {
     color: '#333333',
     letterSpacing: '0',
     textAlign: 'center',
-    marginLeft: "0.045rem"
+    marginLeft: "0.045rem",
+    fontWeight: 'bold',
   },
   iconItem: {margin: "0.32rem 0 0 0", display: 'inline-block'},
-  textStyle: {fontSize: '0.3rem', color: '#FFFFFF', letterSpacing: '0', textAlign: 'center'},
+  textStyle: {fontSize: '0.3rem',fontWeight: 'bold', color: '#FFFFFF', letterSpacing: '0', textAlign: 'center'},
   activity: {display: "flex", justifyContent: "space-around", marginTop: "0.49rem"},
   addBtn: {
     display: 'flex', justifyContent: 'center', alignItems: 'center',
@@ -503,7 +508,8 @@ const styles = {
     color: '#999999',
     letterSpacing: '0',
     textAlign: 'center',
-    marginLeft: '0.08rem'
+    marginLeft: '0.08rem',
+    fontWeight: 'bold',
   }
 }
 

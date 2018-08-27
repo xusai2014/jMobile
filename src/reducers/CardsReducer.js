@@ -12,7 +12,8 @@ const initialState = {
   looseCard:{},
   haveBill:{},
   activities:[],
-  removeLoginStatus:{}
+  removeLoginStatus:{},
+  examineAccount:true
 };
 //全局状态信息，数据信息存储
 export default function (state = initialState, actions) {
@@ -33,9 +34,11 @@ export default function (state = initialState, actions) {
         fromBank:actions.data,
       }
     case GET_IDENTITY_INFO[1]:
+      const { MERC_SN } = actions.data
       return {
         ...state,
         identityInfo:actions.data,
+        examineAccount:MERC_SN == '700000000620451'
       }
     case LOOSE_CARD[1]:
       return {

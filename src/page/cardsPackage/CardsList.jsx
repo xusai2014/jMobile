@@ -12,7 +12,8 @@ const { alert } = Modal;
 @InitDecorator(
   (state)=>{
     return {
-      cardsList:state.CardsReducer.cardsList
+      cardsList:state.CardsReducer.cardsList,
+      examineAccount:state.CardsReducer.examineAccount,
     }
   }
 )
@@ -87,7 +88,7 @@ export default class CardsList extends React.Component {
   }
 
   openCardMarket(){
-    if(this.state.examineAccount){
+    if(this.props.examineAccount){
       return
     }
     jsNative.nativeOpenNewWebView({
@@ -98,7 +99,8 @@ export default class CardsList extends React.Component {
   }
 
   render() {
-    const {activeCard,cardStatus,examineAccount} = this.state;
+    const {activeCard,cardStatus,} = this.state;
+    const {examineAccount} =this.props
     const { cardsList } = this.props;
     return <div>
       <Header title="卡包" hide={false}
@@ -119,7 +121,7 @@ export default class CardsList extends React.Component {
         }} onClick={()=>this.openCardMarket()}>
           <img src="/static/img/信用卡@2x.png" style={{width: "0.3rem"}}/>
           <span style={{margin: '0.08rem', fontSize: '0.24rem', color: '#4C7BFE', letterSpacing: '0'}}>
-            {examineAccount?'':'办信用卡'}
+            {examineAccount?'  ':'办信用卡'}
         </span>
           <img src="/static/img/Path 3@2x.png" style={{width: "0.1rem"}}/>
         </div>

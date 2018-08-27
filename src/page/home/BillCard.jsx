@@ -278,7 +278,7 @@ export default class BillCard extends React.Component {
       } else if( authSts == '-1') {
         //数据尚未装载完毕不处理
       } else if(authSts == '99') {
-        alert(<span className="alert_title">您尚未通过实名认证，请先进行实名认证</span>,'',[
+        alert(<span className="alert_title">您尚未通过实名认证，<br/>请先进行实名认证</span>,'',[
           {text:"取消",onPress:()=>{},style: {fontSize: '0.32rem',color: '#333333', letterSpacing: '-0.89PX', textAlign: 'center'}},
           {text:"去认证",onPress:()=>{jsNative.nativeGoRealName();},style: {fontSize: '0.32rem',color: '#4C7BFE', letterSpacing: '-0.89PX', textAlign: 'center'}},
         ])
@@ -339,8 +339,7 @@ export default class BillCard extends React.Component {
         return
       }
       this.props.history.push(`/bill/detail/${bill_id}`,{bank_name})
-    }}
-                style={{background: '#FFFFFF', marginTop: '0.2rem', padding: "0.3rem 0", position: 'relative'}}>
+    }} style={{background: '#FFFFFF', marginTop: '0.2rem', padding: "0.3rem 0", position: 'relative'}}>
       <div style={{display: 'flex', alignItems: 'center'}}>
         {
           isNew == '01' ? <div style={{
@@ -366,13 +365,15 @@ export default class BillCard extends React.Component {
             color: '#333333',
             letterSpacing: '0',
             textAlign: 'center',
+            fontWeight: 'bold',
           }}>{bank_name}</span>
           <span style={{
             fontSize: "0.28rem",
             color: '#999999',
             letterSpacing: '0',
             textAlign: 'center',
-            marginLeft: '0.18rem'
+            marginLeft: '0.18rem',
+            fontWeight: 'bold',
           }}
 
           >{card_num}</span>
@@ -384,7 +385,8 @@ export default class BillCard extends React.Component {
                 fontSize: '0.22rem',
                 color: '#333333',
                 letterSpacing: '-1px',
-                marginLeft: '2.57rem'
+                marginLeft: '2.57rem',
+                fontWeight: 'bold',
               }}>
                 {percent > 0 ? `${percent}%更新中...` : '登录中...'}
                 <Progress style={{width: "1.32rem"}} percent={percent} position="normal"/>
@@ -406,7 +408,8 @@ export default class BillCard extends React.Component {
                 fontSize:'0.24rem',
                 color: '#41C72F',
                 letterSpacing: '0',
-                marginLeft: '2.57rem'
+                marginLeft: '2.57rem',
+                fontWeight: 'bold',
               }}>已同步至最新</div>
           }
         </div>
@@ -425,6 +428,7 @@ export default class BillCard extends React.Component {
             fontSize: '0.3rem',
             color: '#333333',
             letterSpacing: '0',
+            fontWeight: 'bold',
           }}>{current_bill_remain_amt}</div>
           <div style={{
             fontSize: '0.22rem',
@@ -440,7 +444,8 @@ export default class BillCard extends React.Component {
             color: '#999999',
             letterSpacing: '0',
             textAlign: 'center',
-            lineHeight: '0.5rem'
+            lineHeight: '0.5rem',
+            fontWeight: 'bold',
           }}>
             {day}
           </div>
@@ -448,18 +453,22 @@ export default class BillCard extends React.Component {
             display: 'inline-block',
             marginLeft: "0.26rem",
           }}>
-            <div style={{
-              fontSize: '0.22rem',
-              color: '#999999',
-              letterSpacing: '0',
-              lineHeight: '0.225rem'
-            }}>{des}
-            </div>
+            {
+              examineAccount?'':<div style={{
+                fontSize: '0.22rem',
+                color: '#999999',
+                letterSpacing: '0',
+                lineHeight: '0.225rem',
+                fontWeight: 'bold',
+              }}>{des}
+              </div>
+            }
             <div style={{
               fontSize: '0.2rem',
               color: '#999999',
               letterSpacing: '0',
-              lineHeight: '0.225rem'
+              lineHeight: '0.225rem',
+              fontWeight: 'bold',
             }}>{date}</div>
           </div>
         </div>
@@ -473,7 +482,8 @@ export default class BillCard extends React.Component {
           textAlign: 'center',
           width: '1.26rem',
           height: '0.53rem',
-          lineHeight: '0.53rem'
+          lineHeight: '0.53rem',
+          fontWeight: 'bold',
         }} onClick={(e) => {
           if(actionName=='更新未出'){
             return

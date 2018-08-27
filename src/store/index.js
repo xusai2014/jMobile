@@ -22,7 +22,7 @@ function promiseMiddleware() {
           if(SUCCESS == 'M511'){
             const { bindList } = result;
             return next({...rest, data:bindList, type: SUCCESS})
-          } else if(SUCCESS == 'M543' ){
+          } else if(SUCCESS == "CH828" ){
             const { bankNm,type } = result;
             return next({...rest, data:{bankNm,type}, type: SUCCESS})
           }else  if( SUCCESS == 'M814'|| SUCCESS == 'M113'||SUCCESS == 'M512'

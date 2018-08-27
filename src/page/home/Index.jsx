@@ -259,7 +259,7 @@ export default class Index extends React.Component {
             }
 
           }} key={k} style={{display: "inline-block", textAlign: 'center'}}>
-            <img style={{width: '0.74rem'}} src={logoUri}/>
+            <img style={{width: '0.74rem',height:'0.74rem'}} src={logoUri}/>
             <div style={{fontWeight: 'bold',}}>{gameName}</div>
           </div>
         }) : null

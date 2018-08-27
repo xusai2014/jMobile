@@ -70,9 +70,9 @@ export default class AddBill extends React.Component {
     }
     switch (key) {
       case 'creditLimit':
-        return !/^[0-9]*(.)?[0-9]*$/.test(val) || val.length > 13
+        return !/^[0-9]*(.)?[0-9]*$/.test(val) || val.length > 10
       case 'newBalance':
-        return !/^[0-9]*(.)?[0-9]*$/.test(val) || val.length > 13
+        return !/^[0-9]*(.)?[0-9]*$/.test(val) || val.length > 10
       default:
         return false;
     }

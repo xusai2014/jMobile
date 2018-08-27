@@ -198,10 +198,17 @@ export default class CardsList extends React.Component {
                   bankNo,cardNum:num
                 })).then((result)=>{
                   if(Object.keys(result.data).length!= 0){
+
                     this.props.history.push(`/bill/detail/${result.data}`,{bank_name:bankNm})
                   } else {
                     // TODO  跳转逻辑 jerry
-                    this.props.history.push('/bill/method')
+                    alert('',<span className="alert_content">此卡还未添加账单，请先导入账单再查看详情。</span>,[
+                      {text:"添加账单",onPress:()=>{
+                        this.props.history.push('/bill/method')
+                      },style: {fontSize: '0.32rem',color: '#333333', letterSpacing: '-0.89PX', textAlign: 'center'}},
+                      { text: '取消', onPress: () => console.log('cancel'), style: {fontSize: '0.32rem',color: '#4C7BFE', letterSpacing: '-0.89PX', textAlign: 'center'} },
+                    ])
+
                   }
                 })
               } else if(parseInt(index) == 2 ){

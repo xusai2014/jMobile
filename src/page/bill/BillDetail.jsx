@@ -464,8 +464,8 @@ export default class BillDetail extends React.Component {
     return [<Header title={`${bank_name}`}
                     right={<img onClick={()=>{
                       alert('', <span className="alert_content">账单删除后，如需再次查询，需要重新导入账单</span>, [
-                        { text: '确认', onPress: () => this.removeBill(billId),style: {fontSize: '0.32rem',color: '#333333', letterSpacing: '-0.89PX', textAlign: 'center'} },
-                        { text: '取消', onPress: () => console.log('cancel'),style: {fontSize: '0.32rem',color: '#4C7BFE', letterSpacing: '-0.89PX', textAlign: 'center'} },
+                        { text: '取消', onPress: () => console.log('cancel'),style: {fontSize: '0.32rem',color: '#333333', letterSpacing: '-0.89PX', textAlign: 'center'} },
+                        { text: '确认', onPress: () => this.removeBill(billId),style: {fontSize: '0.32rem',color: '#4C7BFE', letterSpacing: '-0.89PX', textAlign: 'center'} },
                       ])
                     }} style={{width: "0.36rem",}} src="/static/img/删除@2x.png"/>}/>, <div>
       <div style={{

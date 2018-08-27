@@ -5,6 +5,7 @@ import {InitDecorator} from "../../compoents/InitDecorator";
 import {Modal, Progress, Toast}  from "antd-mobile";
 import {jsNative} from "sx-jsbridge";
 import {waitFunc} from "../../utils/util";
+import globalStyle from "../../style";
 const {loginHelper} = jsNative;
 const {prompt, alert} = Modal;
 
@@ -38,12 +39,12 @@ export default class BillCard extends React.Component {
         const {subtype = ''} = data;
         if (subtype) {
           alert(<span className="alert_title">暂时无法获取账单的最新状态</span>, <span className="alert_content">如果您已通过其导入它平台还款，建议您通过网银导入</span>, [
-              {text: '暂不需要', onPress: () => console.log('置顶聊天被点击了'),style: {fontSize: '0.32rem',color: '#333333', letterSpacing: '-0.89PX', textAlign: 'center'} },
-              {text: '通过网银导入', onPress: () => this.props.history.push('/bill/method', {anchor: '#cyberId'}),style: {fontSize: '0.32rem',color: '#4C7BFE', letterSpacing: '-0.89PX', textAlign: 'center'} }
+              {text: '暂不需要', onPress: () => console.log('置顶聊天被点击了'),style: globalStyle.cancelStyle},
+              {text: '通过网银导入', onPress: () => this.props.history.push('/bill/method', {anchor: '#cyberId'}),style: globalStyle.sureStyle }
             ]);
         } else {
           alert(<span className="alert_title">该银行暂不支持同步您的账单数据</span>, '', [
-            {text: '我知道了', onPress: () => console.log('置顶聊天被点击了'), style: {fontSize: '0.32rem',textAlign: "center", paddingLeft: '0'}}
+            {text: '我知道了', onPress: () => console.log('置顶聊天被点击了'), style: globalStyle.singleStyle}
           ]);
         }
 
@@ -179,10 +180,10 @@ export default class BillCard extends React.Component {
       onPress: value => new Promise((resolve) => {
         resolve();
         alert(<span className="alert_title">是否退出当前认证流程</span>,<span className="alert_content">选择“是”将退出当前认证流程已填写信息将丢失</span>,[
-          {text:"是",onPress:()=>{},style: {fontSize: '0.32rem',color: '#333333', letterSpacing: '-0.89PX', textAlign: 'center'}},
+          {text:"是",onPress:()=>{},style: globalStyle.cancelStyle},
           {text:"否",onPress:()=>{
             this.promptClick({input, taskId, description, callback})
-          },style: {fontSize: '0.32rem',color: '#4C7BFE', letterSpacing: '-0.89PX', textAlign: 'center'}}
+          },style: globalStyle.sureStyle}
         ])
       }),
     },
@@ -278,9 +279,9 @@ export default class BillCard extends React.Component {
       } else if( authSts == '-1') {
         //数据尚未装载完毕不处理
       } else if(authSts == '99') {
-        alert(<span className="alert_title">您尚未通过实名认证，<br/>请先进行实名认证</span>,'',[
-          {text:"取消",onPress:()=>{},style: {fontSize: '0.32rem',color: '#333333', letterSpacing: '-0.89PX', textAlign: 'center'}},
-          {text:"去认证",onPress:()=>{jsNative.nativeGoRealName();},style: {fontSize: '0.32rem',color: '#4C7BFE', letterSpacing: '-0.89PX', textAlign: 'center'}},
+        alert(<span className="alert_title">您尚未通过实名认证，请先进行实名认证</span>,'',[
+          {text:"取消",onPress:()=>{},style: globalStyle.cancelStyle},
+          {text:"去认证",onPress:()=>{jsNative.nativeGoRealName();},style: globalStyle.sureStyle},
         ])
       } else {
         jsNative.nativeGoRealName();

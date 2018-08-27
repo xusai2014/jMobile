@@ -5,6 +5,7 @@ import {InitDecorator} from "../../compoents/InitDecorator";
 import Loading from "../../compoents/Loading";
 import { Toast,Modal } from 'antd-mobile';
 import {waitFunc} from "../../utils/util";
+import globalStyle from "../../style";
 const {prompt,alert} = Modal;
 
 const results = {
@@ -190,10 +191,10 @@ export default class LoadingStatus extends React.Component{
       onPress: value => new Promise((resolve) => {
         resolve();
         alert(<span className="alert_title">是否退出当前认证流程</span>, <span className="alert_content">选择“是”将退出当前认证流程已填写信息将丢失</span>,[
-          {text:"是",onPress:()=>{this.props.history.go(-1)},style: {fontSize: '0.32rem',color: '#333333', letterSpacing: '-0.89PX', textAlign: 'center'}},
+          {text:"是",onPress:()=>{this.props.history.go(-1)},style: globalStyle.cancelStyle},
           {text:"否",onPress:()=>{
             this.promptClick({input, taskId, description, callback})
-          },style: {fontSize: '0.32rem',color: '#4C7BFE', letterSpacing: '-0.89PX', textAlign: 'center'}}
+          },style: globalStyle.sureStyle}
         ])
       }),
     },
@@ -275,8 +276,8 @@ export default class LoadingStatus extends React.Component{
       alert(<span className="alert_title">返回将会中断导入，确认继续吗？</span>,'',[
         {text:"确认",onPress:()=>{
           window.history.go(-1);
-        },style: {fontSize: '0.32rem',color: '#333333', letterSpacing: '-0.89PX', textAlign: 'center'}},
-        {text:"取消",onPress:()=>{},style: {fontSize: '0.32rem',color: '#4C7BFE', letterSpacing: '-0.89PX', textAlign: 'center'}},
+        },style: globalStyle.cancelStyle},
+        {text:"取消",onPress:()=>{},style: globalStyle.sureStyle},
       ])
     }} key="1" title={`正在导入${title}`} ></Header>,
       <div key={2} style={{

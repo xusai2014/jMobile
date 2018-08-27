@@ -23,6 +23,6 @@ export default [
 */
 export const config = {
   enableAutoRouter:true,//开启动态生成路由代码,
-  enableZIP:false,
+  enableZIP:true,
 }
 

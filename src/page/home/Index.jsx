@@ -130,9 +130,9 @@ export default class Index extends React.Component {
       } else if( authSts == '-1') {
         //数据尚未装载完毕不处理
       } else if(authSts == '99') {
-        alert('您尚未通过实名认证，请先进行实名认证','',[
-          {text:"取消",onPress:()=>{},style: 'default'},
-          {text:"去认证",onPress:()=>{jsNative.nativeGoRealName();},style: 'default'},
+        alert(<span className="alert_title">您尚未通过实名认证，请先进行实名认证</span>,'',[
+          {text:"取消",onPress:()=>{},style: {fontSize: '0.32rem',color: '#333333', letterSpacing: '-0.89PX', textAlign: 'center'}},
+          {text:"去认证",onPress:()=>{jsNative.nativeGoRealName();},style: {fontSize: '0.32rem',color: '#4C7BFE', letterSpacing: '-0.89PX', textAlign: 'center'}},
         ])
       } else {
         jsNative.nativeGoRealName();

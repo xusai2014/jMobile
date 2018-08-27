@@ -76,8 +76,8 @@ export default class EmailAdd extends React.Component {
     const { DATA:taskId,RESULTCODE} = data;
     if( RESULTCODE == "1000"){
 
-      alert('','再次登录将会覆盖掉您原有的登录信息，您确定再次登录吗？',[
-        { text: '取消', onPress: () => console.log('cancel'), style: 'default' },
+      alert('',<span className="alert_content">再次登录将会覆盖掉您原有的登录信息，您确定再次登录吗？</span>,[
+        { text: '取消', onPress: () => console.log('cancel'), style: {fontSize: '0.32rem',color: '#333333', letterSpacing: '-0.89PX', textAlign: 'center'} },
         { text: '确认', onPress: () => {
           this.props.dispatch(removeLoginStatus({taskId})).then(()=>{
             this.props.dispatch(removeBillAllStatus({taskId})).then(()=>{
@@ -87,7 +87,7 @@ export default class EmailAdd extends React.Component {
               Toast.hide();
             })
           },()=>Toast.hide())
-        } },
+        },style: {fontSize: '0.32rem',color: '#4C7BFE', letterSpacing: '-0.89PX', textAlign: 'center'} },
       ])
       return;
     }

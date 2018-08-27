@@ -74,7 +74,7 @@ export const JUDGE_SEL_CARD = ['REQUEST','CH823','FAILURE'];
 
 //发卡行
 
-export const IDENTITY_BNK = ['REQUEST','M543','FAILURE'];
+export const IDENTITY_BNK = ['REQUEST','CH828','FAILURE'];
 
 //M512,M502.M503
 //提交信息

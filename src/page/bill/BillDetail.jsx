@@ -605,8 +605,9 @@ export default class BillDetail extends React.Component {
                         display: 'inline-block',
                         width:"2.63rem",
                         textAlign:'right',
-                        paddingRight:"0.4rem"
-                      }}>-{amount_money}</div></div>
+                        paddingRight:"0.4rem",
+                        fontWeight:'bold'
+                      }}>{amount_money}</div></div>
 
                     })
                   }
@@ -644,9 +645,10 @@ export default class BillDetail extends React.Component {
                 display: 'inline-block',
                 width: '2rem',
                 textAlign: "right",
-                padding: "0 0.26rem 0 0"
+                padding: "0 0.26rem 0 0",
+                fontWeight:'bold',
               }}>
-                +{repaymentAmount}
+                {repaymentAmount}
               </div>
             </div>, <div style={{width: "6.94rem", margin: 'auto', border: '1PX solid #F1F1F1'}}></div>]
           })}</div>
@@ -654,22 +656,15 @@ export default class BillDetail extends React.Component {
         </div>
         <div style={{display: 'flex',position: 'fixed',bottom: '0'}}>
           <div style={{
-            width:'0.58rem',
-            height:"1.02rem",
-            opacity: '0.24',
-            background: '#4C7BFE',
-            display:'inline-block'
-          }}></div><div style={{
           fontSize: '0.36rem',
           color: '#333333',
           letterSpacing: '0',
-          padding:'0 0.67rem',
           display:'inline-flex',
           alignItems:'center',
           background: '#FFFFFF',
           height: '1.02rem',
-          width:'2.17rem'
-        }} onClick={()=>this.callSyncBill(taskId,importBillType,abbr,card_number)}><span style={{margin:'auto 0.13rem auto 0',height:'0.5rem'}}>
+          width:'3.75rem'
+        }} onClick={()=>this.callSyncBill(taskId,importBillType,abbr,card_number)}><span style={{margin:'auto 0.1rem auto 1.2rem',height:'0.5rem'}}>
           <style>{
           `@-webkit-keyframes rotation{
             from {-webkit-transform: rotate(0deg);}
@@ -685,12 +680,12 @@ export default class BillDetail extends React.Component {
            }
            `
           }</style>
-          <img className={syncBegin?"Rotation":""} style={{height:'0.5rem',}} src="/static/img/更新@2x.png"/>
+          <img className={syncBegin?"Rotation":""} style={{height:'0.3rem',}} src="/static/img/更新@2x.png"/>
         </span>更新</div><div style={{
           fontSize: '0.36rem',
           color: '#FFFFFF',
           letterSpacing: '0',
-          width:'3.51rem',
+          width:'3.75rem',
           display:'inline-flex',
           background: '#4C7BFE',
           alignItems: 'center',

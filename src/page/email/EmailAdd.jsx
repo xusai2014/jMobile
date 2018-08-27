@@ -7,6 +7,7 @@ import {Toast,Modal} from "antd-mobile";
 import {
   regEmail
 } from '../../utils/util';
+import globalStyle from "../../style";
 const { alert } = Modal
 @InitDecorator((state) => {
   return {
@@ -77,7 +78,7 @@ export default class EmailAdd extends React.Component {
     if( RESULTCODE == "1000"){
 
       alert('',<span className="alert_content">再次登录将会覆盖掉您原有的登录信息，您确定再次登录吗？</span>,[
-        { text: '取消', onPress: () => console.log('cancel'), style: {fontSize: '0.32rem',color: '#333333', letterSpacing: '-0.89PX', textAlign: 'center'} },
+        { text: '取消', onPress: () => console.log('cancel'), style: globalStyle.cancelStyle},
         { text: '确认', onPress: () => {
           this.props.dispatch(removeLoginStatus({taskId})).then(()=>{
             this.props.dispatch(removeBillAllStatus({taskId})).then(()=>{
@@ -87,7 +88,7 @@ export default class EmailAdd extends React.Component {
               Toast.hide();
             })
           },()=>Toast.hide())
-        },style: {fontSize: '0.32rem',color: '#4C7BFE', letterSpacing: '-0.89PX', textAlign: 'center'} },
+        },style: globalStyle.sureStyle },
       ])
       return;
     }

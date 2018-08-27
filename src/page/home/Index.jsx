@@ -181,7 +181,7 @@ export default class Index extends React.Component {
 
   example = [{
     card_num: "29999",
-    bank_name: "lee",
+    bank_name: "*强",
     bill_type: 'DONE',
     current_bill_remain_amt: "1000000",
     payment_due_date: moment().format('YYYY-MM-DD'),

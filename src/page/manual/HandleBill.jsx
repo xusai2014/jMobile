@@ -69,9 +69,9 @@ export default class HandleBill extends React.Component {
       case 'fullCardNum':
         return !/^[0-9]*$/.test(val) || val.length > 25
       case 'creditLimit':
-        return !/^[0-9]*(.)?[0-9]*$/.test(val) || val.length > 13
+        return !/^[0-9]*(.)?[0-9]*$/.test(val) || val.length > 10
       case 'newBalance':
-        return !/^[0-9]*(.)?[0-9]*$/.test(val) || val.length > 13
+        return !/^[0-9]*(.)?[0-9]*$/.test(val) || val.length > 10
       default:
         return false;
     }

@@ -120,16 +120,19 @@ export default class EmailAdd extends React.Component {
             placeHolder: "请输入邮箱密码",
           },].map((v, k) => {
             const {name, disabled, placeHolder, icon, key} = v;
+            const val = this.state[key]?this.state[key]:''
             return <div key={k} style={styles.item}>
               <div style={styles.name}>{name}</div>
               <input onChange={(e) => {
                 if(this.inputLimit(key,e.currentTarget.value.trim())){
                   return;
+                } else {
+                  this.setState({
+                    [key]: e.currentTarget.value.trim()
+                  },()=>this.enableBtn())
                 }
-                this.setState({
-                  [key]: e.currentTarget.value.trim()
-                },()=>this.enableBtn())
               }}
+                     value={val}
                      type={icon?(!eyesOpen?'password':'text'):'text'}
                      disabled={disabled} style={styles.input} placeholder={placeHolder}/>
               {icon ? <img onClick={() => {

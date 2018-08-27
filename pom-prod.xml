@@ -4,10 +4,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.suixingpay</groupId>
-	<artifactId>rcs-admin</artifactId>
+	<artifactId>mp-ccm-web</artifactId>
 	<packaging>pom</packaging>
 	<version>1.0</version>
-	<name>RCS-ADMIN</name>
+	<name>MP-CCM-WEB</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

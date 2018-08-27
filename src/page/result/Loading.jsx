@@ -271,7 +271,7 @@ export default class LoadingStatus extends React.Component{
     const  { type,}   = this.props.match.params;
     const { title } = results[type];
     const { progress } = this.state;
-    return [<Header key="1" title={`正在导入${title}`} ></Header>,
+    return [<Header backStart={()=>{}} key="1" title={`正在导入${title}`} ></Header>,
       <div key={2} style={{
         width:"7.5rem",position:'absolute',textAlign:'center',
         backgroundColor:"#FFFFFF",paddingBottom:"0.5rem",

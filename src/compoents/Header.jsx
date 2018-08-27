@@ -38,7 +38,7 @@ class AllHeader extends React.Component {
   render() {
     const {title, hide, right ,color="#FFFFFF", backStart = this.backStart} = this.props;
     const ua = window.navigator.userAgent;
-    return ([<div style={{ position:'fixed',height:'0.96rem',width:'7.5rem',background: color,border:"1px solid #F1F1F1"}}>
+    return ([<div style={{ position:'fixed',height:'0.96rem',width:'7.5rem',background: color,}}>
       {
         hide ? null :
             <div   style={{textAlign:'center',lineHeight:"0.96rem"}}>

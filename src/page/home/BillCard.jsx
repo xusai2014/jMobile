@@ -227,7 +227,7 @@ export default class BillCard extends React.Component {
           day: " ",
           date: " ",
           des: <span style={{color:'red'}}>{`已逾期${moment().diff(duM, 'days')}天`}</span>,
-          actionName: examineAccount?"":"立即还款",
+          actionName: examineAccount?"点击":"立即还款",
           action:examineAccount?()=>{}:action
         }
       } else {

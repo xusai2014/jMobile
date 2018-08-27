@@ -4,10 +4,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.suixingpay</groupId>
-	<artifactId>mposappweb</artifactId>
+	<artifactId>mp-ccb-web</artifactId>
 	<packaging>pom</packaging>
 	<version>1.0</version>
-	<name>MPOSAPPWEB</name>
+	<name>MP-CCB-WEB</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

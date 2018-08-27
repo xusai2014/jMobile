@@ -1,8 +1,6 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom'
 import {getSearch} from "../utils/util";
-import {Toast} from 'antd-mobile'
-import 'antd-mobile/lib/toast/style/index.css'
 
 class FixedContent extends React.Component {
 

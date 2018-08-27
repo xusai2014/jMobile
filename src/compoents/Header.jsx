@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {Icon} from "antd-mobile";
+import {jsNative} from "sx-jsbridge";
 
 class AllHeader extends React.Component {
   componentWillMount() {
@@ -22,17 +23,25 @@ class AllHeader extends React.Component {
   }
 
   backStart() {
-    const {startPage} = this.props;
-    startPage ? this.props.history.push(startPage) : window.history.back();
+    jsNative.nativeCallBindCreditCard({},(data)=>{
+      const { TaskCenter = '' } = data;
+      if( window.location.href.indexOf('/cards/cardslist') >0 && parseInt(TaskCenter) == 1 ){
+        jsNative.nativeCloseWebview({},()=>{})
+      } else {
+        window.history.go(-1);
+      }
+
+    })
+
   }
 
   render() {
-    const {title, hide, right ,color="#FFFFFF"} = this.props;
+    const {title, hide, right ,color="#FFFFFF", backStart = this.backStart} = this.props;
     const ua = window.navigator.userAgent;
-    return (<div style={{height:'0.81rem',width:'7.5rem',background: color,border:"1px solid #F1F1F1"}}>
+    return ([<div style={{ position:'fixed',height:'0.96rem',width:'7.5rem',background: color,border:"1px solid #F1F1F1"}}>
       {
         hide ? null :
-            <div   style={{textAlign:'center',lineHeight:"0.81rem"}}>
+            <div   style={{textAlign:'center',lineHeight:"0.96rem"}}>
               <div style={{
                 height: "0.81rem",
                 display: "inline-flex",
@@ -40,8 +49,8 @@ class AllHeader extends React.Component {
                 position:'absolute',
                 left:'0.11rem',
                 width: '1rem'
-              }} onClick={()=>{window.history.go(-1);}}>
-                <Icon color="#666666" type="left" size={'md'} />
+              }} onClick={()=>{backStart();}}>
+                <img src="/static/img/back.png" style={{ width:"0.19rem",height:'0.34rem',marginLeft:'0.31rem'}} />
               </div>
               <span style={{
                 fontSize: '0.31rem',
@@ -62,7 +71,7 @@ class AllHeader extends React.Component {
             </div>
       }
 
-    </div>)
+    </div>,<div style={{ height:'0.96rem',width:'7.4rem',background: color,border:"1px solid #F1F1F1"}}></div>])
   }
 }
 

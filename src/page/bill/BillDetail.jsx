@@ -1,26 +1,473 @@
 import React from 'react';
 import Header from '../../compoents/Header';
-import {Tabs} from "antd-mobile"
+import {Tabs,Modal,Toast} from "antd-mobile"
 import Popup from "../home/components/Popup";
-
+import {InitDecorator} from "../../compoents/InitDecorator";
+import {
+  checkToken, deleteBill, getBillDetail, getLoginList, getPayDetail, syncBill,
+  verifyCode
+} from "../../actions/reqAction";
+import {waitFunc} from "../../utils/util";
+import LoadCom from "../../compoents/LoadCom";
+const {operation,alert,prompt} = Modal;
+@InitDecorator((state)=>{
+  return {
+    billDetail:state.BillReducer.billDetail,
+    payDetail:state.BillReducer.payDetail
+  }
+})
 export default class BillDetail extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
       expandOne: "-1",
-      visible:false
+      visible:false,
+      syncBegin:false,
+      currentNum:'1',
+      pageSize:'20',
+      totalPages:'1',
+    }
+  }
+
+  async callSyncBill(task_id, importBillType,abbr,cardNum) {
+    Toast.loading('请稍候...');
+    if(importBillType == '01'){
+
+    } else {
+      this.props.dispatch(getLoginList({
+        abbr,
+        cardType: 'CREDITCARD',
+      })).then((result) => {
+        const {data} = result;
+        const {subtype = ''} = data;
+        if (subtype) {
+          alert('暂时无法获取账单的最新状态', <div>如果您已通过其导入它平台还款，建议您通过网银导入</div>, [
+            {text: '暂不需要', onPress: () => console.log('置顶聊天被点击了'), },
+            {text: '通过网银导入', onPress: () => this.props.history.push('/bill/method', {anchor: '#cyberId'}), }
+          ]);
+        } else {
+          alert('该银行暂不支持同步您的账单数据', '', [
+            {text: '我知道了', onPress: () => console.log('置顶聊天被点击了'), style: {textAlign: "center", paddingLeft: '0'}}
+          ]);
+        }
+
+      }, (err) => {
+      }).finally(()=>this.setState({syncBegin:false}));
+
+      return
+    }
+
+    await this.setState({
+      syncBegin:true
+    })
+    this.props.dispatch(syncBill({
+      taskId: task_id,
+      cardNum
+    })).then((result) => {
+      const {data} = result;
+      if(typeof data != 'undefined'){
+        this.loopLogin(data, importBillType)
+      }
+      this.setState({syncBegin:false})
+    }, () => {
+      this.setState({syncBegin:false})
+
+    })
+
+  }
+
+  /**
+   *   @author jerryxu
+   *   @params 用户信息
+   *   @description 第二步流程 检查任务状态并获取任务状态
+   */
+  async loopLogin(taskId, loginType) {
+
+    let status = {};
+    do {
+      await waitFunc(3000)
+      status = await this.props.dispatch(checkToken({
+        taskId,
+      }))
+    } while (this.judgeTaskStatus(status))
+    this.handleStatus(status, taskId, loginType);
+  }
+
+  /**
+   *   @author jerryxu
+   *   @params 用户信息
+   *   @description 第三步流程判断任务状态，分别处理
+   */
+  handleStatus(status, taskId, loginType) {
+    const {data = {}} = status;
+    const {phase, phase_status = '', input, description} = data;
+    switch (phase_status) {
+      case 'WAIT_CODE'://输入验证码
+
+        return this.promptClick({
+          input,
+          description,
+          taskId,
+          callback: this.verifycation.bind(this)
+        })
+      case "DOING":
+        return;
+      case "DONE_SUCC"://成功登录
+        this.setState({
+          syncBegin:false
+        })
+        Toast.success('同步成功');
+        this.initData();
+        return;
+      case "DONE_FAIL":
+        this.setState({
+          syncBegin:false
+        })
+        Toast.info(description);
+        return;
+      case "DONE_TIMEOUT":
+        this.setState({
+          syncBegin:false
+        })
+        Toast.info('同步失败');
+        return;
+      default:
+        this.setState({
+          syncBegin:false
+        })
+        Toast.info('同步失败');
+        return;
+    }
+  }
+
+
+  /**
+   *   @author jerryxu
+   *   @methodName
+   *   @params 任务编号 短信验证码
+   *   @description 第三步流程的分支流程，输入验证码检查登录状态
+   */
+  async verifycation({taskId, value: code}) {
+    let codeStatus = ''
+
+    codeStatus = await this.props.dispatch(verifyCode({
+      taskId,
+      code,
+    }));
+
+    const {data} = codeStatus;
+    //if(value == '200'){
+
+    //} else {
+    this.loopLogin(taskId);
+    //}
+  }
+
+  /**
+   *   @author jerryxu
+   *   @methodName i
+   *   @params 魔蝎验证码模版 任务编号 信息描述 回调函数
+   *   @description Popup提示，输入信息，异步处理
+   */
+  promptClick({input, taskId, description, callback}) {
+    prompt('输入验证码', description, [{
+      text: '取消',
+      onPress: value => new Promise((resolve) => {
+        resolve();
+      }),
+    },
+      {
+        text: '确定',
+        onPress: value => new Promise((resolve, reject) => {
+          if(!value.trim()){
+            Toast.info('请输入短信验证码')
+            return;
+          }
+          if(value.trim().length>6 || !/^[0-9]*$/.test(value.trim())){
+            Toast.info('请检查您输入的验证码位数')
+            return;
+          }
+          callback({taskId, value})
+          resolve();
+          // setTimeout(() => {
+          //   this.setState({modal: true, description: "您绑定的卡为借记卡，卡包只支持绑定信用卡，请您重新绑定"})
+          //   console.log(`value:${value}`);
+          // }, 1000);
+        }),
+      },
+    ], 'default', null, ['请输入验证码'])
+
+  }
+
+  judgeTaskStatus(status) {
+    const {data} = status;
+    const {phase, phase_status} = data;
+    switch (phase_status) {
+      case "DOING":
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  judgeStatus(bill_type, payment_due_date, bill_date, action) {
+    if (bill_type == 'DONE') {
+      const duM = moment(payment_due_date);
+      if (parseInt(duM.diff(moment(), 'days')) < 0) {
+        return {
+          day: " ",
+          date: " ",
+          des: `已逾期${moment().diff(duM, 'days')}天`,
+          actionName: "立即还款",
+          action
+        }
+      } else {
+        return {
+          day: duM.diff(moment(), 'days'),
+          date: duM.format('MM-DD'),
+          des: '天后到期',
+          actionName: "立即还款",
+          action
+        }
+      }
+    } else if (bill_type == 'UNDONE') {
+      const duM = moment(bill_date);
+      return {
+        day: duM.diff(moment(), 'days'),
+        date: duM.format('MM-DD'),
+        des: '天后到期',
+        actionName: "更新未出",
+        action
+      }
+    } else {
+      return {
+        day: "",
+        date: '',
+        des: '',
+        actionName: "",
+        action
+      }
     }
 
   }
 
+  componentDidMount(){
+    // TODO 账单明细的下拉加载
+    this.initData()
+  }
+
+  initData(){
+    const { billId } = this.props.match.params;
+    const { currentNum, pageSize} = this.state;
+    this.props.dispatch(getBillDetail({
+      billId,
+      currentNum,
+      pageSize
+    })).then((result)=>{
+      const { data = {}} = result;
+      const { pageResponseDto } = data;
+      const {
+        currentPage,
+        size,
+        totalPages,
+      } = pageResponseDto;
+      this.setState({
+        currentNum:currentPage,
+        pageSize:size,
+        totalPages,
+      })
+    })
+
+  }
+
+  async getPayDetailInfo(bankId = '0308',cardNumber = '4443'){
+    const { billDetail } =this.props;
+    const {} = billDetail;
+    this.props.dispatch(getPayDetail({
+      bankId,
+      cardNumber,
+    }))
+  }
+  generateStr(v){
+    let unit = '';
+    let ba = v;
+    if(v/10000 >= 1){
+      ba =v/10000
+      unit= '万';
+    } else if(v/1000>=1){
+      ba =v/1000;
+      unit= '千';
+    }
+    return ba.toFixed(2)+unit
+  }
+  generate(payment_due_date,bill_date,credit_limit,balance){
+    const payDate = payment_due_date ?moment(payment_due_date).format('MM.DD'):moment().format('MM.DD')
+    const billDate = bill_date ?moment(bill_date).format('MM.DD'):moment().format('MM.DD');
+    const  freeInterest = parseInt(moment(payment_due_date).diff(moment(),'days')) + parseInt(moment().daysInMonth())
+    let amount= 0;
+    let amountUnit = ''
+    if(credit_limit/10000>=1){
+      amount =credit_limit/10000
+      amountUnit= '万';
+    } else if(credit_limit/1000>=1){
+      amount =credit_limit/1000;
+      amountUnit= '千';
+    }
+
+    let ba= 0;
+    let baUnit = ''
+    if(balance/10000>=1){
+      ba =balance/10000
+      baUnit= '万';
+    } else if(balance/1000>=1){
+      ba =balance/1000;
+      baUnit= '千';
+    }
+    return [{
+      title: "还款日", value: payDate,
+      unit: ""
+    }, {
+      title: "出账日", value: billDate, unit: ""
+    }, {
+      title: "免息期", value: freeInterest, unit: "天"
+    }, {
+      title: "总额度", value: amount.toFixed(2), unit: amountUnit
+    }, {
+      title: "剩余额度约", value: ba.toFixed(2) , unit: baUnit
+    }]
+  }
+
+
+
+  haneleDetail(list){
+    if(list.length == 0){
+      return {
+        from:'',
+        to:'',
+        datalist:[]
+      }
+    } else {
+      const { trans_date:from } = list[0]
+      const { trans_date:to }= list[list.length-1];
+      return {
+        from:moment(from).format('MM-DD'),
+        to:moment(to).format('MM-DD'),
+        datalist:_.values(list.map((v,k)=>{
+          const { description,trans_date,amount_money } = v;
+          return {
+            description,
+            trans_date:moment(trans_date).format('MM.DD'),amount_money
+          }
+        }))
+      }
+    }
+
+
+  }
+
+  judgeStatus(bill_type, payment_due_date, bill_date) {
+    if (bill_type == 'DONE') {
+      const duM = moment(payment_due_date);
+      if(parseInt(duM.diff(moment(), 'days')) < 0){
+        return {
+          day: "",
+          date: "",
+          des:`已逾期${moment().diff(duM, 'days')}天`
+        }
+      } else {
+        return {
+          day: duM.diff(moment(), 'days'),
+          date: duM.format('MM-DD'),
+          des:'天后到期'
+        }
+      }
+    } else if (bill_type == 'UNDONE') {
+      const duM = moment(bill_date);
+      return {
+        day: duM.diff(moment(), 'days'),
+        date: duM.format('MM-DD'),
+        des:'天后到期'
+      }
+    } else {
+      return {
+        day: "",
+        date: '',
+        des:''
+      }
+    }
+
+  }
+  async removeBill(billId){
+    this.props.dispatch(deleteBill({
+      billId,
+    })).then((result)=>{
+      //TODO succeed to delete bill
+      this.props.history.go(-1)
+    })
+  }
+
+  loadMoreDataFn(currentNum,pageSize,callback){
+    const { billId } = this.props.match.params;
+    const { currentNum:num, pageSize:size} = this.state;
+    if(parseInt(currentNum) == parseInt(num+1)){
+      this.props.dispatch(getBillDetail({
+        billId,
+        currentNum,
+        pageSize
+      })).then((result)=>{
+        const { data = {}} = result;
+        const { pageResponseDto } = data;
+        const {
+          currentPage,
+          size,
+          totalPages,
+        } = pageResponseDto;
+        this.setState({
+          currentNum:currentPage,
+          pageSize:size,
+          totalPages,
+        })
+      }).finally(()=>callback())
+    }
+
+  }
 
   render() {
-    const {title = '银行'} = this.props;
-    const {expandOne, visible} = this.state;
+    const {billDetail ={},payDetail= []} = this.props;
+    const {expandOne, visible, syncBegin,
+      currentNum, pageSize,totalPages
+    } = this.state;
+    const { state } = this.props.location;
+    const { bank_name = '银行' } = state;
+    const {
+      payment_due_date ,
+      bill_date ,
+      credit_limit = '',//总额度
+      balance = '',//剩余额度
+      pageResponseDto ={},//账单明细
+      name_on_card = '',
+      bill_type = '',
+      min_payment = '',
+      card_number = '',
+      importBillType,
+      bank_id,
+      abbr='',
+      taskId,
+      current_bill_remain_amt = '0.00'
+    } = billDetail;
+    const { pageList:list = [],} = pageResponseDto
+    const { billId } = this.props.match.params;
 
-    return [<Header title={title}
-                    right={<img style={{width: "0.36rem",}} src="/static/img/删除@2x.png"/>}/>, <div>
+    const { from , to, datalist } = this.haneleDetail(list);
+    const {day, date, des} = this.judgeStatus(bill_type, payment_due_date, bill_date)
+    return [<Header title={`${bank_name}`}
+                    right={<img onClick={()=>{
+                      alert('', '账单删除后，如需再次查询，需要重新导入账单', [
+                        { text: '确认', onPress: () => this.removeBill(billId) },
+                        { text: '取消', onPress: () => console.log('cancel') },
+                      ])
+                    }} style={{width: "0.36rem",}} src="/static/img/删除@2x.png"/>}/>, <div>
       <div style={{
         height: '2.95rem',
         width: '7.5rem',
@@ -33,10 +480,10 @@ export default class BillDetail extends React.Component {
             letterSpacing: '0',
             padding: '0.27rem 0 0 0.31rem'
           }}
-        >韩胜臣 6226 **** **** 4128
+        >{name_on_card} {card_number}
         </div>
         <div style={{paddingBottom: "0.38rem"}}>
-          <div style={{width: "5rem", padding: '0.43rem 0 0 0.31rem', display: 'inline-block'}}>
+          <div style={{width: "4.5rem", padding: '0.43rem 0 0 0.31rem', display: 'inline-block'}}>
             <div
               style={{
                 opacity: '0.5',
@@ -44,20 +491,20 @@ export default class BillDetail extends React.Component {
                 color: '#FFFFFF',
                 letterSpacing: '0',
               }}
-            >10天后出账
+            >{day}{des}
             </div>
             <div style={{
               fontSize: '0.62rem',
               color: '#FFFFFF',
               letterSpacing: '0',
-            }}>4074.65
+            }}>{current_bill_remain_amt}
             </div>
             <div style={{
               opacity: '0.5',
               fontSize: '0.24rem',
               color: '#FFFFFF',
               letterSpacing: '0',
-            }}>最低应还：- -
+            }}>最低应还：{min_payment}
             </div>
           </div>
           <div style={{
@@ -66,20 +513,10 @@ export default class BillDetail extends React.Component {
             color: '#FFFFFF',
             letterSpacing: '0',
             textAlign: 'right',
-            display: 'inline-block'
+            display: 'inline-block',
+            width: '2.5rem'
           }}>
-            {[{
-              title: "还款日", value: "08.26",
-              unit: ""
-            }, {
-              title: "出账日", value: "08.08", unit: ""
-            }, {
-              title: "免息期", value: "28", unit: "天"
-            }, {
-              title: "总额度", value: "4.50", unit: "万"
-            }, {
-              title: "剩余额度", value: "2.68", unit: "万"
-            }].map((v, k) => {
+            {this.generate(payment_due_date,bill_date,credit_limit, balance).map((v, k) => {
               const {title, value, unit} = v;
               return <div>
                 <span>{title}：</span><span>{value}</span><span>{unit}</span>
@@ -94,28 +531,35 @@ export default class BillDetail extends React.Component {
             {title: '还款记录', sub: '1'},
           ]}
           initialPage={0}
+          onTabClick={(v)=>{
+            const { sub} = v
+              if(sub == '1'){
+                this.getPayDetailInfo(bank_id,card_number)
+              }
+            }
+          }
         >
           <div style={{background: '#FFFFFF',height:'auto'}}>
-            {[1, 2].map((v, k) => {
+            {[1].map((v, k) => {
               return <div>
                 <div style={{
                   display: 'flex',
                   alignItems: 'center',
                   padding: '0.16rem 0'
-                }}>
+                }}
+                     onClick={() => {
+                       if (v == expandOne) {
+                         this.setState({expandOne: '-1'})
+                       } else {
+                         this.setState({expandOne: v})
+                       }
+
+                     }}>
                   <img style={{
                     width: '0.19rem',
                     margin: '0 0.17rem 0 0.28rem',
                     height: '0.132rem',
-                  }} src={expandOne == v ? "/static/img/triangleup@2x.png" : "/static/img/triangle@2x.png"}
-                       onClick={() => {
-                         if (v == expandOne) {
-                           this.setState({expandOne: '-1'})
-                         } else {
-                           this.setState({expandOne: v})
-                         }
-
-                       }}/>
+                  }} src={expandOne == v ? "/static/img/triangleup@2x.png" : "/static/img/triangle@2x.png"}/>
                   <div style={{display: 'inline-block'}}>
                     <div style={{
                       fontSize: '0.26rem',
@@ -127,12 +571,13 @@ export default class BillDetail extends React.Component {
                       fontSize: '0.24rem',
                       color: '#999999',
                       letterSpacing: '0'
-                    }}><span>07-09</span>至<span>08-08</span></div>
+                    }}><span>{from}</span>至<span>{to}</span></div>
                   </div>
                 </div>
-                {expandOne == v ? <div >
+                {expandOne == v ? [<div id="load" style={{overflow:'scroll'}}>
                   {
-                    [1, 2, 3, 4].map((v, k) => {
+                    list.map((v, k) => {
+                      const { description,trans_date,amount_money } = v;
                       return <div style={{
                         display:'flex',
                         alignItems:'center'
@@ -145,13 +590,13 @@ export default class BillDetail extends React.Component {
                           color: '#333333',
                           letterSpacing: '0',
                           width:"4.23rem"
-                        }}>微信支付-广州唯品会电子商务有限公司
+                        }}>{description}
                         </div>
                         <div style={{
                           fontSize: '0.24rem',
                           color: '#999999',
                           letterSpacing: '0',
-                        }}>06.25
+                        }}>{trans_date}
                         </div>
                       </div><div style={{
                         fontSize: '0.32rem',
@@ -161,26 +606,35 @@ export default class BillDetail extends React.Component {
                         width:"2.63rem",
                         textAlign:'right',
                         paddingRight:"0.4rem"
-                      }}>-695.35</div></div>
+                      }}>-{amount_money}</div></div>
 
                     })
                   }
-                </div> : null}</div>
+                  <LoadCom loadMoreDataFn={(c,p,callback)=>this.loadMoreDataFn(c,p,callback)}
+                           currentNum={currentNum}
+                           pageSize ={pageSize}
+                           totalPages={totalPages}
+                  />
+                </div>] : null}</div>
             })}
           </div>
-          <div style={{background: '#FFFFFF'}}>{[1, 11, 11].map(() => {
+          <div style={{background: '#FFFFFF'}}>{payDetail.map((v,k) => {
+            const {createTime,repaymentAmount,repaymentTime,repaymentChannel} =v;
+            const {} = repaymentTime;
             return [<div style={{height: '1.06rem', padding: '0.18rem 0', display: 'flex', alignItems: 'center'}}>
               <div style={{margin: '0 0 0 0.64rem', display: 'inline-block', width: '4.86rem'}}>
                 <div style={{
                   fontSize: '0.26rem',
                   color: '#333333',
                   letterSpacing: '0',
-                }}>还到还款
+                }}>{
+                  repaymentChannel =='01'?'还到':""
+                }还款
                 </div>
                 <div style={{
                   color: '#999999',
                   fontSize: "0.24rem",
-                }}>2018-07-09 09:21
+                }}>{moment(repaymentTime).format('YYYY-MM-DD')}
                 </div>
               </div>
               <div style={{
@@ -192,13 +646,12 @@ export default class BillDetail extends React.Component {
                 textAlign: "right",
                 padding: "0 0.26rem 0 0"
               }}>
-                -695.35
+                +{repaymentAmount}
               </div>
             </div>, <div style={{width: "6.94rem", margin: 'auto', border: '1PX solid #F1F1F1'}}></div>]
           })}</div>
         </Tabs>
         </div>
-
         <div style={{display: 'flex',position: 'fixed',bottom: '0'}}>
           <div style={{
             width:'0.58rem',
@@ -216,7 +669,23 @@ export default class BillDetail extends React.Component {
           background: '#FFFFFF',
           height: '1.02rem',
           width:'2.17rem'
-        }}><span style={{margin:'auto 0.13rem auto 0',height:'0.5rem'}}><img style={{height:'0.5rem'}} src="/static/img/更新@2x.png"/>
+        }} onClick={()=>this.callSyncBill(taskId,importBillType,abbr,card_number)}><span style={{margin:'auto 0.13rem auto 0',height:'0.5rem'}}>
+          <style>{
+          `@-webkit-keyframes rotation{
+            from {-webkit-transform: rotate(0deg);}
+            to {-webkit-transform: rotate(360deg);}
+           }
+
+           .Rotation{
+            -webkit-transform: rotate(360deg);
+            animation: rotation 3s linear infinite;
+            -moz-animation: rotation 3s linear infinite;
+            -webkit-animation: rotation 3s linear infinite;
+            -o-animation: rotation 3s linear infinite;
+           }
+           `
+          }</style>
+          <img className={syncBegin?"Rotation":""} style={{height:'0.5rem',}} src="/static/img/更新@2x.png"/>
         </span>更新</div><div style={{
           fontSize: '0.36rem',
           color: '#FFFFFF',
@@ -226,13 +695,13 @@ export default class BillDetail extends React.Component {
           background: '#4C7BFE',
           alignItems: 'center',
           justifyContent: 'center'
-        }} onClick={()=>this.props.history.push('/manual/handlebill')}>立即还款</div>
+        }} onClick={()=>this.setState({visible:true})}>立即还款</div>
         </div>
 
       </div>
     </div>,visible?<Popup style={{top:'0.81rem'}} title="选择还款方式"  data={
       [
-        {imgSrc:"/static/img/还@2x.png",name:'还到',action:"",type:'0',des:'（授信额度30000元）',color:'#4d7cfe'},
+        {imgSrc:"/static/img/还@2x.png",name:'还到',action:"",type:'0',des:'',color:''},
         {imgSrc:"/static/img/qita@2x.png",name:'其它',action:"",type:'1',des:'',color:'',node:[
           {imgSrc:"/static/img/微信@2x.png",name:'微信',action:"",type:'0',des:'',color:''},
           {imgSrc:"/static/img/支付宝@2x.png",name:'支付宝',action:"",type:'0',des:'',color:''}

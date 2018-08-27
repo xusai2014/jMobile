@@ -1,19 +1,16 @@
 import React from 'react';
 import Header from "../../compoents/Header";
-import {Modal} from 'antd-mobile';
 import ModalCom from "../../compoents/ModalCom";
-import {Tabs} from "antd-mobile"
-import {checkToken, getLoginList, loginCyber, verifyCode} from "../../actions/reqAction";
+import { Tabs, Toast, Modal} from "antd-mobile"
+import {getLoginList, loginCyber, removeBillAllStatus, removeLoginStatus,} from "../../actions/reqAction";
 import {InitDecorator} from "../../compoents/InitDecorator";
-import {connect} from "react-redux";
-const prompt = Modal.prompt;
+const { alert } = Modal
 
 const cardType = 'CREDITCARD'
 
-@connect((state) => ({
+@InitDecorator((state) => ({
   loginList: state.BillReducer.loginList
 }))
-@InitDecorator()
 export default class CyberBank extends React.Component {
 
   constructor(props) {
@@ -23,144 +20,98 @@ export default class CyberBank extends React.Component {
       description: '',
       eyesOpen: true,
       selected: true,
-      inputData: {}
+      inputData: {},
+
     }
   }
 
   async componentWillMount() {
-    const reqParams = await this.props.getBaseParams();
     const {bankId: abbr} = this.props.match.params;
     this.props.dispatch(getLoginList({
       abbr,
-      cardType: cardType
+      cardType: cardType,
     })).then((result) => {
     }, (err) => {
     });
   }
 
+  /**
+  *   @author jerryxu
+  *   @params 用户信息
+  *   @description 第一步流程 输入用户信息，创建任务
+  */
+  async loginCyberFunc(v) {
+     const {login_type: loginType,items} = v;
+     const {inputData} = this.state;
+     const stateData = inputData[loginType]?inputData[loginType]:{}
+     const {username, password,protocolSelected} = stateData;
+     const {bankId: abbr} = this.props.match.params;
+    if(!username){
+      Toast.info('请输入账号')
+      return;
+    } else if(!password ){
+      Toast.info('请输入密码')
+      return;
+    } else if( !protocolSelected){
+      Toast.info('请勾选协议')
+      return;
+    }
+    const [ one,two] = items;
+    const { reg , name} = one;
+    const regE = new RegExp(reg)
+    if(!regE.test(username)){
+      Toast.info(`请检查输入${name}`)
+      return
+    }
+    const { reg:reg2 , name:name2} = two;
+    const regE2 = new RegExp(reg2)
+    if(!regE2.test(password)){
+      Toast.info(`请检查输入${name2}`)
+      return
+    }
+    const loginStatus = await this.props.dispatch(loginCyber({
+       password,
+       abbr,
+       account:username,
+       loginType,
+       loginTarget: cardType,
+     }))
 
-  promptClick({ input, taskId, description, callback}){
-    prompt('输入验证码', description, [{
-        text: '取消',
-        onPress: value => new Promise((resolve) => {
-          Toast.info('登录失败', 1);
-          setTimeout(() => {
-            resolve();
-            console.log(`value:${value}`);
-          }, 1000);
-        }),
-      },
-      {
-        text: '确定',
-        onPress: value => new Promise((resolve, reject) => {
-          callback({taskId,value})
-          resolve();
-          // setTimeout(() => {
-          //   this.setState({modal: true, description: "您绑定的卡为借记卡，卡包只支持绑定信用卡，请您重新绑定"})
-          //   console.log(`value:${value}`);
-          // }, 1000);
-        }),
-      },
-    ], 'default', null, ['请输入验证码'])
-
-  }
-  async loginCyber(v) {
-    const {login_type: loginType} = v;
-    const {inputData} = this.state;
-    const {username: account, password} = inputData[loginType];
-    const {bankId: abbr} = this.props.match.params;
-    const data = await this.props.dispatch(loginCyber({
-      password,
-      abbr,
-      account,
-      loginType,
-      loginTarget: cardType,
-    }))
-    const { data:taskId ='' } = data;
-    debugger
-    //const taskId = "93842bc0-9b03-11e8-b35b-00163e0cf9f8";
-    setTimeout(() => {
-      this.loopLogin(taskId);
-    }, 3000)
-  }
-
-  async loopLogin(taskId){
-    let status = {};
-    do {
-      status = await this.props.dispatch(checkToken({
-        taskId
-      }))
-      debugger;
-    } while (this.judgeStatus(status))
-    this.handleStatus(status, taskId);
-  }
-
-  handleStatus(status, taskId) {
-    const { data } = status;
-    const { phase, phase_status } = data;
-    switch (phase_status) {
-      case 'WAIT_CODE':
-        const { input ,description } = data
-        this.promptClick({
-          input,
-          description,
-          taskId,
-          callback:this.verifyCode
-        })
+     const { data } = loginStatus;
+    const { DATA:taskId,RESULTCODE} = data;
+    if( RESULTCODE == '1001'){
+      alert('','再次登录将会覆盖掉您原有的登录信息，您确定再次登录吗？',[
+        { text: '取消', onPress: () => console.log('cancel'), style: 'default' },
+        { text: '确认', onPress: () => {
         debugger;
-        return;
-      case "DOING":
-        return;
-      case "DONE_SUCC":
-        this.loopCheckAlways({taskId})
-        return;
-      case "DONE_FAIL":
-        return;
-      case "DONE_TIMEOUT":
-        return;
-      default:
-        return;
+        Toast.loading('请稍候',0);
+          this.props.dispatch(removeLoginStatus({taskId})).then(()=>{
+            this.props.dispatch(removeBillAllStatus({taskId})).then(()=>{
+              Toast.hide();
+              this.loginCyberFunc(v)
+            },()=>{
+              Toast.hide();
+            })
+          },()=>Toast.hide())
+        }},
+      ])
+      return;
+    }
+
+    if(!taskId){
+      // 任务创建失败
+      Toast.info('任务创建失败', 1);
+    } else {
+      this.props.history.push('/load/cyber',{
+        taskId,loginType:'01'
+      })
+
     }
   }
 
-  async verifyCode(taskId,code){
-    let codeStatus = ''
-    codeStatus = await this.props.dispatch(verifyCode({
-      taskId,
-      code
-    }))
-    const { data } = codeStatus;
-    const { value } = data;
-    //if(value == '200'){
-
-    //} else {
-    this.loopLogin(taskId);
-    //}
-  }
-
-  async loopCheckAlways({ taskId }) {
-    let pollingStatus = ''
-    do {
-      pollingStatus = await this.props.dispatch(pollingCyber({
-        taskId
-      }));
-      debugger;
-    } while (pollingStatus)
-  }
-
-  judgeStatus(status) {
-    const { data } = status;
-    const { phase, phase_status } = data;
-    switch (phase_status) {
-      case "DOING":
-        return true;
-      default:
-        return false;
-    }
-  }
 
   //For Object
-  setDeepState(property,key,obj) {
+  setDeepState(property,key,obj,callback) {
     const s = this.state[property]
 
     this.setState({
@@ -168,11 +119,25 @@ export default class CyberBank extends React.Component {
         ...s,
         [key]:{
           ...s[key],
-          obj
+          ...obj
         }
       }
 
-    })
+    },callback)
+  }
+
+  enableBtn(key){
+    const data = this.state.inputData[key]?this.state.inputData[key]:{}
+    const { password, protocolSelected,username,disableBtn } = data;
+    if( password && protocolSelected && username){
+      this.setDeepState('inputData',key,{
+        disableBtn:false
+      })
+    } else {
+      this.setDeepState('inputData',key,{
+        disableBtn:true
+      })
+    }
   }
 
 
@@ -192,13 +157,14 @@ export default class CyberBank extends React.Component {
       >
         {
           loginData.map((v, k) => {
-            const {items,login_type} = v;
+            const {items,login_type,disabled = false} = v;
             const {
               username = '',
               password = '',
               eyesOpen = false,
               protocolSelected = false,
-              passSelected = false,
+              passSelected = true,
+              disableBtn = true
             } = inputData[login_type] ? inputData[login_type] : {}
             return <div key={3}>
               {
@@ -212,14 +178,13 @@ export default class CyberBank extends React.Component {
                              if (k == 0) {
                                this.setDeepState('inputData',login_type,{
                                  username: e.currentTarget.value
-                               })
+                               },()=>this.enableBtn(login_type))
 
                              } else {
                                this.setDeepState('inputData',login_type,{
                                  password: e.currentTarget.value
-                               });
+                               },()=>this.enableBtn(login_type))
                              }
-
                            }}
                            disabled={disabled}
                            style={styles.input}
@@ -245,9 +210,10 @@ export default class CyberBank extends React.Component {
                 paddingLeft: '0.31rem',
                 display: 'flex',
                 alignItems: 'center'
-              }} onClick={() => {
-                this.setDeepState('inputData',login_type,{protocolSelected:!protocolSelected})
               }}><img style={{width: '0.23rem'}}
+                      onClick={() => {
+                        this.setDeepState('inputData',login_type,{protocolSelected:!protocolSelected},()=>this.enableBtn(login_type));
+                      }}
                       src={protocolSelected ? "/static/img/selected@2x.png" : "/static/img/Oval@2x.png"}/>
                 <span style={{
                   fontSize: '0.24rem',
@@ -255,15 +221,26 @@ export default class CyberBank extends React.Component {
                   letterSpacing: '-0.77PX',
                   margin: "0 0 0 0.18rem"
                 }}>同意用户授权协议</span>
-                <img style={{width: '0.23rem'}}
+                <img style={{width: '0.23rem',marginLeft:'3.3rem'}}
                      onClick={()=>{
                        this.setDeepState('inputData',login_type,{
                        passSelected:!passSelected
                      })}}
                      src={passSelected ? "/static/img/square@2x.png" : "/static/img/squareno@2x.png"}/>
-                <span>记住密码</span>
+                <span style={{
+                  fontSize: '0.24rem',
+                  color:'rgb(153, 153, 153)',
+                  letterSpacing: '-0.77px',
+                  margin: '0px 0px 0px 0.18rem'
+                }}>记住密码</span>
               </div>
-              <div style={styles.finishBtn} onClick={() => this.loginCyber(v)}>开始登录</div>
+              <div className={!disableBtn?'enableBtn':'disableBtn'}
+                   onClick={() => {
+                     this.setDeepState('inputData',login_type,{
+                       disabled:true
+                     });
+                     this.loginCyberFunc(v)
+                   }}>开始登录</div>
               <ModalCom visible={modal} showAction={(v) => {
                 this.setState({modal: v})
               }} description={description}/>
@@ -315,15 +292,4 @@ const styles = {
     letterSpacing: '-0.77PX',
     margin: "0.31rem 0 0 0.31rem"
   },
-  finishBtn: {
-    background: '#4C7BFE',
-    boxShadow: '0 0.06rem 0.12rem 0 #9BB5FF',
-    borderRadius: "0.08rem",
-    margin: "0.78rem 0.16rem 0 0.16rem",
-    lineHeight: "1.18rem",
-    textAlign: 'center',
-    fontSize: "0.34rem",
-    color: "#FFFFFF",
-    letterSpacing: '-0.011rem',
-  }
 }

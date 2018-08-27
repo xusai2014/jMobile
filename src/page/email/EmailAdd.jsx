@@ -1,64 +1,140 @@
 import React from 'react';
 import Header from "../../compoents/Header";
-import {Modal} from 'antd-mobile';
 import ModalCom from "../../compoents/ModalCom";
-const prompt = Modal.prompt;
+import {emailLogin, removeBillAllStatus, removeLoginStatus} from "../../actions/reqAction";
+import {InitDecorator} from "../../compoents/InitDecorator";
+import {Toast,Modal} from "antd-mobile";
+import {
+  regEmail
+} from '../../utils/util';
+const { alert } = Modal
+@InitDecorator((state) => {
+  return {
+    emailLogin: state.BillReducer.emailLogin
+  }
+})
+export default class EmailAdd extends React.Component {
 
-export default class EmailAdd extends React.Component{
-
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      modal:false,
-      description:'',
-      eyesOpen:true,
-      selected:true,
+      modal: false,
+      description: '',
+      eyesOpen: false,
+      selected: false,
+      password: '',
+      account: "",
+      btnDisabled:true,
     }
   }
 
-  promptClick= () => prompt('输入验证码', '请输入手机号135****1234收到的验证码',
-    [
-      {
-        text: '取消',
-        onPress: value => new Promise((resolve) => {
-          Toast.info('onPress promise resolve', 1);
-          setTimeout(() => {
-            resolve();
-            console.log(`value:${value}`);
-          }, 1000);
-        }),
-      },
-      {
-        text: '确定',
-        onPress: value => new Promise((resolve, reject) => {
-          resolve();
-          setTimeout(() => {
-            this.setState({modal:true,description:"您绑定的卡为借记卡，卡包只支持绑定信用卡，请您重新绑定"})
-            console.log(`value:${value}`);
-          }, 1000);
-        }),
-      },
-    ], 'default', null, ['请输入验证码'])
+  enableBtn(){
+    const { password, selected,account } = this.state;
+    if( password && selected && account){
+      this.setState({btnDisabled:false})
+    } else {
+      this.setState({btnDisabled:true})
+    }
+  }
 
-  render(){
-    const { modal,description,eyesOpen, selected } = this.state;
+  inputLimit(key,val){
+    if(!val){
+      return false
+    }
+    switch (key){
+      case 'account':
+        return  val.length >40
+      case 'password':
+        return  val.length >16
+      default:
+        return false;
+    }
+  }
+
+  async loginEnter() {
+    const {account, password, selected} = this.state;
+    if(!account){
+      Toast.info('请输入邮箱')
+      return;
+    } else if(!password ){
+      Toast.info('请输入密码')
+      return;
+    } else if( !selected){
+      Toast.info('请勾选协议')
+      return;
+    }
+    if(!regEmail.test(account)){
+      Toast.info('请输入正确的邮箱地址')
+      return;
+    }
+    Toast.loading('请稍候',0)
+    const login = await this.props.dispatch(emailLogin({
+      account,
+      password,
+    }))
+    const { data } = login;
+    const { DATA:taskId,RESULTCODE} = data;
+    if( RESULTCODE == "1000"){
+
+      alert('','再次登录将会覆盖掉您原有的登录信息，您确定再次登录吗？',[
+        { text: '取消', onPress: () => console.log('cancel'), style: 'default' },
+        { text: '确认', onPress: () => {
+          this.props.dispatch(removeLoginStatus({taskId})).then(()=>{
+            this.props.dispatch(removeBillAllStatus({taskId})).then(()=>{
+              Toast.hide();
+              this.loginEnter()
+            },()=>{
+              Toast.hide();
+            })
+          },()=>Toast.hide())
+        } },
+      ])
+      return;
+    }
+    if (!taskId) {
+      // 任务创建失败
+      Toast.info('任务创建失败', 1);
+    } else {
+      Toast.hide();
+      this.props.history.push('/load/email', {taskId, loginType: "03"})
+    }
+
+  }
+
+
+
+  render() {
+    const {modal, description, eyesOpen,btnDisabled, selected} = this.state;
     return [
       <Header title="导入账单邮箱"/>,
-       <div key={3}>
+      <div key={3}>
         {
           [{
             name: '账单邮箱', value: "",
             placeHolder: "请输入账单邮箱",
+            key: 'account'
           }, {
             name: '密码', value: '',
-            icon:true,
+            key: 'password',
+            icon: true,
             placeHolder: "请输入邮箱密码",
           },].map((v, k) => {
-            const {name, disabled, placeHolder, icon, } = v;
+            const {name, disabled, placeHolder, icon, key} = v;
             return <div key={k} style={styles.item}>
               <div style={styles.name}>{name}</div>
-               <input disabled={disabled} style={styles.input} placeholder={placeHolder}/>
-              {icon ? <img onClick={()=>{this.setState({eyesOpen:!eyesOpen})}} src={eyesOpen?"/static/img/眼睛@2x.png":"/static/img/闭眼icon@2x.png"} style={ styles.img}/> : null}
+              <input onChange={(e) => {
+                if(this.inputLimit(key,e.currentTarget.value.trim())){
+                  return;
+                }
+                this.setState({
+                  [key]: e.currentTarget.value.trim()
+                },()=>this.enableBtn())
+              }}
+                     type={icon?(!eyesOpen?'password':'text'):'text'}
+                     disabled={disabled} style={styles.input} placeholder={placeHolder}/>
+              {icon ? <img onClick={() => {
+                this.setState({eyesOpen: !eyesOpen})
+              }} src={eyesOpen ? "/static/img/眼睛@2x.png" : "/static/img/闭眼icon@2x.png"} style={ styles.img}/> : null}
             </div>
 
           })
@@ -67,15 +143,18 @@ export default class EmailAdd extends React.Component{
           paddingLeft: '0.31rem',
           display: 'flex',
           alignItems: 'center'
-        }} onClick={()=>{this.setState({selected:!selected})}}><img  style={{width:'0.23rem'}} src={selected?"/static/img/selected@2x.png":"/static/img/Oval@2x.png"} />
+        }} onClick={() => {
+          this.setState({selected: !selected},()=>this.enableBtn())
+        }}><img style={{width: '0.23rem'}} src={selected ? "/static/img/selected@2x.png" : "/static/img/Oval@2x.png"}/>
           <span style={{
             fontSize: '0.24rem',
             color: '#999999',
             letterSpacing: '-0.77PX',
-            margin:"0 0 0 0.18rem"
+            margin: "0 0 0 0.18rem"
           }}>同意用户授权协议</span>
         </div>
-        <div style={styles.finishBtn} onClick={() => this.promptClick()}>开始登录</div>
+        <div className={!btnDisabled?'enableBtn':'disableBtn'}
+             onClick={() => this.loginEnter()}>开始登录</div>
         <ModalCom visible={modal} showAction={(v) => {
           this.setState({modal: v})
         }} description={description}/>
@@ -125,15 +204,4 @@ const styles = {
     letterSpacing: '-0.77PX',
     margin: "0.31rem 0 0 0.31rem"
   },
-  finishBtn: {
-    background: '#4C7BFE',
-    boxShadow: '0 0.06rem 0.12rem 0 #9BB5FF',
-    borderRadius: "0.08rem",
-    margin: "0.78rem 0.16rem 0 0.16rem",
-    lineHeight: "1.18rem",
-    textAlign: 'center',
-    fontSize: "0.34rem",
-    color: "#FFFFFF",
-    letterSpacing: '-0.011rem',
-  }
 }

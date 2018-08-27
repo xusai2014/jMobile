@@ -2,7 +2,7 @@ import React from 'react';
 import Header from '../../compoents/Header'
 import {connect} from "react-redux";
 import {InitDecorator} from "../../compoents/InitDecorator";
-import {getBankList} from '../../actions/reqAction';
+import {getBankList, getEmailList} from '../../actions/reqAction';
 
 @connect((state)=>{
  return {
@@ -12,15 +12,37 @@ import {getBankList} from '../../actions/reqAction';
 @InitDecorator()
 export default class MethodList extends React.Component{
   async componentWillMount(){
-    const reqParams = await this.props.getBaseParams();
     this.props.dispatch(getBankList()).then((result)=>{
+      const { state ={} } = this.props.location;
+      const { anchor ='' } = state;
+      setTimeout(()=>{
+        anchor && window.scrollTo(0,220)
+      },1000)
     },(err)=>{
     });
   }
 
+  async enterEmail(){
+    this.props.dispatch(getEmailList({
+    })).then((result)=>{
+      const { data = [] }= result;
+      if(data.length >0){
+        this.props.history.push('/email/manager');
+      } else {
+        this.props.history.push('/email/add');
+      }
+    },(err)=>{
+
+    });
+  }
+
+  componentDidMount(){
+
+  }
+
   render(){
     const  { bankList = [] } = this.props;
-    return [<Header title="添加账单" />,<div style={{
+    return [<Header key={'a'} title="添加账单" />,<div key={'b'} style={{
       background: '#FFFFFF',
       border: '1PX solid #DDDDDD'
     }}>
@@ -28,19 +50,28 @@ export default class MethodList extends React.Component{
         img:"/static/img/email@2x.png",
         name:"邮箱导入",
         des:"绑定账单后去邮箱，一键获取信用卡账单",
-        action:"/email/manager"
+        action:"/email/manager",
+        key:'email'
       },{
         img:"/static/img/shoushu@2x.png",
         name:"手输账单",
         des:"没有邮箱、网银账单？请手动输入账单",
-        action:"/bill/cardlist"
+        action:"/bill/cardlist",
+        key:'cyber'
       }].map((v,k)=>{
-        const { img, name, des,action} = v;
-        return [<span>{k==1?<div style={{
+        const { img, name, des,action, key} = v;
+        return [<span key={'a1'}>{k==1?<div style={{
           border: '1PX solid #F1F1F1',
           width:'6.94rem',
           margin:'auto'
-        }}></div>:null}</span>,<div key={k} onClick={()=>{this.props.history.push(action)}}>
+        }}></div>:null}</span>,<div key={k} onClick={()=>{
+
+          if(key == 'cyber'){
+            this.props.history.push(action)
+          } else if(key == 'email'){
+            this.enterEmail()
+          }
+        }}>
           <div style={{
             margin:"0.41rem 0.31rem 0.41rem 0.28rem",
             display:'inline-block',
@@ -63,7 +94,7 @@ export default class MethodList extends React.Component{
 
         </div>]
       })}
-    </div>,<div style={{
+    </div>,<div key={'c'} id="cyberId" style={{
       fontSize: '0.24rem',
       color: '#999999',
       letterSpacing: '0',
@@ -72,8 +103,8 @@ export default class MethodList extends React.Component{
       {
         bankList.map((v,k)=>{
           const {abbr, name, logo_uri} = v
-          return [<div onClick={()=>this.props.history.push(`/cyber/login/${abbr}`,{name})} style={{background: '#FFFFFF',padding:"0.18rem 0 0.18rem 0.28rem",display:'flex', alignItems: 'center'}}>
-            <span style={{width:'0.6rem',height:'0.6rem',borderRadius:'0.3rem'}}><img src={logo_uri} style={{width:'0.6rem'}}/></span>
+          return [<div key={k} onClick={()=>this.props.history.push(`/cyber/login/${abbr}`,{name})} style={{background: '#FFFFFF',padding:"0.18rem 0 0.18rem 0.28rem",display:'flex', alignItems: 'center'}}>
+            <span style={{width:'0.6rem',height:'0.6rem',borderRadius:'0.3rem'}}><img src={logo_uri} style={{width:'0.6rem',borderRadius:'0.3rem'}}/></span>
             <span style={{
               fontSize: '0.32rem',
               color: '#333333',
@@ -81,7 +112,7 @@ export default class MethodList extends React.Component{
               fontWeight:"500",
               margin:"0 0 0 0.31rem"
             }}>{name}</span>
-          </div>,<div style={{
+          </div>,<div key={'f'} style={{
             border: '1PX solid #F1F1F1',
             width:'6.94rem',
             margin:'auto'

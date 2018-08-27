@@ -10,13 +10,15 @@ import FixedContent from './compoents/FixedContent';
 import uam from './utils/deviceMark';//ua mark
 import { fetchPromise, PromiseList } from './utils/fetch-middleware';
 import sa from 'sa-sdk-javascript';
+import Storage from './store'
 /*
  * whatwg 是fetch API的统一版本，在不支持fetch的浏览器中处理兼容问题，同时引入轻量的promise库
  * */
 import 'whatwg-fetch';
 
 import Promise from 'promise-polyfill';
-import { initJSBridge } from './utils/jsBridge';
+import {initJSBridge, jsNative, nativeJs} from 'sx-jsbridge';
+import './style.less';
 
 // To add to window, 定义全局变量
 if (!window.Promise) {
@@ -30,7 +32,13 @@ window.sa = sa;
 if (module.hot) {
   module.hot.accept();
 }
-initJSBridge();
+initJSBridge(true,{TOKEN_ID:"2560227265634a56b000e8c9d1dc2255"});
+
+nativeJs.informLoginStatus(() => {
+  jsNative.nativeRequestBaseParams().then((reqParams) => {
+    Storage.dispatch({type:'syncData',data:reqParams})
+  })
+});
 
 sa.init({
   server_url: process.env.mode != 'production' ? 'https://sc.suixingpay.com/sa?project=MPOS_TEST' : 'https://sc.suixingpay.com/sa?project=MPOS_PROD',

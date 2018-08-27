@@ -87,59 +87,6 @@ export const getChannelId = () => {
     return ''
 }
 
-export const getDataFromApp = () => {
-    return new Promise(function (resolve, reject) {
-        setupWebViewJavascriptBridge(function (bridge) {
-            bridge.callHandler('getAuthInfo', function (response) {
-                let resObj = {}
-
-                if(typeof(response) =='string'){
-                    resObj = JSON.parse(response);
-
-                } else if(typeof(response) == 'object'){
-                    resObj = response;
-
-                } else if(typeof(response) == 'undefined'){
-
-                    Toast.fail('请升级APP!',3,()=>{
-                        reject({err:'err'})
-                    });
-
-                }
-                if(resObj.STATUS == '02'){
-                    Toast.fail('请先进行实名认证！',3,()=>{
-                        reject({err:'err'})
-                    });
-
-                }else{
-                    try {
-                        console.log('JS got response', response)
-                        typeof response == 'string' ? response = JSON.parse(response) : response
-                        let username = response.name
-                        let phone = response.mobile
-                        fetchPromise('/api', 'POST', {
-                            "TRDE_CODE": 'M0315',
-                            applyName: username,
-                            channelId: getChannelId(),
-                            applyPhone: phone,
-                            isEnc: true,
-                        }).then((data) => {
-                            sessionStorage.setItem("mobileNo", phone)
-                            sessionStorage.setItem("uuid", data.UUID)
-                            sessionStorage.setItem("getChannelId", getChannelId())
-                            resolve(response)
-                        },(err)=>{
-                            reject(err)
-                        })
-                    } catch (e) {
-                        console.log('error======>', e)
-                    }
-                }
-
-            })
-        })
-    })
-}
 
 export const getSearch = (props) => {
     let search = ""
@@ -155,4 +102,33 @@ export const getSearch = (props) => {
 
 export const trim = (str = '') =>{ //删除左右两端的空格
     return str.replace(/(^\s*)|(\s*$)/g, "");
+}
+
+export const waitFunc = (time)=>{
+  return new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+      resolve()
+    },time)
+  })
+}
+export const regEmail = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/
+export const regBankCard = /^[0-9]*$/
+export const regMobile = /^[0-9]*$/
+export const regIdCard = /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/
+
+export const judgeEnv = ()=>{
+  let env = '-test';
+  if(window.location.host.indexOf('mpmw.vbill.cn')>-1 ){
+    env = ''
+  }  else if(window.location.host.indexOf('mpmw-rc.vbill.cn')>-1){
+    env ='-rc'
+  } else if(window.location.host.indexOf('mpmw-alpha.vbill.cn')>-1){
+    env ='-alpha'
+  } else if(window.location.host.indexOf('mpmw-test.vbill.cn')>-1){
+    env ='-test'
+  } else if(window.location.host.indexOf('mpmw-dev.vbill.cn')>-1) {
+    env = '-dev'
+  }
+  return env;
+
 }

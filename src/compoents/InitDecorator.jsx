@@ -1,16 +1,14 @@
 import React from 'react';
-import { nativeRequestBaseParams } from "../interface/jsNative";
 import { connect } from 'react-redux';
+import { jsNative } from "sx-jsbridge";
+const  { nativeRequestBaseParams } = jsNative;
 
-export const InitDecorator = () => (Coms) => {
+export const InitDecorator = (mergeStateToprops  = ()=>{ return {} }) => (Coms) => {
   return connect((state)=>{
     return {
       isLogged:state.GlobalReducer.isLogged,
       reqParams:state.GlobalReducer.reqParams,
-    }
-  },(dispatch)=>{
-    return{
-      syncData:(v)=>dispatch({type:'syncData',data:v}),
+      ...mergeStateToprops(state)
     }
   })(class extends React.Component {
     constructor(props) {
@@ -18,12 +16,16 @@ export const InitDecorator = () => (Coms) => {
       this.resetParams();
     }
 
+    syncData(v){
+      this.props.dispatch({type:'syncData',data:v})
+    }
+
     /**
      * 重置native返回的请求参数
      */
     resetParams() {
       nativeRequestBaseParams().then((reqParams) => {
-        this.props.syncData(reqParams);
+        this.syncData(reqParams);
       })
     }
 
@@ -32,14 +34,15 @@ export const InitDecorator = () => (Coms) => {
      * @returns {{APPVERSION: *, OSVERSION: *, PLATFORM: *, TOKEN_ID: *, CHANNEL_NO: *}}
      */
     getBaseParams = () => nativeRequestBaseParams().then((reqParams) => {
-      this.props.syncData(reqParams);
-      return {
+      this.syncData(reqParams);
+      const data = {
         APPVERSION: reqParams['APP_VERSIONS'],
         OSVERSION: reqParams['PHONE_VERSIONS'],
         PLATFORM: reqParams['PHONE_PLATFORM'],
-        TOKEN_ID: reqParams['token'],
+        TOKEN_ID: reqParams['TOKEN_ID'],
         CHANNEL_NO: reqParams['channelNo'],
-      };
+      }
+
     })
 
 
@@ -50,6 +53,7 @@ export const InitDecorator = () => (Coms) => {
           getBaseParams={this.getBaseParams}
           resetParams={() => this.resetParams()}
         />
+
       )
     }
   })

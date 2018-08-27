@@ -12,15 +12,26 @@ function promiseMiddleware() {
 
     const [REQUEST, SUCCESS, FAILURE] = types;
 
-    next({...rest, type: REQUEST})
-
     return promise().then(
       (result) => {
-        const {RETURNCODE, DATA} = result;
-        next({...rest, data:DATA, type: 'FINISH'})
-        if (RETURNCODE == '0000') {
-          return next({...rest, data:DATA, type: SUCCESS})
-        } else {
+        const {RETURNCODE, DATA ={}, RESULTCODE} = result;
+        if(RESULTCODE == '1001' || RESULTCODE == "1000"){
+          return next({...rest, data:result, type: SUCCESS})
+        }
+        if (RETURNCODE == '0000' || RESULTCODE == '0000') {
+          if(SUCCESS == 'M511'){
+            const { bindList } = result;
+            return next({...rest, data:bindList, type: SUCCESS})
+          } else if(SUCCESS == 'M543' ){
+            const { bankNm,type } = result;
+            return next({...rest, data:{bankNm,type}, type: SUCCESS})
+          }else  if( SUCCESS == 'M814'|| SUCCESS == 'M113'||SUCCESS == 'M512'
+            ||SUCCESS == 'M502'|| SUCCESS =='MP013'|| SUCCESS == 'M503' || SUCCESS == 'CH803' || SUCCESS == 'CH813' ){
+            return next({...rest, data:result, type: SUCCESS})
+          } else {
+            return next({...rest, data:DATA, type: SUCCESS})
+          }
+        } else{
           next({...rest, data: null, type: SUCCESS});
           next({...rest, result, type: FAILURE})
           throw Error('接口失败')

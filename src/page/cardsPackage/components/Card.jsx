@@ -1,24 +1,37 @@
 import React from 'react';
+import bankIcon from '../../../utils/bank';
 
 
 export default class Card extends React.Component {
+  generateStr(v){
+    let unit = '';
+    let ba = v;
+    if(v/10000 >= 1){
+      ba =v/10000
+      unit= '万';
+    } else if(v/1000>=1){
+      ba =v/1000;
+      unit= '千';
+    }
+    return ba.toFixed(2)+unit
+  }
+
   render() {
-    const { popupCard, id } =this.props;
+    const { popupCard,actName, id, bankNm,payment_due_date,card_limit,actNo,bankNo } =this.props;
     return (<div style={styles.container}>
       <div>
-        <div style={styles.rowItem}
-        >
-          <img style={{width: '0.4rem', margin: '0.16rem', height: "0.4rem"}} src="/static/img/交通银行@2x.png"/>
+        <div style={styles.rowItem}>
+          <img style={{width: '0.76rem', height: "0.76rem"}} src={bankIcon[bankNo]}/>
         </div>
-        <div style={{width: '2.2rem', display: 'inline-block', marginLeft: '0.21rem', marginTop: '0.47rem',}}>
+        <div style={{width: '3rem', display: 'inline-block', marginLeft: '0.21rem', marginTop: '0.47rem',}}>
           <div style={{
             fontSize: '0.3rem', color: '#FFFFFF',
-            letterSpacing: "-0.83PX", textAlign: 'center'
-          }}>{'交通银行信用卡'}</div>
+            letterSpacing: "-0.83PX",
+          }}>{bankNm}</div>
           <div style={{
             fontSize: '0.24rem', color: '#FFFFFF',
-            textAlign: 'center', letterSpacing: '0'
-          }}>{'*胜臣'}<span style={{margin: "0 0.165rem"}}>|</span>{'尾号6537'}</div>
+            letterSpacing: '0'
+          }}>{`*${actName.slice(1)}`}<span style={{margin: "0 0.165rem"}}>|</span>尾号{actNo.substr(-4,4)}</div>
         </div>
         <div style={styles.img}>
           <img src="/static/img/设置@2x.png" style={{width:'0.3rem'}}  onClick={()=>{
@@ -35,11 +48,11 @@ export default class Card extends React.Component {
           letterSpacing: '0',
           marginTop: '0.66rem',
         }}
-      ><span style={{marginLeft: '0.53rem'}}>免息期：{'50'}天</span>
+      ><span style={{marginLeft: '0.53rem'}}>免息期：{payment_due_date?parseInt(moment(payment_due_date).diff(moment(), 'days')) + parseInt(moment().daysInMonth())+'天':'--'}</span>
         <span style={{
         float: 'right',
         marginRight: '0.5rem'
-      }}>单笔限额：{'5'}万元</span>
+      }}>单笔限额：{card_limit?this.generateStr(parseInt(card_limit)):'--'}元</span>
       </div>
 
       <div className="menu-mask" onClick={this.onMaskClick} />

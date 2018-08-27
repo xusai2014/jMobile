@@ -25,7 +25,7 @@
         }
     </script>
     <script>
-        gloablMinHeight = document.documentElement.clientHeight;
+        gloablMinHeight = document.documentElement.clientHeight -18;
         if ('addEventListener' in document) {
             document.addEventListener('DOMContentLoaded', function () {
                 FastClick.attach(document.body);
@@ -251,25 +251,6 @@
         </div>
     </div>
 </div>
-<script>
-    function setupWebViewJavascriptBridge(callback) {
-        if (window.WebViewJavascriptBridge) {
-            return callback(WebViewJavascriptBridge);
-        }
-        if (window.WVJBCallbacks) {
-            return window.WVJBCallbacks.push(callback);
-        }
-        window.WVJBCallbacks = [callback];
-        var WVJBIframe = document.createElement('iframe');
-        WVJBIframe.style.display = 'none';
-        WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
-        document.documentElement.appendChild(WVJBIframe);
-        setTimeout(function () {
-            document.documentElement.removeChild(WVJBIframe)
-        }, 0)
-    }
-</script>
-
 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 <script src="https://cdn.bootcss.com/lodash.js/4.17.4/lodash.min.js"></script>

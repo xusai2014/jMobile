@@ -1,6 +1,6 @@
 import  React from 'react';
 import styles from  './CarouselFigure.scss';
-import Carousel  from 'antd-mobile/lib/carousel';
+import { Carousel }  from 'antd-mobile';
 import {withRouter} from 'react-router-dom';
 @withRouter
 export  default class CarouselFigure extends React.Component {

@@ -10,6 +10,10 @@ export default [{
   component:"../page/result/Result.jsx",
   path:"/result/:type",
   name:"Result"
+},{
+  component:"../page/result/Loading.jsx",
+  path:"/load/:type",
+  name:"Loading"
 },
   {
     component:"../page/cardsPackage/EditCard.jsx",
@@ -32,7 +36,7 @@ export default [{
 
   },{
     component:"../page/manual/AddBill.jsx",
-    path:"/manual/add/:bankId",
+    path:"/manual/add",
     name:"BankCardList"
 
   },{
@@ -47,7 +51,7 @@ export default [{
 
   },{
     component:"../page/bill/BillDetail.jsx",
-    path:"/bill/detail/:bankId",
+    path:"/bill/detail/:billId",
     name:"BillDetail"
 
   },{

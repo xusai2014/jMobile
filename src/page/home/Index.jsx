@@ -250,7 +250,12 @@ export default class Index extends React.Component {
         {isLogged ? [1,2,3,4].map((v, k) => {
           const {logoUri = '', gameUri, gameName = ''} = activities[k]?activities[k]:{};
           return <div onClick={() => {
-            jsNative.nativeOpenNewWebView({url:gameUri},()=>{})
+            if(gameUri.indexOf('site=oldweb')>0){
+              jsNative.nativeOpenOldWebView({url:gameUri})
+            } else {
+              jsNative.nativeOpenNewWebView({url:gameUri},()=>{})
+            }
+
           }} key={k} style={{display: "inline-block", textAlign: 'center'}}>
             <img style={{width: '0.74rem'}} src={logoUri}/>
             <div>{gameName}</div>

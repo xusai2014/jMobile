@@ -17,7 +17,7 @@ export default class Card extends React.Component {
   }
 
   render() {
-    const { popupCard,actName, id, bankNm,payment_due_date,card_limit,actNo,bankNo } =this.props;
+    const { popupCard,actName, id, bankNm,payment_due_date,card_limit,actNo,bankNo,bindType } =this.props;
     return (<div style={styles.container}>
       <div>
         <div style={styles.rowItem}>
@@ -31,7 +31,13 @@ export default class Card extends React.Component {
           <div style={{
             fontSize: '0.24rem', color: '#FFFFFF',
             letterSpacing: '0'
-          }}>{`*${actName.slice(1)}`}<span style={{margin: "0 0.165rem"}}>|</span>尾号{actNo.substr(-4,4)}</div>
+          }}>{`*${actName.slice(1)}`}<span style={{margin: "0 0.165rem"}}>|</span>尾号{actNo.substr(-4,4)}
+            {
+              bindType=='02'?'':<span><img src="/static/img/personal.png" style={{width: '0.24rem', marginLeft: '0.2rem'}} /></span>
+            }
+
+          </div>
+
         </div>
         <div style={styles.img}>
           <img src="/static/img/设置@2x.png" style={{width:'0.3rem'}}  onClick={()=>{

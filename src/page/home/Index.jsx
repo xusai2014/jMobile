@@ -19,7 +19,8 @@ const { alert } = Modal;
     billList: state.BillReducer.billList,
     huandaoData: state.BillReducer.huandaoData,
     freeIntrestData: state.BillReducer.freeIntrestData,
-    activities: state.CardsReducer.activities
+    activities: state.CardsReducer.activities,
+    examineAccount:state.CardsReducer.examineAccount,
   }
 })
 export default class Index extends React.Component {
@@ -197,7 +198,8 @@ export default class Index extends React.Component {
   }]
 
   render() {
-    const {interestShow, visible,freeItems, sycnModal,authSts,examineAccount} = this.state;
+    const {interestShow, visible,freeItems, sycnModal,authSts,} = this.state;
+    const { examineAccount } =this.props;
     const {isLogged, billList = {}, freeIntrestData = [], activities = []} = this.props;
     const {waitPaymentAmount = '0.00', waitPaymentNumber = '0', baseResponseBillDtoList} = billList
     return [<div key={'a'} style={{background: '#FFFFFF', paddingBottom: "0.7rem"}}>

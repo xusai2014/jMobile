@@ -373,7 +373,7 @@ export default class BillDetail extends React.Component {
         return {
           day: "",
           date: "",
-          des:<span style={{color:'red'}}>已逾期${moment().diff(duM, 'days')}天</span>
+          des:`已逾期${moment().diff(duM, 'days')}天`
         }
       } else {
         return {

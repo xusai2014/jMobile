@@ -271,7 +271,14 @@ export default class LoadingStatus extends React.Component{
     const  { type,}   = this.props.match.params;
     const { title } = results[type];
     const { progress } = this.state;
-    return [<Header backStart={()=>{}} key="1" title={`正在导入${title}`} ></Header>,
+    return [<Header backStart={()=>{
+      alert(<span className="alert_title">返回将会中断导入，确认继续吗？</span>,'',[
+        {text:"确认",onPress:()=>{
+          window.history.go(-1);
+        },style: {fontSize: '0.32rem',color: '#333333', letterSpacing: '-0.89PX', textAlign: 'center'}},
+        {text:"取消",onPress:()=>{},style: {fontSize: '0.32rem',color: '#4C7BFE', letterSpacing: '-0.89PX', textAlign: 'center'}},
+      ])
+    }} key="1" title={`正在导入${title}`} ></Header>,
       <div key={2} style={{
         width:"7.5rem",position:'absolute',textAlign:'center',
         backgroundColor:"#FFFFFF",paddingBottom:"0.5rem",

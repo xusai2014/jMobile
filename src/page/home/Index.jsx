@@ -149,10 +149,6 @@ export default class Index extends React.Component {
   }
 
   loginEnter(type, params) {
-    alert(<span className="alert_title">您尚未通过实名认证，请先进行实名认证</span>,'',[
-      {text:"取消",onPress:()=>{},style: globalStyle.cancelStyle},
-      {text:"去认证",onPress:()=>{jsNative.nativeGoRealName();},style: globalStyle.sureStyle},
-    ])
     loginHelper(() => {
       const {authSts} = this.state;
       switch (type) {

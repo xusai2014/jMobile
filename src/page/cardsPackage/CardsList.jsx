@@ -58,6 +58,7 @@ export default class CardsList extends React.Component {
 
   async removeCard(cardNo){
     alert('',<span className="alert_content">是否确认解绑该信用卡</span>,[
+      { text: '取消', onPress: () => console.log('cancel'), style: globalStyle.cancelStyle },
       {text:"确认",onPress:()=>{
         this.props.dispatch(looseCard({
           isQuick:"00",
@@ -66,8 +67,7 @@ export default class CardsList extends React.Component {
           Toast.info('解绑成功');
           this.getCards()
         })
-      },style: globalStyle.cancelStyle},
-      { text: '取消', onPress: () => console.log('cancel'), style: globalStyle.sureStyle },
+      },style: globalStyle.sureStyle},
     ])
   }
 

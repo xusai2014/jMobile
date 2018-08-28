@@ -101,8 +101,10 @@ export default class CyberBank extends React.Component {
 
     if(!taskId){
       // 任务创建失败
+      Toast.hide();
       Toast.info('任务创建失败', 1);
     } else {
+      Toast.hide();
       this.props.history.push('/load/cyber',{
         taskId,loginType:'01'
       })

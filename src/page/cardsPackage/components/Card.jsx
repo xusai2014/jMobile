@@ -30,12 +30,16 @@ export default class Card extends React.Component {
           }}>{bankNm}</div>
           <div style={{
             fontSize: '0.24rem', color: '#FFFFFF',
-            letterSpacing: '0'
-          }}>{`*${actName.slice(1)}`}<span style={{margin: "0 0.165rem"}}>|</span>尾号{actNo.substr(-4,4)}
+            letterSpacing: '0',
+            display:'inline-flex',
+            alignItems:'center',
+          }}>
+            <span>{`*${actName.slice(1)}`}</span>
+            <span style={{margin: "0 0.165rem"}}>|</span>
+            <span>尾号{actNo.substr(-4,4)}</span>
             {
-              bindType=='02'?'':<span><img src="/static/img/personal.png" style={{width: '0.24rem', marginLeft: '0.2rem'}} /></span>
+              bindType=='02'?'':<img src="/static/img/personal.png" style={{width: '0.24rem', marginLeft: '0.2rem'}} />
             }
-
           </div>
 
         </div>

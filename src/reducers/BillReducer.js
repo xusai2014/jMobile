@@ -64,8 +64,7 @@ export default function (state = initialState, actions) {
             logins.map((v, k) => {
               const {
                 login_type, password_desc, username_desc,
-                username_regex, password_regex, username1_desc ='',username1_regex = '',...rest,
-              } = v;
+                username_regex, password_regex, username1_desc ='',username1_regex = '',...rest} = v;
               let items = [];
               items.push({
                 name: username_desc, value: "",

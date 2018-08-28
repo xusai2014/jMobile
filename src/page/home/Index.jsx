@@ -218,7 +218,7 @@ export default class Index extends React.Component {
         }} style={styles.icon}><img src="/static/img/indexadd@2x.png" style={{height: '0.36rem',color:'#000'}} /></div>
       </div>
       <div style={{marginTop: "0.19rem"}}>
-        <span style={styles.moneyStyle}>{isLogged ? (waitPaymentAmount?this.generateStr(parseInt(waitPaymentAmount)):0.00) : '--'}
+        <span style={styles.moneyStyle}>{isLogged ? (waitPaymentAmount?parseFloat(waitPaymentAmount).toFixed(2):0.00) : '--'}
           <span style={styles.unitStyle}>元</span>
         </span>
       </div>

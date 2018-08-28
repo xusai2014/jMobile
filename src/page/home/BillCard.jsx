@@ -367,6 +367,7 @@ export default class BillCard extends React.Component {
             letterSpacing: '0',
             textAlign: 'center',
             fontWeight: 'bold',
+            lineHeight: '0.36rem'
           }}>{bank_name}</span>
           <span style={{
             fontSize: "0.28rem",
@@ -375,6 +376,7 @@ export default class BillCard extends React.Component {
             textAlign: 'center',
             marginLeft: '0.18rem',
             fontWeight: 'bold',
+            lineHeight: '0.36rem'
           }}
 
           >{card_num}</span>

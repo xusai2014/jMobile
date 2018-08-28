@@ -70,6 +70,7 @@ export default class CyberBank extends React.Component {
       Toast.info(`请检查输入${name2}`)
       return
     }
+    Toast.loading('请稍候',0);
     const loginStatus = await this.props.dispatch(loginCyber({
        password,
        abbr,
@@ -81,14 +82,13 @@ export default class CyberBank extends React.Component {
      const { data } = loginStatus;
     const { DATA:taskId,RESULTCODE} = data;
     if( RESULTCODE == '1001'){
+      Toast.hide();
       alert('',<span className="alert_content">再次登录将会覆盖掉您原有的登录信息，您确定再次登录吗？</span>,[
         { text: '取消', onPress: () => console.log('cancel'), style: globalStyle.cancelStyle},
         { text: '确认', onPress: () => {
-        debugger;
-        Toast.loading('请稍候',0);
           this.props.dispatch(removeLoginStatus({taskId})).then(()=>{
             this.props.dispatch(removeBillAllStatus({taskId})).then(()=>{
-              Toast.hide();
+              Toast.loading('请稍候',0);
               this.loginCyberFunc(v)
             },()=>{
               Toast.hide();

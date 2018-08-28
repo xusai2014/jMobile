@@ -106,11 +106,11 @@ export default class AddBill extends React.Component {
       Toast.info('还款日不能大于账单日');
       return;
     }
-    if(!/^[0-9]+(.[0-9])?$/.test(creditLimit)){
+    if(!/^[0-9]+(.[0-9]+)?$/.test(creditLimit)){
       Toast.info('输入信用额度不合法');
       return;
     }
-    if(!/^[0-9]+(.[0-9])?$/.test(newBalance)){
+    if(!/^[0-9]+(.[0-9]+)?$/.test(newBalance)){
       Toast.info('输入账单金额不合法');
       return;
     }

@@ -257,10 +257,10 @@ export default class CyberBank extends React.Component {
                                } else if(k == 1){
                                  this.setDeepState('inputData',login_type,{
                                    username1: e.currentTarget.value
-                                 },()=>this.enableBtn(login_type))
-                                 this.setDeepState('inputData',login_type,{
+                                 },()=>this.setDeepState('inputData',login_type,{
                                    specialForm: true
-                                 },()=>this.enableBtn(login_type))
+                                 },()=>this.enableBtn(login_type)))
+
                                } else {
                                  this.setDeepState('inputData',login_type,{
                                    password: e.currentTarget.value
@@ -283,7 +283,7 @@ export default class CyberBank extends React.Component {
                            disabled={disabled}
                            style={styles.input}
                            placeholder={placeHolder}
-                           type={(k == 0 || (k == 1 && eyesOpen)) ? 'text' : 'password'}
+                           type={((items.length ==2&&k == 1 && !eyesOpen) ||(items.length ==3&& k == 2 && !eyesOpen)) ? 'password' : 'text'}
                     />
                     {icon ? <img onClick={() => {
                       this.setState({

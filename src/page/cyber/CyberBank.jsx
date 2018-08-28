@@ -243,7 +243,10 @@ export default class CyberBank extends React.Component {
 
                   return <div key={k} style={styles.item}>
                     <div style={styles.name}>{name}</div>
-                    <input value={k == 0 ? username : password}
+                    <input value={ items.length > 2?
+                      (k == 0 ? username : (k == 1 ? username1:password)):
+                      (k == 0 ? username : password)
+                    }
                            onChange={(e) => {
                              if(items.length > 2){
                                if (k == 0) {

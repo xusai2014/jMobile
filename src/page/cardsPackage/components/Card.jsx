@@ -43,10 +43,10 @@ export default class Card extends React.Component {
           </div>
 
         </div>
-        <div style={styles.img}>
-          <img src="/static/img/设置@2x.png" style={{width:'0.3rem'}}  onClick={()=>{
-            popupCard(id)
-          }}/>
+        <div style={styles.img} onClick={()=>{
+          popupCard(id)
+        }}>
+          <img src="/static/img/设置@2x.png" style={{width:'0.3rem'}}  />
         </div>
 
       </div>

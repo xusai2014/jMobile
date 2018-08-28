@@ -43,7 +43,7 @@ class AllHeader extends React.Component {
         hide ? null :
             <div   style={{textAlign:'center',lineHeight:"0.96rem"}}>
               <div style={{
-                height: "0.81rem",
+                height: "0.96rem",
                 display: "inline-flex",
                 alignItems: "center",
                 position:'absolute',
@@ -66,7 +66,7 @@ class AllHeader extends React.Component {
                 color:"#4C7BFE",
                 display: 'inline-flex',
                 alignItems: 'center',
-                height: '0.81rem',
+                height: '0.96rem',
               }}>{right}</div>
             </div>
       }

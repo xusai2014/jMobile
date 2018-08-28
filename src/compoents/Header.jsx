@@ -47,7 +47,7 @@ class AllHeader extends React.Component {
                 display: "inline-flex",
                 alignItems: "center",
                 position:'absolute',
-                left:'0.11rem',
+                left:'0rem',
                 width: '1rem'
               }} onClick={()=>{backStart();}}>
                 <img src="/static/img/back.png" style={{ width:"0.19rem",height:'0.34rem',marginLeft:'0.31rem'}} />

@@ -36,6 +36,7 @@ initJSBridge(true,{TOKEN_ID:"280d3b11f25e4d06af65b25282859926"});
 
 nativeJs.informLoginStatus(() => {
   jsNative.nativeRequestBaseParams().then((reqParams) => {
+    window.location.href = '/home/index'
     Storage.dispatch({type:'syncData',data:reqParams})
   })
 });
@@ -61,4 +62,5 @@ if (JSBridge) {
   JSBridge.register('rebuild', reactRender)
 }
 
-reactRender();
+window.reactRender = reactRender
+  reactRender();

@@ -350,7 +350,7 @@ export default class BillCard extends React.Component {
             <img style={{width: '0.445rem'}} src="/static/img/new@2x.png"/>
           </div> : null
         }
-        <div style={{width: '3.24rem', display: "inline-block"}}>
+        <div style={{width: '3.24rem',display: 'inline-flex',alignItems: 'center'}}>
           <div style={{
             margin: '0 0.14rem 0 0.28rem',
             display: "inline-block",

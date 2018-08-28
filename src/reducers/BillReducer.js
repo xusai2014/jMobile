@@ -73,7 +73,7 @@ export default function (state = initialState, actions) {
               })
               username1_desc && items.push({
                 name: username1_desc, value: "",
-                placeHolder: `请输入${username1_regex}`,
+                placeHolder: `请输入${username1_desc}`,
                 reg: username1_regex,
               })
               items.push({

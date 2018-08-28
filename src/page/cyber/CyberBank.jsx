@@ -45,7 +45,7 @@ export default class CyberBank extends React.Component {
      const {login_type: loginType,items} = v;
      const {inputData} = this.state;
      const stateData = inputData[loginType]?inputData[loginType]:{}
-     const {username, password,protocolSelected} = stateData;
+     const {username,username1, specialForm = false, password,protocolSelected} = stateData;
      const {bankId: abbr} = this.props.match.params;
     if(!username){
       Toast.info('请输入账号')
@@ -57,59 +57,125 @@ export default class CyberBank extends React.Component {
       Toast.info('请勾选协议')
       return;
     }
-    const [ one,two] = items;
-    const { reg , name} = one;
-    const regE = new RegExp(reg)
-    if(!regE.test(username)){
-      Toast.info(`请检查输入${name}`)
-      return
-    }
-    const { reg:reg2 , name:name2} = two;
-    const regE2 = new RegExp(reg2)
-    if(!regE2.test(password)){
-      Toast.info(`请检查输入${name2}`)
-      return
-    }
-    Toast.loading('请稍候',0);
-    const loginStatus = await this.props.dispatch(loginCyber({
-       password,
-       abbr,
-       account:username,
-       loginType,
-       loginTarget: cardType,
-     }))
+    if(specialForm){
+      const [ one,two,three] = items;
+      const { reg , name} = one;
+      const regE = new RegExp(reg)
+      if(!regE.test(username)){
+        Toast.info(`请检查输入${name}`)
+        return
+      }
+      const { reg:reg1 , name:name1} = two;
+      const regE1 = new RegExp(reg1)
+      if(!regE1.test(username1)){
+        Toast.info(`请检查输入${name1}`)
+        return
+      }
+      const { reg:reg2 , name:name2} = three;
+      const regE2 = new RegExp(reg2)
+      if(!regE2.test(password)){
+        Toast.info(`请检查输入${name2}`)
+        return
+      }
+      Toast.loading('请稍候',0);
+      const loginStatus = await this.props.dispatch(loginCyber({
+        password,
+        abbr,
+        account:`${username},${username1}`,
+        loginType,
+        loginTarget: cardType,
+      }))
 
-     const { data } = loginStatus;
-    const { DATA:taskId,RESULTCODE} = data;
-    if( RESULTCODE == '1001'){
-      Toast.hide();
-      alert('',<span className="alert_content">再次登录将会覆盖掉您原有的登录信息，您确定再次登录吗？</span>,[
-        { text: '取消', onPress: () => console.log('cancel'), style: globalStyle.cancelStyle},
-        { text: '确认', onPress: () => {
-          this.props.dispatch(removeLoginStatus({taskId})).then(()=>{
-            this.props.dispatch(removeBillAllStatus({taskId})).then(()=>{
-              Toast.loading('请稍候',0);
-              this.loginCyberFunc(v)
-            },()=>{
-              Toast.hide();
-            })
-          },()=>Toast.hide())
-        },style: globalStyle.sureStyle},
-      ])
-      return;
-    }
+      const { data } = loginStatus;
+      const { DATA:taskId,RESULTCODE} = data;
+      if( RESULTCODE == '1001'){
+        Toast.hide();
+        alert('',<span className="alert_content">再次登录将会覆盖掉您原有的登录信息，您确定再次登录吗？</span>,[
+          { text: '取消', onPress: () => console.log('cancel'), style: globalStyle.cancelStyle},
+          { text: '确认', onPress: () => {
+            this.props.dispatch(removeLoginStatus({taskId})).then(()=>{
+              this.props.dispatch(removeBillAllStatus({taskId})).then(()=>{
+                Toast.loading('请稍候',0);
+                this.loginCyberFunc(v)
+              },()=>{
+                Toast.hide();
+              })
+            },()=>Toast.hide())
+          },style: globalStyle.sureStyle},
+        ])
+        return;
+      }
 
-    if(!taskId){
-      // 任务创建失败
-      Toast.hide();
-      Toast.info('任务创建失败', 1);
+      if(!taskId){
+        // 任务创建失败
+        Toast.hide();
+        Toast.info('任务创建失败', 1);
+      } else {
+        Toast.hide();
+        this.props.history.push('/load/cyber',{
+          taskId,loginType:'01'
+        })
+
+      }
+
     } else {
-      Toast.hide();
-      this.props.history.push('/load/cyber',{
-        taskId,loginType:'01'
-      })
+      const [ one,two] = items;
+      const { reg , name} = one;
+      const regE = new RegExp(reg)
+      if(!regE.test(username)){
+        Toast.info(`请检查输入${name}`)
+        return
+      }
 
+
+      const { reg:reg2 , name:name2} = two;
+      const regE2 = new RegExp(reg2)
+      if(!regE2.test(password)){
+        Toast.info(`请检查输入${name2}`)
+        return
+      }
+      Toast.loading('请稍候',0);
+      const loginStatus = await this.props.dispatch(loginCyber({
+        password,
+        abbr,
+        account:username,
+        loginType,
+        loginTarget: cardType,
+      }))
+
+      const { data } = loginStatus;
+      const { DATA:taskId,RESULTCODE} = data;
+      if( RESULTCODE == '1001'){
+        Toast.hide();
+        alert('',<span className="alert_content">再次登录将会覆盖掉您原有的登录信息，您确定再次登录吗？</span>,[
+          { text: '取消', onPress: () => console.log('cancel'), style: globalStyle.cancelStyle},
+          { text: '确认', onPress: () => {
+            this.props.dispatch(removeLoginStatus({taskId})).then(()=>{
+              this.props.dispatch(removeBillAllStatus({taskId})).then(()=>{
+                Toast.loading('请稍候',0);
+                this.loginCyberFunc(v)
+              },()=>{
+                Toast.hide();
+              })
+            },()=>Toast.hide())
+          },style: globalStyle.sureStyle},
+        ])
+        return;
+      }
+
+      if(!taskId){
+        // 任务创建失败
+        Toast.hide();
+        Toast.info('任务创建失败', 1);
+      } else {
+        Toast.hide();
+        this.props.history.push('/load/cyber',{
+          taskId,loginType:'01'
+        })
+
+      }
     }
+
   }
 
 
@@ -164,6 +230,7 @@ export default class CyberBank extends React.Component {
             const {
               username = '',
               password = '',
+              username1 = '',
               eyesOpen = false,
               protocolSelected = false,
               passSelected = true,
@@ -178,16 +245,37 @@ export default class CyberBank extends React.Component {
                     <div style={styles.name}>{name}</div>
                     <input value={k == 0 ? username : password}
                            onChange={(e) => {
-                             if (k == 0) {
-                               this.setDeepState('inputData',login_type,{
-                                 username: e.currentTarget.value
-                               },()=>this.enableBtn(login_type))
+                             if(items.length > 2){
+                               if (k == 0) {
+                                 this.setDeepState('inputData',login_type,{
+                                   username: e.currentTarget.value
+                                 },()=>this.enableBtn(login_type))
 
+                               } else if(k == 1){
+                                 this.setDeepState('inputData',login_type,{
+                                   username1: e.currentTarget.value
+                                 },()=>this.enableBtn(login_type))
+                                 this.setDeepState('inputData',login_type,{
+                                   specialForm: true
+                                 },()=>this.enableBtn(login_type))
+                               } else {
+                                 this.setDeepState('inputData',login_type,{
+                                   password: e.currentTarget.value
+                                 },()=>this.enableBtn(login_type))
+                               }
                              } else {
-                               this.setDeepState('inputData',login_type,{
-                                 password: e.currentTarget.value
-                               },()=>this.enableBtn(login_type))
+                               if (k == 0) {
+                                 this.setDeepState('inputData',login_type,{
+                                   username: e.currentTarget.value
+                                 },()=>this.enableBtn(login_type))
+
+                               } else {
+                                 this.setDeepState('inputData',login_type,{
+                                   password: e.currentTarget.value
+                                 },()=>this.enableBtn(login_type))
+                               }
                              }
+
                            }}
                            disabled={disabled}
                            style={styles.input}

@@ -64,18 +64,27 @@ export default function (state = initialState, actions) {
             logins.map((v, k) => {
               const {
                 login_type, password_desc, username_desc,
-                username_regex, password_regex, ...rest
+                username_regex, password_regex, ...rest,
+                username1_desc ='',username1_regex = ''
               } = v;
-              const items = [{
+              let items = [];
+              items.push({
                 name: username_desc, value: "",
                 placeHolder: `请输入${username_desc}`,
                 reg: username_regex,
-              }, {
+              })
+              username1_desc && items.push({
+                name: username1_desc, value: "",
+                placeHolder: `请输入${username1_regex}`,
+                reg: username1_regex,
+              })
+              items.push({
                 name: password_desc, value: '',
                 icon: true,
                 placeHolder: `请输入${password_desc}`,
                 reg: password_regex,
-              },]
+              })
+
 
               return {
                 title: `${username_desc}`,

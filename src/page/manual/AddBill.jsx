@@ -95,7 +95,7 @@ export default class AddBill extends React.Component {
       Toast.info('请填写信用额度');
       return;
     } else if(!newBalance){
-      Toast.info('请填写剩余额度');
+      Toast.info('请填写账单金额');
       return;
     }
     if(parseInt(creditLimit)<parseInt(newBalance)){

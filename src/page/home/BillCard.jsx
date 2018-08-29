@@ -475,7 +475,7 @@ export default class BillCard extends React.Component {
             }}>{date}</div>
           </div>
         </div>
-        <div style={{
+        {!examineAccount?<div style={{
           display: 'inline-block',
           background: actionName=='更新未出'?'rgb(153, 153, 153)':'#4C7BFE',
           borderRadius: '0.6rem',
@@ -499,6 +499,8 @@ export default class BillCard extends React.Component {
         }}>
           {actionName}
         </div>
+        :null
+        }
       </div>
       {real ? null :
         <img src="/static/img/示例@2x.png" style={{width: "0.71rem", position: 'absolute', right: '0', top: '0'}}/>}

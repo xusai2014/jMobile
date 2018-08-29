@@ -14,7 +14,8 @@ const {operation,alert,prompt} = Modal;
 @InitDecorator((state)=>{
   return {
     billDetail:state.BillReducer.billDetail,
-    payDetail:state.BillReducer.payDetail
+    payDetail:state.BillReducer.payDetail,
+    examineAccount:state.CardsReducer.examineAccount,
   }
 })
 export default class BillDetail extends React.Component {
@@ -682,16 +683,18 @@ export default class BillDetail extends React.Component {
            `
           }</style>
           <img className={syncBegin?"Rotation":""} style={{height:'0.3rem',}} src="/static/img/更新@2x.png"/>
-        </span>更新</div><div style={{
-          fontSize: '0.36rem',
-          color: '#FFFFFF',
-          letterSpacing: '0',
-          width:'3.75rem',
-          display:'inline-flex',
-          background: '#4C7BFE',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }} onClick={()=>this.setState({visible:true})}>立即还款</div>
+        </span>更新</div>{
+            this.props.examineAccount?null:<div style={{
+              fontSize: '0.36rem',
+              color: '#FFFFFF',
+              letterSpacing: '0',
+              width:'3.75rem',
+              display:'inline-flex',
+              background: '#4C7BFE',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }} onClick={()=>this.setState({visible:true})}>立即还款</div>
+        }
         </div>
 
       </div>

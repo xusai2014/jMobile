@@ -207,7 +207,7 @@ export default class Index extends React.Component {
     const { examineAccount } =this.props;
     const {isLogged, billList = {}, freeIntrestData = [], activities = []} = this.props;
     const {waitPaymentAmount = '0.00', waitPaymentNumber = '0', baseResponseBillDtoList} = billList
-    return [<div key={'a'} style={{background: '#FFFFFF', paddingBottom: "0.7rem"}}>
+    return [<div key={'a'} style={{background: '#FFFFFF', paddingBottom: "0.5rem"}}>
       <div style={styles.top}>
         <div style={styles.topText}>7日内待还
           <span style={styles.topSubText}>
@@ -253,6 +253,12 @@ export default class Index extends React.Component {
           })
         }
       </div>
+      <div style={{
+        boxShadow: 'rgba(115, 125, 255, 0.53) 0rem 0.37rem 0.27rem',
+        width: '6.48rem',
+        margin: '-0.35rem auto auto',
+        height: '0.1rem',
+      }}></div>
       <div style={styles.activity}>
         {isLogged ?(!this.props.examineAccount? [1,2,3,4].map((v, k) => {
           const {logoUri = '', gameUri, gameName = ''} = activities[k]?activities[k]:{};
@@ -484,7 +490,7 @@ const styles = {
     height: '1.84rem',
     margin: '0.26rem auto 0 auto',
     display: 'flex',
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
   },
   moneyStyle: {
     fontSize: '0.52rem',
@@ -501,7 +507,7 @@ const styles = {
     marginLeft: "0.045rem",
     fontWeight: 'bold',
   },
-  iconItem: {margin: "0.32rem 0 0 0", display: 'inline-block'},
+  iconItem: {margin: "0.4rem 0 0 0", display: 'inline-block'},
   textStyle: {fontSize: '0.3rem',fontWeight: 'bold', color: '#FFFFFF', letterSpacing: '0', textAlign: 'center'},
   activity: {display: "flex", justifyContent: "space-around", marginTop: "0.49rem"},
   addBtn: {
@@ -515,6 +521,7 @@ const styles = {
     textAlign: 'center',
     marginLeft: '0.08rem',
     fontWeight: 'bold',
+    lineHeight: '0.28rem',
   }
 }
 

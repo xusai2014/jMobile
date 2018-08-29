@@ -254,7 +254,7 @@ export default class Index extends React.Component {
         }
       </div>
       <div style={styles.activity}>
-        {isLogged ? [1,2,3,4].map((v, k) => {
+        {isLogged ?(!this.props.examineAccount? [1,2,3,4].map((v, k) => {
           const {logoUri = '', gameUri, gameName = ''} = activities[k]?activities[k]:{};
           return <div onClick={() => {
             if(gameUri.indexOf('site=oldweb')>0){
@@ -267,7 +267,7 @@ export default class Index extends React.Component {
             <img style={{width: '0.74rem',height:'0.74rem'}} src={logoUri}/>
             <div style={{fontWeight: 'bold',}}>{gameName}</div>
           </div>
-        }) : null
+        }):null) : null
         }
       </div>
     </div>,

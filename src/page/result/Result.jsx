@@ -55,7 +55,7 @@ export default class Result extends React.Component {
       img: "/static/img/done@2x.png",
     }, cyberfailed: {
       describe: (data) => data,
-      footer: () => (<div onClick={() => this.props.history.push('/home/index')} className="enableBtn">完成</div>),
+      footer: () => (<div onClick={() => this.props.history.go(-2)} className="enableBtn">重新登录</div>),
       title: "导入失败",
       img: "/static/img/nothing@2x.png",
     },cybernodata: {

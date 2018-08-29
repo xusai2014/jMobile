@@ -171,8 +171,7 @@ export default class CardsList extends React.Component {
           position: fixed;
           top: 0;
           width: 7.5rem;
-          background-color: #00000069;
-          opacity: 0.4;
+          background-color: #00000040;
           bottom: 0;
           left: 0;
           right: 0;

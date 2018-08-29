@@ -19,7 +19,7 @@ export default class Card extends React.Component {
   render() {
     const { popupCard,actName, id, bankNm,payment_due_date,card_limit,actNo,bankNo,bindType } =this.props;
     return (<div style={styles.container}>
-      <div>
+      <div style={{display:'inline-flex',alignItems:"center"}}>
         <div style={styles.rowItem}>
           <img style={{width: '0.76rem', height: "0.76rem"}} src={bankIcon[bankNo]}/>
         </div>
@@ -89,6 +89,7 @@ const styles = {
   img:{
     width:"0.3rem",
     float:'right',
-    margin:" 0.5rem 0.5rem 0 0"
+    marginLeft: '1.9rem',
+    marginTop: '0.2rem'
   }
 }

@@ -406,7 +406,7 @@ export default class EditCard extends React.Component {
             })
           }
           <div style={styles.tips}>请核对卡号信息，确认无误</div>
-          <div className={enableBtn?'enableBtn':'disableBtn'}
+          <div className={enableBtn?'enableBtn':'disableBtn'} style={{marginTop:'0.78rem'}}
                onClick={() => {
                 if (activeOne == 1) {
                   this.bindCard('usalCardData')

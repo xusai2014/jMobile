@@ -509,7 +509,10 @@ const styles = {
   },
   iconItem: {margin: "0.4rem 0 0 0", display: 'inline-block'},
   textStyle: {fontSize: '0.3rem',fontWeight: 'bold', color: '#FFFFFF', letterSpacing: '0', textAlign: 'center'},
-  activity: {display: "flex", justifyContent: "space-around", marginTop: "0.49rem"},
+  activity: {display: "flex", justifyContent: "space-around",
+    marginTop: '0.79rem',
+    marginBottom: '0.3rem'
+  },
   addBtn: {
     display: 'flex', justifyContent: 'center', alignItems: 'center',
     background: '#FFFFFF', height: '0.84rem', widht: '7.5rem', margin: "0.2rem 0 0 0"

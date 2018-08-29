@@ -15,9 +15,6 @@ export default class MethodList extends React.Component{
     this.props.dispatch(getBankList()).then((result)=>{
       const { state ={} } = this.props.location;
       const { anchor ='' } = state;
-      setTimeout(()=>{
-        anchor && window.scrollTo(0,220)
-      },1000)
     },(err)=>{
     });
   }

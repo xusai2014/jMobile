@@ -113,11 +113,15 @@ export default class Index extends React.Component {
   }
 
   openCardMarket(){
+    let url = '';
+    if(window.location.host.indexOf('mpmw.vbill.cn')>-1 ){
+      url = `https://cca.vbill.cn/cca/home?source=creditCard`
+    } else {
+      url = `https://mpcw${judgeEnv()}.vbill.cn/cca/home?channelId=1000&source=creditCard`
+    }
     nativeOpenNewWebView({
-      url:`https://mpcw${judgeEnv()}.vbill.cn/cca/home?channelId=1000&source=creditCard`
-      //url:'http://172.16.40.34:3100/cca/home'
+      url
     })
-    //https://mpcw-test.vbill.cn/cca/home
   }
 
   identifyFunc(callback){

@@ -303,10 +303,9 @@ export default class BillDetail extends React.Component {
     }
     return ba.toFixed(2)+unit
   }
-  generate(payment_due_date,bill_date,credit_limit,balance){
+  generate(payment_due_date,bill_date,credit_limit,balance,bill_type){
     const payDate = payment_due_date ?moment(payment_due_date).format('MM.DD'):moment().format('MM.DD')
     const billDate = bill_date ?moment(bill_date).format('MM.DD'):moment().format('MM.DD');
-    const  freeInterest = parseInt(moment(payment_due_date).diff(moment(),'days')) + parseInt(moment().daysInMonth())
     let amount= 0;
     let amountUnit = ''
     if(credit_limit/10000>=1){
@@ -326,6 +325,8 @@ export default class BillDetail extends React.Component {
       ba =balance/1000;
       baUnit= '千';
     }
+    let freeInterest = bill_type == 'DONE'? parseInt(moment(payment_due_date).diff(moment(), 'days')) + parseInt(moment().daysInMonth()):
+      parseInt(moment(payment_due_date).diff(moment(), 'days'))
     return [{
       title: "还款日", value: payDate,
       unit: ""
@@ -518,7 +519,7 @@ export default class BillDetail extends React.Component {
             display: 'inline-block',
             width: '2.5rem'
           }}>
-            {this.generate(payment_due_date,bill_date,credit_limit, balance).map((v, k) => {
+            {this.generate(payment_due_date,bill_date,credit_limit, balance, bill_type).map((v, k) => {
               const {title, value, unit} = v;
               return <div>
                 <span>{title}：</span><span>{value}</span><span>{unit}</span>

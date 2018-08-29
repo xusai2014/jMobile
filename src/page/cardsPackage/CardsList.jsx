@@ -149,10 +149,9 @@ export default class CardsList extends React.Component {
         activeCard > -1 ? [
           <style key={'a'}>{`
         .single-foo-menu {
-          position: absolute;
           z-index: 90 !important;
-          width: 100%;
-          position:absolute;
+          width: 7.5rem;
+          position:fixed;
           bottom:0;
         }
 
@@ -169,13 +168,16 @@ export default class CardsList extends React.Component {
           color: #FFF!important;
         }
         .menu-mask {
-          position: absolute;
+          position: fixed;
           top: 0;
-          width: 100%;
-          height: 100%;
-          background-color: #000;
+          width: 7.5rem;
+          background-color: #00000069;
           opacity: 0.4;
-          z-index: 89;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          padding: 0;
+          margin: 0;
         }
         .am-menu .am-flexbox .am-flexbox-item:first-child .am-list .am-list-item .am-list-line .am-list-content{
           text-align:center;

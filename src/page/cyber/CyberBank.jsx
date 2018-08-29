@@ -5,6 +5,7 @@ import { Tabs, Toast, Modal} from "antd-mobile"
 import {getLoginList, loginCyber, removeBillAllStatus, removeLoginStatus,} from "../../actions/reqAction";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import globalStyle from "../../style";
+import {jsNative} from "sx-jsbridge";
 const { alert } = Modal
 
 const cardType = 'CREDITCARD'
@@ -311,10 +312,12 @@ export default class CyberBank extends React.Component {
                       src={protocolSelected ? "/static/img/selected@2x.png" : "/static/img/Oval@2x.png"}/>
                 <span style={{
                   fontSize: '0.24rem',
-                  color: '#999999',
                   letterSpacing: '-0.77PX',
-                  margin: "0 0 0 0.18rem"
-                }}>同意用户授权协议</span>
+                  margin: "0 0 0 0.18rem",
+                  color: '#4c7bfe',
+                }} onClick={()=>jsNative.nativeOpenNewWebView({
+                  url:`${window.location.origin}/static/html/infoprotocol.html`
+                },()=>{})}>同意用户授权协议</span>
                 <img style={{width: '0.23rem',marginLeft:'3.3rem'}}
                      onClick={()=>{
                        this.setDeepState('inputData',login_type,{

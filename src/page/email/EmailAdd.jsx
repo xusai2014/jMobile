@@ -8,6 +8,7 @@ import {
   regEmail
 } from '../../utils/util';
 import globalStyle from "../../style";
+import { jsNative} from 'sx-jsbridge'
 const { alert } = Modal
 @InitDecorator((state) => {
   return {
@@ -147,15 +148,19 @@ export default class EmailAdd extends React.Component {
           paddingLeft: '0.31rem',
           display: 'flex',
           alignItems: 'center'
-        }} onClick={() => {
-          this.setState({selected: !selected},()=>this.enableBtn())
-        }}><img style={{width: '0.23rem'}} src={selected ? "/static/img/selected@2x.png" : "/static/img/Oval@2x.png"}/>
+        }} ><img
+          onClick={() => {
+            this.setState({selected: !selected},()=>this.enableBtn())
+          }}
+          style={{width: '0.23rem'}} src={selected ? "/static/img/selected@2x.png" : "/static/img/Oval@2x.png"}/>
           <span style={{
             fontSize: '0.24rem',
-            color: '#999999',
+            color: '#4c7bfe',
             letterSpacing: '-0.77PX',
             margin: "0 0 0 0.18rem"
-          }}>同意用户授权协议</span>
+          }} onClick={()=>jsNative.nativeOpenNewWebView({
+            url:`${window.location.origin}/static/html/infoprotocol.html`
+          },()=>{})}>同意用户授权协议</span>
         </div>
         <div className={!btnDisabled?'enableBtn':'disableBtn'}
              onClick={() => this.loginEnter()}>开始登录</div>

@@ -229,7 +229,8 @@ export default class LoadingStatus extends React.Component{
 
   async loopCheckAlways({ taskId,loginType }) {
     let pollingStatus = {};
-    let continueLoop = false
+    let continueLoop = false;
+    let times = 0
     do {
       await waitFunc(3000)
       pollingStatus = await this.props.dispatch(pollingCyber({
@@ -242,7 +243,13 @@ export default class LoadingStatus extends React.Component{
       }
       const { data = {}} = pollingStatus;
       const { isFinish =false } = data;
-      continueLoop = !isFinish
+      continueLoop = !isFinish;
+      if(times>60){
+        promiseList.cancel()
+        this.goResult(loginType,3,'导入失败')
+        return;
+      }
+      times++
     } while (continueLoop)
     const {data = {}} =pollingStatus;
     const { resultList = []} = data;

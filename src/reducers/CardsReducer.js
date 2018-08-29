@@ -38,7 +38,7 @@ export default function (state = initialState, actions) {
       return {
         ...state,
         identityInfo:actions.data,
-        examineAccount:MERC_SN == '700000000620451'
+        examineAccount:MERC_SN == '700000001407329'//'700000000620451'
       }
     case LOOSE_CARD[1]:
       return {

@@ -34,7 +34,7 @@ export default function (state = initialState, actions) {
         fromBank:actions.data,
       }
     case GET_IDENTITY_INFO[1]:
-      const { MERC_SN = '' } = actions.data
+      const { MERC_SN = 0 } = actions.data
       return {
         ...state,
         identityInfo:actions.data,

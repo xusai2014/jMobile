@@ -21,7 +21,7 @@ export default class Card extends React.Component {
     return (<div style={styles.container}>
       <div style={{display:'inline-flex',alignItems:"center"}}>
         <div style={styles.rowItem}>
-          <img style={{width: '0.76rem', height: "0.76rem"}} src={bankIcon[bankNo]}/>
+          <img style={{width: '0.76rem', height: "0.76rem"}} src={bankIcon[bankNo]?bankIcon[bankNo]:'/static/img/bank/313@1x.png'}/>
         </div>
         <div style={{width: '3rem', display: 'inline-block', marginLeft: '0.21rem', marginTop: '0.47rem',}}>
           <div style={{

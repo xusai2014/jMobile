@@ -34,6 +34,7 @@ if (module.hot) {
 }
 initJSBridge(true,{TOKEN_ID:"75ba1fcbd1284e2c8f5c1e54130317c3"});
 
+
 nativeJs.informLoginStatus(() => {
   jsNative.nativeRequestBaseParams().then((reqParams) => {
     window.location.href = '/home/index'

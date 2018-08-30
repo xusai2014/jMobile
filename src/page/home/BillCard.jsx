@@ -115,12 +115,12 @@ export default class BillCard extends React.Component {
 
         return;
       case "DONE_SUCC"://成功登录
-        Toast.success('账单信息同步完成');
         this.setState({
           percent: 100,
           syncBegin: false
         },()=>{
           this.props.updateData();
+          Toast.success('账单信息同步完成');
         });
         return;
       case "DONE_FAIL":

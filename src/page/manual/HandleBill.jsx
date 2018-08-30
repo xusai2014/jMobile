@@ -120,7 +120,7 @@ export default class HandleBill extends React.Component {
       return;
     }
     if(moment(paymentDueDate).diff(moment(billDate),'days') <=0){
-      Toast.info('还款日不能大于账单日');
+      Toast.info('还款日不能小于账单日');
       return;
     }
     if(!/^[0-9]+(.[0-9]+)?$/.test(creditLimit)){

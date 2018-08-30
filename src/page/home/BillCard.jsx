@@ -40,7 +40,7 @@ export default class BillCard extends React.Component {
         if (subtype) {
           alert(<span className="alert_title">暂时无法获取账单的最新状态</span>, <span className="alert_content">如果您已通过其导入它平台还款，建议您通过网银导入</span>, [
               {text: '暂不需要', onPress: () => console.log('置顶聊天被点击了'),style: globalStyle.cancelStyle},
-              {text: '通过网银导入', onPress: () => this.props.history.push('/bill/method', {anchor: '#cyberId'}),style: globalStyle.sureStyle }
+              {text: '通过网银导入', onPress: () => this.props.history.push('/bill/method'),style: globalStyle.sureStyle }
             ]);
         } else {
           alert(<span className="alert_title">该银行暂不支持同步您的账单数据</span>, '', [

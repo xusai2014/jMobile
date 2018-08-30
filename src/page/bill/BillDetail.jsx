@@ -33,7 +33,7 @@ export default class BillDetail extends React.Component {
   }
 
   async callSyncBill(task_id, importBillType,abbr,cardNum) {
-    Toast.loading('请稍候...');
+    Toast.loading('请稍候...',0);
     if(importBillType == '01'){
 
     } else {
@@ -47,7 +47,7 @@ export default class BillDetail extends React.Component {
         if (subtype) {
           alert(<span className="alert_title">暂时无法获取账单的最新状态</span>, <span className="alert_content">如果您已通过其导入它平台还款，建议您通过网银导入</span>, [
             {text: '暂不需要', onPress: () => console.log('置顶聊天被点击了'),style: globalStyle.cancelStyle},
-            {text: '通过网银导入', onPress: () => this.props.history.push('/bill/method', {anchor: '#cyberId'}),style: globalStyle.sureStyle }
+            {text: '通过网银导入', onPress: () => this.props.history.push('/bill/method',),style: globalStyle.sureStyle }
           ]);
         } else {
           alert(<span className="alert_title">该银行暂不支持同步您的账单数据</span>, '', [
@@ -71,10 +71,13 @@ export default class BillDetail extends React.Component {
     })).then((result) => {
       const {data} = result;
       if(typeof data != 'undefined'){
-        this.loopLogin(data, importBillType)
+        this.loopLogin(data, importBillType);
+        return
       }
+      Toast.hide()
       this.setState({syncBegin:false})
     }, () => {
+      Toast.hide()
       this.setState({syncBegin:false})
     })
 
@@ -111,7 +114,7 @@ export default class BillDetail extends React.Component {
     const {phase, phase_status = '', input, description} = data;
     switch (phase_status) {
       case 'WAIT_CODE'://输入验证码
-
+        Toast.hide()
         return this.promptClick({
           input,
           description,
@@ -121,6 +124,7 @@ export default class BillDetail extends React.Component {
       case "DOING":
         return;
       case "DONE_SUCC"://成功登录
+        Toast.hide()
         this.setState({
           syncBegin:false
         })
@@ -128,18 +132,21 @@ export default class BillDetail extends React.Component {
         this.initData();
         return;
       case "DONE_FAIL":
+        Toast.hide()
         this.setState({
           syncBegin:false
         })
         Toast.info(description);
         return;
       case "DONE_TIMEOUT":
+        Toast.hide()
         this.setState({
           syncBegin:false
         })
         Toast.info('同步失败');
         return;
       default:
+        Toast.hide()
         this.setState({
           syncBegin:false
         })
@@ -156,6 +163,7 @@ export default class BillDetail extends React.Component {
    *   @description 第三步流程的分支流程，输入验证码检查登录状态
    */
   async verifycation({taskId, value: code}) {
+    Toast.loading('请稍候...',0)
     let codeStatus = ''
 
     codeStatus = await this.props.dispatch(verifyCode({

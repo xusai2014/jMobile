@@ -14,7 +14,6 @@ export default class MethodList extends React.Component{
   async componentWillMount(){
     this.props.dispatch(getBankList()).then((result)=>{
       const { state ={} } = this.props.location;
-      const { anchor ='' } = state;
     },(err)=>{
     });
   }

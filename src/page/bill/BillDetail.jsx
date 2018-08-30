@@ -41,6 +41,7 @@ export default class BillDetail extends React.Component {
         abbr,
         cardType: 'CREDITCARD',
       })).then((result) => {
+        Toast.hide();
         const {data} = result;
         const {subtype = ''} = data;
         if (subtype) {
@@ -55,6 +56,7 @@ export default class BillDetail extends React.Component {
         }
 
       }, (err) => {
+        Toast.hide();
       }).finally(()=>this.setState({syncBegin:false}));
 
       return
@@ -74,9 +76,12 @@ export default class BillDetail extends React.Component {
       this.setState({syncBegin:false})
     }, () => {
       this.setState({syncBegin:false})
-
     })
 
+  }
+
+  componentWillUnmount(){
+      promiseList.cancel()
   }
 
   /**

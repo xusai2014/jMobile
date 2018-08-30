@@ -72,7 +72,7 @@ export const  fetchPromise = async (url, method = 'GET', data, cancel = false, i
   //let baseUrl = 'http://172.16.135.174:8080/phoneclient/notify.htm'; //开发服务器
   let baseUrl = apiUrl;//'http://172.16.42.28:8080/lemon-mobile/phoneclient/notify.htm'; //李建
   if(window.location.host.indexOf('mpmw.vbill.cn')>-1 ){
-    baseUrl = '//mp.vbill.cn/phoneclient/notify.htm'
+    baseUrl = '//mp-alpha.vbill.cn/phoneclient/notify.htm'
   }  else if(window.location.host.indexOf('mpmw-rc.vbill.cn')>-1){
     baseUrl ='https://mp-rc.vbill.cn/phoneclient/notify.htm'
   } else if(window.location.host.indexOf('mpmw-alpha.vbill.cn')>-1){

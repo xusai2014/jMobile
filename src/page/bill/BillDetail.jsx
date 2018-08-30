@@ -587,7 +587,7 @@ export default class BillDetail extends React.Component {
                       fontSize: '0.24rem',
                       color: '#999999',
                       letterSpacing: '0'
-                    }}><span>{from}</span>至<span>{to}</span></div>
+                    }}><span>{to}</span>至<span>{from}</span></div>
                   </div>
                 </div>
                 {expandOne == v ? [<div id="load" style={{overflow:'scroll'}}>

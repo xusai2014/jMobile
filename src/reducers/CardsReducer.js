@@ -34,11 +34,11 @@ export default function (state = initialState, actions) {
         fromBank:actions.data,
       }
     case GET_IDENTITY_INFO[1]:
-      const { MERC_SN } = actions.data
+      const { MERC_SN = '' } = actions.data
       return {
         ...state,
         identityInfo:actions.data,
-        examineAccount:parseInt(MERC_SN) == 700000001407329//'700000000620451'
+        examineAccount:parseInt(MERC_SN) == 700000000620451//'700000000620451'
       }
     case LOOSE_CARD[1]:
       return {

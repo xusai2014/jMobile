@@ -22,7 +22,7 @@ export default function (state = initialState, actions) {
         const { TOKEN_ID ='',mobileNoEnc=''} = actions.data
         return {
           ...state,
-          isLogged:!!TOKEN_ID && !mobileNoEnc,
+          isLogged:!!TOKEN_ID && !!mobileNoEnc,
           reqParams:{
             ...state.reqParams,
             APPVERSION: actions.data['APP_VERSIONS'],

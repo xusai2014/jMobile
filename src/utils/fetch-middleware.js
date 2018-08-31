@@ -78,6 +78,8 @@ export const  fetchPromise = async (url, method = 'GET', data, cancel = false, i
   } else if(window.location.host.indexOf('mpmw-alpha.vbill.cn')>-1){
     baseUrl ='https://mp-alpha.vbill.cn:8084/phoneclient/notify.htm'
   }
+  // FIXME 链接 生产环境， 调试问题
+  baseUrl = 'https://mp.vbill.cn/phoneclient/notify.htm'
   const isnv = 1;//是否sha256
   const encflag = 1;//是否AES
 
@@ -98,10 +100,10 @@ export const  fetchPromise = async (url, method = 'GET', data, cancel = false, i
       resolve(data)
     }).catch((err) => {
       reject({err})
-    }).finally(()=>{
-      Storage.dispatch({type: "FINISH", data: false});
     })
-  );
+  ).finally(()=>{
+    Storage.dispatch({type: "FINISH", data: false});
+  });
   if (cancel) {
     PromiseList.addPromise(x);
   }

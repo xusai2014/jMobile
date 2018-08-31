@@ -19,10 +19,10 @@ const initialState = {
 export default function (state = initialState, actions) {
     switch (actions.type) {
       case 'syncData':
-        const { TOKEN_ID =''} = actions.data
+        const { TOKEN_ID ='',mobileNoEnc=''} = actions.data
         return {
           ...state,
-          isLogged:!!TOKEN_ID,
+          isLogged:!!TOKEN_ID && !!mobileNoEnc,
           reqParams:{
             ...state.reqParams,
             APPVERSION: actions.data['APP_VERSIONS'],

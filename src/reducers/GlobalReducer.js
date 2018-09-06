@@ -1,4 +1,5 @@
 import {ASYNC_COOKIE, CLEAR_MSG, FORM_SET,SET_UUID} from '../utils/ActionsType';
+import deviceMark from "../utils/deviceMark";
 
 const initialState = {
     loginToken: '',
@@ -22,7 +23,7 @@ export default function (state = initialState, actions) {
         const { TOKEN_ID ='',mobileNoEnc=''} = actions.data
         return {
           ...state,
-          isLogged:!!TOKEN_ID && !!mobileNoEnc,
+          isLogged: deviceMark.isIOS ? !!TOKEN_ID : !!TOKEN_ID && !!mobileNoEnc,
           reqParams:{
             ...state.reqParams,
             APPVERSION: actions.data['APP_VERSIONS'],

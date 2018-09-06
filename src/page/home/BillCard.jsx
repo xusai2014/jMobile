@@ -450,7 +450,7 @@ export default class BillCard extends React.Component {
             lineHeight: '0.5rem',
             fontWeight: 'bold',
           }}>
-            {day}
+            {day>=0?day:0}
           </div>
           <div style={{
             display: 'inline-block',

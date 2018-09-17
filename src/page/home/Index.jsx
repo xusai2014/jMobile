@@ -212,9 +212,8 @@ export default class Index extends React.Component {
     if(localStorage.getItem(MERC_SN)){
       jsNative.nativeOpenNewWebView({url:gameUri},()=>{});
     } else {
-      alert(<span className="alert_title">免责声明</span>, <span className="alert_content">如果您已通过其导入它平台还款，建议您通过网银导入</span>, [
-        {text: '暂不需要', onPress: () => console.log('置顶聊天被点击了'),style: globalStyle.cancelStyle},
-        {text: '通过网银导入', onPress: () => {
+      alert(<span className="alert_title">免责声明</span>, <span className="alert_content">您所访问的页面将跳转到第三方网站，请自行对网站所提供的信息、服务加以辨别及判断，并承担使用内容而引起的所有风险</span>, [
+        {text: '我知道了', onPress: () => {
           localStorage.setItem(MERC_SN,true);
           jsNative.nativeOpenNewWebView({url:gameUri},()=>{});
         },style: globalStyle.sureStyle }

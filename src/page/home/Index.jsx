@@ -33,7 +33,8 @@ export default class Index extends React.Component {
       sycnModal:false,
       authSts:'-1',
       freeItems:false,
-      examineAccount:true
+      examineAccount:true,
+      MERC_SN:''
     }
   }
 
@@ -89,7 +90,8 @@ export default class Index extends React.Component {
       const {authSts,MERC_SN = ''} = data;
       this.setState({
         authSts: authSts,
-        examineAccount:MERC_SN != '700000000620451'
+        examineAccount:MERC_SN != '700000000620451',
+        MERC_SN
       })
     }, () => {
     })
@@ -202,6 +204,23 @@ export default class Index extends React.Component {
     real:false,
   }]
 
+  openPPMoney(gameUri){
+    const { MERC_SN} = this.state
+    if(!MERC_SN){
+      return;
+    }
+    if(localStorage.getItem(MERC_SN)){
+      jsNative.nativeOpenNewWebView({url:gameUri},()=>{});
+    } else {
+      alert(<span className="alert_title">免责声明</span>, <span className="alert_content">您所访问的页面将跳转到第三方网站，请自行对网站所提供的信息、服务加以辨别及判断，并承担使用内容而引起的所有风险</span>, [
+        {text: '我知道了', onPress: () => {
+          localStorage.setItem(MERC_SN,true);
+          jsNative.nativeOpenNewWebView({url:gameUri},()=>{});
+        },style: globalStyle.sureStyle }
+      ]);
+    }
+  }
+
   render() {
     const {interestShow, visible,freeItems, sycnModal,authSts,} = this.state;
     const { examineAccount } =this.props;
@@ -266,9 +285,12 @@ export default class Index extends React.Component {
             if(gameUri.indexOf('site=oldweb')>0){
               jsNative.nativeOpenOldWebView({url:gameUri},()=>{})
             } else {
-              jsNative.nativeOpenNewWebView({url:gameUri},()=>{})
+              if(gameUri.indexOf('ppmoney.com')>-1){
+                this.openPPMoney(gameUri)
+              } else {
+                jsNative.nativeOpenNewWebView({url:gameUri},()=>{})
+              }
             }
-
           }} key={k} style={{display: "inline-block", textAlign: 'center'}}>
             <img style={{width: '0.74rem',height:'0.74rem'}} src={logoUri}/>
             <div style={{fontWeight: 'bold',}}>{gameName}</div>

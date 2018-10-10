@@ -65,6 +65,7 @@ export const  fetchPromise = async (url, method = 'GET', data, cancel = false, i
       TOKEN_ID: reqParams['TOKEN_ID'],
       CHANNEL_NO: reqParams['channelNo'],
     }})
+  data = {...data,...reqParams};
   if(isMock){
     return fetchMockData(data);
   }

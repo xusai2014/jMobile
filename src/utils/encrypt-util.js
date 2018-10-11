@@ -1,5 +1,5 @@
 const key = 'fdsa1234';
-const signKey = 'zxcasdqwe';
+export const SIGN_KEY = 'zxcasdqwe';
 
 
 export const generateSign = (basicInfo, signKey) => {
@@ -33,7 +33,7 @@ export const packageReqData = (data, isnv, encflag) => {
             delete data[value]
         }
     }
-    const signature = generateSign({...data, isnv, encflag}, signKey)
+    const signature = generateSign({...data, isnv, encflag}, SIGN_KEY)
     dataBody["sign"] = aesEncrypt(signature);
     dataBody["isnv"] = aesEncrypt(isnv)
     Object.keys(data).map((v, k) => {
@@ -43,7 +43,7 @@ export const packageReqData = (data, isnv, encflag) => {
 }
 
 
-function aesEncrypt(x) {
+export const aesEncrypt = (x)=> {
     //
     return CryptoJS.AES.encrypt(
         String(x),

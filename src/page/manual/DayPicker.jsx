@@ -175,8 +175,11 @@ const styles = {
     fontSize: '0.27rem'
   },
   input: {
-    width: '7.5rem',
-    height: '1rem'
+    lineHeight: '1rem',
+    fontSize: '0.31rem',
+    color: '#999999',
+    letterSpacing: '0',
+    border: '0',
   },
   header: {
     width: '7.5rem',
@@ -216,5 +219,13 @@ const styles = {
     position: 'absolute',
     zIndex: '-1',
     top: '2rem'
-  }
+  },
+  paceHolder: {
+    fontSize: '0.31rem',
+    color: '#999999',
+    letterSpacing: '0',
+    height: '0.44rem',
+    width: '3.6rem',
+    border: '0',
+  },
 }

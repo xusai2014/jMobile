@@ -346,7 +346,7 @@ export default class BillDetail extends React.Component {
     }, {
       title: "出账日", value: billDate, unit: ""
     }, {
-      title: "免息期", value: freeInterest, unit: "天"
+      title: "免息期", value: parseInt(freeInterest)>0?freeInterest:0, unit: "天"
     }, {
       title: "总额度", value: amount.toFixed(2), unit: amountUnit
     }, {
@@ -486,8 +486,10 @@ export default class BillDetail extends React.Component {
                     }} style={{width: "0.36rem",}} src="/static/img/删除@2x.png"/>}/>, <div>
       <div style={{
         height: '2.95rem',
-        width: '7.5rem',
-        backgroundImage: 'linear-gradient(-269deg, #7576FF 6%, #5E84FE 98%)',
+        width: '6.94rem',
+        margin:'0 0.28rem',
+        borderRadius: '0.08rem',
+        backgroundImage: 'linear-gradient(-90deg, #5E84FE 14%, #7576FF 81%)',
       }}>
         <div
           style={{
@@ -499,7 +501,7 @@ export default class BillDetail extends React.Component {
         >{name_on_card} {card_number}
         </div>
         <div style={{paddingBottom: "0.38rem"}}>
-          <div style={{width: "4.5rem", padding: '0.43rem 0 0 0.31rem', display: 'inline-block'}}>
+          <div style={{width: "3.9rem", padding: '0.43rem 0 0 0.31rem', display: 'inline-block'}}>
             <div
               style={{
                 opacity: '0.5',
@@ -540,7 +542,18 @@ export default class BillDetail extends React.Component {
             })}
           </div>
         </div>
-        <div style={{height:'auto'}}>
+      </div>
+      <div style={{
+        opacity: '0.58',
+        margin:'-0.9rem 0.425rem 0.5rem',
+        borderRadius: '0.26rem',
+        width:'6.65rem',
+        height:'0.84rem',
+        boxShadow: 'rgba(115, 125, 255, 0.53) 0rem 0.37rem 0.27rem',
+      }}>
+
+      </div>
+      <div style={{height:'auto'}}>
         <Tabs
           tabs={[
             {title: '账单明细', sub: '0'},
@@ -549,10 +562,10 @@ export default class BillDetail extends React.Component {
           initialPage={0}
           onTabClick={(v)=>{
             const { sub} = v
-              if(sub == '1'){
-                this.getPayDetailInfo(bank_id,card_number)
-              }
+            if(sub == '1'){
+              this.getPayDetailInfo(bank_id,card_number)
             }
+          }
           }
         >
           <div style={{background: '#FFFFFF',height:'auto'}}>
@@ -669,9 +682,9 @@ export default class BillDetail extends React.Component {
             </div>, <div style={{width: "6.94rem", margin: 'auto', border: '1PX solid #F1F1F1'}}></div>]
           })}</div>
         </Tabs>
-        </div>
-        <div style={{display: 'flex',position: 'fixed',bottom: '0'}}>
-          <div style={{
+      </div>
+      <div style={{display: 'flex',position: 'fixed',bottom: '0'}}>
+        <div style={{
           fontSize: '0.36rem',
           color: '#333333',
           letterSpacing: '0',
@@ -682,7 +695,7 @@ export default class BillDetail extends React.Component {
           width:'3.75rem'
         }} onClick={()=>this.callSyncBill(taskId,importBillType,abbr,card_number)}><span style={{margin:'auto 0.1rem auto 1.2rem',height:'0.5rem'}}>
           <style>{
-          `@-webkit-keyframes rotation{
+            `@-webkit-keyframes rotation{
             from {-webkit-transform: rotate(0deg);}
             to {-webkit-transform: rotate(360deg);}
            }
@@ -698,19 +711,17 @@ export default class BillDetail extends React.Component {
           }</style>
           <img className={syncBegin?"Rotation":""} style={{height:'0.3rem',}} src="/static/img/更新@2x.png"/>
         </span>更新</div>{
-            this.props.examineAccount?null:<div style={{
-              fontSize: '0.36rem',
-              color: '#FFFFFF',
-              letterSpacing: '0',
-              width:'3.75rem',
-              display:'inline-flex',
-              background: '#4C7BFE',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }} onClick={()=>this.setState({visible:true})}>立即还款</div>
-        }
-        </div>
-
+        this.props.examineAccount?null:<div style={{
+          fontSize: '0.36rem',
+          color: '#FFFFFF',
+          letterSpacing: '0',
+          width:'3.75rem',
+          display:'inline-flex',
+          background: '#4C7BFE',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }} onClick={()=>this.setState({visible:true})}>立即还款</div>
+      }
       </div>
     </div>,visible?<Popup style={{top:'0.81rem'}} title="选择还款方式"  data={
       [

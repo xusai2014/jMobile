@@ -24,8 +24,8 @@ export default class FreeItem extends React.Component{
       balance,
     } = this.props;
     return (<div style={{textAlign: 'left', margin: "0.23rem 0"}}>
-                <span style={{width: '0.6rem', borderRadius: '0.3rem'}}>
-                  <img style={{width: '0.6rem',borderRadius:"0.3rem"}} src={imgSrc}/>
+                <span style={{width: '0.6rem', borderRadius: '0.24rem'}}>
+                  <img style={{width: '0.48rem', height:'0.48rem',borderRadius:"0.24rem"}} src={imgSrc}/>
                 </span>
       <div style={{display: "inline-block", margin: "0 0 0 0.14rem"}}>
         <div style={{
@@ -39,7 +39,7 @@ export default class FreeItem extends React.Component{
           fontSize: '0.2rem',
           color: '#999999',
           letterSpacing: '0',
-        }}>总额度{this.generateStr(parseInt(credit_limit))}元|剩余额度约{this.generateStr(parseInt(balance))}元</div>
+        }}>可用约{this.generateStr(parseInt(balance))}元</div>
       </div>
       <div
         style={{
@@ -50,7 +50,7 @@ export default class FreeItem extends React.Component{
           color:'#333333',
           letterSpacing: '-0.89px',
         }}
-      >{freeInterest}天</div>
+      >{parseInt(freeInterest) >0?freeInterest:0}天</div>
     </div>)
   }
 }

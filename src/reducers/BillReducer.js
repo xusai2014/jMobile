@@ -10,7 +10,7 @@ import {
   FREE_INTEREST,
   EMAIL_LOGIN,
   EMAIL_TASK_STATUS, DELETE_BILL, DIRECT_EMAIL_BILL, EMAIL_LIST, DELETE_EMAIL, HANDLE_BILL, REMOVE_BILL_ALL_STATUS,
-  ADTIVITY_DATA,
+  ADTIVITY_DATA, ECHO_FOEM,
 } from '../utils/ActionsType';
 
 const initialState = {
@@ -39,8 +39,8 @@ const initialState = {
   billAllStatus:{
 
   },
-  activityData:{}
-
+  activityData:{},
+  echoForm:{},
 };
 //全局状态信息，数据信息存储
 export default function (state = initialState, actions) {
@@ -195,6 +195,11 @@ export default function (state = initialState, actions) {
       return {
         ...state,
         activityData:actions.data
+      }
+    case ECHO_FOEM[1]:
+      return {
+        ...state,
+        echoForm:actions.data,
       }
     default:
       return state

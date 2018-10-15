@@ -5,6 +5,7 @@ import ModalCom from "../../compoents/ModalCom";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {handleBillForm, identityBank} from "../../actions/reqAction";
 import {regBankCard} from '../../utils/util'
+import DayPicker from "./DayPicker";
 @InitDecorator(
   (state) => {
     return {
@@ -119,10 +120,7 @@ export default class HandleBill extends React.Component {
       Toast.info('账单金额不能大于信用额度');
       return;
     }
-    if(moment(paymentDueDate).diff(moment(billDate),'days') <=0){
-      Toast.info('还款日不能小于账单日');
-      return;
-    }
+
     if(!/^[0-9]+(.[0-9]+)?$/.test(creditLimit)){
       Toast.info('输入信用额度不合法');
       return;
@@ -134,9 +132,9 @@ export default class HandleBill extends React.Component {
 
     this.props.dispatch(handleBillForm({
       bankName,
-      billDate: moment(billDate).format('YYYY-MM-DD'),
+      billDate: billDate,
       fullCardNum,
-      paymentDueDate: moment(paymentDueDate).format('YYYY-MM-DD'),
+      paymentDueDate: paymentDueDate,
       nameOnCard,
       creditLimit,
       newBalance,
@@ -231,19 +229,13 @@ export default class HandleBill extends React.Component {
           return <div key={k} style={styles.item}>
             <div style={styles.name}>{name}</div>
             {
-              code == '1' ? <DatePicker
-                mode="date"
-                title={name}
-                extra="Optional"
-                value={this.state[key]}
-                onChange={date => this.setState({[key]: date}, () => {
-                  this.enableBtn()
-                })}
-              >
-                <div
-                  style={styles.input}>{this.state[key] ? moment(this.state[key]).format('YYYY-MM-DD') : placeHolder}
-                </div>
-              </DatePicker> :
+              code == '1' ?
+                <DayPicker onRes={(day)=>{
+                  this.setState({[key]: day}, () => {
+                    this.enableBtn()
+                  })}
+                }/>
+               :
                 (divTag ? <div onClick={() => {
                                   if (key == 'bankName') {
                                     this.findBank()

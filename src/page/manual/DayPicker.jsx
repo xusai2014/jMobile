@@ -1,0 +1,220 @@
+import React from 'react';
+export default class DayPicker extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showPanel: false,
+      selectIndex:4,
+      dayVal:''
+    };
+    this.initDays()
+  }
+
+  selectDay() {
+    this.setState({
+      showPanel: true,
+    })
+  }
+
+  moveList() {
+    const {top: a, bottom: b} = this.refs.canlenda.getBoundingClientRect();
+    const {top: x, bottom: y} = this.refs.mark.getBoundingClientRect();
+    const dtaY = this.dtaObj.end_Y - this.dtaObj.Y
+    if ((a > x && dtaY > 0)
+      || (y > b && dtaY < 0)) {
+      return;
+    }
+    this.dtaObj.dta_Y = this.dtaObj.dta_Y + dtaY;
+    this.refs.canlenda.style.transition = 'cubic-bezier(0,0,0.2,1.15) 2s';
+    this.refs.canlenda.style.webkitTransition = 'cubic-bezier(0,0,0.2,1.15) 2s';
+
+    this.refs.canlenda.style.transform = `translate3d(0,${this.dtaObj.dta_Y}px,0)`;
+    this.refs.canlenda.style.webkitTransform = `translate3d(0,${this.dtaObj.dta_Y}px,0)`;
+    this.reviseItem();
+    this.selectValue()
+  }
+
+  reviseItem() {
+
+    const l = this.dtaObj.dta_Y % (this.dtaObj.itemV);
+    if (Math.abs(l) > 19) {
+      //向上偏移
+      this.dtaObj.dta_Y = this.dtaObj.dta_Y - this.dtaObj.itemV - l
+      this.refs.canlenda.style.transform = `translate3d(0,${this.dtaObj.dta_Y}px,0)`;
+      this.refs.canlenda.style.webkitTransform = `translate3d(0,${this.dtaObj.dta_Y}px,0)`;
+
+    } else {
+      //向下偏移
+      this.dtaObj.dta_Y = this.dtaObj.dta_Y - l
+      this.refs.canlenda.style.transform = `translate3d(0,${this.dtaObj.dta_Y}px,0)`;
+      this.refs.canlenda.style.webkitTransform = `translate3d(0,${this.dtaObj.dta_Y}px,0)`;
+    }
+  }
+
+  selectValue() {
+    const addIndex = this.dtaObj.dta_Y/this.dtaObj.itemV;
+    this.setState({
+      selectIndex:4 - addIndex,
+      dayVal:this.dtaObj.initArr[4 - addIndex]
+    },()=>{
+      this.props.onRes(4 - addIndex)
+    })
+
+  }
+
+  dtaObj = {
+    X: "",
+    Y: "",
+    end_X: "",
+    end_Y: "",
+    dta_Y: 0,
+    limit_Y: 40,
+    selcectIndex:4,
+    initArr:[],
+    itemV:0,
+  }
+
+  componentDidMount(){
+
+  }
+
+
+  initDays (){
+    const days = moment().daysInMonth();
+    const initArr =  new Array(days);
+    for(let i = 1; i<=days; i++){
+      initArr[i] = i;
+    }
+    this.dtaObj.initArr = initArr;
+    const index = moment().get('date');
+    const itemV = parseFloat(document.documentElement.style.fontSize)*0.7;
+    this.dtaObj.dta_Y = -(index - this.dtaObj.selcectIndex)*itemV;
+    this.dtaObj.selcectIndex = this.dtaObj.initArr[index];
+    this.dtaObj.itemV = itemV;
+  }
+
+
+
+  render() {
+    const {showPanel} = this.state;
+
+    return (
+      [
+        <div style={styles.input} onClick={() => {
+          this.selectDay()
+        }}>{
+          this.state.dayVal?this.state.dayVal:'选择日期'
+        }</div>,
+        showPanel ?
+          <div style={styles.panel}>
+            <div style={styles.container}>
+              <div style={styles.header}>
+                <span style={{marginLeft: '0.3rem'}} onClick={()=>{
+                  this.setState({
+                    showPanel:false
+                  })
+                }}>取消</span>
+                <span>账单日</span>
+                <span style={{color: '#4C7BFE', marginRight: '0.3rem'}} onClick={()=>{
+                  this.selectValue();
+                  this.setState({
+                    showPanel:false
+                  })
+                }}>确定</span>
+              </div>
+              <div style={styles.body}>
+                <div style={{
+                  ...styles.list,
+                  transition: 'cubic-bezier(0,0,0.2,1.15) 2s',
+                  webkitTransition :'cubic-bezier(0,0,0.2,1.15) 2s',
+                  transform : `translate3d(0,${this.dtaObj.dta_Y}px,0)`,
+                  webkitTransform : `translate3d(0,${this.dtaObj.dta_Y}px,0)`,
+                }}
+                     onTouchMove={(e) => {
+                       this.dtaObj.end_X = e.touches[0].pageX
+                       this.dtaObj.end_Y = e.touches[0].pageY
+
+                     }}
+                     onTouchEnd={(e) => {
+                       this.moveList();
+                     }}
+                     onTouchStart={(e) => {
+                       this.dtaObj.X = e.touches[0].pageX
+                       this.dtaObj.Y = e.touches[0].pageY
+                     }}
+                     ref="canlenda"
+                >
+                  {
+                    this.dtaObj.initArr.map((v, k) => {
+                      return <div style={styles.item}>{k}</div>
+                    })
+                  }
+                </div>
+                <div ref="mark" style={styles.mark}></div>
+              </div>
+            </div>
+          </div> : null
+      ]
+    )
+  }
+}
+const styles = {
+  panel: {
+    background: 'rgba(0, 0, 0, 0.4)',
+    position: 'absolute',
+    top: '0',
+    bottom: '0',
+    width: '7.5rem'
+  },
+  container: {
+    position: 'fixed',
+    width: '7.5rem',
+    bottom: '0',
+    backgroundColor: '#FFFFFF',
+    fontSize: '0.27rem'
+  },
+  input: {
+    width: '7.5rem',
+    height: '1rem'
+  },
+  header: {
+    width: '7.5rem',
+    fontSize: '0.31rem',
+    display: 'flex',
+    letterSpacing: '-1px',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: '0.99rem',
+    border: '1PX solid #F1F1F1'
+  },
+  list: {
+    width: '0.9rem',
+    justifyContent: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
+    margin: "0 auto"
+
+  },
+  body: {
+    overflow: 'hidden',
+    width: '7.5rem',
+    height: '4rem',
+    position: 'relative'
+  },
+  item: {
+    fontSize: '0.31rem',
+    color: '#999999',
+    letterSpacing: '-1PX',
+    height: '0.7rem'
+  },
+  mark: {
+    background: '#F0F7FF',
+    width: '7.5rem',
+    height: '0.7rem',
+    position: 'absolute',
+    zIndex: '-1',
+    top: '2rem'
+  }
+}

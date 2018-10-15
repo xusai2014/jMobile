@@ -2,7 +2,7 @@ import React from 'react';
 import Header from "../../compoents/Header";
 import ModalCom from "../../compoents/ModalCom";
 import { Tabs, Toast, Modal} from "antd-mobile"
-import {getLoginList, loginCyber, removeBillAllStatus, removeLoginStatus,} from "../../actions/reqAction";
+import {getEchoForm, getLoginList, loginCyber, removeBillAllStatus, removeLoginStatus,} from "../../actions/reqAction";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import globalStyle from "../../style";
 import {jsNative} from "sx-jsbridge";
@@ -11,7 +11,8 @@ const { alert } = Modal
 const cardType = 'CREDITCARD'
 
 @InitDecorator((state) => ({
-  loginList: state.BillReducer.loginList
+  loginList: state.BillReducer.loginList,
+  echoForm:state.BillReducer.echoForm
 }))
 export default class CyberBank extends React.Component {
 
@@ -23,18 +24,31 @@ export default class CyberBank extends React.Component {
       eyesOpen: true,
       selected: true,
       inputData: {},
+      echoStatus:false
 
     }
   }
 
   async componentWillMount() {
     const {bankId: abbr} = this.props.match.params;
+
     this.props.dispatch(getLoginList({
       abbr,
       cardType: cardType,
     })).then((result) => {
+      debugger;
     }, (err) => {
     });
+
+    this.props.dispatch(getEchoForm({bankName:abbr})).then((result)=>{
+      if(result){
+        this.setState({
+          echoStatus:true
+        })
+      }
+    },(err)=>{
+      debugger
+    })
   }
 
   /**
@@ -79,12 +93,14 @@ export default class CyberBank extends React.Component {
         return
       }
       Toast.loading('请稍候',0);
+      const { data:x } = this.props.echoForm;
       const loginStatus = await this.props.dispatch(loginCyber({
         password,
         abbr,
         account:`${username},${username1}`,
         loginType,
         loginTarget: cardType,
+        uuid:this.state.echoStatus?'':''
       }))
 
       const { data } = loginStatus;
@@ -142,6 +158,7 @@ export default class CyberBank extends React.Component {
         account:username,
         loginType,
         loginTarget: cardType,
+        uuid:''
       }))
 
       const { data } = loginStatus;

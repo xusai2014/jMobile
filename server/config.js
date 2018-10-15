@@ -1,11 +1,11 @@
 export default [
    {
      "/api":{
-       target:"http://172.16.136.174:8080",
+       target:"https://mpos.suixingpay.com",
        secure:false,
        changeOrigin: true,
        pathRewrite: {
-         '^/api' : '/api',     // rewrite path
+         '^/api/test' : '/phoneclient/notify.htm',     // rewrite path
        },
      }
    },{
@@ -23,6 +23,6 @@ export default [
 */
 export const config = {
   enableAutoRouter:true,//开启动态生成路由代码,
-  enableZIP:true,
+  enableZIP:false,
 }
 

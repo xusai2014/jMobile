@@ -175,6 +175,8 @@ export default class AddBill extends React.Component {
                 <DayPicker onRes={(day)=>{
                   this.setState({
                     [key]:day
+                  },()=>{
+                    this.enableBtn()
                   })}
                 }/> :
                 <input

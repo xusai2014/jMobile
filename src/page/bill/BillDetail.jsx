@@ -4,12 +4,13 @@ import {Tabs,Modal,Toast} from "antd-mobile"
 import Popup from "../home/components/Popup";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {
-  checkToken, deleteBill, getBillDetail, getLoginList, getPayDetail, syncBill,
+  checkToken, deleteBill, getBillDetail, getLoginList, getPayDetail, setMarkBill, syncBill,
   verifyCode
 } from "../../actions/reqAction";
 import {waitFunc} from "../../utils/util";
 import LoadCom from "../../compoents/LoadCom";
 import globalStyle from "../../style";
+import KeyWord from "../home/components/KeyWord";
 const {operation,alert,prompt} = Modal;
 @InitDecorator((state)=>{
   return {
@@ -29,6 +30,7 @@ export default class BillDetail extends React.Component {
       currentNum:'1',
       pageSize:'20',
       totalPages:'1',
+      detailShow:false //展示标记还部分输入框
     }
   }
 
@@ -455,7 +457,7 @@ export default class BillDetail extends React.Component {
       currentNum, pageSize,totalPages
     } = this.state;
     const { state } = this.props.location;
-    const { bank_name = '银行' } = state;
+    const { bank_name = '银行',detailShow } = state;
     const {
       payment_due_date ,
       bill_date ,
@@ -551,7 +553,6 @@ export default class BillDetail extends React.Component {
         height:'0.84rem',
         boxShadow: 'rgba(115, 125, 255, 0.53) 0rem 0.37rem 0.27rem',
       }}>
-
       </div>
       <div style={{height:'auto'}}>
         <Tabs
@@ -683,45 +684,28 @@ export default class BillDetail extends React.Component {
           })}</div>
         </Tabs>
       </div>
-      <div style={{display: 'flex',position: 'fixed',bottom: '0'}}>
-        <div style={{
-          fontSize: '0.36rem',
-          color: '#333333',
-          letterSpacing: '0',
-          display:'inline-flex',
-          alignItems:'center',
-          background: '#FFFFFF',
-          height: '1.02rem',
-          width:'3.75rem'
-        }} onClick={()=>this.callSyncBill(taskId,importBillType,abbr,card_number)}><span style={{margin:'auto 0.1rem auto 1.2rem',height:'0.5rem'}}>
-          <style>{
-            `@-webkit-keyframes rotation{
-            from {-webkit-transform: rotate(0deg);}
-            to {-webkit-transform: rotate(360deg);}
-           }
+      <div style={styles.bottom}>
+        <div style={styles.bottomItem}>
+          <img src="/static/img/1.1.0/sync.png" style={styles.img} />
+          <div>同步</div></div>
+        <div style={styles.bottomItem} onClick={()=>{
+          debugger
+          this.setState({detailShow:true})
+        }}>
+          <img src="/static/img/1.1.0/pen.png" style={styles.img} />
+          <div>标记还部分</div></div>
+        <div style={styles.bottomItem} onClick={()=>{
+          this.props.dispatch(setMarkBill({
+            cardNum:card_number,
+            bankId:bank_id,
+            payStatus:'01'
+          })).then(()=>{
 
-           .Rotation{
-            -webkit-transform: rotate(360deg);
-            animation: rotation 3s linear infinite;
-            -moz-animation: rotation 3s linear infinite;
-            -webkit-animation: rotation 3s linear infinite;
-            -o-animation: rotation 3s linear infinite;
-           }
-           `
-          }</style>
-          <img className={syncBegin?"Rotation":""} style={{height:'0.3rem',}} src="/static/img/更新@2x.png"/>
-        </span>更新</div>{
-        this.props.examineAccount?null:<div style={{
-          fontSize: '0.36rem',
-          color: '#FFFFFF',
-          letterSpacing: '0',
-          width:'3.75rem',
-          display:'inline-flex',
-          background: '#4C7BFE',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }} onClick={()=>this.setState({visible:true})}>立即还款</div>
-      }
+          })
+        }} >
+          <img src="/static/img/1.1.0/select.png" style={styles.img} />
+          <div>标记已还清</div></div>
+        <div style={styles.bottomBlue} onClick={()=>this.setState({visible:true})}>立即还款</div>
       </div>
     </div>,visible?<Popup style={{top:'0.81rem'}} title="选择还款方式"  data={
       [
@@ -732,6 +716,64 @@ export default class BillDetail extends React.Component {
         ]},
       ]
     } visible={visible} setVisible={(v)=>{this.setState({visible:v})}}
-    />:null];
+    />:null
+      ,this.state.detailShow?<div style={styles.container} key={'f'}>
+      <div style={styles.header}>
+        <img src="/static/img/back.png" style={styles.back} onClick={()=>{}}/>
+        标记还部分</div>
+      <KeyWord billData={{card_number,bank_id}} />
+    </div>:null];
   }
+}
+
+const styles = {
+  bottom:{
+    display: 'flex',position: 'fixed',bottom: '0',
+    alignItems:"center"
+  },
+  container:{
+    position: 'fixed',
+    width: '7.5rem',
+    bottom: '0',
+    backgroundColor:'#FFFFFF',
+    fontSize: '0.27rem'
+  },header:{
+    fontSize: '0.3rem',
+    color: '#333333',
+    letterSpacing: '0',
+    width:'7.5rem',
+    lineHeight:'0.8rem',
+    textAlign:'center',
+    border: '2px solid #ECECEC'
+  },
+  bottomBlue:{
+    background: '#4C7BFE',
+    width:"3.45rem",
+    lineHeight:'1.1rem',
+    textAlign:"center",
+    fontSize: '0.3rem',
+    color: '#FFFFFF',
+    letterSpacing: '0'
+  },
+  bottomItem:{
+    width:"1.34rem",
+    height:'1.1rem',
+    textAlign:"center",
+    fontSize: '0.2rem',
+    color: '#333333',
+    letterSpacing: '0',
+    borderRight:"0.01rem solid #979797"
+  },
+  img:{
+    height:'0.33rem',
+    marginTop:'0.3rem',
+  },
+  back:{
+    width:"0.2rem",
+    height:'0.34rem',
+    marginLeft:'0.31rem',
+    position: 'absolute',
+    left: '0',
+    top: '0.23rem'
+  },
 }

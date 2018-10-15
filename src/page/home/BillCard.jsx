@@ -74,8 +74,8 @@ export default class BillCard extends React.Component {
 
   }
 
-  showMoreAction() {
-    this.props.showMoreAction()
+  showMoreAction(task_id, importBillType, abbr, cardNum,bankId,bill_type) {
+    this.props.showMoreAction(task_id, importBillType, abbr, cardNum,bankId,bill_type,()=>this.callSyncBill(task_id, importBillType, abbr, cardNum))
   }
 
   /**
@@ -344,6 +344,7 @@ export default class BillCard extends React.Component {
       authSts,
       examineAccount,
       moreAction,
+      bank_id,
     }
       = this.props;
     const {
@@ -433,7 +434,7 @@ export default class BillCard extends React.Component {
                   this.callLogin()
                   return
                 }
-                this.showMoreAction(task_id, importBillType, abbr, card_num)
+                this.showMoreAction(task_id, importBillType, abbr, card_num,bank_id,bill_type)
               }}/>)
               :
               <div style={{

@@ -15,8 +15,11 @@ export default class MoreItem extends React.Component {
       items = [],
       cancelFunc = ()=>{},
       level = 1,
-      setLevel = ()=>{}
+      setLevel = ()=>{},
+      billData = {},
+
     } = this.props;
+    const { bill_type } = billData;
     return (
       <div style={styles.panel}>
         {
@@ -24,10 +27,11 @@ export default class MoreItem extends React.Component {
             <div style={styles.container}>
               {
                 items.map((v,k)=>{
-                  const {
+                  let {
                     action = ()=>{},
                     name = '',
                   } = v;
+                  name = name=='manual'?(bill_type=='UNDONE'?"标记已还清":""):name
                   const isBlueObj = k<2?styles.blue:{}
                   const stylesObj = {
                     ...styles.item,
@@ -43,7 +47,7 @@ export default class MoreItem extends React.Component {
                 <div style={styles.header}>
                   <img src="/static/img/back.png" style={styles.back} onClick={()=>setLevel()}/>
                   标记还部分</div>
-                <KeyWord />
+                <KeyWord billData={billData} />
               </div>:null
         }
       </div>

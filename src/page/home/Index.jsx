@@ -6,7 +6,7 @@ import {InitDecorator} from "../../compoents/InitDecorator";
 import FreeItem from "./components/FreeItem";
 import {
   getBillList, getFreeInterest, getIndetiyInfo,
-  getActivities
+  getActivities, setMarkBill
 } from "../../actions/reqAction";
 import {jsNative,} from "sx-jsbridge";
 import {judgeEnv} from "../../utils/util";
@@ -39,6 +39,9 @@ export default class Index extends React.Component {
       MERC_SN: '',
       moreAction: false,
       level: 1,
+      activeCard: {},
+      syncfunc: () => {
+      }
     }
   }
 
@@ -75,7 +78,9 @@ export default class Index extends React.Component {
   initData() {
     this.getUserInfo();
     this.getBillList();
-    this.props.dispatch(getActivities()).then(() => {}, () => {});
+    this.props.dispatch(getActivities()).then(() => {
+    }, () => {
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -142,11 +147,14 @@ export default class Index extends React.Component {
       } else if (authSts == '99') {
         alert(<span className="alert_title">您尚未通过实名认证，请先进行实名认证</span>, '', [
           {
-            text: "取消", onPress: () => {},
+            text: "取消", onPress: () => {
+          },
             style: globalStyle.cancelStyle
           },
           {
-            text: "去认证", onPress: () => {jsNative.nativeGoRealName()},
+            text: "去认证", onPress: () => {
+            jsNative.nativeGoRealName()
+          },
             style: globalStyle.sureStyle
           },
         ])
@@ -156,7 +164,8 @@ export default class Index extends React.Component {
       this.setState({
         authSts: authSts
       })
-    }, () => {})
+    }, () => {
+    })
   }
 
   loginEnter(type, params) {
@@ -224,7 +233,8 @@ export default class Index extends React.Component {
           text: '我知道了',
           onPress: () => {
             localStorage.setItem(MERC_SN, true);
-            jsNative.nativeOpenNewWebView({url: gameUri}, () => {});
+            jsNative.nativeOpenNewWebView({url: gameUri}, () => {
+            });
           },
           style: globalStyle.sureStyle
         }]
@@ -233,7 +243,7 @@ export default class Index extends React.Component {
   }
 
   render() {
-    const {interestShow, visible, freeItems, sycnModal, authSts, moreAction, level} = this.state;
+    const {interestShow, activeCard, visible, freeItems, sycnModal, authSts, moreAction, level} = this.state;
     const {examineAccount} = this.props;
     const {isLogged, billList = {}, freeIntrestData = [], activities = []} = this.props;
     const {waitPaymentAmount = '0.00', waitPaymentNumber = '0', baseResponseBillDtoList} = billList
@@ -323,7 +333,14 @@ export default class Index extends React.Component {
               (baseResponseBillDtoList.length == 0 ?
                 this.example : baseResponseBillDtoList).map((v, k) => {
                 return <BillCard {...v}
-                                 showMoreAction={() => this.setState({moreAction: true})}
+                                 showMoreAction={(task_id, importBillType, abbr, cardNum, bankId, bill_type, syncfunc) => this.setState({
+                                   moreAction: true, activeCard: {
+                                     task_id, importBillType, abbr, cardNum, bankId, bill_type
+                                   }, syncfunc
+                                 })}
+                                 callSync={() => {
+                                   this.setState()
+                                 }}
                                  isLogged={isLogged}
                                  key={k}
                                  repay={(e) => {
@@ -448,10 +465,25 @@ export default class Index extends React.Component {
           {
             name: "更新账单",
             action: () => {
+              this.setState({moreAction: false})
+              this.state.syncfunc()
             },
           }, {
-            name: "标记已还清",
+            name: "mamual",
             action: () => {
+              this.setState({moreAction: false});
+              const {
+                cardNum,
+                bankId,
+              } = activeCard;
+              this.props.dispatch(setMarkBill({
+                cardNum,
+                bankId,
+                payStatus: '01'
+              })).then(() => {
+
+              })
+
             },
           }, {
             name: "标记还部分",
@@ -464,6 +496,7 @@ export default class Index extends React.Component {
                     this.setState({moreAction: false})
                   }}
                   level={level}
+                  billData={activeCard}
                   setLevel={() => {
                     this.setState({level: 1})
                   }}/> :

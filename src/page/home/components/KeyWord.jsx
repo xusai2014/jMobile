@@ -13,7 +13,7 @@ export default class KeyWord extends React.Component {
     super(props);
     this.state = {
       repaymentAmount:'',
-      x
+      x:""
     }
   }
 

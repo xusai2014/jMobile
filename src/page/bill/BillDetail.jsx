@@ -4,7 +4,7 @@ import {Tabs,Modal,Toast} from "antd-mobile"
 import Popup from "../home/components/Popup";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {
-  checkToken, deleteBill, getBillDetail, getLoginList, getPayDetail, setMarkBill, syncBill,
+  checkToken, deleteBill, getBillDetail, getBillDetaillList, getLoginList, getPayDetail, setMarkBill, syncBill,
   verifyCode
 } from "../../actions/reqAction";
 import {waitFunc} from "../../utils/util";
@@ -17,6 +17,7 @@ const {operation,alert,prompt} = Modal;
     billDetail:state.BillReducer.billDetail,
     payDetail:state.BillReducer.payDetail,
     examineAccount:state.CardsReducer.examineAccount,
+    billDetailList:state.BillReducer.billDetailList
   }
 })
 export default class BillDetail extends React.Component {
@@ -30,7 +31,8 @@ export default class BillDetail extends React.Component {
       currentNum:'1',
       pageSize:'20',
       totalPages:'1',
-      detailShow:false //展示标记还部分输入框
+      detailShow:false, //展示标记还部分输入框,
+      pageData:{},
     }
   }
 
@@ -275,25 +277,13 @@ export default class BillDetail extends React.Component {
   }
 
   initData(){
-    const { billId } = this.props.match.params;
-    const { currentNum, pageSize} = this.state;
-    this.props.dispatch(getBillDetail({
-      billId,
-      currentNum,
-      pageSize
+    const { billId, } = this.props.match.params;
+    const { bank_id:bankId, bank_name ,card_num:cardNum } = this.props.location.state;
+
+    this.props.dispatch(getBillDetaillList({
+      cardNum,bankId
     })).then((result)=>{
-      const { data = {}} = result;
-      const { pageResponseDto } = data;
-      const {
-        currentPage,
-        size,
-        totalPages,
-      } = pageResponseDto;
-      this.setState({
-        currentNum:currentPage,
-        pageSize:size,
-        totalPages,
-      })
+      debugger;
     })
 
   }
@@ -451,33 +441,57 @@ export default class BillDetail extends React.Component {
 
   }
 
+  getBillList(billId){
+    const { currentNum, pageSize} = this.state;
+    this.props.dispatch(getBillDetail({
+      billId,
+      currentNum,
+      pageSize
+    })).then((result)=>{
+      const { data = {}} = result;
+      const { pageResponseDto } = data;
+      const {
+        currentPage,
+        size,
+        totalPages,
+        pageList = []
+      } = pageResponseDto;
+      debugger;
+      this.setState({
+        currentNum:currentPage,
+        pageSize:size,
+        totalPages,
+        pageData:{
+          ...this.state.pageData,
+          [billId]:pageList
+        },
+      })
+    });
+  }
+
   render() {
-    const {billDetail ={},payDetail= []} = this.props;
-    const {expandOne, visible, syncBegin,
-      currentNum, pageSize,totalPages
+    const {billDetailList ={},payDetail= [],billDetail} = this.props;
+    const {expandOne, visible,
+      currentNum, pageSize,totalPages, pageData
     } = this.state;
     const { state } = this.props.location;
-    const { bank_name = '银行',detailShow } = state;
+    const { bank_name = '银行',bank_id ,card_num } = state;
     const {
       payment_due_date ,
       bill_date ,
       credit_limit = '',//总额度
       balance = '',//剩余额度
-      pageResponseDto ={},//账单明细
       name_on_card = '',
       bill_type = '',
       min_payment = '',
-      card_number = '',
+      items = [],
+      current_bill_remain_amt = '0.00',
       importBillType,
-      bank_id,
-      abbr='',
-      taskId,
-      current_bill_remain_amt = '0.00'
-    } = billDetail;
-    const { pageList:list = [],} = pageResponseDto
+      abbr,
+      taskId
+    } = billDetailList;
     const { billId } = this.props.match.params;
 
-    const { from , to, datalist } = this.haneleDetail(list);
     const {day, date, des} = this.judgeStatus(bill_type, payment_due_date, bill_date)
     return [<Header title={`${bank_name}`}
                     right={<img onClick={()=>{
@@ -500,7 +514,7 @@ export default class BillDetail extends React.Component {
             letterSpacing: '0',
             padding: '0.27rem 0 0 0.31rem'
           }}
-        >{name_on_card} {card_number}
+        >{name_on_card} {card_num}
         </div>
         <div style={{paddingBottom: "0.38rem"}}>
           <div style={{width: "3.9rem", padding: '0.43rem 0 0 0.31rem', display: 'inline-block'}}>
@@ -564,13 +578,14 @@ export default class BillDetail extends React.Component {
           onTabClick={(v)=>{
             const { sub} = v
             if(sub == '1'){
-              this.getPayDetailInfo(bank_id,card_number)
+              this.getPayDetailInfo(bank_id,card_num)
             }
           }
           }
         >
           <div style={{background: '#FFFFFF',height:'auto'}}>
-            {[1].map((v, k) => {
+            {items.map((v, k) => {
+              const {billType,bill_month,bill_id} = v;
               return <div>
                 <div style={{
                   display: 'flex',
@@ -579,9 +594,11 @@ export default class BillDetail extends React.Component {
                 }}
                      onClick={() => {
                        if (v == expandOne) {
-                         this.setState({expandOne: '-1'})
+                         this.setState({expandOne: '-1',currentNum:"1",totalPages:"1"})
                        } else {
-                         this.setState({expandOne: v})
+                         this.setState({expandOne: v},()=>{
+                           this.getBillList(bill_id)
+                         })
                        }
 
                      }}>
@@ -595,18 +612,20 @@ export default class BillDetail extends React.Component {
                       fontSize: '0.26rem',
                       color: '#4C7BFE',
                       letterSpacing: '0',
-                    }}>未出账单
+                    }}> {billType == 'DONE'?"已出账单":(
+                            billType == 'UNDONE'?"未出账单":
+                              (billType=='OVERDUEPAYMENT'?"已逾期":""))}
                     </div>
                     <div style={{
                       fontSize: '0.24rem',
                       color: '#999999',
                       letterSpacing: '0'
-                    }}><span>{to}</span>至<span>{from}</span></div>
+                    }}><span>{bill_month}</span></div>
                   </div>
                 </div>
                 {expandOne == v ? [<div id="load" style={{overflow:'scroll'}}>
                   {
-                    list.map((v, k) => {
+                    pageData[bill_id]? pageData[bill_id].map((v, k) => {
                       const { description,trans_date,amount_money } = v;
                       return <div style={{
                         display:'flex',
@@ -639,13 +658,16 @@ export default class BillDetail extends React.Component {
                         fontWeight:'bold'
                       }}>{amount_money}</div></div>
 
-                    })
-                  }
-                  <LoadCom loadMoreDataFn={(c,p,callback)=>this.loadMoreDataFn(c,p,callback)}
-                           currentNum={currentNum}
-                           pageSize ={pageSize}
-                           totalPages={totalPages}
-                  />
+                    }):
+                      null
+                  }{
+                  pageData[bill_id]?<LoadCom loadMoreDataFn={(c,p,callback)=>this.loadMoreDataFn(c,p,callback)}
+                                             currentNum={currentNum}
+                                             pageSize ={pageSize}
+                                             totalPages={totalPages}
+                  />:<div style={{textAlign: 'center',}}>正在加载中...</div>
+                }
+
                 </div>] : null}</div>
             })}
           </div>
@@ -685,18 +707,19 @@ export default class BillDetail extends React.Component {
         </Tabs>
       </div>
       <div style={styles.bottom}>
-        <div style={styles.bottomItem}>
+        <div style={styles.bottomItem} onClick={()=>{
+          this.callSyncBill(taskId, importBillType,abbr,card_num)
+        }}>
           <img src="/static/img/1.1.0/sync.png" style={styles.img} />
           <div>同步</div></div>
         <div style={styles.bottomItem} onClick={()=>{
-          debugger
           this.setState({detailShow:true})
         }}>
           <img src="/static/img/1.1.0/pen.png" style={styles.img} />
           <div>标记还部分</div></div>
         <div style={styles.bottomItem} onClick={()=>{
           this.props.dispatch(setMarkBill({
-            cardNum:card_number,
+            cardNum:card_num,
             bankId:bank_id,
             payStatus:'01'
           })).then(()=>{
@@ -721,7 +744,7 @@ export default class BillDetail extends React.Component {
       <div style={styles.header}>
         <img src="/static/img/back.png" style={styles.back} onClick={()=>{}}/>
         标记还部分</div>
-      <KeyWord billData={{card_number,bank_id}} />
+      <KeyWord billData={{card_num,bank_id}} />
     </div>:null];
   }
 }
@@ -762,7 +785,8 @@ const styles = {
     fontSize: '0.2rem',
     color: '#333333',
     letterSpacing: '0',
-    borderRight:"0.01rem solid #979797"
+    borderRight:"0.01rem solid #979797",
+    background:"rgb(245, 245, 245)"
   },
   img:{
     height:'0.33rem',

@@ -368,7 +368,7 @@ export default class BillCard extends React.Component {
       if (examineAccount) {
         return
       }
-      this.props.history.push(`/bill/detail/${bill_id}`, {bank_name})
+      this.props.history.push(`/bill/detail/${bill_id}`, {bank_name,card_num,bank_id})
     }} style={{background: '#FFFFFF', marginTop: '0.2rem', padding: "0.3rem 0", position: 'relative'}}>
       <div style={{display: 'flex', alignItems: 'center'}}>
         {

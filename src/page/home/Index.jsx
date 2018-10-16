@@ -469,17 +469,18 @@ export default class Index extends React.Component {
               this.state.syncfunc()
             },
           }, {
-            name: "mamual",
-            action: () => {
+            name: "manual",
+            action: (param) => {
               this.setState({moreAction: false});
               const {
                 cardNum,
                 bankId,
               } = activeCard;
+              const {payStatus} = param
               this.props.dispatch(setMarkBill({
                 cardNum,
                 bankId,
-                payStatus: '01'
+                payStatus: payStatus
               })).then(() => {
 
               })

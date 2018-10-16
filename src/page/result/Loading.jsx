@@ -191,7 +191,10 @@ export default class LoadingStatus extends React.Component{
       onPress: value => new Promise((resolve) => {
         resolve();
         alert(<span className="alert_title">是否退出当前认证流程</span>, <span className="alert_content">选择“是”将退出当前认证流程已填写信息将丢失</span>,[
-          {text:"是",onPress:()=>{this.props.history.go(-1)},style: globalStyle.cancelStyle},
+          {text:"是",onPress:()=>{
+            //prompt().close()
+          this.props.history.go(-1)
+          },style: globalStyle.cancelStyle},
           {text:"否",onPress:()=>{
             this.promptClick({input, taskId, description, callback})
           },style: globalStyle.sureStyle}

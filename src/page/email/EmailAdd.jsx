@@ -23,7 +23,7 @@ export default class EmailAdd extends React.Component {
       modal: false,
       description: '',
       eyesOpen: false,
-      selected: false,
+      selected: true,
       password: '',
       account: "",
       btnDisabled:true,

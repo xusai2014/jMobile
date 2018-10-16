@@ -152,22 +152,26 @@ export default class AddBill extends React.Component {
           name: '账单日', value: "",
           placeHolder: "请选择",
           code: "1",
-          key: 'accountDate'
+          key: 'accountDate',
+          type:'date'
         }, {
           name: '还款日', value: "",
           placeHolder: "请选择",
           code: "1",
-          key: 'repayDate'
+          key: 'repayDate',
+          type:'date'
         }, {
           name: '信用额度', value: "",
           placeHolder: "请输入信用额度",
-          key: "creditLimit"
+          key: "creditLimit",
+          type:'number'
         }, {
           name: '账单金额', value: "",
           placeHolder: "请输入账单金额",
-          key: "newBalance"
+          key: "newBalance",
+          type:'number'
         }].map((v, k) => {
-          const {name, disabled, value, key, placeHolder, icon, code = '0'} = v;
+          const {name, disabled, value, key,type, placeHolder, icon, code = '0'} = v;
           return <div key={k} style={styles.item}>
             <div style={styles.name}>{name}</div>
             {
@@ -191,6 +195,8 @@ export default class AddBill extends React.Component {
                       this.findBank()
                     }
                   }}
+
+                  type={type}
                   value={this.state[key]}
                   disabled={disabled}
                   style={styles.input}

@@ -31,13 +31,17 @@ export default class MoreItem extends React.Component {
                     action = ()=>{},
                     name = '',
                   } = v;
-                  name = name=='manual'?(bill_type=='UNDONE'?"标记已还清":""):name
+                  name = name=='manual'?(bill_type=='UNDONE'?"标记已还清":(
+                    bill_type=='DONE'?'标记未还清':name
+                  )):name
                   const isBlueObj = k<2?styles.blue:{}
                   const stylesObj = {
                     ...styles.item,
                     ...isBlueObj
                   }
-                  return <div style={stylesObj} onClick={()=>{action()}}>{name}</div>
+                  const param = name=='manual'?(bill_type=='UNDONE'?{payStatus:'01'}:(
+                    bill_type=='DONE'?{payStatus:'02'}:{})):{}
+                  return <div style={stylesObj} onClick={()=>{action(param)}}>{name}</div>
                 })
               }
               <div onClick={()=>{cancelFunc()}} style={styles.cancel}>取消</div>

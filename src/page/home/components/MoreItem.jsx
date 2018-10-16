@@ -31,7 +31,6 @@ export default class MoreItem extends React.Component {
                     action = ()=>{},
                     name = '',
                   } = v;
-                  debugger
 
                   const isBlueObj = k<2?styles.blue:{}
                   const stylesObj = {

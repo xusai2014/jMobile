@@ -19,6 +19,16 @@ export default class KeyWord extends React.Component {
   markRest(activeCard){
     const {card_num:cardNum,bank_id:bankId} = activeCard;
     const { repaymentAmount } = this.state;
+    if(!repaymentAmount){
+      Toast.info('请输入金额');
+      return
+    }
+    if(/(^[1-9](\d+)?(\.\d{1,2})?$)|(^0$)|(^\d\.\d{1,2}$)/.test(repaymentAmount)){
+
+    } else {
+      Toast.info('请输入正确金额');
+      return
+    }
     this.props.dispatch(setBillRest({
       cardNum,
       bankId,
@@ -35,7 +45,12 @@ export default class KeyWord extends React.Component {
 
     return (
       <div>
-        <input type="number" onChange={(e)=>{
+        <input type="number" onKeyDown={(e)=>{
+          if(parseInt(e.keyCode) == 8){
+            this.markRest(activeCard)
+          }
+        }} onChange={(e)=>{
+
           this.setState({
             repaymentAmount:e.currentTarget.value,
           })

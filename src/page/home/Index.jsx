@@ -1,5 +1,5 @@
 import React from 'react';
-import {Modal,} from 'antd-mobile'
+import {Modal,Toast} from 'antd-mobile'
 import BillCard from "./BillCard";
 import Popup from "./components/Popup";
 import {InitDecorator} from "../../compoents/InitDecorator";
@@ -304,7 +304,7 @@ export default class Index extends React.Component {
       </div>
       <div style={styles.shadowBlock}></div>
       <div style={styles.activity}>
-        {isLogged ? (!this.props.examineAccount ? [1, 2, 3, 4].map((v, k) => {
+        {isLogged ? (!this.props.examineAccount ? activities.map((v, k) => {
           const {logoUri = '', gameUri, gameName = ''} = activities[k] ? activities[k] : {};
           return <div onClick={() => {
             if (gameUri.indexOf('site=oldweb') > 0) {
@@ -482,7 +482,8 @@ export default class Index extends React.Component {
                 bankId,
                 payStatus: payStatus
               })).then(() => {
-
+                  Toast.info('标记成功');
+                  this.initData()
               })
 
             },
@@ -496,8 +497,9 @@ export default class Index extends React.Component {
                   cancelFunc={() => {
                     this.setState({moreAction: false})
                   }}
+                  updateData = {()=>this.initData()}
                   level={level}
-                  billData={activeCard}
+                  billData={{bank_id:activeCard.bankId,bill_type:activeCard.bill_type,card_num:activeCard.cardNum}}
                   setLevel={() => {
                     this.setState({level: 1})
                   }}/> :

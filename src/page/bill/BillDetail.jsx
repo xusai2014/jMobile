@@ -727,7 +727,13 @@ export default class BillDetail extends React.Component {
           })
         }} >
           <img src="/static/img/1.1.0/select.png" style={styles.img} />
-          <div>标记已还清</div></div>
+          <div>{
+            importBillType == 'DONE'?"标记未还清":(
+              importBillType == 'UNDONE'?"标记已还清":(
+                importBillType == 'OVERDUEPAYMENT'?"标记已还清":""
+              )
+            )
+          }</div></div>
         <div style={styles.bottomBlue} onClick={()=>this.setState({visible:true})}>立即还款</div>
       </div>
     </div>,visible?<Popup style={{top:'0.81rem'}} title="选择还款方式"  data={
@@ -742,9 +748,11 @@ export default class BillDetail extends React.Component {
     />:null
       ,this.state.detailShow?<div style={styles.container} key={'f'}>
       <div style={styles.header}>
-        <img src="/static/img/back.png" style={styles.back} onClick={()=>{}}/>
+        <img src="/static/img/back.png" style={styles.back} onClick={()=>{this.setState({detailShow:false,})}}/>
         标记还部分</div>
-      <KeyWord billData={{card_num,bank_id}} />
+      <KeyWord billData={{card_num,bank_id}} apiCallback={()=>{
+        this.getPayDetailInfo(bank_id,card_num)
+        this.setState({detailShow:false})}} />
     </div>:null];
   }
 }

@@ -197,35 +197,42 @@ export default class HandleBill extends React.Component {
           key: "fullCardNum",
           name: '卡号', value: "",
           placeHolder: "请输入完整卡号",
+          type:"number",
         }, {
           key: "bankName",
           name: '发卡行', value: "",
           placeHolder: "点击此处识别发卡行",
-          divTag: true
+          divTag: true,
+          type:"",
         }, {
           key: "nameOnCard",
           name: '持卡人', value: "",
           placeHolder: "请输入持卡人姓名",
+          type:"text",
         }, {
           name: '账单日', value: "",
           placeHolder: "请选择",
           code: "1",
-          key: 'accountDate'
+          key: 'accountDate',
+          type:"",
         }, {
           name: '还款日', value: "",
           placeHolder: "请选择",
           code: "1",
-          key: 'repayDate'
+          key: 'repayDate',
+          type:"",
         }, {
           name: '信用额度', value: "",
           placeHolder: "请输入信用额度",
-          key: "creditLimit"
+          key: "creditLimit",
+          type:"number",
         }, {
           name: '账单金额', value: "",
           placeHolder: "请输入账单金额",
-          key: "newBalance"
+          key: "newBalance",
+          type:"number",
         }].map((v, k) => {
-          const {name, disabled, value, divTag = false, key, placeHolder, icon, code = '0'} = v;
+          const {name, disabled, value,type, divTag = false, key, placeHolder, icon, code = '0'} = v;
           return <div key={k} style={styles.item}>
             <div style={styles.name}>{name}</div>
             {
@@ -256,6 +263,7 @@ export default class HandleBill extends React.Component {
                                 this.enableBtn()
                               })
                             }}
+                           type={type}
                            value={this.state[key]}
                            disabled={disabled}
                            style={styles.input}

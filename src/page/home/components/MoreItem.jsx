@@ -17,7 +17,7 @@ export default class MoreItem extends React.Component {
       level = 1,
       setLevel = ()=>{},
       billData = {},
-
+      updateData = ()=>{}
     } = this.props;
     const { bill_type } = billData;
     return (
@@ -31,16 +31,18 @@ export default class MoreItem extends React.Component {
                     action = ()=>{},
                     name = '',
                   } = v;
-                  name = name=='manual'?(bill_type=='UNDONE'?"标记已还清":(
-                    bill_type=='DONE'?'标记未还清':name
-                  )):name
+                  debugger
+
                   const isBlueObj = k<2?styles.blue:{}
                   const stylesObj = {
                     ...styles.item,
                     ...isBlueObj
                   }
                   const param = name=='manual'?(bill_type=='UNDONE'?{payStatus:'01'}:(
-                    bill_type=='DONE'?{payStatus:'02'}:{})):{}
+                    bill_type=='DONE'?{payStatus:'02'}:(bill_type == 'OVERDUEPAYMENT'?{payStatus:'01'}:{}))):{}
+                  name = name=='manual'?(bill_type=='UNDONE'?"标记已还清":(
+                    bill_type=='DONE'?'标记未还清':(bill_type == 'OVERDUEPAYMENT'?"标记已还清":name)
+                  )):name
                   return <div style={stylesObj} onClick={()=>{action(param)}}>{name}</div>
                 })
               }
@@ -51,7 +53,7 @@ export default class MoreItem extends React.Component {
                 <div style={styles.header}>
                   <img src="/static/img/back.png" style={styles.back} onClick={()=>setLevel()}/>
                   标记还部分</div>
-                <KeyWord billData={billData} />
+                <KeyWord billData={billData} apiCallback={()=>{updateData();cancelFunc()}} />
               </div>:null
         }
       </div>
@@ -62,7 +64,7 @@ export default class MoreItem extends React.Component {
 const styles = {
   panel:{
     background: 'rgba(0, 0, 0, 0.5)',
-    position: 'absolute',
+    position: 'fixed',
     top: '0',
     bottom: '0',
     width: '7.5rem'

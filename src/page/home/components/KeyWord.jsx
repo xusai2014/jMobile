@@ -1,6 +1,7 @@
 import React from 'react';
 import {InitDecorator} from "../../../compoents/InitDecorator";
 import {setBillRest} from "../../../actions/reqAction";
+import { Toast } from 'antd-mobile'
 
 @InitDecorator((state) => {
   return {
@@ -16,16 +17,16 @@ export default class KeyWord extends React.Component {
   }
 
   markRest(activeCard){
-    const {cardNum,bankId} = activeCard;
+    const {card_num:cardNum,bank_id:bankId} = activeCard;
     const { repaymentAmount } = this.state;
     this.props.dispatch(setBillRest({
       cardNum,
       bankId,
       repaymentAmount
     })).then((result)=>{
-      debugger
+      Toast.info('标记成功')
+      this.props.apiCallback()
     },(err)=>{
-      debugger
     })
   }
   render(){
@@ -34,7 +35,7 @@ export default class KeyWord extends React.Component {
 
     return (
       <div>
-        <input type={"number"} onChange={(e)=>{
+        <input type="number" onChange={(e)=>{
           this.setState({
             repaymentAmount:e.currentTarget.value,
           })

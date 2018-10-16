@@ -32,7 +32,7 @@ window.sa = sa;
 if (module.hot) {
   module.hot.accept();
 }
-initJSBridge(false,{TOKEN_ID:"abdff8ddca584713a1f6c7866fb0a16f"});
+initJSBridge(true,{TOKEN_ID:"0f743e7580354e38a533a01aa622ee0b"});
 
 
 nativeJs.informLoginStatus(() => {

@@ -101,7 +101,7 @@ const styles = {
   back:{
     width:"0.2rem",
     height:'0.34rem',
-    marginLeft:'0.31rem',
+    padding:'0 0.31rem',
     position: 'absolute',
     left: '0',
     top: '0.23rem'

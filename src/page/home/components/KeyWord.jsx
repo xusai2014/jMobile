@@ -54,10 +54,10 @@ export default class KeyWord extends React.Component {
           this.setState({
             repaymentAmount:e.currentTarget.value,
           })
-        }} value={repaymentAmount} style={styles.input} placeholder="请输入账单金额"/>
-        <button onClick={()=>{
-          this.markRest(activeCard)
-        }}>确定</button>
+
+        }}
+               autoFocus={true}
+               value={repaymentAmount} style={styles.input} placeholder="请输入账单金额"/>
       </div>
     )
   }

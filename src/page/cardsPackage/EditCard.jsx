@@ -286,17 +286,20 @@ export default class EditCard extends React.Component {
         [{
           key: "cardNum",
           name: '信用卡卡号', value: "",
-          placeHolder: "请输入卡号", icon: "/static/img/扫一扫@2x.png"
+          placeHolder: "请输入卡号", icon: "/static/img/扫一扫@2x.png",
+          type:"number"
         }, {
           name: '姓名', value: "",
           placeHolder: "请输入姓名",
           disabled: activeOne == 0 ? true : false,
-          key: "username"
+          key: "username",
+          type:"text"
         }, {
           name: '持卡人身份证', value: "",
           placeHolder: "请输入身份证号码",
           disabled: activeOne == 0 ? true : false,
-          key: "id"
+          key: "id",
+          type:"number"
         }, {
           key: "bank",
           name: '发卡行', value: "",
@@ -307,8 +310,9 @@ export default class EditCard extends React.Component {
           key: "phone",
           name: '手机号', value: "",
           placeHolder: "请输入发卡行预留手机号",
+          type:"number"
         }].map((v, k) => {
-          const {name, disabled = false, btnTag = false, key, value, placeHolder, icon} = v;
+          const {name, disabled = false, btnTag = false, key,type, value, placeHolder, icon} = v;
           const {cardData = []} = this.state;
           let property = activeOne == 1 ? 'usalCardData' : "cardData";
           const val = this.state[property][key] ? this.state[property][key] : ''
@@ -354,6 +358,7 @@ export default class EditCard extends React.Component {
                     })
                   }
                 }}
+                type={type}
                 value={
                   activeOne == 0 ? (key == 'username' ?
                     `*${val.slice(1)}`

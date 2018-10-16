@@ -20,7 +20,7 @@ export default class KeyWord extends React.Component {
     const {card_num:cardNum,bank_id:bankId} = activeCard;
     const { repaymentAmount,x } = this.state;
     if(!repaymentAmount){
-      Toast.info('请输入金额');
+      Toast.info('请输入还款金额');
       return
     }
     if(/(^[1-9](\d+)?(\.\d{1,2})?$)|(^0$)|(^\d\.\d{1,2}$)/.test(repaymentAmount)){

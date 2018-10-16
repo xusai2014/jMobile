@@ -13,7 +13,6 @@ export default class KeyWord extends React.Component {
     super(props);
     this.state = {
       repaymentAmount:'',
-      x:""
     }
   }
 
@@ -45,12 +44,9 @@ export default class KeyWord extends React.Component {
     const { billData:activeCard } = this.props
 
     return (
-      <div>{x}
+      <div>
         <input type="number" onKeyDown={(e)=>{
-          this.setState({
-            x:e.keyCode,
-          })
-          if(parseInt(e.keyCode) == 8){
+          if(parseInt(e.keyCode) == 13){
             this.markRest(activeCard)
           }
         }} onChange={(e)=>{

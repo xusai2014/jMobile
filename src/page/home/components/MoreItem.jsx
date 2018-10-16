@@ -21,10 +21,17 @@ export default class MoreItem extends React.Component {
     } = this.props;
     const { bill_type } = billData;
     return (
-      <div style={styles.panel}>
+      <div style={styles.panel} onClick={(e)=>{
+        e.preventDefault();
+        e.stopPropagation()
+        cancelFunc();
+      }}>
         {
           level === 1?
-            <div style={styles.container}>
+            <div style={styles.container} onClick={(e)=>{
+              e.preventDefault();
+              e.stopPropagation();
+            }}>
               {
                 items.map((v,k)=>{
                   let {
@@ -48,7 +55,10 @@ export default class MoreItem extends React.Component {
               <div onClick={()=>{cancelFunc()}} style={styles.cancel}>取消</div>
             </div>:
             level === 2?
-              <div style={styles.container}>
+              <div style={styles.container} onClick={(e)=>{
+                e.preventDefault();
+                e.stopPropagation();
+              }}>
                 <div style={styles.header}>
                   <img src="/static/img/back.png" style={styles.back} onClick={()=>setLevel()}/>
                   标记还部分</div>

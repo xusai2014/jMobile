@@ -12,13 +12,14 @@ export default class KeyWord extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      repaymentAmount:''
+      repaymentAmount:'',
+      x
     }
   }
 
   markRest(activeCard){
     const {card_num:cardNum,bank_id:bankId} = activeCard;
-    const { repaymentAmount } = this.state;
+    const { repaymentAmount,x } = this.state;
     if(!repaymentAmount){
       Toast.info('请输入金额');
       return
@@ -40,13 +41,15 @@ export default class KeyWord extends React.Component {
     })
   }
   render(){
-    const { repaymentAmount } = this.state;
+    const { repaymentAmount, x } = this.state;
     const { billData:activeCard } = this.props
 
     return (
-      <div>
+      <div>{x}
         <input type="number" onKeyDown={(e)=>{
-          alert(e.keyCode)
+          this.setState({
+            x:e.keyCode,
+          })
           if(parseInt(e.keyCode) == 8){
             this.markRest(activeCard)
           }

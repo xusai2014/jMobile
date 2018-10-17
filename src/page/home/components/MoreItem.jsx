@@ -44,10 +44,10 @@ export default class MoreItem extends React.Component {
                     ...styles.item,
                     ...isBlueObj
                   }
-                  const param = name=='manual'?(bill_type=='UNDONE'?{payStatus:'01'}:(
-                    bill_type=='DONE'?{payStatus:'02'}:(bill_type == 'OVERDUEPAYMENT'?{payStatus:'01'}:{}))):{}
-                  name = name=='manual'?(bill_type=='UNDONE'?"标记已还清":(
-                    bill_type=='DONE'?'标记未还清':(bill_type == 'OVERDUEPAYMENT'?"标记已还清":name)
+                  const param = name=='manual'?(bill_type=='UNDONE'?{payStatus:'02'}:(
+                    bill_type=='DONE'?{payStatus:'01'}:(bill_type == 'OVERDUEPAYMENT'?{payStatus:'01'}:{}))):{}
+                  name = name=='manual'?(bill_type=='UNDONE'?"标记未还清":(
+                    bill_type=='DONE'?'标记已还清':(bill_type == 'OVERDUEPAYMENT'?"标记已还清":name)
                   )):name
                   return <div style={stylesObj} onClick={()=>{action(param)}}>{name}</div>
                 })

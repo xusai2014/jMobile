@@ -277,7 +277,6 @@ export default class BillDetail extends React.Component {
   }
 
   initData(){
-    const { billId, } = this.props.match.params;
     const { bank_id:bankId, bank_name ,card_num:cardNum } = this.props.location.state;
 
     this.props.dispatch(getBillDetaillList({
@@ -721,16 +720,16 @@ export default class BillDetail extends React.Component {
           this.props.dispatch(setMarkBill({
             cardNum:card_num,
             bankId:bank_id,
-            payStatus:'01'
+            payStatus:bill_type == 'DONE'?"01":"02"
           })).then(()=>{
-
+            this.initData()
           })
         }} >
           <img src="/static/img/1.1.0/select.png" style={styles.img} />
           <div>{
-            importBillType == 'DONE'?"标记未还清":(
-              importBillType == 'UNDONE'?"标记已还清":(
-                importBillType == 'OVERDUEPAYMENT'?"标记已还清":""
+            bill_type == 'DONE'?"标记已还清":(
+              bill_type == 'UNDONE'?"标记未还清":(
+                bill_type == 'OVERDUEPAYMENT'?"标记已还清":""
               )
             )
           }</div></div>
@@ -751,6 +750,7 @@ export default class BillDetail extends React.Component {
         <img src="/static/img/back.png" style={styles.back} onClick={()=>{this.setState({detailShow:false,})}}/>
         标记还部分</div>
       <KeyWord billData={{card_num,bank_id}} apiCallback={()=>{
+        this.initData()
         this.getPayDetailInfo(bank_id,card_num)
         this.setState({detailShow:false})}} />
     </div>:null];

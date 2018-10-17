@@ -607,7 +607,7 @@ export default class BillDetail extends React.Component {
                   <div style={{display: 'inline-block'}}>
                     <div style={{
                       fontSize: '0.26rem',
-                      color: '#4C7BFE',
+                      color: statusKey=='03'?"red":'#4C7BFE',
                       letterSpacing: '0',
                     }}>
                       {

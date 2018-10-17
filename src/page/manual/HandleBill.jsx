@@ -132,9 +132,9 @@ export default class HandleBill extends React.Component {
 
     this.props.dispatch(handleBillForm({
       bankName,
-      billDate: billDate,
+      billDate: this.handeleDate(billDate),
       fullCardNum,
-      paymentDueDate: paymentDueDate,
+      paymentDueDate: this.handeleDate(paymentDueDate),
       nameOnCard,
       creditLimit,
       newBalance,
@@ -143,6 +143,14 @@ export default class HandleBill extends React.Component {
       Toast.info('手写账单成功');
       this.props.history.push('/home/index')
     })
+  }
+
+  handeleDate(date){
+    if(parseInt(date)<10){
+      return '0'+date
+    } else {
+      return date
+    }
   }
 
   enableBtn() {

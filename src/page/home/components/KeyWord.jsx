@@ -29,12 +29,16 @@ export default class KeyWord extends React.Component {
       Toast.info('请输入正确金额');
       return
     }
+    if(parseInt(repaymentAmount)<=0){
+      Toast.info('请输入正确金额');
+      return
+    }
     this.props.dispatch(setBillRest({
       cardNum,
       bankId,
       repaymentAmount
     })).then((result)=>{
-      Toast.info('标记成功')
+      Toast.info('设置还款状态成功')
       this.props.apiCallback()
     },(err)=>{
     })

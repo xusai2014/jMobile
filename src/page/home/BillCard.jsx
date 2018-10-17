@@ -269,8 +269,8 @@ export default class BillCard extends React.Component {
         action: () => {
         }
       }:{
-         day: duM.diff(moment(), 'days'),
-         date: Math.abs(days),
+         day: Math.abs(days),
+         date: duM.format('MM-DD'),
          des: `天前出账`,
          actionName: "更新未出",
          action: () => {

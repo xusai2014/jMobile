@@ -482,7 +482,7 @@ export default class Index extends React.Component {
                 bankId,
                 payStatus: payStatus
               })).then(() => {
-                  Toast.info('标记成功');
+                  Toast.info('设置还款状态成功');
                   this.initData()
               })
 

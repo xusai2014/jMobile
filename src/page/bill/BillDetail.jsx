@@ -239,7 +239,8 @@ export default class BillDetail extends React.Component {
           date: " ",
           des: `已逾期${moment().diff(duM, 'days')}天`,
           actionName: "立即还款",
-          action
+          action,
+          key:"03"
         }
       } else {
         return {
@@ -247,7 +248,8 @@ export default class BillDetail extends React.Component {
           date: duM.format('MM-DD'),
           des: '天后到期',
           actionName: "立即还款",
-          action
+          action,
+          key:"02"
         }
       }
     } else if (bill_type == 'UNDONE') {
@@ -258,13 +260,15 @@ export default class BillDetail extends React.Component {
         date: duM.format('MM-DD'),
         des: '天后出账',
         actionName: "更新未出",
-        action
+        action,
+        key:"01"
       }:{
         day: Math.abs(days),
         date: duM.format('MM-DD'),
         des: '天前出账',
         actionName: "更新未出",
-        action
+        action,
+        key:"04"
       }
     } else {
       return {
@@ -272,7 +276,8 @@ export default class BillDetail extends React.Component {
         date: '',
         des: '',
         actionName: "",
-        action
+        action,
+        key:""
       }
     }
 
@@ -466,7 +471,7 @@ export default class BillDetail extends React.Component {
     } = billDetailList;
     const { billId } = this.props.match.params;
 
-    const {day, date, des} = this.judgeStatus(bill_type, payment_due_date, bill_date)
+    const {day, date, des,key:statusKey} = this.judgeStatus(bill_type, payment_due_date, bill_date)
     return [<Header title={`${bank_name}`}
                     right={<img onClick={()=>{
                       alert('', <span className="alert_content">账单删除后，如需再次查询，需要重新导入账单</span>, [
@@ -559,7 +564,19 @@ export default class BillDetail extends React.Component {
         >
           <div style={{background: '#FFFFFF',height:'auto'}}>
             {items.map((v, k) => {
-              const {billType,bill_month,bill_id} = v;
+              const {billType,bill_month,bill_id,bill_date} = v;
+              const duM = moment(bill_date);
+              const days = duM.diff(moment(), 'days');
+              let billItemDes = '';
+              const { billId } = this.props.match.params;
+              if(statusKey == '03' && bill_id == billId){
+                billItemDes = '已逾期';
+              } else {
+                billItemDes =billType == 'DONE'?"已出账单":
+                  (billType == 'UNDONE'?"未出账单":
+                    (billType=='OVERDUEPAYMENT'?"已逾期":""))
+              }
+
               return <div>
                 <div style={{
                   display: 'flex',
@@ -586,9 +603,10 @@ export default class BillDetail extends React.Component {
                       fontSize: '0.26rem',
                       color: '#4C7BFE',
                       letterSpacing: '0',
-                    }}> {billType == 'DONE'?"已出账单":(
-                            billType == 'UNDONE'?"未出账单":
-                              (billType=='OVERDUEPAYMENT'?"已逾期":""))}
+                    }}>
+                      {
+                        billItemDes
+                      }
                     </div>
                     <div style={{
                       fontSize: '0.24rem',

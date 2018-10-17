@@ -17,8 +17,10 @@ export default class Card extends React.Component {
   }
 
   render() {
-    const { popupCard,actName, id, bankNm,payment_due_date,card_limit,actNo,bankNo,bindType } =this.props;
+    const { popupCard,actName,bill_type, id, bankNm,payment_due_date,card_limit,actNo,bankNo,bindType } =this.props;
     const freeDay = parseInt(moment(payment_due_date).diff(moment(), 'days')) + parseInt(moment().daysInMonth())
+    const freeDay1 = bill_type == 'DONE'? parseInt(moment(payment_due_date).diff(moment(), 'days')) + parseInt(moment().daysInMonth()):
+      parseInt(moment(payment_due_date).diff(moment(), 'days'))
     return (<div style={bindType=='02'?styles.containerGray:styles.container}>
       <div style={{display:'inline-flex',alignItems:"center"}}>
         <div style={styles.rowItem}>

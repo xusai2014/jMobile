@@ -252,10 +252,17 @@ export default class BillDetail extends React.Component {
       }
     } else if (bill_type == 'UNDONE') {
       const duM = moment(bill_date);
-      return {
-        day: duM.diff(moment(), 'days'),
+      const days = duM.diff(moment(), 'days')
+      return parseInt(days)>0? {
+        day: days,
         date: duM.format('MM-DD'),
         des: '天后出账',
+        actionName: "更新未出",
+        action
+      }:{
+        day: Math.abs(days),
+        date: duM.format('MM-DD'),
+        des: '天前出账',
         actionName: "更新未出",
         action
       }

@@ -412,7 +412,7 @@ export default class BillCard extends React.Component {
         </div>
         <div style={{width: '4.26rem', display: 'inline-block'}}>
           {
-            !(update <= 10 && update >= 0) ? (syncBegin ?
+            syncBegin ?
               <div style={{
                 fontSize: '0.22rem',
                 color: '#333333',
@@ -435,15 +435,7 @@ export default class BillCard extends React.Component {
                   return
                 }
                 this.showMoreAction(task_id, importBillType, abbr, card_num,bank_id,bill_type)
-              }}/>)
-              :
-              <div style={{
-                fontSize: '0.24rem',
-                color: '#41C72F',
-                letterSpacing: '0',
-                marginLeft: '2.57rem',
-                fontWeight: 'bold',
-              }}>已同步至最新</div>
+              }}/>
           }
         </div>
       </div>

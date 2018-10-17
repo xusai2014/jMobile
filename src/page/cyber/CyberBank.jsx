@@ -82,7 +82,7 @@ export default class CyberBank extends React.Component {
     } else if (!password) {
       Toast.info('请输入密码')
       return;
-    } else if (!protocolSelected) {
+    } else if (protocolSelected === false) {
       Toast.info('请勾选协议')
       return;
     }

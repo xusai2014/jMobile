@@ -679,7 +679,7 @@ export default class BillDetail extends React.Component {
                   color: '#333333',
                   letterSpacing: '0',
                 }}>{
-                  repaymentChannel =='01'?'还到':(repaymentChannel =='01'?'手动':"")
+                  repaymentChannel =='01'?'还到':(repaymentChannel =='02'?'手动':"")
                 }还款
                 </div>
                 <div style={{

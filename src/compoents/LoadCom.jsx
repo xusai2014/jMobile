@@ -13,7 +13,8 @@ export default class LoadCom extends React.Component{
   }
 
 
-  scrollLoad =()=> {
+  scrollLoad =(e)=> {
+    e.preventDefault();
     const { loadMoreDataFn,currentNum, pageSize,totalPages } = this.props;
     if (parseInt(totalPages)<=parseInt(currentNum) || this.state.isLoading) {
       return;

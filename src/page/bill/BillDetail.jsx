@@ -394,10 +394,10 @@ export default class BillDetail extends React.Component {
     })
   }
 
-  loadMoreDataFn(currentNum,pageSize,callback){
-    const { billId } = this.props.match.params;
+  loadMoreDataFn(currentNum,pageSize,billId,callback){
     const { currentNum:num, pageSize:size} = this.state;
     if(parseInt(currentNum) == parseInt(num+1)){
+      const { currentNum = '1', pageSize = '20'} = this.state;
       this.props.dispatch(getBillDetail({
         billId,
         currentNum,
@@ -407,13 +407,19 @@ export default class BillDetail extends React.Component {
         const { pageResponseDto } = data;
         const {
           currentPage,
-          size,
+          size = '20',
           totalPages,
+          pageList = []
         } = pageResponseDto;
+        debugger;
         this.setState({
           currentNum:currentPage,
           pageSize:size,
           totalPages,
+          pageData:{
+            ...this.state.pageData,
+            [billId]:pageList
+          },
         })
       }).finally(()=>callback())
     }
@@ -421,7 +427,7 @@ export default class BillDetail extends React.Component {
   }
 
   getBillList(billId){
-    const { currentNum, pageSize} = this.state;
+    const { currentNum = '1', pageSize = '20'} = this.state;
     this.props.dispatch(getBillDetail({
       billId,
       currentNum,
@@ -431,7 +437,7 @@ export default class BillDetail extends React.Component {
       const { pageResponseDto } = data;
       const {
         currentPage,
-        size,
+        size = '20',
         totalPages,
         pageList = []
       } = pageResponseDto;
@@ -653,7 +659,7 @@ export default class BillDetail extends React.Component {
                     }):
                       null
                   }{
-                  pageData[bill_id]?<LoadCom loadMoreDataFn={(c,p,callback)=>this.loadMoreDataFn(c,p,callback)}
+                  pageData[bill_id]?<LoadCom loadMoreDataFn={(c,p,callback)=>this.loadMoreDataFn(c,p,bill_id,callback)}
                                              currentNum={currentNum}
                                              pageSize ={pageSize}
                                              totalPages={totalPages}

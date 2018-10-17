@@ -319,7 +319,7 @@ export default class CyberBank extends React.Component {
               password = '',
               username1 = '',
               eyesOpen = false,
-              protocolSelected = false,
+              protocolSelected = true,
               passSelected = true,
               disableBtn = true,
               echoStatus = false

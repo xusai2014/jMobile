@@ -46,6 +46,7 @@ export default class KeyWord extends React.Component {
     return (
       <div>
         <input type="number" onKeyDown={(e)=>{
+          console.log(e.keyCode)
           if(parseInt(e.keyCode) == 13){
             this.markRest(activeCard)
           }

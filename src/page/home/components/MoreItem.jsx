@@ -25,6 +25,7 @@ export default class MoreItem extends React.Component {
         e.preventDefault();
         e.stopPropagation()
         cancelFunc();
+        setLevel();
       }}>
         {
           level === 1?

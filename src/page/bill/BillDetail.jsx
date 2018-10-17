@@ -294,7 +294,7 @@ export default class BillDetail extends React.Component {
     this.props.dispatch(getBillDetaillList({
       cardNum,bankId
     })).then((result)=>{
-      debugger;
+
     })
 
   }
@@ -510,7 +510,7 @@ export default class BillDetail extends React.Component {
               fontSize: '0.62rem',
               color: '#FFFFFF',
               letterSpacing: '0',
-            }}>{current_bill_remain_amt}
+            }}>{parseInt(current_bill_remain_amt) == 0?'--':current_bill_remain_amt}
             </div>
             <div style={{
               opacity: '0.5',
@@ -562,7 +562,7 @@ export default class BillDetail extends React.Component {
           }
           }
         >
-          <div style={{background: '#FFFFFF',height:'auto'}}>
+          <div style={{background: '#FFFFFF',height:'auto',marginBottom:'2.2rem'}}>
             {items.map((v, k) => {
               const {billType,bill_month,bill_id,bill_date} = v;
               const duM = moment(bill_date);
@@ -663,7 +663,7 @@ export default class BillDetail extends React.Component {
                 </div>] : null}</div>
             })}
           </div>
-          <div style={{background: '#FFFFFF'}}>{payDetail.map((v,k) => {
+          <div style={{background: '#FFFFFF',height:'auto',marginBottom:'2.2rem'}}>{payDetail.map((v,k) => {
             const {createTime,repaymentAmount,repaymentTime,repaymentChannel} =v;
             const {} = repaymentTime;
             return [<div style={{height: '1.06rem', padding: '0.18rem 0', display: 'flex', alignItems: 'center'}}>

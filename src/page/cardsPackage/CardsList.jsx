@@ -223,7 +223,7 @@ export default class CardsList extends React.Component {
                 })).then((result) => {
                   if (Object.keys(result.data).length != 0) {
 
-                    this.props.history.push(`/bill/detail/${result.data}`, {bank_name: bankNm})
+                    this.props.history.push(`/bill/detail/${result.data}`,{bank_name:bankNm,card_num:actNo.substr(actNo.length-4),bank_id:bankNo})
                   } else {
                     // TODO  跳转逻辑 jerry
                     alert('', <span className="alert_content">此卡还未添加账单，请先导入账单再查看详情。</span>, [

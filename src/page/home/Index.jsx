@@ -3,9 +3,8 @@ import {Modal,Toast} from 'antd-mobile'
 import BillCard from "./BillCard";
 import Popup from "./components/Popup";
 import {InitDecorator} from "../../compoents/InitDecorator";
-import FreeItem from "./components/FreeItem";
 import {
-  getBillList, getFreeInterest, getIndetiyInfo,
+  getBillList, getIndetiyInfo,
   getActivities, setMarkBill
 } from "../../actions/reqAction";
 import {jsNative,} from "sx-jsbridge";
@@ -13,15 +12,14 @@ import {judgeEnv} from "../../utils/util";
 import globalStyle from "../../style";
 import MoreItem from "./components/MoreItem";
 import IconEnter from "./components/IconEnter";
+import FreeInterest from "./components/FreeInterest";
 const {loginHelper, nativeOpenNewWebView} = jsNative;
 const {alert} = Modal;
-
 
 @InitDecorator((state) => {
   return {
     billList: state.BillReducer.billList,
     huandaoData: state.BillReducer.huandaoData,
-    freeIntrestData: state.BillReducer.freeIntrestData,
     activities: state.CardsReducer.activities,
     examineAccount: state.CardsReducer.examineAccount,
   }
@@ -32,49 +30,22 @@ export default class Index extends React.Component {
     this.state = {
       interestShow: false, //免息期弹窗展示,
       visible: false,//弹出框
-      sycnModal: false,
-      authSts: '-1',
-      freeItems: false,
-      examineAccount: true,
-      MERC_SN: '',
-      moreAction: false,
-      level: 1,
-      activeCard: {},
+      authSts: '-1',// 是否实名认证
+      freeItems: false,//免息期弹窗
+      examineAccount: true,//是否是审核账号
+      MERC_SN: '',// 用户商编
+      moreAction: false, // 更多菜单
+      level: 1,// 更多菜单展示的层级
+      activeCard: {}, // 当前要处理账某个账单的详细数据
       syncfunc: () => {
-      }
+      } //选中账单更新数据，注册的方法
     }
   }
-
-  generateStr(v) {
-    let unit = '';
-    let ba = v;
-    if (v / 10000 >= 1) {
-      ba = v / 10000
-      unit = '万';
-    } else if (v / 1000 >= 1) {
-      ba = v / 1000;
-      unit = '千';
-    }
-    return <span>{ba.toFixed(2)}<span style={styles.unitStyle}>{unit}</span></span>
-  }
-
-  onWrapTouchStart = (e) => {
-    // fix touch to scroll background page on iOS
-    if (!/iPhone|iPod|iPad/i.test(navigator.userAgent)) {
-      return;
-    }
-    const pNode = closest(e.target, '.am-modal-content');
-    if (!pNode) {
-      e.preventDefault();
-    }
-  }
-
   componentWillMount() {
     if (this.props.isLogged) {
       this.initData()
     }
   }
-
   initData() {
     this.getUserInfo();
     this.getBillList();
@@ -83,12 +54,18 @@ export default class Index extends React.Component {
     });
   }
 
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.isLogged && this.props.isLogged != nextProps.isLogged) {
+      // 全局组件订阅的登录状态，如Native 与 Server通知登录状态已切换，立即更新视图
       this.initData();
     }
   }
-
+  /**
+  *
+  *   @methodName getUserInfo
+  *   @description 获取用户基本信息，提供审核账号与实名认证状态
+  */
   getUserInfo() {
     this.props.dispatch(getIndetiyInfo({
       appType: 'mpos'
@@ -104,21 +81,8 @@ export default class Index extends React.Component {
     })
   }
 
-  async getFreeData() {
-    const reqParams = await this.props.getBaseParams();
-    this.props.dispatch(getFreeInterest({
-      ...reqParams
-    })).then((result) => {
-      this.setState({freeItems: true})
-    }, () => {
-    })
-  }
-
-  async getBillList() {
-    const reqParams = await this.props.getBaseParams();
-    this.props.dispatch(getBillList({
-      ...reqParams
-    }))
+  getBillList() {
+    this.props.dispatch(getBillList())
   }
 
   openCardMarket() {
@@ -128,9 +92,7 @@ export default class Index extends React.Component {
     } else {
       url = `https://mpcw${judgeEnv()}.vbill.cn/cca/home?channelId=1000&source=creditCard`
     }
-    nativeOpenNewWebView({
-      url
-    })
+    nativeOpenNewWebView({ url })
   }
 
   identifyFunc(callback) {
@@ -170,13 +132,11 @@ export default class Index extends React.Component {
 
   loginEnter(type, params) {
     loginHelper(() => {
-      const {authSts} = this.state;
       switch (type) {
         case 1:
           //展示免息期
           this.setState({interestShow: true}, () => {
             document.body.style.position =  'fixed'
-            this.getFreeData()
           });
           return;
         case 2:
@@ -201,23 +161,6 @@ export default class Index extends React.Component {
       }
     })
   }
-
-  example = [{
-    card_num: "2886",
-    bank_name: "招商银行",
-    bill_type: 'UNDONE',
-    current_bill_remain_amt: "4800.56",
-    payment_due_date: moment().format('YYYY-MM-DD'),
-    task_id: "11111111111",
-    bill_id: "11111111",
-    bill_date: moment().format('YYYY-MM-DD'),
-    logo_uri: '/static/img/招商银行@2x.png',
-    importBillType: "",
-    isNew: '00',
-    abbr: "CMB",
-    update_time: "2018-06-06",
-    real: false,
-  }]
 
   openPPMoney(gameUri) {
     const {MERC_SN} = this.state
@@ -244,9 +187,9 @@ export default class Index extends React.Component {
   }
 
   render() {
-    const {interestShow, activeCard, visible, freeItems, sycnModal, authSts, moreAction, level} = this.state;
+    const {interestShow, activeCard, visible, authSts, moreAction, level} = this.state;
     const {examineAccount} = this.props;
-    const {isLogged, billList = {}, freeIntrestData = [], activities = []} = this.props;
+    const {isLogged, billList = {}, activities = []} = this.props;
     const {waitPaymentAmount = '0.00', waitPaymentNumber = '0', baseResponseBillDtoList} = billList
     return [<div key={'a'} style={styles.container}>
       <div style={styles.top}>
@@ -350,9 +293,6 @@ export default class Index extends React.Component {
                                  }}
                                  examineAccount={examineAccount}
                                  authSts={authSts}
-                                 importModal={() => {
-                                   this.setState({sycnModal: true})
-                                 }}
                                  updateData={() => this.initData()}
                 />
               }) : null)
@@ -362,108 +302,45 @@ export default class Index extends React.Component {
               showMoreAction={() => this.setState({moreAction: true})}
               examineAccount={examineAccount}
               isLogged={isLogged}
-              {...v} key={k} repay={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              this.loginEnter(5)
-            }}/>)
+              {...v}
+              key={k}
+              repay={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                this.loginEnter(5)
+              }}
+            />)
         }
       </div>,
       <div key={'c'} style={styles.addBtn}
            onClick={() => this.loginEnter(2)}
       >
-        <img style={{color: "#999999", height: "0.25rem"}} src="/static/img/addCard@2x.png"/>
+        <img style={styles.addImg} src="/static/img/addCard@2x.png"/>
         <span style={styles.addText}>添加信用卡账单</span>
-      </div>, <div>{
-        (isLogged && !examineAccount) ? <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          margin: '0.82rem 0 1.56rem 0'
-        }} onClick={() => this.openCardMarket()}>
+      </div>,
+      <div>{(isLogged && !examineAccount) ?
+        <div style={styles.enterCard} onClick={() => this.openCardMarket()}>
           <img src="/static/img/信用卡2x.png" style={{width: "0.41rem"}}/>
-          <span style={{
-            fontWeight: 'bold',
-            lineHeight: '0.28rem',
-            margin: '0.08rem',
-            fontSize: '0.28rem',
-            color: '#4C7BFE',
-            letterSpacing: '0'
-          }}>
+          <span style={styles.applyCard}>
           办信用卡
         </span>
           <img src="/static/img/Path 3@2x.png" style={{width: "0.1rem"}}/>
-        </div> : null
-      }</div>,
-      <Modal
-        style={{width: '6rem'}}
-        key={'d'}
-        visible={interestShow}
-        transparent
-        maskClosable={true}
-        onClose={() => {
-          document.body.style.position =  'static';
-          this.setState({interestShow: false})}
-        }
-        title={<div style={{textAlign: 'left'}}>最长免息期</div>}
-        wrapProps={{onTouchStart: this.onWrapTouchStart}}
-        closable={true}
-      >
-        <div style={{height: '5.03rem', overflow: 'scroll'}}>
-          {
-            freeItems ? (freeIntrestData.length == 0 ? <div style={{marginTop: '0.6rem'}}>
-              <img style={{width: '1.55rem'}} src="/static/img/Bitmap@1x.png"/>
-              <div>未导入信用卡账单</div>
-              <div>无记录查看</div>
-            </div>
-              : freeIntrestData.map((v, k) => {
-                const {bank_logo: imgSrc, credit_limit, balance, bank_name, payment_due_date, card_number, bill_type} = v;
-                const freeInterest = bill_type == 'DONE' ? parseInt(moment(payment_due_date).diff(moment(), 'days')) + parseInt(moment().daysInMonth()) :
-                  parseInt(moment(payment_due_date).diff(moment(), 'days'))
-                return <FreeItem key={k}
-                                 credit_limit={credit_limit}
-                                 imgSrc={imgSrc}
-                                 title={bank_name}
-                                 card_number={card_number}
-                                 freeInterest={freeInterest}
-                                 balance={balance}
-                                 {...v}
-                />
-              })) : null
-          }
-        </div>
-      </Modal>,
-      <Modal
-        key="z"
-        visible={sycnModal}
-        transparent
-        maskClosable={true}
-        onClose={() => {
-          this.setState({sycnModal: false})
+        </div> : null}
+      </div>,
+      <FreeInterest
+        key="FreeInterest"
+        parentParams={{
+          isShow:interestShow,
+          closeFunc:()=>this.setState({interestShow:false}),
+          openFunc:()=>this.setState({interestShow:true}),
         }}
-        wrapProps={{onTouchStart: this.onWrapTouchStart}}
-        footer={[{
-          text: '我知道了', onPress: () => {
-            this.setState({sycnModal: false})
-          }
-        }]}
-      >
-        <div style={{height: 100, overflow: 'scroll'}}>
-          <div style={{marginTop: "0.5rem", fontSize: "0.35rem", color: "#000"}}
-               onClick={() => this.props.history.push('/bill/method')}>请使用网银同步
-          </div>
-        </div>
-      </Modal>
-      , visible ?
-        <Popup
-          key="e"
+      />,
+      <Popup
+          key="Popup"
           title="选择还款方式"
           visible={visible}
-          setVisible={(v) => {
-            this.setState({visible: v})
-          }}
-        />
-        : null,
+          setVisible={(v) => {this.setState({visible: v})}}
+      />,
       moreAction ?
         <MoreItem items={[
           {
@@ -511,6 +388,22 @@ export default class Index extends React.Component {
     ]
   }
 
+  example = [{
+    card_num: "2886",
+    bank_name: "招商银行",
+    bill_type: 'UNDONE',
+    current_bill_remain_amt: "4800.56",
+    payment_due_date: moment().format('YYYY-MM-DD'),
+    task_id: "11111111111",
+    bill_id: "11111111",
+    bill_date: moment().format('YYYY-MM-DD'),
+    logo_uri: '/static/img/招商银行@2x.png',
+    importBillType: "",
+    isNew: '00',
+    abbr: "CMB",
+    update_time: "2018-06-06",
+    real: false,
+  }]
 
   icons = [{
     img: "/static/img/kabao@2x.png",
@@ -541,12 +434,21 @@ export default class Index extends React.Component {
     action: "",
     title: "挖金币"
   }]
-
+  onWrapTouchStart = (e) => {
+    // antd-mobile 提供的差异化处理，貌似没个卵用
+    // fix touch to scroll background page on iOS
+    if (!/iPhone|iPod|iPad/i.test(navigator.userAgent)) {
+      return;
+    }
+    const pNode = closest(e.target, '.am-modal-content');
+    if (!pNode) {
+      e.preventDefault();
+    }
+  }
 }
 
 const styles = {
-  container: {background: '#FFFFFF', paddingBottom: "0.5rem"}
-  ,
+  container: {background: '#FFFFFF', paddingBottom: "0.5rem"},
   topText: {
     fontSize: '0.3rem',
     color: '#999999',
@@ -613,6 +515,7 @@ const styles = {
     display: 'flex', justifyContent: 'center', alignItems: 'center',
     background: '#FFFFFF', height: '0.84rem', widht: '7.5rem', margin: "0.2rem 0 0 0"
   },
+  addImg:{color: "#999999", height: "0.25rem"},
   addText: {
     fontSize: '0.28rem',
     color: '#999999',
@@ -630,6 +533,20 @@ const styles = {
     width: '6.48rem',
     margin: '-0.35rem auto auto',
     height: '0.1rem',
+  },
+  applyCard:{
+    fontWeight: 'bold',
+    lineHeight: '0.28rem',
+    margin: '0.08rem',
+    fontSize: '0.28rem',
+    color: '#4C7BFE',
+    letterSpacing: '0'
+  },
+  enterCard:{
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: '0.82rem 0 1.56rem 0'
   }
 }
 

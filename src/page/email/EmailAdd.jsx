@@ -1,6 +1,5 @@
 import React from 'react';
 import Header from "../../compoents/Header";
-import ModalCom from "../../compoents/ModalCom";
 import {emailLogin, removeBillAllStatus, removeLoginStatus} from "../../actions/reqAction";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {Toast,Modal} from "antd-mobile";
@@ -20,7 +19,6 @@ export default class EmailAdd extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      modal: false,
       description: '',
       eyesOpen: false,
       selected: true,
@@ -106,7 +104,7 @@ export default class EmailAdd extends React.Component {
 
 
   render() {
-    const {modal, description, eyesOpen,btnDisabled, selected} = this.state;
+    const {eyesOpen,btnDisabled, selected} = this.state;
     return [
       <Header title="导入账单邮箱"/>,
       <div key={3}>
@@ -164,10 +162,6 @@ export default class EmailAdd extends React.Component {
         </div>
         <div className={!btnDisabled?'enableBtn':'disableBtn'}
              onClick={() => this.loginEnter()}>开始登录</div>
-        <ModalCom visible={modal} showAction={(v) => {
-          this.setState({modal: v})
-        }} description={description}/>
-
       </div>
     ]
   }

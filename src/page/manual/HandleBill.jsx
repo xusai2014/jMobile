@@ -1,7 +1,6 @@
 import React from 'react';
 import Header from '../../compoents/Header';
-import {Modal, Toast, DatePicker} from 'antd-mobile'
-import ModalCom from "../../compoents/ModalCom";
+import { Toast, } from 'antd-mobile'
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {handleBillForm, identityBank} from "../../actions/reqAction";
 import {regBankCard} from '../../utils/util'
@@ -18,7 +17,6 @@ export default class HandleBill extends React.Component {
     super(props);
     this.state = {
       activeOne: 0,
-      modal: false,
       description: '',
       visible: false,
       accountDate: '',
@@ -177,16 +175,8 @@ export default class HandleBill extends React.Component {
 
   render() {
     const {
-      activeOne,
-      modal,
-      description,
       bankName,
-      accountDate,
       fullCardNum,
-      repayDate,
-      nameOnCard,
-      creditLimit,
-      newBalance,
       enabelBtn
     } = this.state;
 
@@ -288,10 +278,6 @@ export default class HandleBill extends React.Component {
       <div className={enabelBtn ? 'enableBtn' : 'disableBtn'}
            onClick={() => this.commitForm()}>保存
       </div>
-      <ModalCom visible={modal} showAction={(v) => {
-        this.setState({modal: v})
-      }} description={description}/>
-
     </div>];
   }
 }
@@ -337,5 +323,4 @@ const styles = {
     letterSpacing: '-0.77PX',
     margin: "0.31rem 0 0 0.31rem"
   },
-
 }

@@ -1,6 +1,5 @@
 import React from 'react';
 import Header from "../../compoents/Header";
-import ModalCom from "../../compoents/ModalCom";
 import {Tabs, Toast, Modal} from "antd-mobile"
 import {getEchoForm, getLoginList, loginCyber, removeBillAllStatus, removeLoginStatus,} from "../../actions/reqAction";
 import {InitDecorator} from "../../compoents/InitDecorator";
@@ -19,7 +18,6 @@ export default class CyberBank extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      modal: false,
       description: '',
       eyesOpen: true,
       selected: true,
@@ -299,7 +297,7 @@ export default class CyberBank extends React.Component {
 
 
   render() {
-    const {modal, description, inputData} = this.state;
+    const { inputData} = this.state;
     const {bankId} = this.props.match.params;
     const {state = {}} = this.props.history.location
     const {name: bankName = ''} = state;
@@ -398,10 +396,6 @@ export default class CyberBank extends React.Component {
                      this.loginCyberFunc(v)
                    }}>开始登录
               </div>
-              <ModalCom visible={modal} showAction={(v) => {
-                this.setState({modal: v})
-              }} description={description}/>
-
             </div>
           })
         }

@@ -699,8 +699,8 @@ export default class BillDetail extends React.Component {
             bankId:bank_id,
             payStatus:bill_type == 'DONE'?"01":"02"
           })).then(()=>{
-            Toast.info('设置还款状态成功');
             this.initData()
+            Toast.info('设置还款状态成功');
           },()=>{Toast.hide()})
         }} >
           <img src="/static/img/1.1.0/select.png" style={styles.img} />

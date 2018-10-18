@@ -111,8 +111,8 @@ export default class Popup extends React.Component{
   }
 
   render(){
-    const { visible, setVisible, title = '选择还款方式' ,style = {} } = this.props;
-    return <div style={{
+    const { visible, title = '选择还款方式' ,style = {} } = this.props;
+    return visible?<div style={{
       position:'fixed',
       bottom: '0rem',
       width:'7.5rem',
@@ -149,7 +149,6 @@ export default class Popup extends React.Component{
           this.renderList()
         }
       </div>
-
-      </div>
+      </div>:null
   }
 }

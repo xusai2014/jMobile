@@ -2,7 +2,6 @@ import React from 'react';
 import Header from '../../compoents/Header';
 import InputRadio from "./components/InputRadio";
 import {Modal, Toast} from 'antd-mobile'
-import ModalCom from "../../compoents/ModalCom";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {
   identityBank, judgeSelfCard, postInfo, sendVerification,
@@ -27,7 +26,6 @@ export default class EditCard extends React.Component {
 
     this.state = {
       activeOne: 0,
-      modal: false,
       description: '',
       cardData: {
         cardNum: "",
@@ -254,7 +252,7 @@ export default class EditCard extends React.Component {
 
 
   render() {
-    const {activeOne, modal, description} = this.state;
+    const {activeOne,} = this.state;
     let property = activeOne == 1 ? 'usalCardData' : "cardData";
     const {enableBtn = false} = this.state[property];
 
@@ -424,10 +422,6 @@ export default class EditCard extends React.Component {
            }}
       >确认
       </div>
-      <ModalCom visible={modal} showAction={(v) => {
-        this.setState({modal: v})
-      }} description={description}/>
-
     </div>];
   }
 }

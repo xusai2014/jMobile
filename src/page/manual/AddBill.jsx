@@ -1,7 +1,6 @@
 import React from 'react';
 import Header from '../../compoents/Header';
-import {Modal, Toast, DatePicker} from 'antd-mobile'
-import ModalCom from "../../compoents/ModalCom";
+import { Toast} from 'antd-mobile'
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {handleBillForm, identityBank} from "../../actions/reqAction";
 import DayPicker from "./DayPicker";
@@ -18,7 +17,6 @@ export default class AddBill extends React.Component {
     super(props);
     this.state = {
       activeOne: 0,
-      modal: false,
       description: '',
       visible: false,
       accountDate: '',
@@ -129,9 +127,9 @@ export default class AddBill extends React.Component {
     })
   }
 
-  handeleDate(date){
-    if(parseInt(date)<10){
-      return '0'+date
+  handeleDate(date) {
+    if (parseInt(date) < 10) {
+      return '0' + date
     } else {
       return date
     }
@@ -139,8 +137,6 @@ export default class AddBill extends React.Component {
 
   render() {
     const {
-      modal,
-      description,
       bankName,
       enabelBtn,
     } = this.state;
@@ -161,35 +157,36 @@ export default class AddBill extends React.Component {
           placeHolder: "请选择",
           code: "1",
           key: 'accountDate',
-          type:'date'
+          type: 'date'
         }, {
           name: '还款日', value: "",
           placeHolder: "请选择",
           code: "1",
           key: 'repayDate',
-          type:'date'
+          type: 'date'
         }, {
           name: '信用额度', value: "",
           placeHolder: "请输入信用额度",
           key: "creditLimit",
-          type:'number'
+          type: 'number'
         }, {
           name: '账单金额', value: "",
           placeHolder: "请输入账单金额",
           key: "newBalance",
-          type:'number'
+          type: 'number'
         }].map((v, k) => {
-          const {name, disabled, value, key,type, placeHolder, icon, code = '0'} = v;
+          const {name, disabled, value, key, type, placeHolder, icon, code = '0'} = v;
           return <div key={k} style={styles.item}>
             <div style={styles.name}>{name}</div>
             {
               code == '1' ?
-                <DayPicker onRes={(day)=>{
+                <DayPicker onRes={(day) => {
                   this.setState({
-                    [key]:day
-                  },()=>{
+                    [key]: day
+                  }, () => {
                     this.enableBtn()
-                  })}
+                  })
+                }
                 }/> :
                 <input
                   onChange={(e) => {
@@ -209,7 +206,7 @@ export default class AddBill extends React.Component {
                   disabled={disabled}
                   style={styles.input}
                   placeholder={placeHolder}
-              />
+                />
             }
             {icon ? <img src={icon} style={ styles.img}/> : null}
           </div>
@@ -219,10 +216,6 @@ export default class AddBill extends React.Component {
       <div className={enabelBtn ? 'enableBtn' : 'disableBtn'}
            onClick={() => this.commitForm()}>保存
       </div>
-      <ModalCom visible={modal} showAction={(v) => {
-        this.setState({modal: v})
-      }} description={description}/>
-
     </div>];
   }
 }

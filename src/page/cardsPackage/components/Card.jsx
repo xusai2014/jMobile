@@ -1,5 +1,6 @@
 import React from 'react';
 import bankIcon from '../../../utils/bank';
+import {computerFreePeriod} from "../../../utils/util";
 
 
 export default class Card extends React.Component {
@@ -18,8 +19,7 @@ export default class Card extends React.Component {
 
   render() {
     const { popupCard,actName,import_bill_type:bill_type, id, bankNm,payment_due_date,card_limit,actNo,bankNo,bindType } =this.props;
-    const freeDay1 = bill_type == 'DONE'? parseInt(moment(payment_due_date).diff(moment(), 'days')) + parseInt(moment().daysInMonth()):
-      parseInt(moment(payment_due_date).diff(moment(), 'days'))
+    const freeDays = computerFreePeriod(bill_type,payment_due_date);
     return (<div style={bindType=='02'?styles.containerGray:styles.container}>
       <div style={{display:'inline-flex',alignItems:"center"}}>
         <div style={styles.rowItem}>
@@ -61,7 +61,7 @@ export default class Card extends React.Component {
           marginTop: '0.66rem',
         }}
       ><span style={{marginLeft: '0.53rem'}}>免息期：{
-        payment_due_date?freeDay1 +'天':'--'}</span>
+        payment_due_date?freeDays +'天':'--'}</span>
         <span style={{
         float: 'right',
         marginRight: '0.5rem'

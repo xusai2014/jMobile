@@ -390,7 +390,7 @@ export default class CyberBank extends React.Component {
                   margin: '0px 0px 0px 0.18rem'
                 }}>记住密码</span>
               </div>
-              <div className={!disableBtn ? 'enableBtn' : 'disableBtn'}
+              <div className={echoStatus?"enableBtn":(!disableBtn ? 'enableBtn' : 'disableBtn')}
                    onClick={() => {
                      this.setDeepState('inputData', login_type, {
                        disabled: true

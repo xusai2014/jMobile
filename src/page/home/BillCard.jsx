@@ -26,7 +26,7 @@ export default class BillCard extends React.Component {
     }
   }
 
-  async callSyncBill(task_id, importBillType, abbr, cardNum) {
+  async callSyncBill(task_id, importBillType, abbr, cardNum,bank_name) {
     // TODO 仅支持网银
     Toast.loading('请稍候', 0);
     if (importBillType == '01') {
@@ -42,7 +42,7 @@ export default class BillCard extends React.Component {
         if (subtype) {
           alert(<span className="alert_title">暂时无法获取账单的最新状态</span>, <span className="alert_content">如果您已通过其导入它平台还款，建议您通过网银导入</span>, [
             {text: '暂不需要', onPress: () => console.log('置顶聊天被点击了'), style: globalStyle.cancelStyle},
-            {text: '通过网银导入', onPress: () => this.props.history.push('/bill/method'), style: globalStyle.sureStyle}
+            {text: '通过网银导入', onPress: () => this.props.history.push(`/cyber/login/${abbr}`,{name:bank_name}), style: globalStyle.sureStyle}
           ]);
         } else {
           alert(<span className="alert_title">该银行暂不支持同步您的账单数据</span>, '', [
@@ -74,8 +74,8 @@ export default class BillCard extends React.Component {
 
   }
 
-  showMoreAction(task_id, importBillType, abbr, cardNum,bankId,bill_type) {
-    this.props.showMoreAction(task_id, importBillType, abbr, cardNum,bankId,bill_type,()=>this.callSyncBill(task_id, importBillType, abbr, cardNum))
+  showMoreAction(task_id, importBillType, abbr, cardNum,bankId,bill_type,bank_name) {
+    this.props.showMoreAction(task_id, importBillType, abbr, cardNum,bankId,bill_type,()=>this.callSyncBill(task_id, importBillType, abbr, cardNum,bank_name))
   }
 
   /**
@@ -444,7 +444,7 @@ export default class BillCard extends React.Component {
                   this.callLogin()
                   return
                 }
-                this.showMoreAction(task_id, importBillType, abbr, card_num,bank_id,bill_type)
+                this.showMoreAction(task_id, importBillType, abbr, card_num,bank_id,bill_type,bank_name)
               }}/>
           }
         </div>
@@ -495,7 +495,7 @@ export default class BillCard extends React.Component {
                 this.callLogin()
                 return
               }
-              this.showMoreAction(task_id, importBillType, abbr, card_num,bank_id,bill_type)
+              this.showMoreAction(task_id, importBillType, abbr, card_num,bank_id,bill_type,bank_name)
             }
           }}>
             {

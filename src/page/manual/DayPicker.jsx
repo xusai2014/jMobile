@@ -3,6 +3,7 @@ export default class DayPicker extends React.Component {
   constructor(props) {
     super(props);
     document.body.style.overflowY = 'hidden';
+    document.body.style.position =  'fixed';
     this.state = {
       showPanel: false,
       selectIndex:4,
@@ -11,8 +12,9 @@ export default class DayPicker extends React.Component {
     this.initDays()
   }
 
-  componentWillUnmount(){
+  destroyStyle(){
     document.body.style.overflowY = '';
+    document.body.style.position =  'static';
   }
 
   selectDay() {
@@ -117,10 +119,19 @@ export default class DayPicker extends React.Component {
           this.state.dayVal?this.state.dayVal:'选择日期'
         }</div>,
         showPanel ?
-          <div style={styles.panel}>
-            <div style={styles.container}>
+          <div style={styles.panel} onClick={(e)=>{
+            this.destroyStyle()
+            this.setState({
+              showPanel:false
+            })
+          }}>
+            <div style={styles.container} onClick={(e)=>{
+              e.preventDefault();
+              e.stopPropagation();
+            }}>
               <div style={styles.header}>
                 <span style={{marginLeft: '0.3rem'}} onClick={()=>{
+                  this.destroyStyle()
                   this.setState({
                     showPanel:false
                   })
@@ -130,7 +141,8 @@ export default class DayPicker extends React.Component {
                   this.selectValue();
                   this.setState({
                     showPanel:false
-                  })
+                  });
+                  this.destroyStyle();
                 }}>确定</span>
               </div>
               <div style={styles.body}>

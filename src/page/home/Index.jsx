@@ -175,6 +175,7 @@ export default class Index extends React.Component {
         case 1:
           //展示免息期
           this.setState({interestShow: true}, () => {
+            document.body.style.position =  'fixed'
             this.getFreeData()
           });
           return;
@@ -400,7 +401,10 @@ export default class Index extends React.Component {
         visible={interestShow}
         transparent
         maskClosable={true}
-        onClose={() => this.setState({interestShow: false})}
+        onClose={() => {
+          document.body.style.position =  'static';
+          this.setState({interestShow: false})}
+        }
         title={<div style={{textAlign: 'left'}}>最长免息期</div>}
         wrapProps={{onTouchStart: this.onWrapTouchStart}}
         closable={true}

@@ -13,6 +13,7 @@ export default class KeyWord extends React.Component {
     super(props);
     this.state = {
       repaymentAmount:'',
+      isRepeat:false,
     }
   }
 
@@ -40,19 +41,27 @@ export default class KeyWord extends React.Component {
     })).then((result)=>{
       Toast.info('设置还款状态成功')
       this.props.apiCallback()
+      this.isRepeat = false;
     },(err)=>{
+      this.isRepeat = false;
     })
   }
+
+  isRepeat = false
   render(){
-    const { repaymentAmount, x } = this.state;
+    const { repaymentAmount, } = this.state;
     const { billData:activeCard } = this.props
 
     return (
       <div>
         <input type="number" onKeyDown={(e)=>{
-          console.log(e.keyCode)
           if(parseInt(e.keyCode) == 13 || parseInt(e.keyCode) == 9){
+            if(this.isRepeat){
+              return;
+            }
+            this.isRepeat = true
             this.markRest(activeCard)
+
           }
         }} onChange={(e)=>{
 

@@ -693,6 +693,7 @@ export default class BillDetail extends React.Component {
           <img src="/static/img/1.1.0/pen.png" style={styles.img} />
           <div>标记还部分</div></div>
         <div style={styles.bottomItem} onClick={()=>{
+          Toast.loading('请稍候');
           this.props.dispatch(setMarkBill({
             cardNum:card_num,
             bankId:bank_id,
@@ -700,7 +701,7 @@ export default class BillDetail extends React.Component {
           })).then(()=>{
             Toast.info('设置还款状态成功');
             this.initData()
-          })
+          },()=>{Toast.hide()})
         }} >
           <img src="/static/img/1.1.0/select.png" style={styles.img} />
           <div>{

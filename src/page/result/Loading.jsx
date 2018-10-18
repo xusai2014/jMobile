@@ -299,8 +299,7 @@ export default class LoadingStatus extends React.Component{
                   ]);
                   return window.leaveStatu
                 }
-                }
-              }
+              }}
               when={!window.leaveStatu}
       />,
       <div key={2} style={{

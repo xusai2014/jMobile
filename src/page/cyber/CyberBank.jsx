@@ -74,7 +74,7 @@ export default class CyberBank extends React.Component {
     const {login_type: loginType, items} = v;
     const {inputData} = this.state;
     const stateData = inputData[loginType] ? inputData[loginType] : {}
-    const {username, username1,echoStatus, uuid, specialForm = false, password, protocolSelected} = stateData;
+    const {username, username1,echoStatus, uuid = '', specialForm = false, password, protocolSelected = true} = stateData;
     const {bankId: abbr} = this.props.match.params;
     if (!username) {
       Toast.info('请输入账号')
@@ -235,7 +235,7 @@ export default class CyberBank extends React.Component {
 
   enableBtn(key) {
     const data = this.state.inputData[key] ? this.state.inputData[key] : {}
-    const {password, protocolSelected, username, disableBtn} = data;
+    const {password, protocolSelected = true, username, disableBtn} = data;
     if (password && protocolSelected && username) {
       this.setDeepState('inputData', key, {
         disableBtn: false

@@ -62,7 +62,7 @@ export default class Card extends React.Component {
           marginTop: '0.66rem',
         }}
       ><span style={{marginLeft: '0.53rem'}}>免息期：{
-        payment_due_date?(freeDay >0? freeDay :0) +'天':'--'}</span>
+        payment_due_date?freeDay1 +'天':'--'}</span>
         <span style={{
         float: 'right',
         marginRight: '0.5rem'

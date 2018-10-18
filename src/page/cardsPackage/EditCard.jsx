@@ -299,7 +299,7 @@ export default class EditCard extends React.Component {
           placeHolder: "请输入身份证号码",
           disabled: activeOne == 0 ? true : false,
           key: "id",
-          type:"number"
+          type:"text"
         }, {
           key: "bank",
           name: '发卡行', value: "",

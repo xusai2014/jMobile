@@ -1,36 +1,35 @@
 import React from 'react';
 import {InitDecorator} from "../../../compoents/InitDecorator";
 import {setBillRest} from "../../../actions/reqAction";
-import { Toast } from 'antd-mobile'
+import {Toast} from 'antd-mobile'
 
 @InitDecorator((state) => {
-  return {
-  }
+  return {}
 })
 export default class KeyWord extends React.Component {
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      repaymentAmount:'',
-      isRepeat:false,
+      repaymentAmount: '',
+      isRepeat: false,
     }
   }
 
-  markRest(activeCard){
-    const {card_num:cardNum,bank_id:bankId} = activeCard;
-    const { repaymentAmount,x } = this.state;
-    if(!repaymentAmount){
+  markRest(activeCard) {
+    const {card_num: cardNum, bank_id: bankId} = activeCard;
+    const {repaymentAmount, x} = this.state;
+    if (!repaymentAmount) {
       Toast.info('请输入还款金额');
       return
     }
-    if(/(^[1-9](\d+)?(\.\d{1,2})?$)|(^0$)|(^\d\.\d{1,2}$)/.test(repaymentAmount)){
+    if (/(^[1-9](\d+)?(\.\d{1,2})?$)|(^0$)|(^\d\.\d{1,2}$)/.test(repaymentAmount)) {
 
     } else {
       Toast.info('请输入正确金额');
       return
     }
-    if(parseInt(repaymentAmount)<=0){
+    if (parseInt(repaymentAmount) <= 0) {
       Toast.info('请输入正确金额');
       return
     }
@@ -38,38 +37,37 @@ export default class KeyWord extends React.Component {
       cardNum,
       bankId,
       repaymentAmount
-    })).then((result)=>{
+    })).then((result) => {
       Toast.info('设置还款状态成功')
       this.props.apiCallback()
       this.isRepeat = false;
-    },(err)=>{
+    }, (err) => {
       this.isRepeat = false;
     })
   }
 
   isRepeat = false
-  render(){
-    const { repaymentAmount, } = this.state;
-    const { billData:activeCard } = this.props
+
+  render() {
+    const {repaymentAmount,} = this.state;
+    const {billData: activeCard} = this.props
 
     return (
       <div>
-        <input type="number" onKeyDown={(e)=>{
-          if(parseInt(e.keyCode) == 13 || parseInt(e.keyCode) == 9){
-            if(this.isRepeat){
-              return;
-            }
-            this.isRepeat = true
-            this.markRest(activeCard)
-
-          }
-        }} onChange={(e)=>{
-
-          this.setState({
-            repaymentAmount:e.currentTarget.value,
-          })
-
-        }}
+        <input type="number"
+               onKeyDown={(e) => {
+                  if (parseInt(e.keyCode) == 13 || parseInt(e.keyCode) == 9) {
+                    if (!this.isRepeat) {
+                      this.isRepeat = true
+                      this.markRest(activeCard)
+                    }
+                  }
+               }}
+               onChange={(e) => {
+                 this.setState({
+                    repaymentAmount: e.currentTarget.value,
+                 })
+               }}
                autoFocus={true}
                value={repaymentAmount} style={styles.input} placeholder="请输入账单金额"/>
       </div>
@@ -78,14 +76,14 @@ export default class KeyWord extends React.Component {
 }
 
 const styles = {
-  input:{
+  input: {
     border: '0.02rem solid #ECECEC',
     borderRadius: '0.09rem',
-    margin:'0.24rem 0.28rem',
-    width:'6.94rem',
-    lineHeight:'0.74rem'
+    margin: '0.24rem 0.28rem',
+    width: '6.94rem',
+    lineHeight: '0.74rem'
   },
-  fontStyle:{
+  fontStyle: {
     fontSize: '0.42rem',
     color: '#555555',
     letterSpacing: '0',

@@ -487,7 +487,7 @@ export default class BillCard extends React.Component {
           <div style={{
             display: 'inline-block',
             marginLeft: "0.26rem",
-          }} onClick={()=>{
+          }} onClick={(e)=>{
             if(key == '03'){
               e.stopPropagation();
               e.preventDefault();

@@ -123,17 +123,6 @@ export default function (state = initialState, actions) {
         billList:actions.data,
       }
     case BILL_DETAIL[1]:
-      const {billDetail ={}} = state;
-      const { pageResponseDto ={} } = billDetail;
-      const {
-        pageList = [],
-        currentPage = '1',
-        size = '20',
-        totalPages = '1',
-      } = pageResponseDto;
-      if(parseFloat(actions.data.pageResponseDto.currentPage) == parseInt(currentPage+1)){
-        actions.data.pageResponseDto.pageList = pageList.concat(actions.data.pageResponseDto.pageList)
-      }
       return {
         ...state,
         billDetail:actions.data,

@@ -17,17 +17,23 @@ export default class DayPicker extends React.Component {
     })
   }
 
-  moveList() {
+  moveList(len) {
     const {top: a, bottom: b} = this.refs.canlenda.getBoundingClientRect();
     const {top: x, bottom: y} = this.refs.mark.getBoundingClientRect();
-    const dtaY = this.dtaObj.end_Y - this.dtaObj.Y
+    const dtaY = this.dtaObj.end_Y - this.dtaObj.Y;
     if ((a > x && dtaY > 0)
       || (y > b && dtaY < 0)) {
       return;
     }
-    this.dtaObj.dta_Y = this.dtaObj.dta_Y + dtaY;
-    this.refs.canlenda.style.transition = 'cubic-bezier(0,0,0.2,1.15) 2s';
-    this.refs.canlenda.style.webkitTransition = 'cubic-bezier(0,0,0.2,1.15) 2s';
+    if(  dtaY >0 && this.dtaObj.dta_Y + dtaY >  4 * this.dtaObj.itemV  ){
+      this.dtaObj.dta_Y = 3 * this.dtaObj.itemV
+    } else if(dtaY <0 && Math.abs(this.dtaObj.dta_Y + dtaY) >  (len-4) * this.dtaObj.itemV){
+      this.dtaObj.dta_Y = -(len-5) * this.dtaObj.itemV
+    } else {
+      this.dtaObj.dta_Y = this.dtaObj.dta_Y + dtaY;
+    }
+    this.refs.canlenda.style.transition = 'cubic-bezier(0,0,0.2,1.15) 1s';
+    this.refs.canlenda.style.webkitTransition = 'cubic-bezier(0,0,0.2,1.15) 1s';
 
     this.refs.canlenda.style.transform = `translate3d(0,${this.dtaObj.dta_Y}px,0)`;
     this.refs.canlenda.style.webkitTransform = `translate3d(0,${this.dtaObj.dta_Y}px,0)`;
@@ -137,7 +143,7 @@ export default class DayPicker extends React.Component {
 
                      }}
                      onTouchEnd={(e) => {
-                       this.moveList();
+                       this.moveList(this.dtaObj.initArr.length);
                      }}
                      onTouchStart={(e) => {
                        this.dtaObj.X = e.touches[0].pageX

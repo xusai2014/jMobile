@@ -395,35 +395,20 @@ export default class BillDetail extends React.Component {
   }
 
   loadMoreDataFn(currentNum,pageSize,billId,callback){
-    const { currentNum:num, pageSize:size} = this.state;
-    if(parseInt(currentNum) == parseInt(num+1)){
-      const { currentNum = '1', pageSize = '20'} = this.state;
-      this.props.dispatch(getBillDetail({
-        billId,
-        currentNum,
-        pageSize
-      })).then((result)=>{
-        const { data = {}} = result;
-        const { pageResponseDto } = data;
-        const {
-          currentPage,
-          size = '20',
-          totalPages,
-          pageList = []
-        } = pageResponseDto;
-        debugger;
-        this.setState({
-          currentNum:currentPage,
-          pageSize:size,
-          totalPages,
-          pageData:{
-            ...this.state.pageData,
-            [billId]:pageList
-          },
-        })
-      }).finally(()=>callback())
-    }
-
+    this.props.dispatch(getBillDetail({
+      billId,
+      currentNum,
+      pageSize
+    })).then((result)=>{
+      const { data = {}} = result;
+      debugger;
+      this.setState({
+        pageData:{
+          ...this.state.pageData,
+          [billId]:data
+        },
+      })
+    }).finally(()=>callback())
   }
 
   getBillList(billId){
@@ -433,22 +418,12 @@ export default class BillDetail extends React.Component {
       currentNum,
       pageSize
     })).then((result)=>{
-      const { data = {}} = result;
-      const { pageResponseDto } = data;
-      const {
-        currentPage,
-        size = '20',
-        totalPages,
-        pageList = []
-      } = pageResponseDto;
+      const { data = []} = result;
       debugger;
       this.setState({
-        currentNum:currentPage,
-        pageSize:size,
-        totalPages,
         pageData:{
           ...this.state.pageData,
-          [billId]:pageList
+          [billId]:data
         },
       })
     });
@@ -659,11 +634,11 @@ export default class BillDetail extends React.Component {
                     }):
                       null
                   }{
-                  pageData[bill_id]?<LoadCom loadMoreDataFn={(c,p,callback)=>this.loadMoreDataFn(c,p,bill_id,callback)}
-                                             currentNum={currentNum}
-                                             pageSize ={pageSize}
-                                             totalPages={totalPages}
-                  />:<div style={{textAlign: 'center',}}>正在加载中...</div>
+                  pageData[bill_id]?
+                    (pageData[bill_id].length==0?
+                        <div style={{textAlign: 'center',}}>没有更多了</div>:null
+                    )
+                      :<div style={{textAlign: 'center',}}>正在加载中...</div>
                 }
 
                 </div>] : null}</div>

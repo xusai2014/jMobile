@@ -246,7 +246,8 @@ export default class BillCard extends React.Component {
           }}>{`逾期${moment().diff(duM, 'days')}天`}</span>,
           actionName: examineAccount ? "点击" : "立即还款",
           action: examineAccount ? () => {
-          } : action
+          } : action,
+          key:"03"
         }
       } else {
         return {
@@ -255,7 +256,8 @@ export default class BillCard extends React.Component {
           des: '天后到期',
           actionName: examineAccount ? "" : "立即还款",
           action: examineAccount ? () => {
-          } : action
+          } : action,
+          key:"02"
         }
       }
     } else if (bill_type == 'UNDONE') {
@@ -266,15 +268,15 @@ export default class BillCard extends React.Component {
         date: duM.format('MM-DD'),
         des: `天后出账`,
         actionName: "更新未出",
-        action: () => {
-        }
+        action: () => {},
+         key:"01"
       }:{
          day: Math.abs(days),
          date: duM.format('MM-DD'),
          des: `天前出账`,
          actionName: "更新未出",
-         action: () => {
-         }
+         action: () => {},
+         key:"04"
        }
     } else {
       return {
@@ -361,7 +363,7 @@ export default class BillCard extends React.Component {
     } = this.state;
     const update = moment().diff(moment(update_time), 'minutes')
 
-    const {day, date, des, actionName, action} = this.judgeStatus(bill_type, payment_due_date, bill_date, repay)
+    const {day, date, des, actionName, action, key} = this.judgeStatus(bill_type, payment_due_date, bill_date, repay)
     return <div onClick={(e) => {
       if (!real) {
         if (isLogged) {
@@ -434,7 +436,7 @@ export default class BillCard extends React.Component {
               <img src="/static/img/1.1.0/more@2x.png" style={{
                 height: '0.07rem',
                 float: 'right',
-                padding: '0.2rem 0.4rem'
+                padding: '0.2rem 0.4rem 0.2rem 0.8rem'
               }} onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
@@ -485,6 +487,16 @@ export default class BillCard extends React.Component {
           <div style={{
             display: 'inline-block',
             marginLeft: "0.26rem",
+          }} onClick={()=>{
+            if(key == '03'){
+              e.stopPropagation();
+              e.preventDefault();
+              if (!real) {
+                this.callLogin()
+                return
+              }
+              this.showMoreAction(task_id, importBillType, abbr, card_num,bank_id,bill_type)
+            }
           }}>
             {
               examineAccount ? '' : <div style={{

@@ -122,6 +122,8 @@ export default class LoadingStatus extends React.Component{
 
   goResult(loginType,status = 3,description){
 
+    //取消路由拦截
+    window.leaveStatu = true
     // 1 是成功 2是无数据 3是失败
     if(status == 1){
       if(loginType == '01'){

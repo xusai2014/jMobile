@@ -139,11 +139,12 @@ export default class DayPicker extends React.Component {
                 <span>账单日</span>
                 <span style={{color: '#4C7BFE', marginRight: '0.3rem'}} onClick={()=>{
                   this.selectValue();
+                  this.destroyStyle();
                   this.setState({
                     showPanel:false
                   });
-                  this.destroyStyle();
                 }}>确定</span>
+
               </div>
               <div style={styles.body}>
                 <div style={{

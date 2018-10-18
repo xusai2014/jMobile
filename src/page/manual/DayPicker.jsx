@@ -2,13 +2,17 @@ import React from 'react';
 export default class DayPicker extends React.Component {
   constructor(props) {
     super(props);
-
+    document.body.style.overflowY = 'hidden';
     this.state = {
       showPanel: false,
       selectIndex:4,
       dayVal:''
     };
     this.initDays()
+  }
+
+  componentWillUnmount(){
+    document.body.style.overflowY = '';
   }
 
   selectDay() {

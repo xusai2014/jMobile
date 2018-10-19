@@ -581,7 +581,7 @@ export default class BillDetail extends React.Component {
                   }} src={expandOne == v ? "/static/img/triangleup@2x.png" : "/static/img/triangle@2x.png"}/>
                   <div style={{display: 'inline-block'}}>
                     {
-                      billType != 'DONE'?<div style={{
+                      billItemDes != '已出账单'?<div style={{
                         fontSize: '0.26rem',
                         color: (statusKey == '03' && bill_id == billId)?"red":'#4C7BFE',
                         letterSpacing: '0',

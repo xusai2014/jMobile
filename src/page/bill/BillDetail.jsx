@@ -491,7 +491,7 @@ export default class BillDetail extends React.Component {
               fontSize: '0.62rem',
               color: '#FFFFFF',
               letterSpacing: '0',
-            }}>{parseInt(current_bill_remain_amt) == 0?'--':current_bill_remain_amt}
+            }}>{parseFloat(current_bill_remain_amt) == 0?'--':current_bill_remain_amt}
             </div>
             <div style={{
               opacity: '0.5',

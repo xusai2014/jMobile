@@ -580,15 +580,36 @@ export default class BillDetail extends React.Component {
                     height: '0.132rem',
                   }} src={expandOne == v ? "/static/img/triangleup@2x.png" : "/static/img/triangle@2x.png"}/>
                   <div style={{display: 'inline-block'}}>
-                    <div style={{
-                      fontSize: '0.26rem',
-                      color: (statusKey == '03' && bill_id == billId)?"red":'#4C7BFE',
-                      letterSpacing: '0',
-                    }}>
-                      {
-                        billItemDes
-                      }
-                    </div>
+                    {
+                      billType != 'DONE'?<div style={{
+                        fontSize: '0.26rem',
+                        color: (statusKey == '03' && bill_id == billId)?"red":'#4C7BFE',
+                        letterSpacing: '0',
+                      }}>
+                        {
+                          billItemDes
+                        }
+                      </div>:
+                        <div style={{
+                          fontSize: '0.26rem',
+                          color: (statusKey == '03' && bill_id == billId)?"red":'#4C7BFE',
+                          letterSpacing: '0',
+                        }}>
+                          {
+                            `${moment(bill_month).format('MM')}月`
+                          }
+                          <span style={{
+                            fontSize: '0.24rem',
+                            color: '#999999',
+                            letterSpacing: '0',
+                            marginLeft:'0.1rem'
+                          }}>{
+                            moment(bill_month).format('YYYY')
+                          }</span>
+                        </div>
+
+                    }
+
                     <div style={{
                       fontSize: '0.24rem',
                       color: '#999999',

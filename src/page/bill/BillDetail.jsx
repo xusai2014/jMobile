@@ -614,8 +614,8 @@ export default class BillDetail extends React.Component {
                       fontSize: '0.24rem',
                       color: '#999999',
                       letterSpacing: '0'
-                    }}><span>{moment(bill_date).format('YYYY-MM-DD')}
-                    </span>至<span>{moment(bill_date).add(-1,'months').add(-1,'days').format('YYYY-MM-DD')}</span>
+                    }}><span>{moment(bill_date).add(-1,'months').add(1,'days').format('YYYY-MM-DD')}
+                    </span>至<span>{moment(bill_date).format('YYYY-MM-DD')}</span>
                     </div>
                   </div>
                 </div>

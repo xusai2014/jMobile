@@ -464,7 +464,7 @@ export default class BillCard extends React.Component {
             color: '#333333',
             letterSpacing: '0',
             fontWeight: 'bold',
-          }}>{parseInt(current_bill_remain_amt) == 0?'--':current_bill_remain_amt}</div>
+          }}>{parseFloat(current_bill_remain_amt) == 0?'--':current_bill_remain_amt}</div>
           <div style={{
             fontSize: '0.22rem',
             color: '#999999',

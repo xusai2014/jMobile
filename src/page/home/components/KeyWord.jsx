@@ -23,13 +23,13 @@ export default class KeyWord extends React.Component {
       Toast.info('请输入还款金额');
       return
     }
-    if (/(^[0-9](\d+)?(\.\d{1,2})?$)|(^0$)|(^\d\.\d{1,2}$)/.test(repaymentAmount)) {
+    if (/(^[0-9](\d+)?(\.\d{1,2})?$)|(^0$)|(^\d\.\d{1,2}$)/.test(repaymentAmount) || /([0-9]+\.[0-9]{2})[0-9]*/.test(repaymentAmount)) {
 
     } else {
       Toast.info('请输入正确金额');
       return
     }
-    if (parseInt(repaymentAmount) <= 0) {
+    if (parseFloat(repaymentAmount) <= 0) {
       Toast.info('请输入正确金额');
       return
     }

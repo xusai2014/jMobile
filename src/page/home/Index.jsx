@@ -199,23 +199,19 @@ export default class Index extends React.Component {
           </span>
         </div>
         <div style={styles.flexCenter}>
-          <IconEnter action={() => {
-            this.loginEnter(1)
-          }}
+          <IconEnter action={() => {this.loginEnter(1)}}
                      des={'免息期'} icon={"/static/img/canlendar@2x.png"}
           />
           <span style={{width: '0.18rem'}}></span>
-          <IconEnter action={() => {
-            this.loginEnter(2)
-          }}
+          <IconEnter action={() => this.loginEnter(2) }
                      des={'账单'} icon={"/static/img/indexadd@2x.png"}
           />
           <span style={{width: '0.3rem'}}></span>
         </div>
       </div>
       <div style={{marginTop: "0.19rem"}}>
-        <span
-          style={styles.moneyStyle}>{isLogged ? (waitPaymentAmount ? parseFloat(waitPaymentAmount).toFixed(2) : 0.00) : '--'}
+        <span style={styles.moneyStyle}>
+          {isLogged ? (waitPaymentAmount ? parseFloat(waitPaymentAmount).toFixed(2) : 0.00) : '--'}
           <span style={styles.unitStyle}>元</span>
         </span>
       </div>
@@ -230,12 +226,12 @@ export default class Index extends React.Component {
               return null
             }
             return <div key={k} onClick={() => {
-              if (type == '0') {
-                this.loginEnter(3, {action})
-              } else if (type == '1') {
-                this.loginEnter(4, {action})
-              }
-            }}>
+                  if (type == '0') {
+                    this.loginEnter(3, {action})
+                  } else if (type == '1') {
+                    this.loginEnter(4, {action})
+                  }
+                }}>
               <span style={styles.iconItem}>
                 <img src={img} style={{width: '0.65rem'}}/>
               </span>
@@ -383,8 +379,8 @@ export default class Index extends React.Component {
                   billData={{bank_id:activeCard.bankId,bill_type:activeCard.bill_type,card_num:activeCard.cardNum}}
                   setLevel={() => {
                     this.setState({level: 1})
-                  }}/> :
-        null
+                  }}
+        /> : null
     ]
   }
 

@@ -5,7 +5,6 @@ export default class MoreItem extends React.Component {
   constructor(props){
     super(props);
     document.body.style.overflowY = 'hidden';
-    document.body.style.position =  'fixed';
   }
 
   componentWillUnmount(){

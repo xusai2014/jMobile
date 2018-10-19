@@ -23,7 +23,7 @@ export default class KeyWord extends React.Component {
       Toast.info('请输入还款金额');
       return
     }
-    if (/(^[1-9](\d+)?(\.\d{1,2})?$)|(^0$)|(^\d\.\d{1,2}$)/.test(repaymentAmount)) {
+    if (/(^[0-9](\d+)?(\.\d{1,2})?$)|(^0$)|(^\d\.\d{1,2}$)/.test(repaymentAmount)) {
 
     } else {
       Toast.info('请输入正确金额');

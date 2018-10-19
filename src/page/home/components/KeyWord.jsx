@@ -12,11 +12,11 @@ export default class KeyWord extends React.Component {
     super(props);
     this.state = {
       repaymentAmount: '',
-      isRepeat: false,
     }
   }
 
   markRest(activeCard) {
+    Toast.loading('请稍候...')
     const {card_num: cardNum, bank_id: bankId} = activeCard;
     const {repaymentAmount, x} = this.state;
     if (!repaymentAmount) {
@@ -40,13 +40,11 @@ export default class KeyWord extends React.Component {
     })).then((result) => {
       Toast.info('设置还款状态成功')
       this.props.apiCallback()
-      this.isRepeat = false;
     }, (err) => {
-      this.isRepeat = false;
+      Toast.hide();
     })
   }
 
-  isRepeat = false
 
   render() {
     const {repaymentAmount,} = this.state;
@@ -57,10 +55,7 @@ export default class KeyWord extends React.Component {
         <input type="number"
                onKeyDown={(e) => {
                   if (parseInt(e.keyCode) == 13 || parseInt(e.keyCode) == 9) {
-                    if (!this.isRepeat) {
-                      this.isRepeat = true
                       this.markRest(activeCard)
-                    }
                   }
                }}
                onChange={(e) => {

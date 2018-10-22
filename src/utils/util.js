@@ -1,92 +1,3 @@
-import {Toast} from "antd-mobile";
-import 'antd-mobile/lib/toast/style/index.css'
-
-
-export function runGenerator(generator){
-  var it = generator();
-
-  function go(result){
-    if(result.done) {
-      // console.log(result.value);
-      return result.value;
-    }
-    return result.value.then(function(value){
-      return go(it.next(value));
-    },function(error){
-      return go(it.throw(error));
-    });
-  }
-
-  go(it.next());
-}
-
-export const createMeta = (data = {}) => {
-    let oMeta = document.createElement('meta');
-    let keys = Object.keys(data);
-    keys.map((v) => {
-        oMeta.setAttribute(v, data[v])
-    })
-    oMeta.setAttribute("id", "share")
-    document.getElementsByTagName('head')[0].appendChild(oMeta);
-}
-
-export const removeMeta = () => {
-    let parent = document.getElementsByTagName('head')[0]
-    let current = document.getElementById("share")
-    !!current ? parent.removeChild(current) : undefined
-}
-
-/**
- * 调用分享接口，获取相关数据
- * @param mobileNo
- * @param type
- * @param cardId
- */
-export const share = (mobileNo, type, cardId) => {
-    let patt = /[a-z]/i
-    console.log(mobileNo, 'mod323')
-    return new Promise(function (resolve, reject) {
-        let params = {
-            mobileNo, type
-        }
-        params = cardId ? {...params, cardId} : params
-        params = patt.test(mobileNo) ? {...params, isEnc: true} : params
-        console.log(params, '===params====')
-        fetchPromise('/api', 'POST', {
-            "TRDE_CODE": 'M0318',
-            ...params
-        }).then((result) => {
-            console.log(11111)
-            if (result.RETURNCODE == '0000') {
-                let url = !!cardId ? `${result.RETURNURL[0]['shareUrl']}/${cardId}` : result.RETURNURL[0]['shareUrl']
-                let data = {
-                    url: `${window.location.origin}/cca/creditApply/${result.RETURNURL[0].recommendPhoneEnc}/${result.RETURNURL[0].channelCode}/${ encodeURIComponent(url)}`,
-                    iconUrl: result.RETURNURL[0].sharePic,
-                    description: result.RETURNURL[0].shareDescribe,
-                    title: result.RETURNURL[0].shareTitle,
-                }
-                console.log(data, '---')
-                createMeta(data);
-                resolve(result.RETURNURL[0])
-            } else {
-                reject()
-            }
-        })
-
-    })
-
-}
-
-export const getChannelId = () => {
-    let u = navigator.userAgent
-    if (u.indexOf('SuiXingPay-Mpos') > -1) {
-        return '1000'
-    } else if (u.indexOf('Xlm-app') > -1) {
-        return '1001'
-    }
-    return ''
-}
-
 
 export const getSearch = (props) => {
     let search = ""
@@ -111,6 +22,7 @@ export const waitFunc = (time)=>{
     },time)
   })
 }
+
 export const regEmail = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/
 export const regBankCard = /^[0-9]*$/
 export const regMobile = /^[0-9]*$/
@@ -130,5 +42,23 @@ export const judgeEnv = ()=>{
     env = '-dev'
   }
   return env;
+}
+
+/**
+*   @author jerryxu
+*   @methodName 免息期计算
+*   @params mod
+*   @description 免息期计算，已出账单延迟到下一个自然月
+*/
+export const computerFreePeriod  = (bill_type,payment_due_date)=>{
+
+  const days =  bill_type == 'DONE' ?
+    parseInt(moment(payment_due_date).diff(moment(), 'days')) + parseInt(moment().daysInMonth()) :
+    parseInt(moment(payment_due_date).diff(moment(), 'days'))
+  if(days >0){
+    return days
+  } else {
+    return '--'
+  }
 
 }

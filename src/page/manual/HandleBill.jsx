@@ -1,10 +1,10 @@
 import React from 'react';
 import Header from '../../compoents/Header';
-import {Modal, Toast, DatePicker} from 'antd-mobile'
-import ModalCom from "../../compoents/ModalCom";
+import { Toast, } from 'antd-mobile'
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {handleBillForm, identityBank} from "../../actions/reqAction";
 import {regBankCard} from '../../utils/util'
+import DayPicker from "./DayPicker";
 @InitDecorator(
   (state) => {
     return {
@@ -17,7 +17,6 @@ export default class HandleBill extends React.Component {
     super(props);
     this.state = {
       activeOne: 0,
-      modal: false,
       description: '',
       visible: false,
       accountDate: '',
@@ -119,10 +118,7 @@ export default class HandleBill extends React.Component {
       Toast.info('账单金额不能大于信用额度');
       return;
     }
-    if(moment(paymentDueDate).diff(moment(billDate),'days') <=0){
-      Toast.info('还款日不能小于账单日');
-      return;
-    }
+
     if(!/^[0-9]+(.[0-9]+)?$/.test(creditLimit)){
       Toast.info('输入信用额度不合法');
       return;
@@ -134,9 +130,9 @@ export default class HandleBill extends React.Component {
 
     this.props.dispatch(handleBillForm({
       bankName,
-      billDate: moment(billDate).format('YYYY-MM-DD'),
+      billDate: this.handeleDate(billDate),
       fullCardNum,
-      paymentDueDate: moment(paymentDueDate).format('YYYY-MM-DD'),
+      paymentDueDate: this.handeleDate(paymentDueDate),
       nameOnCard,
       creditLimit,
       newBalance,
@@ -145,6 +141,14 @@ export default class HandleBill extends React.Component {
       Toast.info('手写账单成功');
       this.props.history.push('/home/index')
     })
+  }
+
+  handeleDate(date){
+    if(parseInt(date)<10){
+      return '0'+date
+    } else {
+      return date
+    }
   }
 
   enableBtn() {
@@ -171,16 +175,8 @@ export default class HandleBill extends React.Component {
 
   render() {
     const {
-      activeOne,
-      modal,
-      description,
       bankName,
-      accountDate,
       fullCardNum,
-      repayDate,
-      nameOnCard,
-      creditLimit,
-      newBalance,
       enabelBtn
     } = this.state;
 
@@ -199,51 +195,52 @@ export default class HandleBill extends React.Component {
           key: "fullCardNum",
           name: '卡号', value: "",
           placeHolder: "请输入完整卡号",
+          type:"number",
         }, {
           key: "bankName",
           name: '发卡行', value: "",
           placeHolder: "点击此处识别发卡行",
-          divTag: true
+          divTag: true,
+          type:"",
         }, {
           key: "nameOnCard",
           name: '持卡人', value: "",
           placeHolder: "请输入持卡人姓名",
+          type:"text",
         }, {
           name: '账单日', value: "",
           placeHolder: "请选择",
           code: "1",
-          key: 'accountDate'
+          key: 'accountDate',
+          type:"",
         }, {
           name: '还款日', value: "",
           placeHolder: "请选择",
           code: "1",
-          key: 'repayDate'
+          key: 'repayDate',
+          type:"",
         }, {
           name: '信用额度', value: "",
           placeHolder: "请输入信用额度",
-          key: "creditLimit"
+          key: "creditLimit",
+          type:"number",
         }, {
           name: '账单金额', value: "",
           placeHolder: "请输入账单金额",
-          key: "newBalance"
+          key: "newBalance",
+          type:"number",
         }].map((v, k) => {
-          const {name, disabled, value, divTag = false, key, placeHolder, icon, code = '0'} = v;
+          const {name, disabled, value,type, divTag = false, key, placeHolder, icon, code = '0'} = v;
           return <div key={k} style={styles.item}>
             <div style={styles.name}>{name}</div>
             {
-              code == '1' ? <DatePicker
-                mode="date"
-                title={name}
-                extra="Optional"
-                value={this.state[key]}
-                onChange={date => this.setState({[key]: date}, () => {
-                  this.enableBtn()
-                })}
-              >
-                <div
-                  style={styles.input}>{this.state[key] ? moment(this.state[key]).format('YYYY-MM-DD') : placeHolder}
-                </div>
-              </DatePicker> :
+              code == '1' ?
+                <DayPicker onRes={(day)=>{
+                  this.setState({[key]: day}, () => {
+                    this.enableBtn()
+                  })}
+                }/>
+               :
                 (divTag ? <div onClick={() => {
                                   if (key == 'bankName') {
                                     this.findBank()
@@ -264,6 +261,7 @@ export default class HandleBill extends React.Component {
                                 this.enableBtn()
                               })
                             }}
+                           type={type}
                            value={this.state[key]}
                            disabled={disabled}
                            style={styles.input}
@@ -280,10 +278,6 @@ export default class HandleBill extends React.Component {
       <div className={enabelBtn ? 'enableBtn' : 'disableBtn'}
            onClick={() => this.commitForm()}>保存
       </div>
-      <ModalCom visible={modal} showAction={(v) => {
-        this.setState({modal: v})
-      }} description={description}/>
-
     </div>];
   }
 }
@@ -329,5 +323,4 @@ const styles = {
     letterSpacing: '-0.77PX',
     margin: "0.31rem 0 0 0.31rem"
   },
-
 }

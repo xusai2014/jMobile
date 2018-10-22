@@ -1,10 +1,9 @@
 import React from 'react';
 import Header from '../../compoents/Header';
-import {Modal, Toast, DatePicker} from 'antd-mobile'
-import ModalCom from "../../compoents/ModalCom";
+import { Toast} from 'antd-mobile'
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {handleBillForm, identityBank} from "../../actions/reqAction";
-import { regBankCard } from '../../utils/util'
+import DayPicker from "./DayPicker";
 
 @InitDecorator(
   (state) => {
@@ -18,7 +17,6 @@ export default class AddBill extends React.Component {
     super(props);
     this.state = {
       activeOne: 0,
-      modal: false,
       description: '',
       visible: false,
       accountDate: '',
@@ -28,8 +26,8 @@ export default class AddBill extends React.Component {
       nameOnCard: "",
       creditLimit: "",
       newBalance: "",
-      bankNo:"",
-      enabelBtn:false
+      bankNo: "",
+      enabelBtn: false
     }
   }
 
@@ -48,18 +46,19 @@ export default class AddBill extends React.Component {
       })
     })
   }
-  enableBtn(){
+
+  enableBtn() {
     const {
       accountDate: billDate,
       repayDate: paymentDueDate,
       creditLimit,
       newBalance,
     } = this.state;
-    if( billDate && paymentDueDate  && creditLimit &&  newBalance){
-      this.setState({enabelBtn:true})
+    if (billDate && paymentDueDate && creditLimit && newBalance) {
+      this.setState({enabelBtn: true})
     } else {
 
-      this.setState({enabelBtn:false})
+      this.setState({enabelBtn: false})
     }
 
   }
@@ -85,65 +84,60 @@ export default class AddBill extends React.Component {
       creditLimit,
       newBalance,
     } = this.state;
-    if(!billDate){
+    if (!billDate) {
       Toast.info('请填写账单日');
       return;
-    } else if(!paymentDueDate){
+    } else if (!paymentDueDate) {
       Toast.info('请填写还款日');
       return;
-    }  else if(!creditLimit){
+    } else if (!creditLimit) {
       Toast.info('请填写信用额度');
       return;
-    } else if(!newBalance){
+    } else if (!newBalance) {
       Toast.info('请填写账单金额');
       return;
     }
-    if(parseInt(creditLimit)<parseInt(newBalance)){
+    if (parseInt(creditLimit) < parseInt(newBalance)) {
       Toast.info('账单金额不能大于信用额度');
       return;
     }
-    if(moment(paymentDueDate).diff(moment(billDate),'days') <=0){
-      Toast.info('还款日不能小于账单日');
-      return;
-    }
-    if(!/^[0-9]+(.[0-9]+)?$/.test(creditLimit)){
+    if (!/^[0-9]+(.[0-9]+)?$/.test(creditLimit)) {
       Toast.info('输入信用额度不合法');
       return;
     }
-    if(!/^[0-9]+(.[0-9]+)?$/.test(newBalance)){
+    if (!/^[0-9]+(.[0-9]+)?$/.test(newBalance)) {
       Toast.info('输入账单金额不合法');
       return;
     }
 
     const {state} = this.props.location;
-    const { fullCardNum, nameOnCard, bankNo,bankName} = state
+    const {fullCardNum, nameOnCard, bankNo, bankName} = state
     this.props.dispatch(handleBillForm({
       bankName,
-      billDate:moment(billDate).format('YYYY-MM-DD'),
+      billDate: this.handeleDate(billDate),
       fullCardNum,
-      paymentDueDate:moment(paymentDueDate).format('YYYY-MM-DD'),
+      paymentDueDate: this.handeleDate(paymentDueDate),
       nameOnCard,
       creditLimit,
       newBalance,
       bankNo,
-    })).then(()=>{
+    })).then(() => {
       Toast.info('手写账单成功');
       this.props.history.push('/home/index')
     })
   }
 
+  handeleDate(date) {
+    if (parseInt(date) < 10) {
+      return '0' + date
+    } else {
+      return date
+    }
+  }
+
   render() {
     const {
-      activeOne,
-      modal,
-      description,
       bankName,
-      accountDate,
-      fullCardNum,
-      repayDate,
-      nameOnCard,
-      creditLimit,
-      newBalance,
       enabelBtn,
     } = this.state;
 
@@ -162,63 +156,66 @@ export default class AddBill extends React.Component {
           name: '账单日', value: "",
           placeHolder: "请选择",
           code: "1",
-          key: 'accountDate'
+          key: 'accountDate',
+          type: 'date'
         }, {
           name: '还款日', value: "",
           placeHolder: "请选择",
           code: "1",
-          key: 'repayDate'
+          key: 'repayDate',
+          type: 'date'
         }, {
           name: '信用额度', value: "",
           placeHolder: "请输入信用额度",
-          key: "creditLimit"
+          key: "creditLimit",
+          type: 'number'
         }, {
           name: '账单金额', value: "",
           placeHolder: "请输入账单金额",
-          key: "newBalance"
+          key: "newBalance",
+          type: 'number'
         }].map((v, k) => {
-          const {name, disabled, value, key, placeHolder, icon, code = '0'} = v;
+          const {name, disabled, value, key, type, placeHolder, icon, code = '0'} = v;
           return <div key={k} style={styles.item}>
             <div style={styles.name}>{name}</div>
             {
-              code == '1' ? <DatePicker
-                mode="date"
-                title={name}
-                extra="Optional"
-                value={this.state[key]}
-                onChange={date => this.setState({[key]: date},()=>this.enableBtn())}
-              >
-                <div
-                  style={styles.input}>{this.state[key] ? moment(this.state[key]).format('YYYY-MM-DD') : placeHolder}
-                </div>
-              </DatePicker> : <input onChange={(e) =>{
-                if (this.inputLimit(key, e.currentTarget.value.trim())) {
-                  return;
+              code == '1' ?
+                <DayPicker onRes={(day) => {
+                  this.setState({
+                    [key]: day
+                  }, () => {
+                    this.enableBtn()
+                  })
                 }
-                this.setState({[key]: e.currentTarget.value},()=>this.enableBtn())
-              }}
-                                     onClick={()=>{
-                                       if(key == 'bankName'){
-                                         this.findBank()
-                                       }
-                                     }}
-                                     value={this.state[key]}
-                                     disabled={disabled}
-                                     style={styles.input}
-                                     placeholder={placeHolder}
-              />
+                }/> :
+                <input
+                  onChange={(e) => {
+                    if (this.inputLimit(key, e.currentTarget.value.trim())) {
+                      return;
+                    }
+                    this.setState({[key]: e.currentTarget.value}, () => this.enableBtn())
+                  }}
+                  onClick={() => {
+                    if (key == 'bankName') {
+                      this.findBank()
+                    }
+                  }}
+
+                  type={type}
+                  value={this.state[key]}
+                  disabled={disabled}
+                  style={styles.input}
+                  placeholder={placeHolder}
+                />
             }
             {icon ? <img src={icon} style={ styles.img}/> : null}
           </div>
 
         })
       }
-      <div className={enabelBtn?'enableBtn':'disableBtn'}
-           onClick={() => this.commitForm()}>保存</div>
-      <ModalCom visible={modal} showAction={(v) => {
-        this.setState({modal: v})
-      }} description={description}/>
-
+      <div className={enabelBtn ? 'enableBtn' : 'disableBtn'}
+           onClick={() => this.commitForm()}>保存
+      </div>
     </div>];
   }
 }

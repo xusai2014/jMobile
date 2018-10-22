@@ -6,6 +6,7 @@ import {Modal, Progress, Toast}  from "antd-mobile";
 import {jsNative} from "sx-jsbridge";
 import {waitFunc} from "../../utils/util";
 import globalStyle from "../../style";
+import MoreItem from "./components/MoreItem";
 const {loginHelper} = jsNative;
 const {prompt, alert} = Modal;
 
@@ -20,13 +21,14 @@ export default class BillCard extends React.Component {
     super(props);
     this.state = {
       syncBegin: false,
-      percent: 0
+      percent: 0,
+      moreAction: false
     }
   }
 
-  async callSyncBill(task_id, importBillType, abbr,cardNum) {
+  async callSyncBill(task_id, importBillType, abbr, cardNum,bank_name) {
     // TODO 仅支持网银
-    Toast.loading('请稍候',0);
+    Toast.loading('请稍候', 0);
     if (importBillType == '01') {
 
     } else {
@@ -39,9 +41,9 @@ export default class BillCard extends React.Component {
         const {subtype = ''} = data;
         if (subtype) {
           alert(<span className="alert_title">暂时无法获取账单的最新状态</span>, <span className="alert_content">如果您已通过其导入它平台还款，建议您通过网银导入</span>, [
-              {text: '暂不需要', onPress: () => console.log('置顶聊天被点击了'),style: globalStyle.cancelStyle},
-              {text: '通过网银导入', onPress: () => this.props.history.push('/bill/method'),style: globalStyle.sureStyle }
-            ]);
+            {text: '暂不需要', onPress: () => console.log('置顶聊天被点击了'), style: globalStyle.cancelStyle},
+            {text: '通过网银导入', onPress: () => this.props.history.push(`/cyber/login/${abbr}`,{name:bank_name}), style: globalStyle.sureStyle}
+          ]);
         } else {
           alert(<span className="alert_title">该银行暂不支持同步您的账单数据</span>, '', [
             {text: '我知道了', onPress: () => console.log('置顶聊天被点击了'), style: globalStyle.singleStyle}
@@ -70,6 +72,10 @@ export default class BillCard extends React.Component {
 
     })
 
+  }
+
+  showMoreAction(task_id, importBillType, abbr, cardNum,bankId,bill_type,bank_name) {
+    this.props.showMoreAction(task_id, importBillType, abbr, cardNum,bankId,bill_type,()=>this.callSyncBill(task_id, importBillType, abbr, cardNum,bank_name))
   }
 
   /**
@@ -118,7 +124,7 @@ export default class BillCard extends React.Component {
         this.setState({
           percent: 100,
           syncBegin: false
-        },()=>{
+        }, () => {
           this.props.updateData();
           Toast.success('账单信息同步完成');
         });
@@ -153,7 +159,7 @@ export default class BillCard extends React.Component {
    */
   async verifycation({taskId, value: code}) {
     let codeStatus = '';
-    Toast.loading('请稍候',0)
+    Toast.loading('请稍候', 0)
 
     codeStatus = await this.props.dispatch(verifyCode({
       taskId,
@@ -179,22 +185,28 @@ export default class BillCard extends React.Component {
       text: '取消',
       onPress: value => new Promise((resolve) => {
         resolve();
-        alert(<span className="alert_title">是否退出当前认证流程</span>,<span className="alert_content">选择“是”将退出当前认证流程已填写信息将丢失</span>,[
-          {text:"是",onPress:()=>{},style: globalStyle.cancelStyle},
-          {text:"否",onPress:()=>{
+        alert(<span className="alert_title">是否退出当前认证流程</span>, <span
+          className="alert_content">选择“是”将退出当前认证流程已填写信息将丢失</span>, [
+          {
+            text: "是", onPress: () => {
+          }, style: globalStyle.cancelStyle
+          },
+          {
+            text: "否", onPress: () => {
             this.promptClick({input, taskId, description, callback})
-          },style: globalStyle.sureStyle}
+          }, style: globalStyle.sureStyle
+          }
         ])
       }),
     },
       {
         text: '确定',
         onPress: value => new Promise((resolve, reject) => {
-          if(!value.trim()){
+          if (!value.trim()) {
             Toast.info('请输入短信验证码')
             return;
           }
-          if(value.trim().length>6 || !/^[0-9]*$/.test(value.trim())){
+          if (value.trim().length > 6 || !/^[0-9]*$/.test(value.trim())) {
             Toast.info('请检查您输入的验证码位数')
             return;
           }
@@ -220,42 +232,60 @@ export default class BillCard extends React.Component {
 
 
   judgeStatus(bill_type, payment_due_date, bill_date, action) {
-    const { examineAccount } = this.props;
+    const {examineAccount} = this.props;
     if (bill_type == 'DONE') {
       const duM = moment(payment_due_date);
       if (parseInt(duM.diff(moment(), 'days')) < 0) {
         return {
           day: " ",
-          date: " ",
-          des: <span style={{color:'red'}}>{`已逾期${moment().diff(duM, 'days')}天`}</span>,
-          actionName: examineAccount?"点击":"立即还款",
-          action:examineAccount?()=>{}:action
+          date: duM.format('MM-DD'),
+          des: <span style={{
+            color: 'red',
+            fontSize: '0.29rem',
+            letterSpacing: '1PX'
+          }}>{`逾期${moment().diff(duM, 'days')}天`}</span>,
+          actionName: examineAccount ? "点击" : "立即还款",
+          action: examineAccount ? () => {
+          } : action,
+          key:"03"
         }
       } else {
         return {
           day: duM.diff(moment(), 'days'),
           date: duM.format('MM-DD'),
           des: '天后到期',
-          actionName: examineAccount?"":"立即还款",
-          action:examineAccount?()=>{}:action
+          actionName: examineAccount ? "" : "立即还款",
+          action: examineAccount ? () => {
+          } : action,
+          key:"02"
         }
       }
     } else if (bill_type == 'UNDONE') {
       const duM = moment(bill_date);
-      return {
-        day: duM.diff(moment(), 'days'),
+      const days = duM.diff(moment(), 'days');
+       return parseInt(days)>0? {
+        day: days,
         date: duM.format('MM-DD'),
         des: `天后出账`,
         actionName: "更新未出",
-        action:()=>{}
-      }
+        action: () => {},
+         key:"01"
+      }:{
+         day: Math.abs(days),
+         date: duM.format('MM-DD'),
+         des: `天前出账`,
+         actionName: "更新未出",
+         action: () => {},
+         key:"04"
+       }
     } else {
       return {
         day: "",
         date: '',
         des: '',
         actionName: "",
-        action:()=>{}
+        action: () => {
+        }
       }
     }
 
@@ -267,21 +297,28 @@ export default class BillCard extends React.Component {
     })
   }
 
-  identifyFunc(callback){
+  identifyFunc(callback) {
     this.props.dispatch(getIndetiyInfo({
       appType: 'mpos'
     })).then((result) => {
       const {data} = result;
       const {authSts} = data;
       //  authSts 99:未认证，01：已认证，02：驳回，00：审核中
-      if(authSts == '01'){
+      if (authSts == '01') {
         callback();
-      } else if( authSts == '-1') {
+      } else if (authSts == '-1') {
         //数据尚未装载完毕不处理
-      } else if(authSts == '99') {
-        alert(<span className="alert_title">您尚未通过实名认证，请先进行实名认证</span>,'',[
-          {text:"取消",onPress:()=>{},style: globalStyle.cancelStyle},
-          {text:"去认证",onPress:()=>{jsNative.nativeGoRealName();},style: globalStyle.sureStyle},
+      } else if (authSts == '99') {
+        alert(<span className="alert_title">您尚未通过实名认证，请先进行实名认证</span>, '', [
+          {
+            text: "取消", onPress: () => {
+          }, style: globalStyle.cancelStyle
+          },
+          {
+            text: "去认证", onPress: () => {
+            jsNative.nativeGoRealName();
+          }, style: globalStyle.sureStyle
+          },
         ])
       } else {
         jsNative.nativeGoRealName();
@@ -309,26 +346,28 @@ export default class BillCard extends React.Component {
       logo_uri,
       repay,
       importBillType,
-      real=true,
+      real = true,
       isNew = '00',
       abbr,
       update_time,
       isLogged,
       authSts,
-      examineAccount
+      examineAccount,
+      moreAction,
+      bank_id,
     }
       = this.props;
     const {
       percent,
       syncBegin
     } = this.state;
-    const update =  moment().diff(moment(update_time),'minutes')
+    const update = moment().diff(moment(update_time), 'minutes')
 
-    const {day, date, des, actionName, action} = this.judgeStatus(bill_type, payment_due_date, bill_date, repay)
+    const {day, date, des, actionName, action, key} = this.judgeStatus(bill_type, payment_due_date, bill_date, repay)
     return <div onClick={(e) => {
       if (!real) {
-        if(isLogged){
-          this.identifyFunc(()=>this.props.history.push('/bill/method'))
+        if (isLogged) {
+          this.identifyFunc(() => this.props.history.push('/bill/method'))
           return
         }
         e.stopPropagation();
@@ -336,10 +375,10 @@ export default class BillCard extends React.Component {
         this.callLogin()
         return
       }
-      if(examineAccount){
+      if (examineAccount) {
         return
       }
-      this.props.history.push(`/bill/detail/${bill_id}`,{bank_name})
+      this.props.history.push(`/bill/detail/${bill_id}`, {bank_name,card_num,bank_id})
     }} style={{background: '#FFFFFF', marginTop: '0.2rem', padding: "0.3rem 0", position: 'relative'}}>
       <div style={{display: 'flex', alignItems: 'center'}}>
         {
@@ -350,7 +389,7 @@ export default class BillCard extends React.Component {
             <img style={{width: '0.445rem'}} src="/static/img/new@2x.png"/>
           </div> : null
         }
-        <div style={{width: '3.24rem',display: 'inline-flex',alignItems: 'center'}}>
+        <div style={{width: '3.24rem', display: 'inline-flex', alignItems: 'center'}}>
           <div style={{
             margin: '0 0.14rem 0 0.28rem',
             display: "inline-block",
@@ -383,7 +422,7 @@ export default class BillCard extends React.Component {
         </div>
         <div style={{width: '4.26rem', display: 'inline-block'}}>
           {
-            !(update <= 10 && update>=0)?(syncBegin ?
+            syncBegin ?
               <div style={{
                 fontSize: '0.22rem',
                 color: '#333333',
@@ -394,26 +433,19 @@ export default class BillCard extends React.Component {
                 {percent > 0 ? `${percent}%更新中...` : '登录中...'}
                 <Progress style={{width: "1.32rem"}} percent={percent} position="normal"/>
               </div> :
-              <img src="/static/img/更新@2x.png" style={{
-                height: '0.36rem',
+              <img src="/static/img/1.1.0/more@2x.png" style={{
+                height: '0.07rem',
                 float: 'right',
-                paddingRight: '0.71rem',
+                padding: '0.2rem 0.4rem 0.2rem 0.8rem'
               }} onClick={(e) => {
                 e.stopPropagation();
+                e.preventDefault();
                 if (!real) {
                   this.callLogin()
                   return
                 }
-                this.callSyncBill(task_id, importBillType, abbr,card_num)
-              }}/>)
-              :
-              <div style={{
-                fontSize:'0.24rem',
-                color: '#41C72F',
-                letterSpacing: '0',
-                marginLeft: '2.57rem',
-                fontWeight: 'bold',
-              }}>已同步至最新</div>
+                this.showMoreAction(task_id, importBillType, abbr, card_num,bank_id,bill_type,bank_name)
+              }}/>
           }
         </div>
       </div>
@@ -432,7 +464,7 @@ export default class BillCard extends React.Component {
             color: '#333333',
             letterSpacing: '0',
             fontWeight: 'bold',
-          }}>{current_bill_remain_amt}</div>
+          }}>{parseFloat(current_bill_remain_amt) == 0?'--':current_bill_remain_amt}</div>
           <div style={{
             fontSize: '0.22rem',
             color: '#999999',
@@ -450,14 +482,24 @@ export default class BillCard extends React.Component {
             lineHeight: '0.5rem',
             fontWeight: 'bold',
           }}>
-            {day>=0?day:0}
+            {day >= 0 ? day : 0}
           </div>
           <div style={{
             display: 'inline-block',
             marginLeft: "0.26rem",
+          }} onClick={(e)=>{
+            if(key == '03'){
+              e.stopPropagation();
+              e.preventDefault();
+              if (!real) {
+                this.callLogin()
+                return
+              }
+              this.showMoreAction(task_id, importBillType, abbr, card_num,bank_id,bill_type,bank_name)
+            }
           }}>
             {
-              examineAccount?'':<div style={{
+              examineAccount ? '' : <div style={{
                 fontSize: '0.22rem',
                 color: '#999999',
                 letterSpacing: '0',
@@ -475,9 +517,9 @@ export default class BillCard extends React.Component {
             }}>{date}</div>
           </div>
         </div>
-        {!examineAccount?<div style={{
+        {!examineAccount ? <div style={{
           display: 'inline-block',
-          background: actionName=='更新未出'?'rgb(153, 153, 153)':'#4C7BFE',
+          background: actionName == '更新未出' ? 'rgb(153, 153, 153)' : '#4C7BFE',
           borderRadius: '0.6rem',
           fontSize: '0.22rem',
           color: '#FFFFFF',
@@ -488,7 +530,7 @@ export default class BillCard extends React.Component {
           lineHeight: '0.53rem',
           fontWeight: 'bold',
         }} onClick={(e) => {
-          if(actionName=='更新未出'){
+          if (actionName == '更新未出') {
             return
           }
           if (!real) {
@@ -499,11 +541,13 @@ export default class BillCard extends React.Component {
         }}>
           {actionName}
         </div>
-        :null
+          : null
         }
       </div>
       {real ? null :
         <img src="/static/img/示例@2x.png" style={{width: "0.71rem", position: 'absolute', right: '0', top: '0'}}/>}
+
+
     </div>
   }
 }

@@ -13,7 +13,8 @@ export default class LoadCom extends React.Component{
   }
 
 
-  scrollLoad =()=> {
+  scrollLoad =(e)=> {
+    e.preventDefault();
     const { loadMoreDataFn,currentNum, pageSize,totalPages } = this.props;
     if (parseInt(totalPages)<=parseInt(currentNum) || this.state.isLoading) {
       return;
@@ -52,7 +53,6 @@ export default class LoadCom extends React.Component{
 
     return(<div id="wrapper" style={{
       textAlign: 'center',
-      marginBottom: '1.5rem',
     }}>{
       isLoading?'正在加载中...':(
         parseInt(totalPages)>parseInt(currentNum)?'下拉加载':"没有更多了"

@@ -1,5 +1,6 @@
 import React from 'react';
 import bankIcon from '../../../utils/bank';
+import {computerFreePeriod} from "../../../utils/util";
 
 
 export default class Card extends React.Component {
@@ -17,8 +18,9 @@ export default class Card extends React.Component {
   }
 
   render() {
-    const { popupCard,actName, id, bankNm,payment_due_date,card_limit,actNo,bankNo,bindType } =this.props;
-    return (<div style={styles.container}>
+    const { popupCard,actName,import_bill_type:bill_type, id, bankNm,payment_due_date,card_limit,actNo,bankNo,bindType } =this.props;
+    const freeDays = computerFreePeriod(bill_type,payment_due_date);
+    return (<div style={bindType=='02'?styles.containerGray:styles.container}>
       <div style={{display:'inline-flex',alignItems:"center"}}>
         <div style={styles.rowItem}>
           <img style={{width: '0.76rem', height: "0.76rem"}} src={bankIcon[bankNo]?bankIcon[bankNo]:'/static/img/bank/313@1x.png'}/>
@@ -58,7 +60,8 @@ export default class Card extends React.Component {
           letterSpacing: '0',
           marginTop: '0.66rem',
         }}
-      ><span style={{marginLeft: '0.53rem'}}>免息期：{payment_due_date?parseInt(moment(payment_due_date).diff(moment(), 'days')) + parseInt(moment().daysInMonth())+'天':'--'}</span>
+      ><span style={{marginLeft: '0.53rem'}}>免息期：{
+        payment_due_date?freeDays +'天':'--'}</span>
         <span style={{
         float: 'right',
         marginRight: '0.5rem'
@@ -79,6 +82,15 @@ const styles = {
     borderRadius: "0.08rem",
     height: '2.64rem',
     position: 'relative'
+  },
+  containerGray:{
+    margin: '0.24rem 0.16rem',
+    width: '7.18rem',
+    backgroundImage: "linear-gradient(-133deg, #B3B7CF 0%, #7C8094 100%)",
+    boxShadow: "0 0.06rem 0.12rem 0 #CACBCE",
+    borderRadius: "0.08rem",
+    height: '2.64rem',
+    position: 'relative',
   },
   rowItem:{
     width: "0.72rem", height: '0.72rem',

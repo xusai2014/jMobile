@@ -1,6 +1,18 @@
 import React from 'react';
 import { Modal } from "antd-mobile";
-
+/**
+*   @author jerryxu
+*   @methodName ModalCom
+*   @params
+ *   {
+  *     visible ,
+  *     showAction ,
+  *     description,
+  *     title,
+  *     showAction
+  *   }
+*   @description 封装Alert弹出框
+*/
 export default class ModalCom extends React.Component {
   constructor(props){
     super(props)
@@ -30,7 +42,7 @@ export default class ModalCom extends React.Component {
 
 
   render() {
-    const { visible, showAction ,description } = this.props;
+    const { visible ,description } = this.props;
 
     return <Modal
       visible={visible}

@@ -29,7 +29,7 @@ export default class EmailManager extends React.Component{
       this.props.history.push('/load/email', {taskId, loginType: "03"})
       Toast.hide();
     },(err)=>{
-
+      Toast.hide();
     });
 
   }

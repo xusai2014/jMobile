@@ -9,7 +9,7 @@ import {
   BILL_LIST, BILL_DETAIL, PAY_DETAIL, HUAN_DAO, SYNC_BILL, FREE_INTEREST, EMAIL_LOGIN, EMAIL_TASK_STATUS, DELETE_BILL,
   DIRECT_EMAIL_BILL, EMAIL_LIST, DELETE_EMAIL, CARDS_LIST, JUDGE_SEL_CARD, IDENTITY_BNK, POST_INFO, SEND_VERIFICATION,
   VERIFY_CODE, GET_IDENTITY_INFO, LOOSE_CARD, HANDLE_BILL, GET_BILL_ID, ACTIVITY_CARD, REMOVE_LOGIN_STATUS,
-  REMOVE_BILL_ALL_STATUS, ADTIVITY_DATA
+  REMOVE_BILL_ALL_STATUS, ADTIVITY_DATA, MARK_BILL_STATUS, MARK_BILL_REST, ECHO_FOEM, BILL_DETAIL_LIST
 } from '../utils/ActionsType'
 
 export const getBankList = (data) => ActionCreator(
@@ -240,6 +240,35 @@ export const getActivityData = (data) => ActionCreator(
   `/api`,
   'POST',
   {...data, 'TRDE_CODE': ADTIVITY_DATA[1]}
+)();
+
+
+export const setMarkBill = (data) => ActionCreator(
+  MARK_BILL_STATUS,
+  `/api`,
+  'POST',
+  {...data, 'TRDE_CODE': MARK_BILL_STATUS[1]}
+)();
+
+export const setBillRest = (data) => ActionCreator(
+  MARK_BILL_REST,
+  `/api`,
+  'POST',
+  {...data, 'TRDE_CODE': MARK_BILL_REST[1]}
+)();
+
+export const getEchoForm = (data) => ActionCreator(
+  ECHO_FOEM,
+  `/api`,
+  'POST',
+  {...data, 'TRDE_CODE': ECHO_FOEM[1]}
+)();
+
+export const getBillDetaillList = (data) => ActionCreator(
+  BILL_DETAIL_LIST,
+  `/api`,
+  'POST',
+  {...data, 'TRDE_CODE': BILL_DETAIL_LIST[1]}
 )();
 
 

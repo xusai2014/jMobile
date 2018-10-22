@@ -2,10 +2,10 @@ import React from 'react';
 import Header from "../../compoents/Header";
 import {checkEmailTask, checkToken, pollingCyber, removeLoginStatus, verifyCode} from "../../actions/reqAction";
 import {InitDecorator} from "../../compoents/InitDecorator";
-import Loading from "../../compoents/Loading";
 import { Toast,Modal } from 'antd-mobile';
 import {waitFunc} from "../../utils/util";
 import globalStyle from "../../style";
+import {Prompt,} from "react-router-dom";
 const {prompt,alert} = Modal;
 
 const results = {
@@ -27,6 +27,7 @@ export default class LoadingStatus extends React.Component{
     this.state = {
       progress:0
     }
+    window.leaveStatu = false;
   }
 
   /**
@@ -120,6 +121,8 @@ export default class LoadingStatus extends React.Component{
 
   goResult(loginType,status = 3,description){
 
+    //取消路由拦截
+    window.leaveStatu = true
     // 1 是成功 2是无数据 3是失败
     if(status == 1){
       if(loginType == '01'){
@@ -191,7 +194,10 @@ export default class LoadingStatus extends React.Component{
       onPress: value => new Promise((resolve) => {
         resolve();
         alert(<span className="alert_title">是否退出当前认证流程</span>, <span className="alert_content">选择“是”将退出当前认证流程已填写信息将丢失</span>,[
-          {text:"是",onPress:()=>{this.props.history.go(-1)},style: globalStyle.cancelStyle},
+          {text:"是",onPress:()=>{
+            //prompt().close()
+          this.props.history.go(-1)
+          },style: globalStyle.cancelStyle},
           {text:"否",onPress:()=>{
             this.promptClick({input, taskId, description, callback})
           },style: globalStyle.sureStyle}
@@ -278,16 +284,25 @@ export default class LoadingStatus extends React.Component{
   render() {
     const  { type,}   = this.props.match.params;
     const { title } = results[type];
-    const { progress } = this.state;
-    return [<Header backStart={()=>{
-      alert(<span className="alert_title">返回将会中断导入，确认继续吗？</span>,'',[
-        {text:"取消",onPress:()=>{},style: globalStyle.cancelStyle},
-        {text:"确认",onPress:()=>{
-          promiseList.cancel();
-          window.history.go(-1);
-        },style: globalStyle.sureStyle},
-      ])
-    }} key="1" title={`正在导入${title}`} ></Header>,
+    const { progress, } = this.state;
+    return [<Header key="1" title={`正在导入${title}`} ></Header>,
+      <Prompt message={()=>{
+                if(!window.leaveStatu){
+                  alert(<span className="alert_title">返回将会中断导入，确认继续吗？</span>,'',[
+                    {text:"取消",onPress:()=>{
+                      window.leaveStatu = false
+                    },style: globalStyle.cancelStyle},
+                    {text:"确认",onPress:()=>{
+                      promiseList.cancel();
+                      window.leaveStatu = true;
+                      this.props.history.go(-1)
+                    },style: globalStyle.sureStyle},
+                  ]);
+                  return window.leaveStatu
+                }
+              }}
+              when={!window.leaveStatu}
+      />,
       <div key={2} style={{
         width:"7.5rem",position:'absolute',textAlign:'center',
         backgroundColor:"#FFFFFF",paddingBottom:"0.5rem",

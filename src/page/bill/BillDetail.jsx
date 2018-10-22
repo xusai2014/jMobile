@@ -4,18 +4,20 @@ import {Tabs,Modal,Toast} from "antd-mobile"
 import Popup from "../home/components/Popup";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {
-  checkToken, deleteBill, getBillDetail, getLoginList, getPayDetail, syncBill,
+  checkToken, deleteBill, getBillDetail, getBillDetaillList, getLoginList, getPayDetail, setMarkBill, syncBill,
   verifyCode
 } from "../../actions/reqAction";
 import {waitFunc} from "../../utils/util";
 import LoadCom from "../../compoents/LoadCom";
 import globalStyle from "../../style";
+import KeyWord from "../home/components/KeyWord";
 const {operation,alert,prompt} = Modal;
 @InitDecorator((state)=>{
   return {
     billDetail:state.BillReducer.billDetail,
     payDetail:state.BillReducer.payDetail,
     examineAccount:state.CardsReducer.examineAccount,
+    billDetailList:state.BillReducer.billDetailList
   }
 })
 export default class BillDetail extends React.Component {
@@ -29,6 +31,8 @@ export default class BillDetail extends React.Component {
       currentNum:'1',
       pageSize:'20',
       totalPages:'1',
+      detailShow:false, //展示标记还部分输入框,
+      pageData:{},
     }
   }
 
@@ -235,7 +239,8 @@ export default class BillDetail extends React.Component {
           date: " ",
           des: `已逾期${moment().diff(duM, 'days')}天`,
           actionName: "立即还款",
-          action
+          action,
+          key:"03"
         }
       } else {
         return {
@@ -243,17 +248,27 @@ export default class BillDetail extends React.Component {
           date: duM.format('MM-DD'),
           des: '天后到期',
           actionName: "立即还款",
-          action
+          action,
+          key:"02"
         }
       }
     } else if (bill_type == 'UNDONE') {
       const duM = moment(bill_date);
-      return {
-        day: duM.diff(moment(), 'days'),
+      const days = duM.diff(moment(), 'days')
+      return parseInt(days)>0? {
+        day: days,
         date: duM.format('MM-DD'),
-        des: '天后到期',
+        des: '天后出账',
         actionName: "更新未出",
-        action
+        action,
+        key:"01"
+      }:{
+        day: Math.abs(days),
+        date: duM.format('MM-DD'),
+        des: '天前出账',
+        actionName: "更新未出",
+        action,
+        key:"04"
       }
     } else {
       return {
@@ -261,7 +276,8 @@ export default class BillDetail extends React.Component {
         date: '',
         des: '',
         actionName: "",
-        action
+        action,
+        key:""
       }
     }
 
@@ -273,25 +289,12 @@ export default class BillDetail extends React.Component {
   }
 
   initData(){
-    const { billId } = this.props.match.params;
-    const { currentNum, pageSize} = this.state;
-    this.props.dispatch(getBillDetail({
-      billId,
-      currentNum,
-      pageSize
+    const { bank_id:bankId, bank_name ,card_num:cardNum } = this.props.location.state;
+
+    this.props.dispatch(getBillDetaillList({
+      cardNum,bankId
     })).then((result)=>{
-      const { data = {}} = result;
-      const { pageResponseDto } = data;
-      const {
-        currentPage,
-        size,
-        totalPages,
-      } = pageResponseDto;
-      this.setState({
-        currentNum:currentPage,
-        pageSize:size,
-        totalPages,
-      })
+
     })
 
   }
@@ -346,7 +349,7 @@ export default class BillDetail extends React.Component {
     }, {
       title: "出账日", value: billDate, unit: ""
     }, {
-      title: "免息期", value: freeInterest, unit: "天"
+      title: "免息期", value: parseInt(freeInterest)>0?freeInterest:0, unit: "天"
     }, {
       title: "总额度", value: amount.toFixed(2), unit: amountUnit
     }, {
@@ -382,38 +385,6 @@ export default class BillDetail extends React.Component {
 
   }
 
-  judgeStatus(bill_type, payment_due_date, bill_date) {
-    if (bill_type == 'DONE') {
-      const duM = moment(payment_due_date);
-      if(parseInt(duM.diff(moment(), 'days')) < 0){
-        return {
-          day: "",
-          date: "",
-          des:`已逾期${moment().diff(duM, 'days')}天`
-        }
-      } else {
-        return {
-          day: duM.diff(moment(), 'days'),
-          date: duM.format('MM-DD'),
-          des:'天后到期'
-        }
-      }
-    } else if (bill_type == 'UNDONE') {
-      const duM = moment(bill_date);
-      return {
-        day: duM.diff(moment(), 'days'),
-        date: duM.format('MM-DD'),
-        des:'天后到期'
-      }
-    } else {
-      return {
-        day: "",
-        date: '',
-        des:''
-      }
-    }
-
-  }
   async removeBill(billId){
     this.props.dispatch(deleteBill({
       billId,
@@ -423,60 +394,65 @@ export default class BillDetail extends React.Component {
     })
   }
 
-  loadMoreDataFn(currentNum,pageSize,callback){
-    const { billId } = this.props.match.params;
-    const { currentNum:num, pageSize:size} = this.state;
-    if(parseInt(currentNum) == parseInt(num+1)){
-      this.props.dispatch(getBillDetail({
-        billId,
-        currentNum,
-        pageSize
-      })).then((result)=>{
-        const { data = {}} = result;
-        const { pageResponseDto } = data;
-        const {
-          currentPage,
-          size,
-          totalPages,
-        } = pageResponseDto;
-        this.setState({
-          currentNum:currentPage,
-          pageSize:size,
-          totalPages,
-        })
-      }).finally(()=>callback())
-    }
+  loadMoreDataFn(currentNum,pageSize,billId,callback){
+    this.props.dispatch(getBillDetail({
+      billId,
+      currentNum,
+      pageSize
+    })).then((result)=>{
+      const { data = {}} = result;
+      debugger;
+      this.setState({
+        pageData:{
+          ...this.state.pageData,
+          [billId]:data
+        },
+      })
+    }).finally(()=>callback())
+  }
 
+  getBillList(billId){
+    const { currentNum = '1', pageSize = '20'} = this.state;
+    this.props.dispatch(getBillDetail({
+      billId,
+      currentNum,
+      pageSize
+    })).then((result)=>{
+      const { data = []} = result;
+      debugger;
+      this.setState({
+        pageData:{
+          ...this.state.pageData,
+          [billId]:data
+        },
+      })
+    });
   }
 
   render() {
-    const {billDetail ={},payDetail= []} = this.props;
-    const {expandOne, visible, syncBegin,
-      currentNum, pageSize,totalPages
+    const {billDetailList ={},payDetail= [],billDetail} = this.props;
+    const {expandOne, visible,
+      currentNum, pageSize,totalPages, pageData
     } = this.state;
     const { state } = this.props.location;
-    const { bank_name = '银行' } = state;
+    const { bank_name = '银行',bank_id ,card_num } = state;
     const {
       payment_due_date ,
       bill_date ,
       credit_limit = '',//总额度
       balance = '',//剩余额度
-      pageResponseDto ={},//账单明细
       name_on_card = '',
       bill_type = '',
       min_payment = '',
-      card_number = '',
+      items = [],
+      current_bill_remain_amt = '0.00',
       importBillType,
-      bank_id,
-      abbr='',
-      taskId,
-      current_bill_remain_amt = '0.00'
-    } = billDetail;
-    const { pageList:list = [],} = pageResponseDto
+      abbr,
+      taskId
+    } = billDetailList;
     const { billId } = this.props.match.params;
 
-    const { from , to, datalist } = this.haneleDetail(list);
-    const {day, date, des} = this.judgeStatus(bill_type, payment_due_date, bill_date)
+    const {day, date, des,key:statusKey} = this.judgeStatus(bill_type, payment_due_date, bill_date)
     return [<Header title={`${bank_name}`}
                     right={<img onClick={()=>{
                       alert('', <span className="alert_content">账单删除后，如需再次查询，需要重新导入账单</span>, [
@@ -486,8 +462,10 @@ export default class BillDetail extends React.Component {
                     }} style={{width: "0.36rem",}} src="/static/img/删除@2x.png"/>}/>, <div>
       <div style={{
         height: '2.95rem',
-        width: '7.5rem',
-        backgroundImage: 'linear-gradient(-269deg, #7576FF 6%, #5E84FE 98%)',
+        width: '6.94rem',
+        margin:'0 0.28rem',
+        borderRadius: '0.08rem',
+        backgroundImage: 'linear-gradient(-90deg, #5E84FE 14%, #7576FF 81%)',
       }}>
         <div
           style={{
@@ -496,10 +474,10 @@ export default class BillDetail extends React.Component {
             letterSpacing: '0',
             padding: '0.27rem 0 0 0.31rem'
           }}
-        >{name_on_card} {card_number}
+        >{name_on_card} {card_num}
         </div>
         <div style={{paddingBottom: "0.38rem"}}>
-          <div style={{width: "4.5rem", padding: '0.43rem 0 0 0.31rem', display: 'inline-block'}}>
+          <div style={{width: "3.9rem", padding: '0.43rem 0 0 0.31rem', display: 'inline-block'}}>
             <div
               style={{
                 opacity: '0.5',
@@ -513,7 +491,7 @@ export default class BillDetail extends React.Component {
               fontSize: '0.62rem',
               color: '#FFFFFF',
               letterSpacing: '0',
-            }}>{current_bill_remain_amt}
+            }}>{parseFloat(current_bill_remain_amt) == 0?'--':current_bill_remain_amt}
             </div>
             <div style={{
               opacity: '0.5',
@@ -540,7 +518,17 @@ export default class BillDetail extends React.Component {
             })}
           </div>
         </div>
-        <div style={{height:'auto'}}>
+      </div>
+      <div style={{
+        opacity: '0.58',
+        margin:'-0.9rem 0.425rem 0.5rem',
+        borderRadius: '0.26rem',
+        width:'6.65rem',
+        height:'0.84rem',
+        boxShadow: 'rgba(115, 125, 255, 0.53) 0rem 0.37rem 0.27rem',
+      }}>
+      </div>
+      <div style={{height:'auto'}}>
         <Tabs
           tabs={[
             {title: '账单明细', sub: '0'},
@@ -549,14 +537,27 @@ export default class BillDetail extends React.Component {
           initialPage={0}
           onTabClick={(v)=>{
             const { sub} = v
-              if(sub == '1'){
-                this.getPayDetailInfo(bank_id,card_number)
-              }
+            if(sub == '1'){
+              this.getPayDetailInfo(bank_id,card_num)
             }
           }
+          }
         >
-          <div style={{background: '#FFFFFF',height:'auto'}}>
-            {[1].map((v, k) => {
+          <div style={{background: '#FFFFFF',height:'auto',marginBottom:'2.2rem'}}>
+            {items.map((v, k) => {
+              const {billType,bill_month,bill_id,bill_date} = v;
+              const duM = moment(bill_date);
+              const days = duM.diff(moment(), 'days');
+              let billItemDes = '';
+              const { billId } = this.props.match.params;
+              if(statusKey == '03' && bill_id == billId){
+                billItemDes = '已逾期';
+              } else {
+                billItemDes =billType == 'DONE'?"已出账单":
+                  (billType == 'UNDONE'?"未出账单":
+                    (billType=='OVERDUEPAYMENT'?"已逾期":""))
+              }
+
               return <div>
                 <div style={{
                   display: 'flex',
@@ -565,9 +566,11 @@ export default class BillDetail extends React.Component {
                 }}
                      onClick={() => {
                        if (v == expandOne) {
-                         this.setState({expandOne: '-1'})
+                         this.setState({expandOne: '-1',currentNum:"1",totalPages:"1"})
                        } else {
-                         this.setState({expandOne: v})
+                         this.setState({expandOne: v},()=>{
+                           this.getBillList(bill_id)
+                         })
                        }
 
                      }}>
@@ -577,22 +580,48 @@ export default class BillDetail extends React.Component {
                     height: '0.132rem',
                   }} src={expandOne == v ? "/static/img/triangleup@2x.png" : "/static/img/triangle@2x.png"}/>
                   <div style={{display: 'inline-block'}}>
-                    <div style={{
-                      fontSize: '0.26rem',
-                      color: '#4C7BFE',
-                      letterSpacing: '0',
-                    }}>未出账单
-                    </div>
+                    {
+                      billItemDes != '已出账单'?<div style={{
+                        fontSize: '0.26rem',
+                        color: (statusKey == '03' && bill_id == billId)?"red":'#4C7BFE',
+                        letterSpacing: '0',
+                      }}>
+                        {
+                          billItemDes
+                        }
+                      </div>:
+                        <div style={{
+                          fontSize: '0.26rem',
+                          color: (statusKey == '03' && bill_id == billId)?"red":'#4C7BFE',
+                          letterSpacing: '0',
+                        }}>
+                          {
+                            `${moment(bill_month).format('MM')}月`
+                          }
+                          <span style={{
+                            fontSize: '0.24rem',
+                            color: '#999999',
+                            letterSpacing: '0',
+                            marginLeft:'0.1rem'
+                          }}>{
+                            moment(bill_month).format('YYYY')
+                          }</span>
+                        </div>
+
+                    }
+
                     <div style={{
                       fontSize: '0.24rem',
                       color: '#999999',
                       letterSpacing: '0'
-                    }}><span>{to}</span>至<span>{from}</span></div>
+                    }}><span>{moment(bill_date).add(-1,'months').add(1,'days').format('YYYY-MM-DD')}
+                    </span>至<span>{moment(bill_date).format('YYYY-MM-DD')}</span>
+                    </div>
                   </div>
                 </div>
                 {expandOne == v ? [<div id="load" style={{overflow:'scroll'}}>
                   {
-                    list.map((v, k) => {
+                    pageData[bill_id]? pageData[bill_id].map((v, k) => {
                       const { description,trans_date,amount_money } = v;
                       return <div style={{
                         display:'flex',
@@ -625,17 +654,20 @@ export default class BillDetail extends React.Component {
                         fontWeight:'bold'
                       }}>{amount_money}</div></div>
 
-                    })
-                  }
-                  <LoadCom loadMoreDataFn={(c,p,callback)=>this.loadMoreDataFn(c,p,callback)}
-                           currentNum={currentNum}
-                           pageSize ={pageSize}
-                           totalPages={totalPages}
-                  />
+                    }):
+                      null
+                  }{
+                  pageData[bill_id]?
+                    (pageData[bill_id].length==0?
+                        <div style={{textAlign: 'center',}}>没有更多了</div>:null
+                    )
+                      :<div style={{textAlign: 'center',}}>正在加载中...</div>
+                }
+
                 </div>] : null}</div>
             })}
           </div>
-          <div style={{background: '#FFFFFF'}}>{payDetail.map((v,k) => {
+          <div style={{background: '#FFFFFF',height:'auto',marginBottom:'2.2rem'}}>{payDetail.map((v,k) => {
             const {createTime,repaymentAmount,repaymentTime,repaymentChannel} =v;
             const {} = repaymentTime;
             return [<div style={{height: '1.06rem', padding: '0.18rem 0', display: 'flex', alignItems: 'center'}}>
@@ -645,13 +677,13 @@ export default class BillDetail extends React.Component {
                   color: '#333333',
                   letterSpacing: '0',
                 }}>{
-                  repaymentChannel =='01'?'还到':""
+                  repaymentChannel =='01'?'还到':(repaymentChannel =='02'?'手动':"")
                 }还款
                 </div>
                 <div style={{
                   color: '#999999',
                   fontSize: "0.24rem",
-                }}>{moment(repaymentTime).format('YYYY-MM-DD')}
+                }}>{moment(repaymentTime).format('YYYY-MM-DD HH:mm')}
                 </div>
               </div>
               <div style={{
@@ -669,48 +701,38 @@ export default class BillDetail extends React.Component {
             </div>, <div style={{width: "6.94rem", margin: 'auto', border: '1PX solid #F1F1F1'}}></div>]
           })}</div>
         </Tabs>
-        </div>
-        <div style={{display: 'flex',position: 'fixed',bottom: '0'}}>
-          <div style={{
-          fontSize: '0.36rem',
-          color: '#333333',
-          letterSpacing: '0',
-          display:'inline-flex',
-          alignItems:'center',
-          background: '#FFFFFF',
-          height: '1.02rem',
-          width:'3.75rem'
-        }} onClick={()=>this.callSyncBill(taskId,importBillType,abbr,card_number)}><span style={{margin:'auto 0.1rem auto 1.2rem',height:'0.5rem'}}>
-          <style>{
-          `@-webkit-keyframes rotation{
-            from {-webkit-transform: rotate(0deg);}
-            to {-webkit-transform: rotate(360deg);}
-           }
-
-           .Rotation{
-            -webkit-transform: rotate(360deg);
-            animation: rotation 3s linear infinite;
-            -moz-animation: rotation 3s linear infinite;
-            -webkit-animation: rotation 3s linear infinite;
-            -o-animation: rotation 3s linear infinite;
-           }
-           `
-          }</style>
-          <img className={syncBegin?"Rotation":""} style={{height:'0.3rem',}} src="/static/img/更新@2x.png"/>
-        </span>更新</div>{
-            this.props.examineAccount?null:<div style={{
-              fontSize: '0.36rem',
-              color: '#FFFFFF',
-              letterSpacing: '0',
-              width:'3.75rem',
-              display:'inline-flex',
-              background: '#4C7BFE',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }} onClick={()=>this.setState({visible:true})}>立即还款</div>
-        }
-        </div>
-
+      </div>
+      <div style={styles.bottom}>
+        <div style={styles.bottomItem} onClick={()=>{
+          this.callSyncBill(taskId, importBillType,abbr,card_num)
+        }}>
+          <img src="/static/img/1.1.0/sync.png" style={styles.img} />
+          <div>同步</div></div>
+        <div style={styles.bottomItem} onClick={()=>{
+          this.setState({detailShow:true})
+        }}>
+          <img src="/static/img/1.1.0/pen.png" style={styles.img} />
+          <div>标记还部分</div></div>
+        <div style={styles.bottomItem} onClick={()=>{
+          Toast.loading('请稍候');
+          this.props.dispatch(setMarkBill({
+            cardNum:card_num,
+            bankId:bank_id,
+            payStatus:bill_type == 'DONE'?"01":"02"
+          })).then(()=>{
+            this.initData()
+            Toast.info('设置还款状态成功');
+          },()=>{Toast.hide()})
+        }} >
+          <img src="/static/img/1.1.0/select.png" style={styles.img} />
+          <div>{
+            bill_type == 'DONE'?"标记已还清":(
+              bill_type == 'UNDONE'?"标记未还清":(
+                bill_type == 'OVERDUEPAYMENT'?"标记已还清":""
+              )
+            )
+          }</div></div>
+        <div style={styles.bottomBlue} onClick={()=>this.setState({visible:true})}>立即还款</div>
       </div>
     </div>,visible?<Popup style={{top:'0.81rem'}} title="选择还款方式"  data={
       [
@@ -721,6 +743,68 @@ export default class BillDetail extends React.Component {
         ]},
       ]
     } visible={visible} setVisible={(v)=>{this.setState({visible:v})}}
-    />:null];
+    />:null
+      ,this.state.detailShow?<div style={styles.container} key={'f'}>
+      <div style={styles.header}>
+        <img src="/static/img/back.png" style={styles.back} onClick={()=>{this.setState({detailShow:false,})}}/>
+        标记还部分</div>
+      <KeyWord billData={{card_num,bank_id}} apiCallback={()=>{
+        this.initData()
+        this.getPayDetailInfo(bank_id,card_num)
+        this.setState({detailShow:false})}} />
+    </div>:null];
   }
+}
+
+const styles = {
+  bottom:{
+    display: 'flex',position: 'fixed',bottom: '0',
+    alignItems:"center"
+  },
+  container:{
+    position: 'fixed',
+    width: '7.5rem',
+    bottom: '0',
+    backgroundColor:'#FFFFFF',
+    fontSize: '0.27rem'
+  },header:{
+    fontSize: '0.3rem',
+    color: '#333333',
+    letterSpacing: '0',
+    width:'7.5rem',
+    lineHeight:'0.8rem',
+    textAlign:'center',
+    border: '2px solid #ECECEC'
+  },
+  bottomBlue:{
+    background: '#4C7BFE',
+    width:"3.45rem",
+    lineHeight:'1.1rem',
+    textAlign:"center",
+    fontSize: '0.3rem',
+    color: '#FFFFFF',
+    letterSpacing: '0'
+  },
+  bottomItem:{
+    width:"1.34rem",
+    height:'1.1rem',
+    textAlign:"center",
+    fontSize: '0.2rem',
+    color: '#333333',
+    letterSpacing: '0',
+    borderRight:"0.01rem solid #979797",
+    background:"rgb(245, 245, 245)"
+  },
+  img:{
+    height:'0.33rem',
+    marginTop:'0.3rem',
+  },
+  back:{
+    width:"0.2rem",
+    height:'0.34rem',
+    marginLeft:'0.31rem',
+    position: 'absolute',
+    left: '0',
+    top: '0.23rem'
+  },
 }

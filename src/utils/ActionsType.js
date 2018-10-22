@@ -107,3 +107,17 @@ export const REMOVE_BILL_ALL_STATUS = ['REQUEST','CH827','FAILURE'];
 
 //广告位接口
 export const ADTIVITY_DATA = ['REQUEST','MP013','FAILURE'];
+
+
+//Mark Bill
+export const MARK_BILL_STATUS = ['REQUEST','CH829','FAILURE',];
+//Mark rest
+
+export const MARK_BILL_REST = ['REQUEST','CH830','FAILURE',];
+
+//echo
+export const ECHO_FOEM = ['REQUEST','CH831','FAILURE',];
+
+//BILL list
+
+export const BILL_DETAIL_LIST = ['REQUEST','CH832','FAILURE',];

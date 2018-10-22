@@ -1,27 +1,27 @@
 import React from 'react';
-import {Modal, Icon} from 'antd-mobile'
+import {Modal,Toast} from 'antd-mobile'
 import BillCard from "./BillCard";
 import Popup from "./components/Popup";
 import {InitDecorator} from "../../compoents/InitDecorator";
-import FreeItem from "./components/FreeItem";
 import {
-  getBillList, getFreeInterest, getIndetiyInfo,
-  getActivities
+  getBillList, getIndetiyInfo,
+  getActivities, setMarkBill
 } from "../../actions/reqAction";
 import {jsNative,} from "sx-jsbridge";
 import {judgeEnv} from "../../utils/util";
 import globalStyle from "../../style";
+import MoreItem from "./components/MoreItem";
+import IconEnter from "./components/IconEnter";
+import FreeInterest from "./components/FreeInterest";
 const {loginHelper, nativeOpenNewWebView} = jsNative;
-const { alert } = Modal;
-
+const {alert} = Modal;
 
 @InitDecorator((state) => {
   return {
     billList: state.BillReducer.billList,
     huandaoData: state.BillReducer.huandaoData,
-    freeIntrestData: state.BillReducer.freeIntrestData,
     activities: state.CardsReducer.activities,
-    examineAccount:state.CardsReducer.examineAccount,
+    examineAccount: state.CardsReducer.examineAccount,
   }
 })
 export default class Index extends React.Component {
@@ -30,45 +30,23 @@ export default class Index extends React.Component {
     this.state = {
       interestShow: false, //免息期弹窗展示,
       visible: false,//弹出框
-      sycnModal:false,
-      authSts:'-1',
-      freeItems:false,
-      examineAccount:true,
-      MERC_SN:''
+      authSts: '-1',// 是否实名认证
+      freeItems: false,//免息期弹窗
+      examineAccount: true,//是否是审核账号
+      MERC_SN: '',// 用户商编
+      moreAction: false, // 更多菜单
+      level: 1,// 更多菜单展示的层级
+      activeCard: {}, // 当前要处理账某个账单的详细数据
+      syncfunc: () => {
+      } //选中账单更新数据，注册的方法
     }
   }
-
-  generateStr(v){
-    let unit = '';
-    let ba = v;
-    if(v/10000 >= 1){
-      ba =v/10000
-      unit= '万';
-    } else if(v/1000>=1){
-      ba =v/1000;
-      unit= '千';
-    }
-    return <span>{ba.toFixed(2)}<span style = {styles.unitStyle}>{unit}</span></span>
-  }
-
-  onWrapTouchStart = (e) => {
-    // fix touch to scroll background page on iOS
-    if (!/iPhone|iPod|iPad/i.test(navigator.userAgent)) {
-      return;
-    }
-    const pNode = closest(e.target, '.am-modal-content');
-    if (!pNode) {
-      e.preventDefault();
-    }
-  }
-
   componentWillMount() {
     if (this.props.isLogged) {
       this.initData()
     }
   }
-
-  initData(){
+  initData() {
     this.getUserInfo();
     this.getBillList();
     this.props.dispatch(getActivities()).then(() => {
@@ -76,71 +54,71 @@ export default class Index extends React.Component {
     });
   }
 
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.isLogged && this.props.isLogged != nextProps.isLogged) {
+      // 全局组件订阅的登录状态，如Native 与 Server通知登录状态已切换，立即更新视图
       this.initData();
     }
   }
-
+  /**
+  *
+  *   @methodName getUserInfo
+  *   @description 获取用户基本信息，提供审核账号与实名认证状态
+  */
   getUserInfo() {
     this.props.dispatch(getIndetiyInfo({
       appType: 'mpos'
     })).then((result) => {
       const {data} = result;
-      const {authSts,MERC_SN = ''} = data;
+      const {authSts, MERC_SN = ''} = data;
       this.setState({
         authSts: authSts,
-        examineAccount:MERC_SN != '700000000620451',
+        examineAccount: MERC_SN != '700000000620451',
         MERC_SN
       })
     }, () => {
     })
   }
 
-  async getFreeData() {
-    const reqParams = await this.props.getBaseParams();
-    this.props.dispatch(getFreeInterest({
-      ...reqParams
-    })).then((result) => {
-      this.setState({freeItems:true})
-    }, () => {
-    })
+  getBillList() {
+    this.props.dispatch(getBillList())
   }
 
-  async getBillList() {
-    const reqParams = await this.props.getBaseParams();
-    this.props.dispatch(getBillList({
-      ...reqParams
-    }))
-  }
-
-  openCardMarket(){
+  openCardMarket() {
     let url = '';
-    if(window.location.host.indexOf('mpmw.vbill.cn')>-1 ){
+    if (window.location.host.indexOf('mpmw.vbill.cn') > -1) {
       url = `https://cca.vbill.cn/cca/home?source=creditCard`
     } else {
       url = `https://mpcw${judgeEnv()}.vbill.cn/cca/home?channelId=1000&source=creditCard`
     }
-    nativeOpenNewWebView({
-      url
-    })
+    nativeOpenNewWebView({ url })
   }
 
-  identifyFunc(callback){
+  identifyFunc(callback) {
     this.props.dispatch(getIndetiyInfo({
       appType: 'mpos'
     })).then((result) => {
       const {data} = result;
       const {authSts} = data;
       //  authSts 99:未认证，01：已认证，02：驳回，00：审核中
-      if(authSts == '01'){
+      if (authSts == '01') {
         callback();
-      } else if( authSts == '-1') {
+      } else if (authSts == '-1') {
         //数据尚未装载完毕不处理
-      } else if(authSts == '99') {
-        alert(<span className="alert_title">您尚未通过实名认证，请先进行实名认证</span>,'',[
-          {text:"取消",onPress:()=>{},style: globalStyle.cancelStyle},
-          {text:"去认证",onPress:()=>{jsNative.nativeGoRealName();},style: globalStyle.sureStyle},
+      } else if (authSts == '99') {
+        alert(<span className="alert_title">您尚未通过实名认证，请先进行实名认证</span>, '', [
+          {
+            text: "取消", onPress: () => {
+          },
+            style: globalStyle.cancelStyle
+          },
+          {
+            text: "去认证", onPress: () => {
+            jsNative.nativeGoRealName()
+          },
+            style: globalStyle.sureStyle
+          },
         ])
       } else {
         jsNative.nativeGoRealName();
@@ -150,27 +128,24 @@ export default class Index extends React.Component {
       })
     }, () => {
     })
-
-
   }
 
   loginEnter(type, params) {
     loginHelper(() => {
-      const {authSts} = this.state;
       switch (type) {
         case 1:
           //展示免息期
           this.setState({interestShow: true}, () => {
-            this.getFreeData()
+            document.body.style.position =  'fixed'
           });
           return;
         case 2:
           //添加账单
-          this.identifyFunc(()=>this.props.history.push('/bill/method'))
+          this.identifyFunc(() => this.props.history.push('/bill/method'))
           return;
         case 3:
           //进入卡包
-          this.identifyFunc(()=>{
+          this.identifyFunc(() => {
             const {action: url} = params
             this.props.history.push(url);
           })
@@ -187,6 +162,228 @@ export default class Index extends React.Component {
     })
   }
 
+  openPPMoney(gameUri) {
+    const {MERC_SN} = this.state
+    if (!MERC_SN) {
+      return;
+    }
+    if (localStorage.getItem(MERC_SN)) {
+      jsNative.nativeOpenNewWebView({url: gameUri}, () => {
+      });
+    } else {
+      alert(<span className="alert_title">免责声明</span>,
+        <span className="alert_content">您所访问的页面将跳转到第三方网站，请自行对网站所提供的信息、服务加以辨别及判断，并承担使用内容而引起的所有风险</span>,
+        [{
+          text: '我知道了',
+          onPress: () => {
+            localStorage.setItem(MERC_SN, true);
+            jsNative.nativeOpenNewWebView({url: gameUri}, () => {
+            });
+          },
+          style: globalStyle.sureStyle
+        }]
+      );
+    }
+  }
+
+  render() {
+    const {interestShow, activeCard, visible, authSts, moreAction, level} = this.state;
+    const {examineAccount} = this.props;
+    const {isLogged, billList = {}, activities = []} = this.props;
+    const {waitPaymentAmount = '0.00', waitPaymentNumber = '0', baseResponseBillDtoList} = billList
+    return [<div key={'a'} style={styles.container}>
+      <div style={styles.top}>
+        <div style={styles.topText}>7日内待还
+          <span style={styles.topSubText}>
+          {isLogged ? (waitPaymentNumber ? waitPaymentNumber : 0) : '--'}笔
+          </span>
+        </div>
+        <div style={styles.flexCenter}>
+          <IconEnter action={() => {this.loginEnter(1)}}
+                     des={'免息期'} icon={"/static/img/canlendar@2x.png"}
+          />
+          <span style={{width: '0.18rem'}}></span>
+          <IconEnter action={() => this.loginEnter(2) }
+                     des={'账单'} icon={"/static/img/indexadd@2x.png"}
+          />
+          <span style={{width: '0.3rem'}}></span>
+        </div>
+      </div>
+      <div style={{marginTop: "0.19rem"}}>
+        <span style={styles.moneyStyle}>
+          {isLogged ? (waitPaymentAmount ? parseFloat(waitPaymentAmount).toFixed(2) : 0.00) : '--'}
+          <span style={styles.unitStyle}>元</span>
+        </span>
+      </div>
+      <div style={styles.cover}>
+        {
+          this.icons.map((v, k) => {
+            const {img, text, action, type} = v;
+            if (!isLogged && type == '1') {
+              return null
+            }
+            if (examineAccount && type == '1') {
+              return null
+            }
+            return <div key={k} onClick={() => {
+                  if (type == '0') {
+                    this.loginEnter(3, {action})
+                  } else if (type == '1') {
+                    this.loginEnter(4, {action})
+                  }
+                }}>
+              <span style={styles.iconItem}>
+                <img src={img} style={{width: '0.65rem'}}/>
+              </span>
+              <div style={styles.textStyle}>
+                {text}
+              </div>
+            </div>
+          })
+        }
+      </div>
+      <div style={styles.shadowBlock}></div>
+      <div style={styles.activity}>
+        {isLogged ? (!this.props.examineAccount ? activities.map((v, k) => {
+          const {logoUri = '', gameUri, gameName = ''} = activities[k] ? activities[k] : {};
+          return <div onClick={() => {
+            if (gameUri.indexOf('site=oldweb') > 0) {
+              jsNative.nativeOpenOldWebView({url: gameUri}, () => {
+              })
+            } else {
+              if (gameUri.indexOf('ppmoney.com') > -1) {
+                this.openPPMoney(gameUri)
+              } else {
+                jsNative.nativeOpenNewWebView({url: gameUri}, () => {
+                })
+              }
+            }
+          }} key={k} style={{display: "inline-block", textAlign: 'center',width:'1.875rem'}}>
+            <img style={{width: '0.74rem', height: '0.74rem'}} src={logoUri}/>
+            <div style={{fontWeight: 'bold',}}>{gameName}</div>
+          </div>
+        }) : null) : null
+        }
+      </div>
+    </div>,
+      <div key={'b'}>
+        {
+          isLogged ?
+            (baseResponseBillDtoList ?
+              (baseResponseBillDtoList.length == 0 ?
+                this.example : baseResponseBillDtoList).map((v, k) => {
+                return <BillCard {...v}
+                                 showMoreAction={(task_id, importBillType, abbr, cardNum, bankId, bill_type, syncfunc) => this.setState({
+                                   moreAction: true, activeCard: {
+                                     task_id, importBillType, abbr, cardNum, bankId, bill_type
+                                   }, syncfunc
+                                 })}
+                                 callSync={() => {
+                                   this.setState()
+                                 }}
+                                 isLogged={isLogged}
+                                 key={k}
+                                 repay={(e) => {
+                                   e.stopPropagation()
+                                   this.setState({visible: true})
+                                 }}
+                                 examineAccount={examineAccount}
+                                 authSts={authSts}
+                                 updateData={() => this.initData()}
+                />
+              }) : null)
+            :
+            this.example.map((v, k) => <BillCard
+              authSts={authSts}
+              showMoreAction={() => this.setState({moreAction: true})}
+              examineAccount={examineAccount}
+              isLogged={isLogged}
+              {...v}
+              key={k}
+              repay={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                this.loginEnter(5)
+              }}
+            />)
+        }
+      </div>,
+      <div key={'c'} style={styles.addBtn}
+           onClick={() => this.loginEnter(2)}
+      >
+        <img style={styles.addImg} src="/static/img/addCard@2x.png"/>
+        <span style={styles.addText}>添加信用卡账单</span>
+      </div>,
+      <div>{(isLogged && !examineAccount) ?
+        <div style={styles.enterCard} onClick={() => this.openCardMarket()}>
+          <img src="/static/img/信用卡2x.png" style={{width: "0.41rem"}}/>
+          <span style={styles.applyCard}>
+          办信用卡
+        </span>
+          <img src="/static/img/Path 3@2x.png" style={{width: "0.1rem"}}/>
+        </div> : null}
+      </div>,
+      <FreeInterest
+        key="FreeInterest"
+        parentParams={{
+          isShow:interestShow,
+          closeFunc:()=>this.setState({interestShow:false}),
+          openFunc:()=>this.setState({interestShow:true}),
+        }}
+      />,
+      <Popup
+          key="Popup"
+          title="选择还款方式"
+          visible={visible}
+          setVisible={(v) => {this.setState({visible: v})}}
+      />,
+      moreAction ?
+        <MoreItem items={[
+          {
+            name: "更新账单",
+            action: () => {
+              this.setState({moreAction: false})
+              this.state.syncfunc()
+            },
+          }, {
+            name: "manual",
+            action: (param) => {
+              this.setState({moreAction: false});
+              const {
+                cardNum,
+                bankId,
+              } = activeCard;
+              const {payStatus} = param
+              this.props.dispatch(setMarkBill({
+                cardNum,
+                bankId,
+                payStatus: payStatus
+              })).then(() => {
+                  Toast.info('设置还款状态成功');
+                  this.initData()
+              })
+
+            },
+          }, {
+            name: "标记还部分",
+            action: () => {
+              this.setState({level: 2})
+            },
+          }
+        ]}
+                  cancelFunc={() => {
+                    this.setState({moreAction: false})
+                  }}
+                  updateData = {()=>this.initData()}
+                  level={level}
+                  billData={{bank_id:activeCard.bankId,bill_type:activeCard.bill_type,card_num:activeCard.cardNum}}
+                  setLevel={() => {
+                    this.setState({level: 1})
+                  }}
+        /> : null
+    ]
+  }
+
   example = [{
     card_num: "2886",
     bank_name: "招商银行",
@@ -199,247 +396,10 @@ export default class Index extends React.Component {
     logo_uri: '/static/img/招商银行@2x.png',
     importBillType: "",
     isNew: '00',
-    abbr:"CMB",
-    update_time:"2018-06-06",
-    real:false,
+    abbr: "CMB",
+    update_time: "2018-06-06",
+    real: false,
   }]
-
-  openPPMoney(gameUri){
-    const { MERC_SN} = this.state
-    if(!MERC_SN){
-      return;
-    }
-    if(localStorage.getItem(MERC_SN)){
-      jsNative.nativeOpenNewWebView({url:gameUri},()=>{});
-    } else {
-      alert(<span className="alert_title">免责声明</span>, <span className="alert_content">您所访问的页面将跳转到第三方网站，请自行对网站所提供的信息、服务加以辨别及判断，并承担使用内容而引起的所有风险</span>, [
-        {text: '我知道了', onPress: () => {
-          localStorage.setItem(MERC_SN,true);
-          jsNative.nativeOpenNewWebView({url:gameUri},()=>{});
-        },style: globalStyle.sureStyle }
-      ]);
-    }
-  }
-
-  render() {
-    const {interestShow, visible,freeItems, sycnModal,authSts,} = this.state;
-    const { examineAccount } =this.props;
-    const {isLogged, billList = {}, freeIntrestData = [], activities = []} = this.props;
-    const {waitPaymentAmount = '0.00', waitPaymentNumber = '0', baseResponseBillDtoList} = billList
-    return [<div key={'a'} style={{background: '#FFFFFF', paddingBottom: "0.5rem"}}>
-      <div style={styles.top}>
-        <div style={styles.topText}>7日内待还
-          <span style={styles.topSubText}>
-          {isLogged ? (waitPaymentNumber?waitPaymentNumber:0) : '--'}笔
-          </span>
-        </div>
-        <img onClick={() => {
-          this.loginEnter(1)
-        }} style={styles.img} src="/static/img/canlendar@2x.png"/>
-        <div onClick={() => {
-          this.loginEnter(2)
-        }} style={styles.icon}><img src="/static/img/indexadd@2x.png" style={{height: '0.36rem',color:'#000'}} /></div>
-      </div>
-      <div style={{marginTop: "0.19rem"}}>
-        <span style={styles.moneyStyle}>{isLogged ? (waitPaymentAmount?parseFloat(waitPaymentAmount).toFixed(2):0.00) : '--'}
-          <span style={styles.unitStyle}>元</span>
-        </span>
-      </div>
-      <div style={styles.cover}>
-        {
-          this.icons.map((v, k) => {
-            const {img, text, action, type} = v;
-            if (!isLogged && type == '1') {
-              return null
-            }
-            if(examineAccount && type == '1'){
-              return null
-            }
-            return <div key={k} onClick={() => {
-              if (type == '0') {
-                this.loginEnter(3, {action})
-              } else if (type == '1') {
-                this.loginEnter(4, {action})
-              }
-            }}>
-              <span style={styles.iconItem} >
-                <img src={img} style={{width: '0.65rem'}}/>
-              </span>
-              <div style={styles.textStyle}>
-                {text}
-              </div>
-            </div>
-          })
-        }
-      </div>
-      <div style={{
-        boxShadow: 'rgba(115, 125, 255, 0.53) 0rem 0.37rem 0.27rem',
-        width: '6.48rem',
-        margin: '-0.35rem auto auto',
-        height: '0.1rem',
-      }}></div>
-      <div style={styles.activity}>
-        {isLogged ?(!this.props.examineAccount? [1,2,3,4].map((v, k) => {
-          const {logoUri = '', gameUri, gameName = ''} = activities[k]?activities[k]:{};
-          return <div onClick={() => {
-            if(gameUri.indexOf('site=oldweb')>0){
-              jsNative.nativeOpenOldWebView({url:gameUri},()=>{})
-            } else {
-              if(gameUri.indexOf('ppmoney.com')>-1){
-                this.openPPMoney(gameUri)
-              } else {
-                jsNative.nativeOpenNewWebView({url:gameUri},()=>{})
-              }
-            }
-          }} key={k} style={{display: "inline-block", textAlign: 'center'}}>
-            <img style={{width: '0.74rem',height:'0.74rem'}} src={logoUri}/>
-            <div style={{fontWeight: 'bold',}}>{gameName}</div>
-          </div>
-        }):null) : null
-        }
-      </div>
-    </div>,
-      <div key={'b'}>
-        {
-          isLogged ?
-            (baseResponseBillDtoList?
-            (baseResponseBillDtoList.length == 0?
-              this.example:baseResponseBillDtoList).map((v, k) => {
-              const {
-                card_num,
-                bank_name,
-                bill_type,//账单状态
-                current_bill_remain_amt,//本期账单总金额
-                payment_due_date,//还款日
-                bill_date,
-                task_id,
-                bill_id,// 账单编号,
-                logo_uri,
-                importBillType,//账单类型 01为网银 03为邮箱 02为手写账单
-                isNew,
-                abbr,
-                real= true,
-                update_time,
-              } = v;
-              return <BillCard card_num={card_num}
-                               bank_name={bank_name}
-                               bill_type={bill_type}
-                               current_bill_remain_amt={current_bill_remain_amt}
-                               payment_due_date={payment_due_date}
-                               task_id={task_id}
-                               bill_id={bill_id}
-                               bill_date={bill_date}
-                               logo_uri={logo_uri}
-                               importBillType={importBillType}
-                               real={real}
-                               isLogged={isLogged}
-                               isNew={isNew}
-                               abbr={abbr}
-                               key={k}
-                               repay={(e) => {
-                                  e.stopPropagation()
-                                  this.setState({visible: true})
-                               }}
-                               examineAccount={examineAccount}
-                               authSts={authSts}
-                               update_time ={ update_time }
-                               importModal={()=>{this.setState({sycnModal:true})}}
-                               updateData = {()=>this.initData()}
-              />
-            }):null)
-            :
-            this.example.map((v, k) => <BillCard
-              authSts={authSts}
-              examineAccount={examineAccount}
-              isLogged={isLogged}
-              {...v} key={k} repay={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              this.loginEnter(5)
-            }}/>)
-        }
-      </div>,
-      <div key={'c'} style={styles.addBtn}
-           onClick={() => this.loginEnter(2)}
-      >
-        <img style={{ color:"#999999",height:"0.25rem"}} src="/static/img/addCard@2x.png" />
-        <span style={styles.addText}>添加信用卡账单</span>
-
-      </div>,<div>{
-        (isLogged && !examineAccount)?<div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          margin:'0.82rem 0 1.56rem 0'
-        }} onClick={()=>this.openCardMarket()}>
-          <img src="/static/img/信用卡2x.png" style={{width: "0.41rem"}}/>
-          <span style={{fontWeight: 'bold', lineHeight:'0.28rem',margin: '0.08rem', fontSize: '0.28rem', color: '#4C7BFE', letterSpacing: '0'}}>
-          办信用卡
-        </span>
-          <img src="/static/img/Path 3@2x.png" style={{width: "0.1rem"}}/>
-        </div>:null
-      }</div>,
-      <Modal
-        style={{width:'6rem'}}
-        key={'d'}
-        visible={interestShow}
-        transparent
-        maskClosable={true}
-        onClose={() => this.setState({interestShow: false})}
-        title={<div style={{textAlign: 'left'}}>最长免息期</div>}
-        wrapProps={{onTouchStart: this.onWrapTouchStart}}
-        closable={true}
-      >
-        <div style={{height: '5.03rem', overflow: 'scroll'}}>
-          {
-            freeItems?(freeIntrestData.length == 0?<div style={{marginTop: '0.6rem'}}>
-              <img style={{width:'1.55rem'}} src="/static/img/Bitmap@1x.png" />
-              <div>未导入信用卡账单</div>
-              <div>无记录查看</div>
-            </div>
-              :freeIntrestData.map((v, k) => {
-              const {bank_logo: imgSrc, credit_limit, balance, bank_name, payment_due_date, card_number,bill_type} = v;
-              const freeInterest = bill_type == 'DONE'? parseInt(moment(payment_due_date).diff(moment(), 'days')) + parseInt(moment().daysInMonth()):
-                parseInt(moment(payment_due_date).diff(moment(), 'days'))
-              return <FreeItem key={k}
-                               credit_limit={credit_limit}
-                               imgSrc={imgSrc}
-                               title={bank_name}
-                               card_number={card_number}
-                               freeInterest={freeInterest}
-                               balance={balance}
-                               {...v}
-              />
-            })):null
-          }
-        </div>
-      </Modal>,
-      <Modal
-        key="z"
-        visible={sycnModal}
-        transparent
-        maskClosable={true}
-        onClose={()=>{this.setState({sycnModal:false})}}
-        wrapProps={{ onTouchStart: this.onWrapTouchStart }}
-        footer={[{ text: '我知道了', onPress: () => { this.setState({sycnModal:false})}}]}
-      >
-        <div style={{ height: 100, overflow: 'scroll' }}>
-          <div style={{marginTop:"0.5rem",fontSize:"0.35rem",color:"#000"}} onClick={()=>this.props.history.push('/bill/method')}>请使用网银同步</div>
-        </div>
-      </Modal>
-      , visible ?
-        <Popup
-          key="e"
-          title="选择还款方式"
-          visible={visible}
-          setVisible={(v) => {
-            this.setState({visible: v})
-          }}
-        />
-        : null
-    ]
-  }
-
 
   icons = [{
     img: "/static/img/kabao@2x.png",
@@ -470,11 +430,21 @@ export default class Index extends React.Component {
     action: "",
     title: "挖金币"
   }]
-
+  onWrapTouchStart = (e) => {
+    // antd-mobile 提供的差异化处理，貌似没个卵用
+    // fix touch to scroll background page on iOS
+    if (!/iPhone|iPod|iPad/i.test(navigator.userAgent)) {
+      return;
+    }
+    const pNode = closest(e.target, '.am-modal-content');
+    if (!pNode) {
+      e.preventDefault();
+    }
+  }
 }
 
 const styles = {
-  container: {},
+  container: {background: '#FFFFFF', paddingBottom: "0.5rem"},
   topText: {
     fontSize: '0.3rem',
     color: '#999999',
@@ -484,9 +454,9 @@ const styles = {
     fontWeight: 'bold',
   },
   img: {
-    width: '0.33rem',
-    margin: '0rem 0.48rem 0 3.725rem ',
-    height: '0.36rem',
+    width: '0.2rem',
+    height: '0.22rem',
+    marginLeft: '0.19rem'
   },
   topSubText: {
     color: '#151515',
@@ -499,10 +469,11 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     paddingTop: '0.38rem',
+    justifyContent: 'space-between',
   },
   icon: {
     margin: '0rem 0 0 0 ',
-    display:'inline-block',
+    display: 'inline-block',
     height: '0.36rem',
   },
   cover: {
@@ -530,8 +501,9 @@ const styles = {
     fontWeight: 'bold',
   },
   iconItem: {margin: "0.4rem 0 0 0", display: 'inline-block'},
-  textStyle: {fontSize: '0.3rem',fontWeight: 'bold', color: '#FFFFFF', letterSpacing: '0', textAlign: 'center'},
-  activity: {display: "flex", justifyContent: "space-around",
+  textStyle: {fontSize: '0.3rem', fontWeight: 'bold', color: '#FFFFFF', letterSpacing: '0', textAlign: 'center'},
+  activity: {
+    display: "flex",
     marginTop: '0.79rem',
     marginBottom: '0.3rem'
   },
@@ -539,6 +511,7 @@ const styles = {
     display: 'flex', justifyContent: 'center', alignItems: 'center',
     background: '#FFFFFF', height: '0.84rem', widht: '7.5rem', margin: "0.2rem 0 0 0"
   },
+  addImg:{color: "#999999", height: "0.25rem"},
   addText: {
     fontSize: '0.28rem',
     color: '#999999',
@@ -547,6 +520,29 @@ const styles = {
     marginLeft: '0.08rem',
     fontWeight: 'bold',
     lineHeight: '0.28rem',
+  },
+  flexCenter: {
+    display: 'flex',
+    alignItems: 'center',
+  }, shadowBlock: {
+    boxShadow: 'rgba(115, 125, 255, 0.53) 0rem 0.37rem 0.27rem',
+    width: '6.48rem',
+    margin: '-0.35rem auto auto',
+    height: '0.1rem',
+  },
+  applyCard:{
+    fontWeight: 'bold',
+    lineHeight: '0.28rem',
+    margin: '0.08rem',
+    fontSize: '0.28rem',
+    color: '#4C7BFE',
+    letterSpacing: '0'
+  },
+  enterCard:{
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: '0.82rem 0 1.56rem 0'
   }
 }
 

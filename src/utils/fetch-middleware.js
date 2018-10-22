@@ -1,27 +1,27 @@
 /**
-*   @author jerryxu
-*   @methodName ActionCreator
-*   @params type
-*   @description 事件生成器
-*
-*/
+ *   @author jerryxu
+ *   @methodName ActionCreator
+ *   @params type
+ *   @description 事件生成器
+ *
+ */
 import Storage from '../store';
-import { aesDecrypt,aesEncrypt,generateSign, SIGN_KEY} from './encrypt-util'
+import {packageReqData, aesDecrypt} from './encrypt-util'
 import {Toast,} from 'antd-mobile';
 import { apiUrl,isMock } from '../config/api'
 import {showSingleBtnModal} from "../compoents/ModalAlert";
 import { jsNative } from "sx-jsbridge";
 const  { nativeLogin, nativeQuitLogon, nativeRequestBaseParams } = jsNative;
 
-export const ActionCreator = (type, url, method = 'GET', data, key ,cancel = false) => {
-    return () => {
-        return {
-            types: [...type],
-            payload: key,
-            promise: ()=>fetchPromise(url, method , data, true,true)
+export const ActionCreator = (type, url, method, data, key ,cancel = false) => {
+  return () => {
+    return {
+      types: [...type],
+      payload: key,
+      promise: ()=>fetchPromise(url, method = 'GET', data, true,true)
 
-        }
     }
+  }
 }
 
 
@@ -65,7 +65,6 @@ export const  fetchPromise = async (url, method = 'GET', data, cancel = false, i
       TOKEN_ID: reqParams['TOKEN_ID'],
       CHANNEL_NO: reqParams['channelNo'],
     }})
-  data = {...data,...reqParams};
   if(isMock){
     return fetchMockData(data);
   }
@@ -78,29 +77,24 @@ export const  fetchPromise = async (url, method = 'GET', data, cancel = false, i
     baseUrl ='https://mp-rc.vbill.cn/phoneclient/notify.htm'
   } else if(window.location.host.indexOf('mpmw-alpha.vbill.cn')>-1){
     baseUrl ='https://mp-alpha.vbill.cn:8084/phoneclient/notify.htm'
-  } else if(window.location.host.indexOf('mpmw-test.vbill.cn')>-1){
-    baseUrl ='https://mpos.suixingpay.com/phoneclient/notify.htm'
   }
 
   const isnv = 1;//是否sha256
   const encflag = 1;//是否AES
 
   Storage.dispatch({type: "REQUEST", data: true});
-  data['isnv'] = isnv;
-  data['encflag'] = encflag;
-  data['sign'] = generateSign(data, SIGN_KEY);
-  let requestBody = {};
-  let queryBody = '';
-  if (method.toUpperCase() === 'POST') {
-    requestBody = { body: JSON.stringify({ DELICIOUS_DATA: aesEncrypt(JSON.stringify(data)) }) };
-  } else if (method.toUpperCase() === 'GET') {
-    queryBody = `?DELICIOUS_DATA=${aesEncrypt(JSON.stringify(data))}`;
-  }
+  let queryData = '';
+  const dataBody = packageReqData({...data,...reqParams}, isnv, encflag)
+  Object.keys(dataBody).map((v, k) => {
+    queryData = queryData + v + '=' + dataBody[v] + '&'
+  })
+  const params = method != 'GET' && dataBody ? {body:JSON.stringify(dataBody)} : {}
   const x = new Promise((resolve, reject) =>
-    fetch(`${baseUrl}${queryBody}`, {
-    method,
-    headers: { ...headers },
-    ...requestBody
+    fetch(`${baseUrl}?${queryData}`, {
+      method: method,
+      headers: {...headers, 'Access-Control-Allow-Origin': '*',},
+      mode: 'cors',
+      ...params
     }).then((p)=>{if(x.isCanceled){return;}else{return p}}).then(checkStatus).then(parseJSON).then(filterResponse).then((data) => {
       resolve(data)
     }).catch((err) => {
@@ -265,23 +259,23 @@ export const packagePublicParams = (nativeParams, TRDE_CODE) => ({
  * @param cancelCall
  */
 export const checkReLoginFlow = (err, successCall = () => {}, cancelCall = () => {}) => {
-    if(window.loginAlert){
-      return
+  if(window.loginAlert){
+    return
+  }
+  window.loginAlert =true;
+  showSingleBtnModal({
+    title: err.message, onOk: () => {
+      window.loginAlert = false;
+      nativeQuitLogon();
+      nativeLogin((params) => {
+        if (params.errorCode == '0000') { // 登录成功
+          successCall(params);
+        } else {
+          /* 登录取消 */
+          cancelCall();
+        }
+      });
     }
-    window.loginAlert =true;
-    showSingleBtnModal({
-      title: err.message, onOk: () => {
-        window.loginAlert = false;
-        nativeQuitLogon();
-        nativeLogin((params) => {
-          if (params.errorCode == '0000') { // 登录成功
-            successCall(params);
-          } else {
-            /* 登录取消 */
-            cancelCall();
-          }
-        });
-      }
-    });
-    return true;
+  });
+  return true;
 };

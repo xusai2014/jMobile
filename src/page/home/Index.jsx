@@ -258,7 +258,7 @@ export default class Index extends React.Component {
                 })
               }
             }
-          }} key={k} style={{display: "inline-block", textAlign: 'center'}}>
+          }} key={k} style={{display: "inline-block", textAlign: 'center',width:'1.875rem'}}>
             <img style={{width: '0.74rem', height: '0.74rem'}} src={logoUri}/>
             <div style={{fontWeight: 'bold',}}>{gameName}</div>
           </div>
@@ -503,7 +503,7 @@ const styles = {
   iconItem: {margin: "0.4rem 0 0 0", display: 'inline-block'},
   textStyle: {fontSize: '0.3rem', fontWeight: 'bold', color: '#FFFFFF', letterSpacing: '0', textAlign: 'center'},
   activity: {
-    display: "flex", justifyContent: "space-around",
+    display: "flex",
     marginTop: '0.79rem',
     marginBottom: '0.3rem'
   },

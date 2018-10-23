@@ -77,7 +77,10 @@ export const  fetchPromise = async (url, method = 'GET', data, cancel = false, i
     baseUrl ='https://mp-rc.vbill.cn/phoneclient/notify.htm'
   } else if(window.location.host.indexOf('mpmw-alpha.vbill.cn')>-1){
     baseUrl ='https://mp-alpha.vbill.cn:8084/phoneclient/notify.htm'
+  } else if(window.location.host.indexOf('mpmw-test.vbill.cn')>-1){
+    baseUrl ='https://mpos.suixingpay.com/phoneclient/notify.htm'
   }
+
 
   const isnv = 1;//是否sha256
   const encflag = 1;//是否AES

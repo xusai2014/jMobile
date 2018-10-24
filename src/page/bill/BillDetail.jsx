@@ -446,6 +446,7 @@ export default class BillDetail extends React.Component {
       min_payment = '',
       items = [],
       current_bill_remain_amt = '0.00',
+      new_balance='0.00',
       importBillType,
       abbr,
       taskId
@@ -491,7 +492,7 @@ export default class BillDetail extends React.Component {
               fontSize: '0.62rem',
               color: '#FFFFFF',
               letterSpacing: '0',
-            }}>{parseFloat(current_bill_remain_amt) == 0?'--':current_bill_remain_amt}
+            }}>{parseFloat(new_balance) == 0?'--':new_balance}
             </div>
             <div style={{
               opacity: '0.5',

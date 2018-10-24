@@ -338,6 +338,7 @@ export default class BillCard extends React.Component {
       card_num,
       bank_name,
       bill_type,
+      new_balance ='0',
       current_bill_remain_amt,
       payment_due_date = moment().format('YYYY-MM-DD'),
       task_id,
@@ -464,7 +465,7 @@ export default class BillCard extends React.Component {
             color: '#333333',
             letterSpacing: '0',
             fontWeight: 'bold',
-          }}>{parseFloat(current_bill_remain_amt) == 0?'--':current_bill_remain_amt}</div>
+          }}>{parseFloat(new_balance) == 0?'--':new_balance}</div>
           <div style={{
             fontSize: '0.22rem',
             color: '#999999',

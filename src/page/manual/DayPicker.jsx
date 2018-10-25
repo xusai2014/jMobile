@@ -114,6 +114,7 @@ export default class DayPicker extends React.Component {
 
   render() {
     const {showPanel} = this.state;
+    const { name = '' } = this.props;
 
     return (
       [
@@ -140,7 +141,7 @@ export default class DayPicker extends React.Component {
                     showPanel:false
                   })
                 }}>取消</span>
-                <span>账单日</span>
+                <span>{name}</span>
                 <span style={{color: '#4C7BFE', marginRight: '0.3rem'}} onClick={()=>{
                   this.selectValue();
                   this.destroyStyle();

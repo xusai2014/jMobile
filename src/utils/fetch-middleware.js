@@ -99,7 +99,6 @@ export const  fetchPromise = async (url, method = 'GET', data, cancel = false, i
   const x = new Promise((resolve, reject) =>
     fetch(`${baseUrl}${queryBody}`, {
       method,
-      headers: { ...headers },
       ...requestBody
     }).then((p)=>{if(x.isCanceled){return;}else{return p}}).then(checkStatus).then(parseJSON).then(filterResponse).then((data) => {
       resolve(data)

@@ -235,7 +235,9 @@ export default class HandleBill extends React.Component {
             <div style={styles.name}>{name}</div>
             {
               code == '1' ?
-                <DayPicker onRes={(day)=>{
+                <DayPicker
+                  name={name}
+                  onRes={(day)=>{
                   this.setState({[key]: day}, () => {
                     this.enableBtn()
                   })}

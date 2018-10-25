@@ -597,7 +597,7 @@ export default class BillDetail extends React.Component {
                           letterSpacing: '0',
                         }}>
                           {
-                            `${moment(bill_month).format('MM')}月`
+                            `${moment(bill_date).add(-1,'months').add(1,'days').format('MM')}月`
                           }
                           <span style={{
                             fontSize: '0.24rem',
@@ -605,7 +605,7 @@ export default class BillDetail extends React.Component {
                             letterSpacing: '0',
                             marginLeft:'0.1rem'
                           }}>{
-                            moment(bill_month).format('YYYY')
+                            moment(bill_date).add(-1,'months').add(1,'days').format('YYYY')
                           }</span>
                         </div>
 

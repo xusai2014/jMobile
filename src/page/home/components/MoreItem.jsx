@@ -64,7 +64,11 @@ export default class MoreItem extends React.Component {
                 <div style={styles.header}>
                   <img src="/static/img/back.png" style={styles.back} onClick={()=>setLevel()}/>
                   标记还部分</div>
-                <KeyWord billData={billData} apiCallback={()=>{updateData();cancelFunc()}} />
+                <KeyWord billData={billData} apiCallback={()=>{
+                  updateData();
+                  setLevel();
+                  cancelFunc()
+                }} />
               </div>:null
         }
       </div>

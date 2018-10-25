@@ -795,7 +795,7 @@ const styles = {
     color: '#333333',
     letterSpacing: '0',
     borderRight:"0.005rem solid #979797",
-    background:'#FFFFFF',
+    background:'rgb(255, 255, 255)',
   },
   img:{
     height:'0.33rem',

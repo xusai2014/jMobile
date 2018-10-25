@@ -338,7 +338,7 @@ export default class Index extends React.Component {
           setVisible={(v) => {this.setState({visible: v})}}
       />,
       moreAction ?
-        <MoreItem items={this.moreActions}
+        <MoreItem items={this.moreActions(activeCard)}
                   cancelFunc={() => {
                     this.setState({moreAction: false})
                   }}
@@ -351,7 +351,7 @@ export default class Index extends React.Component {
         /> : null
     ]
   }
-  moreActions = [
+  moreActions = (activeCard)=> [
     {
       name: "更新账单",
       action: () => {

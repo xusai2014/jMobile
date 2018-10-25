@@ -17,6 +17,10 @@ export default class DayPicker extends React.Component {
     document.body.style.position =  'static';
   }
 
+  componentWillUnmount(){
+    this.destroyStyle();
+  }
+
   selectDay() {
     this.setState({
       showPanel: true,

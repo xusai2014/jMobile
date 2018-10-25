@@ -760,7 +760,8 @@ export default class BillDetail extends React.Component {
 const styles = {
   bottom:{
     display: 'flex',position: 'fixed',bottom: '0',
-    alignItems:"center"
+    alignItems:"center",
+    boxShadow: '0 0.02rem 0.04rem 0 rgba(0,0,0,0.50)',
   },
   container:{
     position: 'fixed',
@@ -794,7 +795,7 @@ const styles = {
     color: '#333333',
     letterSpacing: '0',
     borderRight:"0.01rem solid #979797",
-    background:"rgb(245, 245, 245)"
+    background:'#FFFFFF',
   },
   img:{
     height:'0.33rem',

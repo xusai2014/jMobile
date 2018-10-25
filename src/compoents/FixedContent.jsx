@@ -11,7 +11,8 @@ class FixedContent extends React.Component {
     }
 
     componentWillMount() {
-
+      document.body.style.overflowY = '';
+      document.body.style.position =  'static';
         if (!sessionStorage.getItem("mobileNo")) {
             let search = getSearch(this.props)
             !!search ?

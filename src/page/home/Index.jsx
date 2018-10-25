@@ -338,39 +338,7 @@ export default class Index extends React.Component {
           setVisible={(v) => {this.setState({visible: v})}}
       />,
       moreAction ?
-        <MoreItem items={[
-          {
-            name: "更新账单",
-            action: () => {
-              this.setState({moreAction: false})
-              this.state.syncfunc()
-            },
-          }, {
-            name: "manual",
-            action: (param) => {
-              this.setState({moreAction: false});
-              const {
-                cardNum,
-                bankId,
-              } = activeCard;
-              const {payStatus} = param
-              this.props.dispatch(setMarkBill({
-                cardNum,
-                bankId,
-                payStatus: payStatus
-              })).then(() => {
-                  Toast.info('设置还款状态成功');
-                  this.initData()
-              })
-
-            },
-          }, {
-            name: "标记还部分",
-            action: () => {
-              this.setState({level: 2})
-            },
-          }
-        ]}
+        <MoreItem items={this.moreActions}
                   cancelFunc={() => {
                     this.setState({moreAction: false})
                   }}
@@ -383,6 +351,39 @@ export default class Index extends React.Component {
         /> : null
     ]
   }
+  moreActions = [
+    {
+      name: "更新账单",
+      action: () => {
+        this.setState({moreAction: false})
+        this.state.syncfunc()
+      },
+    }, {
+      name: "manual",
+      action: (param) => {
+        this.setState({moreAction: false});
+        const {
+          cardNum,
+          bankId,
+        } = activeCard;
+        const {payStatus} = param
+        this.props.dispatch(setMarkBill({
+          cardNum,
+          bankId,
+          payStatus: payStatus
+        })).then(() => {
+          Toast.info('设置还款状态成功');
+          this.initData()
+        })
+
+      },
+    }, {
+      name: "标记还部分",
+      action: () => {
+        this.setState({level: 2})
+      },
+    }
+  ]
 
   example = [{
     card_num: "2886",

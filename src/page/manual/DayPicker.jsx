@@ -38,8 +38,8 @@ export default class DayPicker extends React.Component {
     } else {
       this.dtaObj.dta_Y = this.dtaObj.dta_Y + dtaY;
     }
-    this.refs.canlenda.style.transition = 'cubic-bezier(0,0,0.2,1.15) 1s';
-    this.refs.canlenda.style.webkitTransition = 'cubic-bezier(0,0,0.2,1.15) 1s';
+    this.refs.canlenda.style.transition = 'cubic-bezier(0,0,0.2,1.15) 0.5s';
+    this.refs.canlenda.style.webkitTransition = 'cubic-bezier(0,0,0.2,1.15) 0.5s';
 
     this.refs.canlenda.style.transform = `translate3d(0,${this.dtaObj.dta_Y}px,0)`;
     this.refs.canlenda.style.webkitTransform = `translate3d(0,${this.dtaObj.dta_Y}px,0)`;
@@ -149,8 +149,8 @@ export default class DayPicker extends React.Component {
               <div style={styles.body}>
                 <div style={{
                   ...styles.list,
-                  transition: 'cubic-bezier(0,0,0.2,1.15) 2s',
-                  webkitTransition :'cubic-bezier(0,0,0.2,1.15) 2s',
+                  transition: 'cubic-bezier(0,0,0.2,1.15) 0.5s',
+                  webkitTransition :'cubic-bezier(0,0,0.2,1.15) 0.5s',
                   transform : `translate3d(0,${this.dtaObj.dta_Y}px,0)`,
                   webkitTransform : `translate3d(0,${this.dtaObj.dta_Y}px,0)`,
                 }}

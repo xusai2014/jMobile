@@ -215,7 +215,7 @@ const styles = {
     border: '1PX solid #F1F1F1'
   },
   list: {
-    width: '0.9rem',
+    width: '7.5rem',
     justifyContent: 'center',
     display: 'flex',
     alignItems: 'center',

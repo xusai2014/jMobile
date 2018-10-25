@@ -794,7 +794,7 @@ const styles = {
     fontSize: '0.2rem',
     color: '#333333',
     letterSpacing: '0',
-    borderRight:"0.01rem solid #979797",
+    borderRight:"0.005rem solid #979797",
     background:'#FFFFFF',
   },
   img:{

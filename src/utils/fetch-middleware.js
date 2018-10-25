@@ -204,8 +204,8 @@ export function parseJSON(response) {
 export const headers = {
   "Content-Type": "application/json;charset=UTF-8",
   'Access-Control-Allow-Origin': '*',
-  "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"
+  "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type,Accept,X-Requested-With,access-control-allow-methods,remember-me,Access-Control-Allow-Origin,access-control-allow-headers"
 }
 
 /**

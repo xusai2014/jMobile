@@ -323,14 +323,14 @@ export default class Index extends React.Component {
           <img src="/static/img/Path 3@2x.png" style={{width: "0.1rem"}}/>
         </div> : null}
       </div>,
-      <FreeInterest
+      isLogged?<FreeInterest
         key="FreeInterest"
         parentParams={{
           isShow:interestShow,
           closeFunc:()=>this.setState({interestShow:false}),
           openFunc:()=>this.setState({interestShow:true}),
         }}
-      />,
+      />:null,
       <Popup
           key="Popup"
           title="选择还款方式"

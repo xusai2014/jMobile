@@ -247,6 +247,11 @@ export default class Index extends React.Component {
         {isLogged ? (!this.props.examineAccount ? activities.map((v, k) => {
           const {logoUri = '', gameUri, gameName = ''} = activities[k] ? activities[k] : {};
           return <div onClick={() => {
+            window.sa.track('SA_ADClick', {
+              Name: '卡管理首页广告',
+              Classification: "卡管理活动",
+              PageTransition: gameUri,
+            });
             if (gameUri.indexOf('site=oldweb') > 0) {
               jsNative.nativeOpenOldWebView({url: gameUri}, () => {
               })

@@ -21,7 +21,14 @@ export default class Adtivity extends React.Component{
       {
         operateActivities.map((v,k)=>{
           const { url, icon} = v;
-          return <img onClick={()=>jsNative.nativeOpenNewWebView({url:url},()=>{})} src={icon} style={{width:'6.94rem',margin:"0 0.28rem"}} />
+          return <img onClick={()=>{
+            window.sa.track('SA_ADClick', {
+              Name: '导入账单结果页',
+              Classification: "导入账单结果页",
+              PageTransition: url,
+            });
+            jsNative.nativeOpenNewWebView({url:url},()=>{})
+          }} src={icon} style={{width:'6.94rem',margin:"0 0.28rem"}} />
         })
       }
     </div>

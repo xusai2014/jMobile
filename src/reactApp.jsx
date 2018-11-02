@@ -11,7 +11,7 @@ import uam from './utils/deviceMark';//ua mark
 import { fetchPromise, PromiseList } from './utils/fetch-middleware';
 import sa from 'sa-sdk-javascript';
 import Storage from './store'
-/*
+/**
  * whatwg 是fetch API的统一版本，在不支持fetch的浏览器中处理兼容问题，同时引入轻量的promise库
  * */
 import 'whatwg-fetch';
@@ -53,7 +53,7 @@ nativeJs.informLoginStatus(() => {
  *  神策数据统计，初始化
  */
 sa.init({
-  server_url: process.env.mode != 'production' ? 'https://sc.vbill.cn/sa?project=MPOS_TEST' : 'https://sc.suixingpay.com/sa?project=MPOS_PROD',
+  server_url: process.env.mode != 'production' ? 'https://sc.vbill.cn/sa?project=MPOS_TEST' : 'https://sc.vill.cn/sa?project=SXF_PLUS',
   heatmap: {
     //是否开启点击图，默认 default 表示开启，自动采集 $WebClick 事件，可以设置 'not_collect' 表示关闭
     clickmap: 'default',

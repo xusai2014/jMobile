@@ -6,7 +6,7 @@ import {Modal, Progress, Toast}  from "antd-mobile";
 import {jsNative} from "sx-jsbridge";
 import {waitFunc} from "../../utils/util";
 import globalStyle from "../../style";
-import MoreItem from "./components/MoreItem";
+import styles from './style/card.less'
 const {loginHelper} = jsNative;
 const {prompt, alert} = Modal;
 
@@ -26,7 +26,7 @@ export default class BillCard extends React.Component {
     }
   }
 
-  async callSyncBill(task_id, importBillType, abbr, cardNum,bank_name) {
+  async callSyncBill(task_id, importBillType, abbr, cardNum, bank_name) {
     // TODO 仅支持网银
     Toast.loading('请稍候', 0);
     if (importBillType == '01') {
@@ -42,7 +42,11 @@ export default class BillCard extends React.Component {
         if (subtype) {
           alert(<span className="alert_title">暂时无法获取账单的最新状态</span>, <span className="alert_content">如果您已通过其导入它平台还款，建议您通过网银导入</span>, [
             {text: '暂不需要', onPress: () => console.log('置顶聊天被点击了'), style: globalStyle.cancelStyle},
-            {text: '通过网银导入', onPress: () => this.props.history.push(`/cyber/login/${abbr}`,{name:bank_name}), style: globalStyle.sureStyle}
+            {
+              text: '通过网银导入',
+              onPress: () => this.props.history.push(`/cyber/login/${abbr}`, {name: bank_name}),
+              style: globalStyle.sureStyle
+            }
           ]);
         } else {
           alert(<span className="alert_title">该银行暂不支持同步您的账单数据</span>, '', [
@@ -74,8 +78,8 @@ export default class BillCard extends React.Component {
 
   }
 
-  showMoreAction(task_id, importBillType, abbr, cardNum,bankId,bill_type,bank_name) {
-    this.props.showMoreAction(task_id, importBillType, abbr, cardNum,bankId,bill_type,()=>this.callSyncBill(task_id, importBillType, abbr, cardNum,bank_name))
+  showMoreAction(task_id, importBillType, abbr, cardNum, bankId, bill_type, bank_name) {
+    this.props.showMoreAction(task_id, importBillType, abbr, cardNum, bankId, bill_type, () => this.callSyncBill(task_id, importBillType, abbr, cardNum, bank_name))
   }
 
   /**
@@ -247,7 +251,7 @@ export default class BillCard extends React.Component {
           actionName: examineAccount ? "点击" : "立即还款",
           action: examineAccount ? () => {
           } : action,
-          key:"03"
+          key: "03"
         }
       } else {
         return {
@@ -257,27 +261,29 @@ export default class BillCard extends React.Component {
           actionName: examineAccount ? "" : "立即还款",
           action: examineAccount ? () => {
           } : action,
-          key:"02"
+          key: "02"
         }
       }
     } else if (bill_type == 'UNDONE') {
       const duM = moment(bill_date);
       const days = duM.diff(moment(), 'days');
-       return parseInt(days)>0? {
+      return parseInt(days) > 0 ? {
         day: days,
         date: duM.format('MM-DD'),
         des: `天后出账`,
         actionName: "更新未出",
-        action: () => {},
-         key:"01"
-      }:{
-         day: Math.abs(days),
-         date: duM.format('MM-DD'),
-         des: `天前出账`,
-         actionName: "更新未出",
-         action: () => {},
-         key:"04"
-       }
+        action: () => {
+        },
+        key: "01"
+      } : {
+        day: Math.abs(days),
+        date: duM.format('MM-DD'),
+        des: `天前出账`,
+        actionName: "更新未出",
+        action: () => {
+        },
+        key: "04"
+      }
     } else {
       return {
         day: "",
@@ -338,8 +344,7 @@ export default class BillCard extends React.Component {
       card_num,
       bank_name,
       bill_type,
-      new_balance ='0',
-      current_bill_remain_amt,
+      new_balance = '0',
       payment_due_date = moment().format('YYYY-MM-DD'),
       task_id,
       bill_id,
@@ -350,11 +355,8 @@ export default class BillCard extends React.Component {
       real = true,
       isNew = '00',
       abbr,
-      update_time,
       isLogged,
-      authSts,
       examineAccount,
-      moreAction,
       bank_id,
     }
       = this.props;
@@ -362,8 +364,6 @@ export default class BillCard extends React.Component {
       percent,
       syncBegin
     } = this.state;
-    const update = moment().diff(moment(update_time), 'minutes')
-
     const {day, date, des, actionName, action, key} = this.judgeStatus(bill_type, payment_due_date, bill_date, repay)
     return <div onClick={(e) => {
       if (!real) {
@@ -379,93 +379,46 @@ export default class BillCard extends React.Component {
       if (examineAccount) {
         return
       }
-      this.props.history.push(`/bill/detail/${bill_id}`, {bank_name,card_num,bank_id})
-    }} style={{background: '#FFFFFF', marginTop: '0.2rem', padding: "0.3rem 0", position: 'relative'}}>
-      <div style={{display: 'flex', alignItems: 'center'}}>
+      this.props.history.push(`/bill/detail/${bill_id}`, {bank_name, card_num, bank_id})
+    }} className={styles.container}>
+      <div className={styles.body}>
         {
-          isNew == '01' ? <div style={{
-            position: 'absolute',
-            top: '0'
-          }}>
+          isNew == '01' ? <div className={styles.new}>
             <img style={{width: '0.445rem'}} src="/static/img/new@2x.png"/>
           </div> : null
         }
-        <div style={{width: '3.24rem', display: 'inline-flex', alignItems: 'center'}}>
-          <div style={{
-            margin: '0 0.14rem 0 0.28rem',
-            display: "inline-block",
-            borderRadius: "0.18rem",
-            background: '#E41E26',
-            height: '0.36rem',
-          }}><img src={logo_uri} style={{
+        <div className={styles.main}>
+          <div className={styles.left}><img src={logo_uri} style={{
             height: '0.36rem',
             borderRadius: "0.18rem"
           }}/></div>
-          <span style={{
-            fontSize: '0.26rem',
-            color: '#333333',
-            letterSpacing: '0',
-            textAlign: 'center',
-            fontWeight: 'bold',
-            lineHeight: '0.36rem'
-          }}>{bank_name}</span>
-          <span style={{
-            fontSize: "0.28rem",
-            color: '#999999',
-            letterSpacing: '0',
-            textAlign: 'center',
-            marginLeft: '0.18rem',
-            fontWeight: 'bold',
-            lineHeight: '0.36rem'
-          }}
+          <span className={styles.name}>{bank_name}</span>
+          <span className={styles.num}
 
           >{card_num}</span>
         </div>
         <div style={{width: '4.26rem', display: 'inline-block'}}>
           {
             syncBegin ?
-              <div style={{
-                fontSize: '0.22rem',
-                color: '#333333',
-                letterSpacing: '-1px',
-                marginLeft: '2.57rem',
-                fontWeight: 'bold',
-              }}>
+              <div className={styles.right}>
                 {percent > 0 ? `${percent}%更新中...` : '登录中...'}
                 <Progress style={{width: "1.32rem"}} percent={percent} position="normal"/>
               </div> :
-              <img src="/static/img/1.1.0/more@2x.png" style={{
-                height: '0.07rem',
-                float: 'right',
-                padding: '0.2rem 0.4rem 0.2rem 0.8rem'
-              }} onClick={(e) => {
+              <img src="/static/img/1.1.0/more@2x.png" className={styles.more} onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
                 if (!real) {
                   this.callLogin()
                   return
                 }
-                this.showMoreAction(task_id, importBillType, abbr, card_num,bank_id,bill_type,bank_name)
+                this.showMoreAction(task_id, importBillType, abbr, card_num, bank_id, bill_type, bank_name)
               }}/>
           }
         </div>
       </div>
-      <div style={{
-        marginTop: '0.31rem',
-        display: 'flex',
-        alignItems: 'center'
-      }}>
-        <div style={{
-          display: 'inline-block',
-          marginLeft: "0.3rem",
-          width: "2.82rem"
-        }}>
-          <div style={{
-            fontSize: '0.3rem',
-            color: '#333333',
-            letterSpacing: '0',
-            fontWeight: 'bold',
-          }}>{parseFloat(new_balance) == 0?'--':new_balance}</div>
+      <div className={styles.bottom}>
+        <div className={styles.bottom_left}>
+          <div className={styles.new_balance}>{parseFloat(new_balance) == 0 ? '--' : new_balance}</div>
           <div style={{
             fontSize: '0.22rem',
             color: '#999999',
@@ -474,81 +427,50 @@ export default class BillCard extends React.Component {
           </div>
         </div>
         <div style={{width: "2.84rem", display: 'inline-block'}}>
-          <div style={{
-            display: 'inline-block',
-            fontSize: '0.5rem',
-            color: '#999999',
-            letterSpacing: '0',
-            textAlign: 'center',
-            lineHeight: '0.5rem',
-            fontWeight: 'bold',
-          }}>
+          <div className={styles.tips}>
             {day >= 0 ? day : 0}
           </div>
           <div style={{
             display: 'inline-block',
             marginLeft: "0.26rem",
-          }} onClick={(e)=>{
-            if(key == '03'){
+          }} onClick={(e) => {
+            if (key == '03') {
               e.stopPropagation();
               e.preventDefault();
               if (!real) {
                 this.callLogin()
                 return
               }
-              this.showMoreAction(task_id, importBillType, abbr, card_num,bank_id,bill_type,bank_name)
+              this.showMoreAction(task_id, importBillType, abbr, card_num, bank_id, bill_type, bank_name)
             }
           }}>
             {
-              examineAccount ? '' : <div style={{
-                fontSize: '0.22rem',
-                color: '#999999',
-                letterSpacing: '0',
-                lineHeight: '0.225rem',
-                fontWeight: 'bold',
-              }}>{des}
+              examineAccount ? '' : <div className={styles.des}>{des}
               </div>
             }
-            <div style={{
-              fontSize: '0.2rem',
-              color: '#999999',
-              letterSpacing: '0',
-              lineHeight: '0.225rem',
-              fontWeight: 'bold',
-            }}>{date}</div>
+            <div className={styles.date}>{date}</div>
           </div>
         </div>
-        {!examineAccount ? <div style={{
-          display: 'inline-block',
-          background: actionName == '更新未出' ? 'rgb(153, 153, 153)' : '#4C7BFE',
-          borderRadius: '0.6rem',
-          fontSize: '0.22rem',
-          color: '#FFFFFF',
-          letterSpacing: '0',
-          textAlign: 'center',
-          width: '1.26rem',
-          height: '0.53rem',
-          lineHeight: '0.53rem',
-          fontWeight: 'bold',
-        }} onClick={(e) => {
-          if (actionName == '更新未出') {
-            return
-          }
-          if (!real) {
-            this.callLogin()
-            return
-          }
-          action(e)
-        }}>
-          {actionName}
-        </div>
+        {!examineAccount ?
+          <div style={{background: actionName == '更新未出' ? 'rgb(153, 153, 153)' : '#4C7BFE',}}
+               className={styles.btn}
+               onClick={(e) => {
+                 if (actionName == '更新未出') {
+                   return
+                 }
+                 if (!real) {
+                   this.callLogin()
+                   return
+                 }
+                 action(e)
+               }}
+          >
+            {actionName}
+          </div>
           : null
         }
       </div>
-      {real ? null :
-        <img src="/static/img/示例@2x.png" style={{width: "0.71rem", position: 'absolute', right: '0', top: '0'}}/>}
-
-
+      {real ? null : <img src="/static/img/示例@2x.png" className={styles.example}/>}
     </div>
   }
 }

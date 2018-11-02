@@ -49,6 +49,18 @@ export default {
       },
       {
         test: /\.less?$/,
+        exclude:/node_modules/,
+        use: [
+          "style-loader", // creates style nodes from JS strings,
+          'css-loader?modules&localIdentName=[path][name]---[local]---[hash:base64:5]', // translates CSS into CommonJS
+          'postcss-loader',
+          {
+            loader: 'less-loader', options: { javascriptEnabled: true}
+          }
+        ]
+      },{
+        test: /\.less?$/,
+        include:/node_modules/,
         use: [
           "style-loader", // creates style nodes from JS strings,
           'postcss-loader',
@@ -73,27 +85,11 @@ export default {
   },
   plugins:  [
     new webpack.BannerPlugin('This file is created by Jerry'),
-    new webpack.LoaderOptionsPlugin({
-      ////帮你解决浏览器前缀、IE兼容问题
-      options: {
-        postcss: function () {
-          return [
-            require("autoprefixer")({
-              browsers: ['ie>=8', '>1% in CN', 'iOS >= 8', 'Android >= 4']
-            }),
-          ]
-        }
-      }
-    }),
     new HtmlWebpackPlugin({
       chunks: ['main', 'vendor', 'runtime~main'],
       filename: 'index.html',
       template: './template/index.html',
       title: '',
-      reactLibray:process.env.mode == 'production'?
-        `<script src="https://cdn.bootcss.com/react/16.3.1/umd/react.production.min.js"></script><script src="https://cdn.bootcss.com/react-dom/16.3.2/umd/react-dom.production.min.js"></script>`
-        :
-        `<script src="https://cdn.bootcss.com/react/16.3.2/umd/react.development.js"></script><script src="https://cdn.bootcss.com/react-dom/16.3.2/umd/react-dom.development.js"></script>`,
       inject: true,
       minify: {
         removeComments: true,

@@ -322,11 +322,11 @@ export default class Index extends React.Component {
       </div>,
       <div>{(isLogged && !examineAccount) ?
         <div className={styles.enterCard} onClick={() => this.openCardMarket()}>
-          <img src="/static/img/信用卡2x.png" className={{width: "0.41rem"}}/>
+          <img src="/static/img/信用卡2x.png" style={{width: "0.41rem"}}/>
           <span className={styles.applyCard}>
           办信用卡
         </span>
-          <img src="/static/img/Path 3@2x.png" className={{width: "0.1rem"}}/>
+          <img src="/static/img/Path 3@2x.png" style={{width: "0.1rem"}}/>
         </div> : null}
       </div>,
       isLogged?<FreeInterest

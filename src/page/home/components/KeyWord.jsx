@@ -24,25 +24,25 @@ export default class KeyWord extends React.Component {
       return
     }
     if (/(^[0-9](\d+)?(\.\d{1,2})?$)|(^0$)|(^\d\.\d{1,2}$)/.test(repaymentAmount) || /([0-9]+\.[0-9]{2})[0-9]*/.test(repaymentAmount)) {
-      return;
+      if (parseFloat(repaymentAmount) <= 0) {
+        Toast.info('请输入正确金额');
+        return;
+      }
+      this.props.dispatch(setBillRest({
+        cardNum,
+        bankId,
+        repaymentAmount
+      })).then((result) => {
+        Toast.info('设置还款状态成功')
+        this.props.apiCallback()
+      }, (err) => {
+        Toast.hide();
+      })
     } else {
       Toast.info('请输入正确金额');
       return;
     }
-    if (parseFloat(repaymentAmount) <= 0) {
-      Toast.info('请输入正确金额');
-      return;
-    }
-    this.props.dispatch(setBillRest({
-      cardNum,
-      bankId,
-      repaymentAmount
-    })).then((result) => {
-      Toast.info('设置还款状态成功')
-      this.props.apiCallback()
-    }, (err) => {
-      Toast.hide();
-    })
+
   }
 
 

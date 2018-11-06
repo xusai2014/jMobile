@@ -37,7 +37,8 @@ export const packageReqData = (data, isnv, encflag) => {
   dataBody["sign"] = aesEncrypt(signature);
   dataBody["isnv"] = aesEncrypt(isnv)
   Object.keys(data).map((v, k) => {
-    dataBody[v] = aesEncrypt(data[v])
+    dataBody[v] = aesEncrypt(data[v]);
+    return;
   });
   return {...dataBody, encflag}
 }

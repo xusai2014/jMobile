@@ -300,8 +300,6 @@ export default class BillDetail extends React.Component {
   }
 
   async getPayDetailInfo(bankId = '0308',cardNumber = '4443'){
-    const { billDetail } =this.props;
-    const {} = billDetail;
     this.props.dispatch(getPayDetail({
       bankId,
       cardNumber,
@@ -669,8 +667,7 @@ export default class BillDetail extends React.Component {
             })}
           </div>
           <div style={{background: '#FFFFFF',height:'auto',marginBottom:'2.2rem'}}>{payDetail.map((v,k) => {
-            const {createTime,repaymentAmount,repaymentTime,repaymentChannel} =v;
-            const {} = repaymentTime;
+            const {repaymentAmount,repaymentTime,repaymentChannel} =v;
             return [<div style={{height: '1.06rem', padding: '0.18rem 0', display: 'flex', alignItems: 'center'}}>
               <div style={{margin: '0 0 0 0.64rem', display: 'inline-block', width: '4.86rem'}}>
                 <div style={{

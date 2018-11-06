@@ -360,7 +360,7 @@ export default class Index extends React.Component {
   moreActions = (activeCard)=> [
     {
       name: "更新账单",
-      action: () => {
+      action: (param) => {
         this.setState({moreAction: false})
         this.state.syncfunc()
       },
@@ -385,7 +385,7 @@ export default class Index extends React.Component {
       },
     }, {
       name: "标记还部分",
-      action: () => {
+      action: (param) => {
         this.setState({level: 2})
       },
     }

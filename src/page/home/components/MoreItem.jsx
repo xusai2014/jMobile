@@ -37,7 +37,7 @@ export default class MoreItem extends React.Component {
               {
                 items.map((v,k)=>{
                   let {
-                    action = ()=>{},
+                    action = (param)=>{},
                     name = '',
                   } = v;
 

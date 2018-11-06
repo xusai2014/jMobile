@@ -99,10 +99,7 @@ export default class HandleBill extends React.Component {
     } else if (!paymentDueDate) {
       Toast.info('请填写还款日');
       return;
-    } else if (!paymentDueDate) {
-      Toast.info('请填写姓名');
-      return;
-    } else if (!creditLimit) {
+    }  else if (!creditLimit) {
       Toast.info('请填写信用额度');
       return;
     } else if (!newBalance) {

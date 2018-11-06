@@ -6,7 +6,7 @@ import {InitDecorator} from "../../compoents/InitDecorator";
 import {getBillId, getCardsList, getIndetiyInfo, looseCard} from "../../actions/reqAction";
 import {jsNative} from 'sx-jsbridge'
 import {judgeEnv} from "../../utils/util";
-import globalStyle from "../../style";
+import globalStyle from "../../globalStyle";
 const {alert} = Modal;
 
 

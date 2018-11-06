@@ -1,7 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-import {Icon} from "antd-mobile";
 import {jsNative} from "sx-jsbridge";
 
 class AllHeader extends React.Component {
@@ -25,7 +24,7 @@ class AllHeader extends React.Component {
   backStart() {
     jsNative.nativeCallBindCreditCard({},(data)=>{
       const { TaskCenter = '' } = data;
-      if( window.location.href.indexOf('/cards/cardslist') >0 && parseInt(TaskCenter) == 1 ){
+      if( window.location.href.includes('/cards/cardslist') && parseInt(TaskCenter) == 1 ){
         jsNative.nativeCloseWebview({},()=>{})
       } else {
         window.history.go(-1);

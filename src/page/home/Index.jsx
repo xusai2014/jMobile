@@ -9,7 +9,7 @@ import {
 } from "../../actions/reqAction";
 import {jsNative,} from "sx-jsbridge";
 import {judgeEnv} from "../../utils/util";
-import globalStyle from "../../style";
+import globalStyle from "../../globalStyle";
 import MoreItem from "./components/MoreItem";
 import IconEnter from "./components/IconEnter";
 import FreeInterest from "./components/FreeInterest";
@@ -253,11 +253,11 @@ export default class Index extends React.Component {
               Classification: "卡管理活动",
               PageTransition: gameUri,
             });
-            if (gameUri.indexOf('site=oldweb') > 0) {
+            if (gameUri.includes('site=oldweb')) {
               jsNative.nativeOpenOldWebView({url: gameUri}, () => {
               })
             } else {
-              if (gameUri.indexOf('ppmoney.com') > -1) {
+              if (gameUri.includes('ppmoney.com')) {
                 this.openPPMoney(gameUri)
               } else {
                 jsNative.nativeOpenNewWebView({url: gameUri}, () => {

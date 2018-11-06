@@ -4,7 +4,7 @@ import {checkEmailTask, checkToken, pollingCyber, removeLoginStatus, verifyCode}
 import {InitDecorator} from "../../compoents/InitDecorator";
 import { Toast,Modal } from 'antd-mobile';
 import {waitFunc} from "../../utils/util";
-import globalStyle from "../../style";
+import globalStyle from "../../globalStyle";
 import {Prompt,} from "react-router-dom";
 const {prompt,alert} = Modal;
 
@@ -70,13 +70,8 @@ export default class LoadingStatus extends React.Component{
 
   judgeStatus(status) {
     const {data = {} } = status;
-    const {phase, phase_status} = data;
-    switch (phase_status) {
-      case "DOING":
-        return true;
-      default:
-        return false;
-    }
+    const { phase_status} = data;
+    return "DOING" == phase_status;
   }
 
   /**
@@ -86,7 +81,7 @@ export default class LoadingStatus extends React.Component{
    */
   handleStatus(status, taskId, loginType) {
     const {data = {}} = status;
-    const {phase, phase_status = '', input, description} = data;
+    const { phase_status = '', input, description} = data;
     switch (phase_status) {
       case 'WAIT_CODE'://输入验证码
 
@@ -119,7 +114,7 @@ export default class LoadingStatus extends React.Component{
     }
   }
 
-  goResult(loginType,status = 3,description){
+  goResult(loginType, status, description){
 
     //取消路由拦截
     window.leaveStatu = true
@@ -166,19 +161,12 @@ export default class LoadingStatus extends React.Component{
    *   @description 第三步流程的分支流程，输入验证码检查登录状态
    */
   async verifycation({taskId, value: code}) {
-    let codeStatus = ''
-
-    codeStatus = await this.props.dispatch(verifyCode({
+    await this.props.dispatch(verifyCode({
       taskId,
       code,
     }));
 
-    const {data} = codeStatus;
-    //if(value == '200'){
-
-    //} else {
     this.checkTask(taskId);
-    //}
   }
 
 

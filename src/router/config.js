@@ -11,9 +11,9 @@ export default [{
   path:"/result/:type",
   name:"Result"
 },{
-  component:"../page/result/Loading.jsx",
+  component:"../page/result/LoadingStatus.jsx",
   path:"/load/:type",
-  name:"Loading"
+  name:"LoadingStatus"
 },
   {
     component:"../page/cardsPackage/EditCard.jsx",
@@ -37,7 +37,7 @@ export default [{
   },{
     component:"../page/manual/AddBill.jsx",
     path:"/manual/add",
-    name:"BankCardList"
+    name:"AddBill"
 
   },{
     component:"../page/email/EmailManager.jsx",

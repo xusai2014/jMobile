@@ -35,14 +35,6 @@ export const InitDecorator = (mergeStateToprops  = ()=>{ return {} }) => (Coms) 
      */
     getBaseParams = () => nativeRequestBaseParams().then((reqParams) => {
       this.syncData(reqParams);
-      const data = {
-        APPVERSION: reqParams['APP_VERSIONS'],
-        OSVERSION: reqParams['PHONE_VERSIONS'],
-        PLATFORM: reqParams['PHONE_PLATFORM'],
-        TOKEN_ID: reqParams['TOKEN_ID'],
-        CHANNEL_NO: reqParams['channelNo'],
-      }
-
     })
 
 

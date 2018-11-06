@@ -157,7 +157,6 @@ export default class HandleBill extends React.Component {
       nameOnCard,
       creditLimit,
       newBalance,
-      bankNo,
     } = this.state;
     if (bankName && billDate && fullCardNum
       && paymentDueDate && nameOnCard && creditLimit && newBalance
@@ -172,11 +171,8 @@ export default class HandleBill extends React.Component {
 
   render() {
     const {
-      bankName,
-      fullCardNum,
       enabelBtn
     } = this.state;
-
     return [<Header key={1} title="手写账单"/>, <style key={2}>
       {
         `
@@ -227,7 +223,7 @@ export default class HandleBill extends React.Component {
           key: "newBalance",
           type:"number",
         }].map((v, k) => {
-          const {name, disabled, value,type, divTag = false, key, placeHolder, icon, code = '0'} = v;
+          const {name, disabled, type, divTag = false, key, placeHolder, icon, code = '0'} = v;
           return <div key={k} style={styles.item}>
             <div style={styles.name}>{name}</div>
             {

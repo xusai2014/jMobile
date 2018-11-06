@@ -106,7 +106,6 @@ export default class EditCard extends React.Component {
     } else if (!resvPhoneNo) {
       Toast.info('请输入预留手机号')
       return;
-    } else {
     }
     if (!regBankCard.test(cardNo)) {
       Toast.info('请输入正确的银行卡号')
@@ -273,7 +272,7 @@ export default class EditCard extends React.Component {
         <div style={styles.typeDes}>信用卡类型</div>
         <InputRadio activeOne={ activeOne } setActiveOne={(v) => {
           if (!this.props.bindSelfCard && v == 1) {
-
+            return;
           } else {
             this.setState({activeOne: v})
           }
@@ -310,8 +309,8 @@ export default class EditCard extends React.Component {
           placeHolder: "请输入发卡行预留手机号",
           type:"number"
         }].map((v, k) => {
-          const {name, disabled = false, btnTag = false, key,type, value, placeHolder, icon} = v;
-          const {cardData = []} = this.state;
+          const {name, disabled = false, btnTag = false, key, type, placeHolder, icon} = v;
+          const { cardData = []} = this.state;
           let property = activeOne == 1 ? 'usalCardData' : "cardData";
           const val = this.state[property][key] ? this.state[property][key] : ''
           return <div key={k} style={styles.item}>
@@ -385,27 +384,15 @@ export default class EditCard extends React.Component {
             }
 
             {icon ? <img onClick={() => {
-              jsNative.nativeOcrBankCard().then((data) => {
-                const {
-                  cardType,
-                  bankName,
-                  expiryDate,
-                  bankCode,
-                  cardName,
-                  cardNumber = '',
-                  errorCode,
-                } = data;
-
-
-                if (activeOne == 1) {
-                  this.setDeepState('usalCardData', key, cardNumber, () => this.enableBtn('usalCardData'))
-
-                } else {
-                  this.setDeepState('cardData', key, cardNumber, () => this.enableBtn('cardData'))
-
-                }
-              })
-            }}
+                            jsNative.nativeOcrBankCard().then((data) => {
+                              const {cardNumber = '',} = data;
+                              if (activeOne == 1) {
+                                this.setDeepState('usalCardData', key, cardNumber, () => this.enableBtn('usalCardData'))
+                              } else {
+                                this.setDeepState('cardData', key, cardNumber, () => this.enableBtn('cardData'))
+                              }
+                            })
+                          }}
                          src={icon} style={ styles.img}/> : null}
           </div>
 

@@ -175,7 +175,7 @@ export default class AddBill extends React.Component {
           key: "newBalance",
           type: 'number'
         }].map((v, k) => {
-          const {name, disabled, value, key, type, placeHolder, icon, code = '0'} = v;
+          const {name, disabled, key, type, placeHolder, icon, code = '0'} = v;
           return <div key={k} style={styles.item}>
             <div style={styles.name}>{name}</div>
             {

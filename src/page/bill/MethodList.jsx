@@ -13,7 +13,7 @@ import {getBankList, getEmailList} from '../../actions/reqAction';
 export default class MethodList extends React.Component{
   async componentWillMount(){
     this.props.dispatch(getBankList()).then((result)=>{
-      const { state ={} } = this.props.location;
+
     },(err)=>{
     });
   }

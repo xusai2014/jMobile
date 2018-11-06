@@ -18,7 +18,6 @@ export const generateString = ()=>{
 */
 import React from 'react';
 import { Switch,Route} from 'react-router-dom';
-import pathList from './config';
 import Loadable from 'react-loadable';
 import Loading from '../compoents/Loading';
 export default ()=>(<Switch>${routerString.join('')}</Switch>)`;
@@ -36,9 +35,6 @@ export default ()=>(<Switch>${routerString.join('')}</Switch>)`;
 */
 import React from 'react';
 import { Switch,Route} from 'react-router-dom';
-import pathList from './config';
-import Loadable from 'react-loadable';
-import Loading from '../compoents/Loading';
 ${imports.join('')}
 export default ()=>(<Switch>${routers.join('')}</Switch>)`;
   fs.writeFileSync(path.join(__dirname,`../src/router/serverRouters.jsx`),string1,'utf-8');

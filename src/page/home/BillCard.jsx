@@ -5,7 +5,7 @@ import {InitDecorator} from "../../compoents/InitDecorator";
 import {Modal, Progress, Toast}  from "antd-mobile";
 import {jsNative} from "sx-jsbridge";
 import {waitFunc} from "../../utils/util";
-import globalStyle from "../../style";
+import globalStyle from "../../globalStyle";
 import styles from './style/card.less'
 const {loginHelper} = jsNative;
 const {prompt, alert} = Modal;
@@ -29,9 +29,7 @@ export default class BillCard extends React.Component {
   async callSyncBill(task_id, importBillType, abbr, cardNum, bank_name) {
     // TODO 仅支持网银
     Toast.loading('请稍候', 0);
-    if (importBillType == '01') {
-
-    } else {
+    if (importBillType != '01') {
       this.props.dispatch(getLoginList({
         abbr,
         cardType: 'CREDITCARD',
@@ -106,7 +104,7 @@ export default class BillCard extends React.Component {
    */
   handleStatus(status, taskId, loginType) {
     const {data = {}} = status;
-    const {phase, phase_status = '', input, description} = data;
+    const { phase_status = '', input, description} = data;
     switch (phase_status) {
       case 'WAIT_CODE'://输入验证码
         Toast.hide();
@@ -162,20 +160,12 @@ export default class BillCard extends React.Component {
    *   @description 第三步流程的分支流程，输入验证码检查登录状态
    */
   async verifycation({taskId, value: code}) {
-    let codeStatus = '';
     Toast.loading('请稍候', 0)
-
-    codeStatus = await this.props.dispatch(verifyCode({
+    await this.props.dispatch(verifyCode({
       taskId,
       code,
     }));
-
-    const {data} = codeStatus;
-    //if(value == '200'){
-
-    //} else {
     this.loopLogin(taskId);
-    //}
   }
 
   /**
@@ -225,13 +215,8 @@ export default class BillCard extends React.Component {
 
   judgeTaskStatus(status) {
     const {data} = status;
-    const {phase, phase_status} = data;
-    switch (phase_status) {
-      case "DOING":
-        return true;
-      default:
-        return false;
-    }
+    const { phase_status} = data;
+    return phase_status == "DOING"
   }
 
 

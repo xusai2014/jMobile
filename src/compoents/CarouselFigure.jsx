@@ -9,7 +9,6 @@ export  default class CarouselFigure extends React.Component {
     this.state = {
       bannerData: []
     };
-    let {prodType} = this.props;
   }
 
   render() {
@@ -27,7 +26,6 @@ export  default class CarouselFigure extends React.Component {
             dotActiveStyle={{width: '0.12rem', height: '0.12rem', background: "#fff"}}
           >
             {bannerData.map((res, k) => {
-              const {  adNm= '', adNo=''} = res;
               return (<a key={k} href={res.linkUrl} >
                   <img
                     style={{width: width, height: height}}

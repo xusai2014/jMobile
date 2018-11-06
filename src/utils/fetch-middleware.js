@@ -19,7 +19,6 @@ export const ActionCreator = (type, url, method = 'GET', data, key ,cancel = fal
       types: [...type],
       payload: key,
       promise: ()=>fetchPromise(url, method , data, true,true)
-
     }
   }
 }

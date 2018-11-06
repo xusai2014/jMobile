@@ -3,7 +3,7 @@ import Header from "../../compoents/Header";
 import {Tabs, Toast, Modal} from "antd-mobile"
 import {getEchoForm, getLoginList, loginCyber, removeBillAllStatus, removeLoginStatus,} from "../../actions/reqAction";
 import {InitDecorator} from "../../compoents/InitDecorator";
-import globalStyle from "../../style";
+import globalStyle from "../../globalStyle";
 import {jsNative} from "sx-jsbridge";
 const {alert} = Modal
 
@@ -105,7 +105,6 @@ export default class CyberBank extends React.Component {
         return
       }
       Toast.loading('请稍候', 0);
-      const {data: x} = this.props.echoForm;
       const loginStatus = await this.props.dispatch(loginCyber({
         password,
         abbr,
@@ -233,7 +232,7 @@ export default class CyberBank extends React.Component {
 
   enableBtn(key) {
     const data = this.state.inputData[key] ? this.state.inputData[key] : {}
-    const {password, protocolSelected = true, username, disableBtn} = data;
+    const {password, protocolSelected = true, username, } = data;
     if (password && protocolSelected && username) {
       this.setDeepState('inputData', key, {
         disableBtn: false
@@ -311,7 +310,7 @@ export default class CyberBank extends React.Component {
       >
         {
           loginData.map((v, k) => {
-            const {items, login_type, disabled = false} = v;
+            const {items, login_type, } = v;
             const {
               username = '',
               password = '',

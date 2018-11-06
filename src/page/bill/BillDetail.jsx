@@ -8,10 +8,9 @@ import {
   verifyCode
 } from "../../actions/reqAction";
 import {waitFunc} from "../../utils/util";
-import LoadCom from "../../compoents/LoadCom";
-import globalStyle from "../../style";
+import globalStyle from "../../globalStyle";
 import KeyWord from "../home/components/KeyWord";
-const {operation,alert,prompt} = Modal;
+const { alert, prompt } = Modal;
 @InitDecorator((state)=>{
   return {
     billDetail:state.BillReducer.billDetail,
@@ -38,9 +37,8 @@ export default class BillDetail extends React.Component {
 
   async callSyncBill(task_id, importBillType,abbr,cardNum) {
     Toast.loading('请稍候...',0);
-    if(importBillType == '01'){
+    if(importBillType != '01'){
 
-    } else {
       this.props.dispatch(getLoginList({
         abbr,
         cardType: 'CREDITCARD',
@@ -115,7 +113,7 @@ export default class BillDetail extends React.Component {
    */
   handleStatus(status, taskId, loginType) {
     const {data = {}} = status;
-    const {phase, phase_status = '', input, description} = data;
+    const { phase_status = '', input, description} = data;
     switch (phase_status) {
       case 'WAIT_CODE'://输入验证码
         Toast.hide()
@@ -155,7 +153,6 @@ export default class BillDetail extends React.Component {
           syncBegin:false
         })
         Toast.info('同步失败');
-        return;
     }
   }
 
@@ -168,19 +165,13 @@ export default class BillDetail extends React.Component {
    */
   async verifycation({taskId, value: code}) {
     Toast.loading('请稍候...',0)
-    let codeStatus = ''
 
-    codeStatus = await this.props.dispatch(verifyCode({
+    await this.props.dispatch(verifyCode({
       taskId,
       code,
     }));
 
-    const {data} = codeStatus;
-    //if(value == '200'){
-
-    //} else {
     this.loopLogin(taskId);
-    //}
   }
 
   /**
@@ -221,7 +212,7 @@ export default class BillDetail extends React.Component {
 
   judgeTaskStatus(status) {
     const {data} = status;
-    const {phase, phase_status} = data;
+    const { phase_status} = data;
     switch (phase_status) {
       case "DOING":
         return true;
@@ -289,7 +280,7 @@ export default class BillDetail extends React.Component {
   }
 
   initData(){
-    const { bank_id:bankId, bank_name ,card_num:cardNum } = this.props.location.state;
+    const { bank_id:bankId, card_num:cardNum } = this.props.location.state;
 
     this.props.dispatch(getBillDetaillList({
       cardNum,bankId
@@ -428,9 +419,8 @@ export default class BillDetail extends React.Component {
   }
 
   render() {
-    const {billDetailList ={},payDetail= [],billDetail} = this.props;
-    const {expandOne, visible,
-      currentNum, pageSize,totalPages, pageData
+    const {billDetailList ={},payDetail= [], } = this.props;
+    const {expandOne, visible, pageData
     } = this.state;
     const { state } = this.props.location;
     const { bank_name = '银行',bank_id ,card_num } = state;
@@ -443,7 +433,6 @@ export default class BillDetail extends React.Component {
       bill_type = '',
       min_payment = '',
       items = [],
-      current_bill_remain_amt = '0.00',
       new_balance='0.00',
       importBillType,
       abbr,
@@ -451,7 +440,7 @@ export default class BillDetail extends React.Component {
     } = billDetailList;
     const { billId } = this.props.match.params;
 
-    const {day, date, des,key:statusKey} = this.judgeStatus(bill_type, payment_due_date, bill_date)
+    const {day, des, key:statusKey } = this.judgeStatus(bill_type, payment_due_date, bill_date)
     return [<Header title={`${bank_name}`}
                     right={<img onClick={()=>{
                       alert('', <span className="alert_content">账单删除后，如需再次查询，需要重新导入账单</span>, [
@@ -544,7 +533,7 @@ export default class BillDetail extends React.Component {
         >
           <div style={{background: '#FFFFFF',height:'auto',marginBottom:'2.2rem'}}>
             {items.map((v, k) => {
-              const {billType,bill_month,bill_id,bill_date} = v;
+              const {billType,bill_id,bill_date} = v;
               const duM = moment(bill_date);
               const days = duM.diff(moment(), 'days');
               let billItemDes = '';

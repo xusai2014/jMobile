@@ -13,35 +13,32 @@ export const initJSBridge = (mock = false) => {
   } else if (window.mpos_bridge) {
     nativeBridge = window.mpos_bridge;
     // android 4.2以下及其他
-  } else if(mock){
-    if(mock){
-      //提供APP输出能力
-      nativeBridge = {
-        postMessage:(obj)=>{
+  } else if (mock) {
+    //提供APP输出能力
+    nativeBridge = {
+      postMessage: (obj) => {
 
-          const { functionName, data, callbackId } = obj;
-          if(!functionName){
-            const {responseId,data} = obj;
-            setTimeout(()=>{
-              JSBridge.receiveMessage({
-                data,
-                callbackId,
-              })
-            },1000);
-          } else {
-            setTimeout(()=>{
-              //调用native注入方法
-              const response = mockData[functionName] //模拟native注册的程序
-              JSBridge.receiveMessage({callbackId, data:{params:data,...response},})
-            },1000)
-          }
-        },
-      }
-
-      //通过WEB方法采集信息、加工，原生交互务阶段执行或者webview初始化阶段调用。
-      document.onload =()=>{
-        //执行web为native注册的方法
-      }
+        const {functionName, data, callbackId} = obj;
+        if (!functionName) {
+          const { data } = obj;
+          setTimeout(() => {
+            JSBridge.receiveMessage({
+              data,
+              callbackId,
+            })
+          }, 1000);
+        } else {
+          setTimeout(() => {
+            //调用native注入方法
+            const response = mockData[functionName] //模拟native注册的程序
+            JSBridge.receiveMessage({callbackId, data: {params: data, ...response},})
+          }, 1000)
+        }
+      },
+    }
+    //通过WEB方法采集信息、加工，原生交互务阶段执行或者webview初始化阶段调用。
+    document.onload = () => {
+      //执行web为native注册的方法
     }
 
   } else {
@@ -69,7 +66,7 @@ export const initJSBridge = (mock = false) => {
       }
 
       if (this._getSystem() == 0 && this._getAndroidVersion() <= 4.2) {
-        const result = prompt(`mposjs://postMessage?jsonParams=${JSON.stringify({ 
+        const result = prompt(`mposjs://postMessage?jsonParams=${JSON.stringify({
           data,
           functionName,
           callbackId: thisCallbackId
@@ -126,7 +123,7 @@ export const initJSBridge = (mock = false) => {
           };
           // 如果是android4.2以下，通过prompt返回
         } else if (this._getSystem() == 0 && this._getAndroidVersion() <= 4.2) {
-          prompt(`mposjs://postMessage?jsonParams=${JSON.stringify({ 
+          prompt(`mposjs://postMessage?jsonParams=${JSON.stringify({
             responseId,
             data: result,
           })}`)
@@ -168,7 +165,7 @@ export const initJSBridge = (mock = false) => {
     _getAndroidVersion: () => {
       const ua = navigator.userAgent.toLowerCase();
       let version = null;
-      if (ua.indexOf('android') > 0) {
+      if (ua.includes('android')) {
         const reg = /android [\d._]+/gi;
         const v_info = ua.match(reg);
         // 得到版本号
@@ -183,7 +180,7 @@ export const initJSBridge = (mock = false) => {
     _getIosVersion: () => {
       const ua = navigator.userAgent.toLowerCase();
       let version = null;
-      if (ua.indexOf('like mac os x') > 0) {
+      if (ua.includes('like mac os x')) {
         const reg = /os [\d._]+/gi;
         const v_info = ua.match(reg);
         // 得到版本号9.3.2或者9.0

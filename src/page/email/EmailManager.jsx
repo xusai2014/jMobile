@@ -4,7 +4,7 @@ import {Icon, SwipeAction, List, Modal} from "antd-mobile";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {directImport, getEmailList, removeEmail} from "../../actions/reqAction";
 import {Toast} from "antd-mobile";
-import globalStyle from "../../style";
+import globalStyle from "../../globalStyle";
 const alert = Modal.alert;
 
 @InitDecorator((state)=>{

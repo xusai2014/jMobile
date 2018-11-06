@@ -48,8 +48,8 @@ export default class LoadCom extends React.Component{
 
   }
   render(){
-    const { status = '',currentNum, pageSize,totalPages } = this.props;
-    const { isLoading,isMore} = this.state;
+    const { currentNum, totalPages } = this.props;
+    const { isLoading, } = this.state;
 
     return(<div id="wrapper" style={{
       textAlign: 'center',

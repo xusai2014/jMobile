@@ -6,7 +6,7 @@ import {Toast,Modal} from "antd-mobile";
 import {
   regEmail
 } from '../../utils/util';
-import globalStyle from "../../style";
+import globalStyle from "../../globalStyle";
 import { jsNative} from 'sx-jsbridge'
 const { alert } = Modal
 @InitDecorator((state) => {

@@ -68,7 +68,7 @@ export default class FreeInterest extends React.Component {
       apiInitData = [],
     } = this.props;
     const {
-      isShow, closeFunc, openFunc,
+      isShow, closeFunc,
     } = parentParams;
     const {
       loadingData

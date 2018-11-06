@@ -45,7 +45,7 @@ export default class BankCardList extends React.Component{
         </div>,
         <div key={'c'} style={{width:"7.5rem",height:"0.3rem"}}></div>,
         cardsList.map((v,k)=>{
-          const { bankNm, actNo,actName,imgSrc ='', action, bankNo,bindType} = v;
+          const { bankNm, actNo,actName, bankNo } = v;
           return [<div key={k} onClick={()=>{this.props.history.push('/manual/add',{
             fullCardNum:actNo, nameOnCard:actName, bankNo,bankName:bankNm,
           })}} style={{margin:"0 0.3rem 0 0",background: '#FFFFFF',width:'7.5rem',height:'1rem',display:'flex',alignItems:'center'}}>

@@ -6,7 +6,7 @@ import Adtivity from "./Adtivity";
 export default class Result extends React.Component {
 
   render() {
-    const {type, data = '{}'} = this.props.match.params;
+    const {type, } = this.props.match.params;
     const {describe, footer, title, img} = this.results[type];
 
     const {state ={}} = this.props.location;

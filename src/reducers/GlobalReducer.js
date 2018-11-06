@@ -17,7 +17,7 @@ const initialState = {
     }
 };
 //全局状态信息，数据信息存储
-export default function (state = initialState, actions) {
+export default function (state = initialState, actions = {}) {
     switch (actions.type) {
       case 'syncData':
         const { TOKEN_ID ='',mobileNoEnc=''} = actions.data
@@ -40,7 +40,7 @@ export default function (state = initialState, actions) {
                 requestStaus: true,
             };
       case 'FINISH':
-          const { type, data} = actions;
+          const {  data} = actions;
             return {
                 ...state,
                 type:data,

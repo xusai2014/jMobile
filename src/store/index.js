@@ -10,7 +10,7 @@ function promiseMiddleware() {
       return next(action)
     }
 
-    const [REQUEST, SUCCESS, FAILURE] = types;
+    const [ , SUCCESS, FAILURE] = types;
 
     return promise().then(
       (result) => {

@@ -18,20 +18,20 @@ export default class KeyWord extends React.Component {
   markRest(activeCard) {
     Toast.loading('请稍候...')
     const {card_num: cardNum, bank_id: bankId} = activeCard;
-    const {repaymentAmount, x} = this.state;
+    const {repaymentAmount, } = this.state;
     if (!repaymentAmount) {
       Toast.info('请输入还款金额');
       return
     }
     if (/(^[0-9](\d+)?(\.\d{1,2})?$)|(^0$)|(^\d\.\d{1,2}$)/.test(repaymentAmount) || /([0-9]+\.[0-9]{2})[0-9]*/.test(repaymentAmount)) {
-
+      return;
     } else {
       Toast.info('请输入正确金额');
-      return
+      return;
     }
     if (parseFloat(repaymentAmount) <= 0) {
       Toast.info('请输入正确金额');
-      return
+      return;
     }
     this.props.dispatch(setBillRest({
       cardNum,

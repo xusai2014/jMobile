@@ -34,7 +34,7 @@ export default class CyberBank extends React.Component {
       abbr,
       cardType: cardType,
     })).then((result) => {
-      debugger;
+
     }, (err) => {
     });
 

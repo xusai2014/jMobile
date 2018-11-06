@@ -399,7 +399,7 @@ export default class BillDetail extends React.Component {
       pageSize
     })).then((result)=>{
       const { data = {}} = result;
-      debugger;
+
       this.setState({
         pageData:{
           ...this.state.pageData,
@@ -417,7 +417,7 @@ export default class BillDetail extends React.Component {
       pageSize
     })).then((result)=>{
       const { data = []} = result;
-      debugger;
+
       this.setState({
         pageData:{
           ...this.state.pageData,

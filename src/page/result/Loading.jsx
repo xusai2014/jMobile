@@ -259,7 +259,7 @@ export default class LoadingStatus extends React.Component{
     } while (continueLoop)
     const {data = {}} =pollingStatus;
     const { resultList = []} = data;
-    debugger;
+
     if( typeof data == 'undefined' || resultList.length == 0 ){
       this.goResult(loginType,2,'无账单数据')
       return;
@@ -278,8 +278,6 @@ export default class LoadingStatus extends React.Component{
       taskId = "586b4860-9c76-11e8-89e7-00163e0dfac7",
     } = state;
     this.checkTask(taskId);
-    debugger;
-
   }
   render() {
     const  { type,}   = this.props.match.params;

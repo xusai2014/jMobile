@@ -9,7 +9,6 @@ import {
 } from "../../actions/reqAction";
 import {regBankCard, regIdCard, regMobile} from '../../utils/util';
 import {jsNative} from 'sx-jsbridge'
-const prompt = Modal.prompt;
 
 @InitDecorator((state) => {
   return {
@@ -142,7 +141,7 @@ export default class EditCard extends React.Component {
       })).then(() => {
           Toast.hide()
           const len = resvPhoneNo.length
-          prompt('输入验证码', `请输入手机号${resvPhoneNo ? `${resvPhoneNo.slice(0, 3)}****${resvPhoneNo.slice(-4, len)}` : ''}收到的验证码`, [{
+              Modal.prompt('输入验证码', `请输入手机号${resvPhoneNo ? `${resvPhoneNo.slice(0, 3)}****${resvPhoneNo.slice(-4, len)}` : ''}收到的验证码`, [{
             text: '取消',
             onPress: value => new Promise((resolve) => {
               resolve();

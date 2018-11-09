@@ -7,7 +7,6 @@ import {getBillId, getCardsList, getIndetiyInfo, looseCard} from "../../actions/
 import {jsNative} from 'sx-jsbridge'
 import {judgeEnv} from "../../utils/util";
 import globalStyle from "../../globalStyle";
-const {alert} = Modal;
 
 
 @InitDecorator(
@@ -58,7 +57,7 @@ export default class CardsList extends React.Component {
   }
 
   async removeCard(cardNo) {
-    alert('', <span className="alert_content">是否确认解绑该信用卡</span>, [
+      Modal.alert('', <span className="alert_content">是否确认解绑该信用卡</span>, [
       {text: '取消', onPress: () => console.log('cancel'), style: globalStyle.cancelStyle},
       {
         text: "确认", onPress: () => {
@@ -226,7 +225,7 @@ export default class CardsList extends React.Component {
                     this.props.history.push(`/bill/detail/${result.data}`,{bank_name:bankNm,card_num:actNo.substr(actNo.length-4),bank_id:bankNo})
                   } else {
                     // TODO  跳转逻辑 jerry
-                    alert('', <span className="alert_content">此卡还未添加账单，请先导入账单再查看详情。</span>, [
+                      Modal.alert('', <span className="alert_content">此卡还未添加账单，请先导入账单再查看详情。</span>, [
                       {
                         text: "添加账单", onPress: () => {
                         this.props.history.push('/bill/method')

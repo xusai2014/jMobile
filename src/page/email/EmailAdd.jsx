@@ -8,7 +8,6 @@ import {
 } from '../../utils/util';
 import globalStyle from "../../globalStyle";
 import { jsNative} from 'sx-jsbridge'
-const { alert } = Modal
 @InitDecorator((state) => {
   return {
     emailLogin: state.BillReducer.emailLogin
@@ -76,7 +75,7 @@ export default class EmailAdd extends React.Component {
     const { DATA:taskId,RESULTCODE} = data;
     if( RESULTCODE == "1000"){
       Toast.hide()
-      alert('',<span className="alert_content">再次登录将会覆盖掉您原有的登录信息，您确定再次登录吗？</span>,[
+        Modal.alert('',<span className="alert_content">再次登录将会覆盖掉您原有的登录信息，您确定再次登录吗？</span>,[
         { text: '取消', onPress: () => console.log('cancel'), style: globalStyle.cancelStyle},
         { text: '确认', onPress: () => {
           this.props.dispatch(removeLoginStatus({taskId})).then(()=>{

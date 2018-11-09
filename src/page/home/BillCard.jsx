@@ -8,7 +8,6 @@ import {waitFunc} from "../../utils/util";
 import globalStyle from "../../globalStyle";
 import styles from './style/card.less'
 const {loginHelper} = jsNative;
-const {prompt, alert} = Modal;
 
 @withRouter
 @InitDecorator((state) => {
@@ -38,7 +37,7 @@ export default class BillCard extends React.Component {
         const {data} = result;
         const {subtype = ''} = data;
         if (subtype) {
-          alert(<span className="alert_title">暂时无法获取账单的最新状态</span>, <span className="alert_content">如果您已通过其导入它平台还款，建议您通过网银导入</span>, [
+            Modal.alert(<span className="alert_title">暂时无法获取账单的最新状态</span>, <span className="alert_content">如果您已通过其导入它平台还款，建议您通过网银导入</span>, [
             {text: '暂不需要', onPress: () => console.log('置顶聊天被点击了'), style: globalStyle.cancelStyle},
             {
               text: '通过网银导入',
@@ -47,7 +46,7 @@ export default class BillCard extends React.Component {
             }
           ]);
         } else {
-          alert(<span className="alert_title">该银行暂不支持同步您的账单数据</span>, '', [
+            Modal.alert(<span className="alert_title">该银行暂不支持同步您的账单数据</span>, '', [
             {text: '我知道了', onPress: () => console.log('置顶聊天被点击了'), style: globalStyle.singleStyle}
           ]);
         }
@@ -175,11 +174,11 @@ export default class BillCard extends React.Component {
    *   @description Popup提示，输入信息，异步处理
    */
   promptClick({input, taskId, description, callback}) {
-    prompt('输入验证码', description, [{
+      Modal.prompt('输入验证码', description, [{
       text: '取消',
       onPress: value => new Promise((resolve) => {
         resolve();
-        alert(<span className="alert_title">是否退出当前认证流程</span>, <span
+          Modal.alert(<span className="alert_title">是否退出当前认证流程</span>, <span
           className="alert_content">选择“是”将退出当前认证流程已填写信息将丢失</span>, [
           {
             text: "是", onPress: () => {
@@ -300,7 +299,7 @@ export default class BillCard extends React.Component {
       } else if (authSts == '-1') {
         //数据尚未装载完毕不处理
       } else if (authSts == '99') {
-        alert(<span className="alert_title">您尚未通过实名认证，请先进行实名认证</span>, '', [
+          Modal.alert(<span className="alert_title">您尚未通过实名认证，请先进行实名认证</span>, '', [
           {
             text: "取消", onPress: () => {
           }, style: globalStyle.cancelStyle

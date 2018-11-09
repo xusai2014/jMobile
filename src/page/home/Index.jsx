@@ -14,7 +14,6 @@ import MoreItem from "./components/MoreItem";
 import IconEnter from "./components/IconEnter";
 import FreeInterest from "./components/FreeInterest";
 const {loginHelper, nativeOpenNewWebView} = jsNative;
-const {alert} = Modal;
 import styles from './style/index.less'
 
 @InitDecorator((state) => {
@@ -108,7 +107,7 @@ export default class Index extends React.Component {
       } else if (authSts == '-1') {
         //数据尚未装载完毕不处理
       } else if (authSts == '99') {
-        alert(<span className="alert_title">您尚未通过实名认证，请先进行实名认证</span>, '', [
+          Modal.alert(<span className="alert_title">您尚未通过实名认证，请先进行实名认证</span>, '', [
           {
             text: "取消", onPress: () => {
           },
@@ -172,7 +171,7 @@ export default class Index extends React.Component {
       jsNative.nativeOpenNewWebView({url: gameUri}, () => {
       });
     } else {
-      alert(<span className="alert_title">免责声明</span>,
+        Modal.alert(<span className="alert_title">免责声明</span>,
         <span className="alert_content">您所访问的页面将跳转到第三方网站，请自行对网站所提供的信息、服务加以辨别及判断，并承担使用内容而引起的所有风险</span>,
         [{
           text: '我知道了',

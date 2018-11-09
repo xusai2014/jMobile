@@ -6,7 +6,7 @@ import { Toast,Modal } from 'antd-mobile';
 import {waitFunc} from "../../utils/util";
 import globalStyle from "../../globalStyle";
 import {Prompt,} from "react-router-dom";
-const {prompt,alert} = Modal;
+
 
 const results = {
   cyber:{
@@ -177,13 +177,12 @@ export default class LoadingStatus extends React.Component{
    *   @description Popup提示，输入信息，异步处理
    */
   promptClick({input, taskId, description, callback}) {
-    prompt('输入验证码', description, [{
+      Modal.prompt('输入验证码', description, [{
       text: '取消',
       onPress: value => new Promise((resolve) => {
         resolve();
-        alert(<span className="alert_title">是否退出当前认证流程</span>, <span className="alert_content">选择“是”将退出当前认证流程已填写信息将丢失</span>,[
+          Modal.alert(<span className="alert_title">是否退出当前认证流程</span>, <span className="alert_content">选择“是”将退出当前认证流程已填写信息将丢失</span>,[
           {text:"是",onPress:()=>{
-            //prompt().close()
           this.props.history.go(-1)
           },style: globalStyle.cancelStyle},
           {text:"否",onPress:()=>{
@@ -205,10 +204,6 @@ export default class LoadingStatus extends React.Component{
           }
           callback({taskId, value})
           resolve();
-          // setTimeout(() => {
-          //   this.setState({modal: true, description: "您绑定的卡为借记卡，卡包只支持绑定信用卡，请您重新绑定"})
-          //   console.log(`value:${value}`);
-          // }, 1000);
         }),
       },
     ], 'default', null, ['请输入验证码'])
@@ -274,7 +269,7 @@ export default class LoadingStatus extends React.Component{
     return [<Header key="1" title={`正在导入${title}`} ></Header>,
       <Prompt message={()=>{
                 if(!window.leaveStatu){
-                  alert(<span className="alert_title">返回将会中断导入，确认继续吗？</span>,'',[
+                    Modal.alert(<span className="alert_title">返回将会中断导入，确认继续吗？</span>,'',[
                     {text:"取消",onPress:()=>{
                       window.leaveStatu = false
                     },style: globalStyle.cancelStyle},
@@ -308,48 +303,5 @@ export default class LoadingStatus extends React.Component{
           marginTop:'5rem'
         }}>{progress >0?'':'登录时间大约30秒'}</div>
     </div>]
-  }
-}
-
-const styles = {
-  describe:{
-    fontSize: "0.36rem",
-    color: "#333333",
-    letterSpacing: '-1PX',
-    textAlign:'center',
-
-  },
-  resason:{
-    fontSize: "0.24rem",
-    color: '#999999',
-    letterSpacing: '-0.67PX',
-    textAlign: "center",
-    margin:'0.3rem 1.53rem 0 1.53rem',
-    width:'4.44rem'
-  },finishBtn:{
-    background:'#4C7BFE',
-    boxShadow: '0 0.06rem 0.12rem 0 #9BB5FF',
-    borderRadius: "0.08rem",
-    margin:"1.4rem 0.16rem 0 0.16rem",
-    lineHeight:"1.18rem",
-    textAlign:'center',
-    fontSize: "0.34rem",
-    color: "#FFFFFF",
-    letterSpacing: '-0.011rem',
-  },
-  actionReplace:{
-    fontSize: "0.36rem",
-    letterSpacing: "0",
-    color: "#4C7BFE",
-    textAlign:'center',
-    marginTop:'1.21rem'
-  },
-  actionsImport:{
-    fontSize: "0.36rem",
-    letterSpacing: "0",
-    color: "#4C7BFE",
-    textAlign:'center',
-    marginTop:'0.63rem',
-    paddingBottom:"0.36rem"
   }
 }

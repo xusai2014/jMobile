@@ -10,7 +10,6 @@ import {
 import {waitFunc} from "../../utils/util";
 import globalStyle from "../../globalStyle";
 import KeyWord from "../home/components/KeyWord";
-const { alert, prompt } = Modal;
 @InitDecorator((state)=>{
   return {
     billDetail:state.BillReducer.billDetail,
@@ -47,12 +46,12 @@ export default class BillDetail extends React.Component {
         const {data} = result;
         const {subtype = ''} = data;
         if (subtype) {
-          alert(<span className="alert_title">暂时无法获取账单的最新状态</span>, <span className="alert_content">如果您已通过其导入它平台还款，建议您通过网银导入</span>, [
+            Modal.alert(<span className="alert_title">暂时无法获取账单的最新状态</span>, <span className="alert_content">如果您已通过其导入它平台还款，建议您通过网银导入</span>, [
             {text: '暂不需要', onPress: () => console.log('置顶聊天被点击了'),style: globalStyle.cancelStyle},
             {text: '通过网银导入', onPress: () => this.props.history.push('/bill/method',),style: globalStyle.sureStyle }
           ]);
         } else {
-          alert(<span className="alert_title">该银行暂不支持同步您的账单数据</span>, '', [
+            Modal.alert(<span className="alert_title">该银行暂不支持同步您的账单数据</span>, '', [
             {text: '我知道了', onPress: () => console.log('置顶聊天被点击了'), style: globalStyle.singleStyle}
           ]);
         }
@@ -181,7 +180,7 @@ export default class BillDetail extends React.Component {
    *   @description Popup提示，输入信息，异步处理
    */
   promptClick({input, taskId, description, callback}) {
-    prompt('输入验证码', description, [{
+      Modal.prompt('输入验证码', description, [{
       text: '取消',
       onPress: value => new Promise((resolve) => {
         resolve();
@@ -443,7 +442,7 @@ export default class BillDetail extends React.Component {
     const {day, des, key:statusKey } = this.judgeStatus(bill_type, payment_due_date, bill_date)
     return [<Header title={`${bank_name}`}
                     right={<img onClick={()=>{
-                      alert('', <span className="alert_content">账单删除后，如需再次查询，需要重新导入账单</span>, [
+                        Modal.alert('', <span className="alert_content">账单删除后，如需再次查询，需要重新导入账单</span>, [
                         { text: '取消', onPress: () => console.log('cancel'),style: globalStyle.cancelStyle},
                         { text: '确认', onPress: () => this.removeBill(billId),style: globalStyle.sureStyle},
                       ])

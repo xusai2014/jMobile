@@ -5,7 +5,6 @@ import {InitDecorator} from "../../compoents/InitDecorator";
 import {directImport, getEmailList, removeEmail} from "../../actions/reqAction";
 import {Toast} from "antd-mobile";
 import globalStyle from "../../globalStyle";
-const alert = Modal.alert;
 
 @InitDecorator((state)=>{
   return {
@@ -73,7 +72,7 @@ export default class EmailManager extends React.Component{
                 {
                   text: '删除',
                   onPress: () => {
-                    alert('', <span className="alert_content">确定删除邮箱</span>, [
+                      Modal.alert('', <span className="alert_content">确定删除邮箱</span>, [
                       { text: '取消', onPress: () => console.log('cancel'),style: globalStyle.cancelStyle},
                       { text: '确认', onPress: () => this.removeEmailOne(uuid),style: globalStyle.sureStyle },
                     ])

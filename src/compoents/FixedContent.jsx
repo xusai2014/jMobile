@@ -1,6 +1,5 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom'
-import {getSearch} from "../utils/util";
 
 class FixedContent extends React.Component {
 

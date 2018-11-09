@@ -309,7 +309,6 @@ export default class EditCard extends React.Component {
           type:"number"
         }].map((v, k) => {
           const {name, disabled = false, btnTag = false, key, type, placeHolder, icon} = v;
-          const { cardData = []} = this.state;
           let property = activeOne == 1 ? 'usalCardData' : "cardData";
           const val = this.state[property][key] ? this.state[property][key] : ''
           return <div key={k} style={styles.item}>

@@ -58,7 +58,6 @@ export default class CyberBank extends React.Component {
         })
       }
     }, (err) => {
-      debugger
     })
   }
 

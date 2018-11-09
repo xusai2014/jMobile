@@ -137,7 +137,6 @@ export default class AddBill extends React.Component {
 
   render() {
     const {
-      bankName,
       enabelBtn,
     } = this.state;
 

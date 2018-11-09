@@ -212,12 +212,7 @@ export default class BillDetail extends React.Component {
   judgeTaskStatus(status) {
     const {data} = status;
     const { phase_status} = data;
-    switch (phase_status) {
-      case "DOING":
-        return true;
-      default:
-        return false;
-    }
+    return "DOING" === phase_status;
   }
 
   judgeStatus(bill_type, payment_due_date, bill_date, action) {
@@ -527,14 +522,11 @@ export default class BillDetail extends React.Component {
             if(sub == '1'){
               this.getPayDetailInfo(bank_id,card_num)
             }
-          }
-          }
+          }}
         >
           <div style={{background: '#FFFFFF',height:'auto',marginBottom:'2.2rem'}}>
             {items.map((v, k) => {
               const {billType,bill_id,bill_date} = v;
-              const duM = moment(bill_date);
-              const days = duM.diff(moment(), 'days');
               let billItemDes = '';
               const { billId } = this.props.match.params;
               if(statusKey == '03' && bill_id == billId){

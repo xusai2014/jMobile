@@ -147,7 +147,6 @@ export default class BillCard extends React.Component {
         this.setState({
           syncBegin: false
         });
-        return;
     }
   }
 

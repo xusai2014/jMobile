@@ -4,39 +4,22 @@ import {getSearch} from "../utils/util";
 
 class FixedContent extends React.Component {
 
-    setFontSize() {
-        var designedWidth = 750;
-        let actualWidth = Math.min(450, $(window).width());
-        document.documentElement.style.fontSize = actualWidth * 100 / designedWidth + 'px';
+    initStyle() {
+        const designedWidth = 750;
+        const actualWidth = Math.min(450, $(window).width());
+        window.requestAnimationFrame(()=> {
+            document.body.style.overflowY = '';
+            document.body.style.position =  'static';
+            document.documentElement.style.fontSize = actualWidth * 100 / designedWidth + 'px';
+        })
     }
 
     componentWillMount() {
-      document.body.style.overflowY = '';
-      document.body.style.position =  'static';
-        if (!sessionStorage.getItem("mobileNo")) {
-            let search = getSearch(this.props)
-            !!search ?
-                this.props.history.push(`/cca/creditApply/${search.recommendPhoneEnc}/${search.channelId}/${encodeURIComponent(search.url)}`)
-                : undefined
-        }
-        this.setFontSize();
-    }
-
-    componentDidMount() {
-
-        window.addEventListener("resize", this.setFontSize);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.setFontSize);
-    }
-
-    adjustWidth() {
-        $(this.refs.content).css(this.getContentStyle());
+        this.initStyle()
     }
 
     render() {
-        const {className, children } = this.props;
+        var {className, children,} = this.props;
         return (
             <div ref="content" className={className} style={{background: '#F5F5F5', width:'7.5rem',minHeight:gloablMinHeight}}>
                 {children}

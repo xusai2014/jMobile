@@ -315,13 +315,13 @@ export default class Index extends React.Component {
         }
       </div>,
       <div key={'c'} className={styles.addBtn}
-           onClick={() => this.loginEnter(2)}
+           onClick={() => _.debounce(this.loginEnter(2),1000)}
       >
         <img className={styles.addImg} src="/static/img/addCard@2x.png"/>
         <span className={styles.addText}>添加信用卡账单</span>
       </div>,
       <div>{(isLogged && !examineAccount) ?
-        <div className={styles.enterCard} onClick={() => this.openCardMarket()}>
+        <div className={styles.enterCard} onClick={() =>  _.debounce(this.openCardMarket(),1000)}>
           <img src="/static/img/信用卡2x.png" style={{width: "0.41rem"}}/>
           <span className={styles.applyCard}>
           办信用卡

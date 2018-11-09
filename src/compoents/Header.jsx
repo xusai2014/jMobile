@@ -12,7 +12,9 @@ class AllHeader extends React.Component {
     if (!title) {
       return;
     }
-    document.title = title;
+    window.requestAnimationFrame(()=> {
+        document.title = title;
+    })
   }
 
   componentWillReceiveProps(nextprops) {

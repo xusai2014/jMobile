@@ -8,12 +8,12 @@
 import Storage from '../store';
 import { aesDecrypt,aesEncrypt,generateSign, SIGN_KEY} from './encrypt-util'
 import {Toast,} from 'antd-mobile';
-import { apiUrl,isMock } from '../config/api'
+import { apiUrl,isMock } from '../config/api';
 import {showSingleBtnModal} from "../compoents/ModalAlert";
 import { jsNative } from "sx-jsbridge";
 const  { nativeLogin, nativeQuitLogon, nativeRequestBaseParams } = jsNative;
 
-export const ActionCreator = (type, url, method = 'GET', data, key ,cancel = false) => {
+export const ActionCreator = (type, url, method = 'GET', data = {}, key = '' ,cancel = false) => {
   return () => {
     return {
       types: [...type],
@@ -54,7 +54,7 @@ export class PromiseList {
  *   @description 网络请求方法
  *
  */
-export const  fetchPromise = async (url, method = 'GET', data, cancel = false, isRedux =false) => {
+export const  fetchPromise = async (url, method = 'GET', data = {}, cancel = false, isRedux =false) => {
   const reqParams = await nativeRequestBaseParams().then((reqParams) => {
     Storage.dispatch({type:'syncData',data:reqParams})
     return {

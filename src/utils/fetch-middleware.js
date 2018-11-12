@@ -239,21 +239,6 @@ export function filterResponse(data) {
 }
 
 /**
- * 打包公共参数
- * @param nativeParams    android/ios 原生返回接口基础参数
- * @param TRDE_CODE       接口标识
- * @returns {{APPVERSION: app版本号, OSVERSION: 手机系统版本, PLATFORM: ios/android, channelNo: 个人版/商务版, TOKEN_ID: token}}
- */
-export const packagePublicParams = (nativeParams, TRDE_CODE) => ({
-  APPVERSION: nativeParams['APP_VERSIONS'],
-  OSVERSION: nativeParams['PHONE_VERSIONS'],
-  PLATFORM: nativeParams['PHONE_PLATFORM'],
-  TOKEN_ID: nativeParams['TOKEN_ID'],
-  CHANNEL_NO: nativeParams['CHANNEL_NO'],
-  TRDE_CODE,
-});
-
-/**
  * 处理重新登录回调
  * @param message
  * @param successCall

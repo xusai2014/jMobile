@@ -271,6 +271,14 @@ export const getBillDetaillList = (data) => ActionCreator(
   {...data, 'TRDE_CODE': BILL_DETAIL_LIST[1]}
 )();
 
+export const actionGenerator = ({ data,type}) => ActionCreator(
+    type,
+    `/api`,
+    'POST',
+    {...data, 'TRDE_CODE': type[1]}
+)();
+
+
 
 
 

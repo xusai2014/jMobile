@@ -7,10 +7,10 @@ class FixedContent extends React.Component {
         const designedWidth = 750;
         const actualWidth = Math.min(450, $(window).width());
         window.requestAnimationFrame(()=> {
-            document.body.style.overflowY = '';
-            document.body.style.position =  'static';
-            document.documentElement.style.fontSize = actualWidth * 100 / designedWidth + 'px';
+          document.body.style.overflowY = '';
+          document.body.style.position = 'static';
         })
+        document.documentElement.style.fontSize = actualWidth * 100 / designedWidth + 'px';
     }
 
     componentWillMount() {

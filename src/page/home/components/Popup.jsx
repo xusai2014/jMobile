@@ -87,8 +87,6 @@ export default class Popup extends React.Component{
       const {telEnc,token,finId} = data;
       jsNative.nativeOpenOldWebView({url:`https://lns-front${judgeEnv()}.vbillbank.com/transitionPageService?telNo=${telEnc}&token=${token}&appId=${finId}&h5Channel=MPOS_XYKHK`},()=>{})
     },()=>{})
-
-
   }
 
   methodList() {

@@ -4,12 +4,14 @@ import {Tabs,Modal,Toast} from "antd-mobile"
 import Popup from "../home/components/Popup";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {
-  checkToken, deleteBill, getBillDetail, getBillDetaillList, getLoginList, getPayDetail, setMarkBill, syncBill,
-  verifyCode
+    actionGenerator,
+    checkToken, deleteBill, getBillDetail, getBillDetaillList, getLoginList, getPayDetail, setMarkBill, syncBill,
+    verifyCode
 } from "../../actions/reqAction";
 import {waitFunc} from "../../utils/util";
 import globalStyle from "../../globalStyle";
 import KeyWord from "../home/components/KeyWord";
+import {BILL_DETAIL_LIST} from "../../utils/ActionsType";
 @InitDecorator((state)=>{
   return {
     billDetail:state.BillReducer.billDetail,
@@ -276,11 +278,9 @@ export default class BillDetail extends React.Component {
   initData(){
     const { bank_id:bankId, card_num:cardNum } = this.props.location.state;
 
-    this.props.dispatch(getBillDetaillList({
-      cardNum,bankId
-    })).then((result)=>{
-
-    })
+    this.props.dispatch(actionGenerator({
+        data:{ cardNum, bankId },type: BILL_DETAIL_LIST
+    }))
 
   }
 

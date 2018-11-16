@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { jsNative } from "sx-jsbridge";
+import {ActionCreator} from "../utils/fetch-middleware";
 const  { nativeRequestBaseParams } = jsNative;
 
 export const InitDecorator = (mergeStateToprops  = ()=>{ return {} }) => (Coms) => {
@@ -39,14 +40,14 @@ export const InitDecorator = (mergeStateToprops  = ()=>{ return {} }) => (Coms) 
 
 
     render() {
-      return (
-        <Coms
+      return (<Coms
           {...this.props}
           getBaseParams={this.getBaseParams}
           resetParams={() => this.resetParams()}
-        />
-
-      )
+          apiDispatcher={(type,data)=>
+              this.props.dispatch(ActionCreator(type, `/api`, 'POST', {...data, 'TRDE_CODE': type[1]})())
+          }
+        />)
     }
   })
 }

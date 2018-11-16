@@ -15,6 +15,7 @@ import IconEnter from "./components/IconEnter";
 import FreeInterest from "./components/FreeInterest";
 const {loginHelper, nativeOpenNewWebView} = jsNative;
 import styles from './style/index.less'
+import {ACTIVITY_CARD, BILL_LIST, GET_IDENTITY_INFO} from "../../utils/ActionsType";
 
 @InitDecorator((state) => {
   return {
@@ -49,9 +50,7 @@ export default class Index extends React.Component {
   initData() {
     this.getUserInfo();
     this.getBillList();
-    this.props.dispatch(getActivities()).then(() => {
-    }, () => {
-    });
+    this.props.apiDispatcher(ACTIVITY_CARD)
   }
 
 
@@ -67,22 +66,20 @@ export default class Index extends React.Component {
   *   @description 获取用户基本信息，提供审核账号与实名认证状态
   */
   getUserInfo() {
-    this.props.dispatch(getIndetiyInfo({
-      appType: 'mpos'
-    })).then((result) => {
-      const {data} = result;
-      const {authSts, MERC_SN = ''} = data;
-      this.setState({
-        authSts: authSts,
-        examineAccount: MERC_SN != '700000000620451',
-        MERC_SN
-      })
-    }, () => {
-    })
+    this.props.apiDispatcher(GET_IDENTITY_INFO,{appType: 'mpos'})
+        .then((result) => {
+            const {data} = result;
+            const {authSts, MERC_SN = ''} = data;
+            this.setState({
+              authSts: authSts,
+              examineAccount: MERC_SN != '700000000620451',
+              MERC_SN
+            })},
+        )
   }
 
   getBillList() {
-    this.props.dispatch(getBillList())
+    this.props.apiDispatcher(BILL_LIST)
   }
 
   openCardMarket() {

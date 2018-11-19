@@ -1,12 +1,8 @@
 import React from 'react';
-import {Modal,Toast} from 'antd-mobile'
+import {Modal, Toast} from 'antd-mobile'
 import BillCard from "./BillCard";
 import Popup from "./components/Popup";
 import {InitDecorator} from "../../compoents/InitDecorator";
-import {
-  getBillList, getIndetiyInfo,
-  getActivities, setMarkBill
-} from "../../actions/reqAction";
 import {jsNative,} from "sx-jsbridge";
 import {judgeEnv} from "../../utils/util";
 import globalStyle from "../../globalStyle";
@@ -15,7 +11,7 @@ import IconEnter from "./components/IconEnter";
 import FreeInterest from "./components/FreeInterest";
 const {loginHelper, nativeOpenNewWebView} = jsNative;
 import styles from './style/index.less'
-import {ACTIVITY_CARD, BILL_LIST, GET_IDENTITY_INFO} from "../../utils/ActionsType";
+import {ACTIVITY_CARD, BILL_LIST, GET_IDENTITY_INFO, MARK_BILL_STATUS} from "../../utils/ActionsType";
 
 @InitDecorator((state) => {
   return {
@@ -42,11 +38,13 @@ export default class Index extends React.Component {
       } //选中账单更新数据，注册的方法
     }
   }
+
   componentWillMount() {
     if (this.props.isLogged) {
       this.initData()
     }
   }
+
   initData() {
     this.getUserInfo();
     this.getBillList();
@@ -60,22 +58,24 @@ export default class Index extends React.Component {
       this.initData();
     }
   }
+
   /**
-  *
-  *   @methodName getUserInfo
-  *   @description 获取用户基本信息，提供审核账号与实名认证状态
-  */
+   *
+   *   @methodName getUserInfo
+   *   @description 获取用户基本信息，提供审核账号与实名认证状态
+   */
   getUserInfo() {
-    this.props.apiDispatcher(GET_IDENTITY_INFO,{appType: 'mpos'})
-        .then((result) => {
-            const {data} = result;
-            const {authSts, MERC_SN = ''} = data;
-            this.setState({
-              authSts: authSts,
-              examineAccount: MERC_SN != '700000000620451',
-              MERC_SN
-            })},
-        )
+    this.props.apiDispatcher(GET_IDENTITY_INFO, {appType: 'mpos'})
+      .then((result) => {
+          const {data} = result;
+          const {authSts, MERC_SN = ''} = data;
+          this.setState({
+            authSts: authSts,
+            examineAccount: MERC_SN != '700000000620451',
+            MERC_SN
+          })
+        },
+      )
   }
 
   getBillList() {
@@ -89,42 +89,41 @@ export default class Index extends React.Component {
     } else {
       url = `https://mpcw${judgeEnv()}.vbill.cn/cca/home?channelId=1000&source=creditCard`
     }
-    nativeOpenNewWebView({ url })
+    nativeOpenNewWebView({url})
   }
 
   identifyFunc(callback) {
-    this.props.dispatch(getIndetiyInfo({
-      appType: 'mpos'
-    })).then((result) => {
-      const {data} = result;
-      const {authSts} = data;
-      //  authSts 99:未认证，01：已认证，02：驳回，00：审核中
-      if (authSts == '01') {
-        callback();
-      } else if (authSts == '-1') {
-        //数据尚未装载完毕不处理
-      } else if (authSts == '99') {
+    this.props.apiDispatcher(GET_IDENTITY_INFO, {appType: 'mpos'})
+      .then((result) => {
+        const {data} = result;
+        const {authSts} = data;
+        //  authSts 99:未认证，01：已认证，02：驳回，00：审核中
+        if (authSts == '01') {
+          callback();
+        } else if (authSts == '-1') {
+          //数据尚未装载完毕不处理
+        } else if (authSts == '99') {
           Modal.alert(<span className="alert_title">您尚未通过实名认证，请先进行实名认证</span>, '', [
-          {
-            text: "取消", onPress: () => {
-          },
-            style: globalStyle.cancelStyle
-          },
-          {
-            text: "去认证", onPress: () => {
-            jsNative.nativeGoRealName()
-          },
-            style: globalStyle.sureStyle
-          },
-        ])
-      } else {
-        jsNative.nativeGoRealName();
-      }
-      this.setState({
-        authSts: authSts
+            {
+              text: "取消", onPress: () => {
+            },
+              style: globalStyle.cancelStyle
+            },
+            {
+              text: "去认证", onPress: () => {
+              jsNative.nativeGoRealName()
+            },
+              style: globalStyle.sureStyle
+            },
+          ])
+        } else {
+          jsNative.nativeGoRealName();
+        }
+        this.setState({
+          authSts: authSts
+        })
+      }, () => {
       })
-    }, () => {
-    })
   }
 
   loginEnter(type, params) {
@@ -133,7 +132,7 @@ export default class Index extends React.Component {
         case 1:
           //展示免息期
           this.setState({interestShow: true}, () => {
-            document.body.style.position =  'fixed'
+            document.body.style.position = 'fixed'
           });
           return;
         case 2:
@@ -168,7 +167,7 @@ export default class Index extends React.Component {
       jsNative.nativeOpenNewWebView({url: gameUri}, () => {
       });
     } else {
-        Modal.alert(<span className="alert_title">免责声明</span>,
+      Modal.alert(<span className="alert_title">免责声明</span>,
         <span className="alert_content">您所访问的页面将跳转到第三方网站，请自行对网站所提供的信息、服务加以辨别及判断，并承担使用内容而引起的所有风险</span>,
         [{
           text: '我知道了',
@@ -196,7 +195,9 @@ export default class Index extends React.Component {
           </span>
         </div>
         <div className={styles.flexCenter}>
-          <IconEnter action={() => {this.loginEnter(1)}}
+          <IconEnter action={() => {
+            this.loginEnter(1)
+          }}
                      des={'免息期'} icon={"/static/img/canlendar@2x.png"}
           />
           <span style={{width: '0.18rem'}}></span>
@@ -223,12 +224,12 @@ export default class Index extends React.Component {
               return null
             }
             return <div key={k} onClick={() => {
-                  if (type == '0') {
-                    this.loginEnter(3, {action})
-                  } else if (type == '1') {
-                    this.loginEnter(4, {action})
-                  }
-                }}>
+              if (type == '0') {
+                this.loginEnter(3, {action})
+              } else if (type == '1') {
+                this.loginEnter(4, {action})
+              }
+            }}>
               <span className={styles.iconItem}>
                 <img src={img} style={{width: '0.65rem'}}/>
               </span>
@@ -311,13 +312,13 @@ export default class Index extends React.Component {
         }
       </div>,
       <div key={'c'} className={styles.addBtn}
-           onClick={() => _.debounce(this.loginEnter(2),1000)}
+           onClick={() => _.debounce(this.loginEnter(2), 1000)}
       >
         <img className={styles.addImg} src="/static/img/addCard@2x.png"/>
         <span className={styles.addText}>添加信用卡账单</span>
       </div>,
       <div>{(isLogged && !examineAccount) ?
-        <div className={styles.enterCard} onClick={() =>  _.debounce(this.openCardMarket(),1000)}>
+        <div className={styles.enterCard} onClick={() => _.debounce(this.openCardMarket(), 1000)}>
           <img src="/static/img/信用卡2x.png" style={{width: "0.41rem"}}/>
           <span className={styles.applyCard}>
           办信用卡
@@ -325,35 +326,38 @@ export default class Index extends React.Component {
           <img src="/static/img/Path 3@2x.png" style={{width: "0.1rem"}}/>
         </div> : null}
       </div>,
-      isLogged?<FreeInterest
+      isLogged ? <FreeInterest
         key="FreeInterest"
         parentParams={{
-          isShow:interestShow,
-          closeFunc:()=>this.setState({interestShow:false}),
-          openFunc:()=>this.setState({interestShow:true}),
+          isShow: interestShow,
+          closeFunc: () => this.setState({interestShow: false}),
+          openFunc: () => this.setState({interestShow: true}),
         }}
-      />:null,
+      /> : null,
       <Popup
-          key="Popup"
-          title="选择还款方式"
-          visible={visible}
-          setVisible={(v) => {this.setState({visible: v})}}
+        key="Popup"
+        title="选择还款方式"
+        visible={visible}
+        setVisible={(v) => {
+          this.setState({visible: v})
+        }}
       />,
       moreAction ?
         <MoreItem items={this.moreActions(activeCard)}
                   cancelFunc={() => {
                     this.setState({moreAction: false})
                   }}
-                  updateData = {()=>this.initData()}
+                  updateData={() => this.initData()}
                   level={level}
-                  billData={{bank_id:activeCard.bankId,bill_type:activeCard.bill_type,card_num:activeCard.cardNum}}
+                  billData={{bank_id: activeCard.bankId, bill_type: activeCard.bill_type, card_num: activeCard.cardNum}}
                   setLevel={() => {
                     this.setState({level: 1})
                   }}
         /> : null
     ]
   }
-  moreActions = (activeCard)=> [
+
+  moreActions = (activeCard) => [
     {
       name: "更新账单",
       action: (param) => {
@@ -369,11 +373,11 @@ export default class Index extends React.Component {
           bankId,
         } = activeCard;
         const {payStatus} = param
-        this.props.dispatch(setMarkBill({
+        this.props.apiDispatcher(MARK_BILL_STATUS, {
           cardNum,
           bankId,
           payStatus: payStatus
-        })).then(() => {
+        }).then(() => {
           Toast.info('设置还款状态成功');
           this.initData()
         })

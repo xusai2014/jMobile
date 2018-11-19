@@ -5,7 +5,7 @@ import Popup from "../home/components/Popup";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {
     actionGenerator,
-    checkToken, deleteBill, getBillDetail, getBillDetaillList, getLoginList, getPayDetail, setMarkBill, syncBill,
+    checkToken, deleteBill, getBillDetail, getLoginList, getPayDetail, setMarkBill, syncBill,
     verifyCode
 } from "../../actions/reqAction";
 import {waitFunc} from "../../utils/util";

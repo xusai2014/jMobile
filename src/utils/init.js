@@ -58,7 +58,7 @@ export default (historyApi: any, store: any) => {
     $title: "信用卡管理首页",
   });
 
-  const unlisten = historyApi.listen((location, action) => {
+  historyApi.listen((location, action) => {
     //单页应用设置，pageview数据采集
     sa.quick('autoTrackSinglePage', {
       platForm: 'h5',

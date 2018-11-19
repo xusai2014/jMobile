@@ -8,7 +8,7 @@
     "build": "npx babel-node server/generate-routers.js && export mode=production && npx webpack --progress --profile --colors --config webpack.config.babel.js",
     "server": "node  ./mock/server.js",
     "debug": "export mode=development && npx babel-node server/server.js --inspect-brk=9229",
-    "type":"flow-typed install"
+    "type": "flow-typed install"
   },
   "theme": {
     "icon-url": "'/static/font/iconfont/iconfont'"

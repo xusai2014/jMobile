@@ -5,7 +5,8 @@
         "browsers": ["ie>=8", ">1% in CN", "iOS >= 8", "Android >= 4"]
       }
     }],
-    "@babel/preset-react"
+    "@babel/preset-react",
+    "@babel/preset-flow"
   ],
   "plugins": [
     "@babel/plugin-proposal-object-rest-spread",

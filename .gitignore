@@ -11,3 +11,4 @@ catalina*
 /logs/
 node_modules/
 .idea
+flow-typed/

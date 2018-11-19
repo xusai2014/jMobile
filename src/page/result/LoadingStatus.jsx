@@ -4,7 +4,7 @@ import {checkEmailTask, checkToken, pollingCyber, removeLoginStatus, verifyCode}
 import {InitDecorator} from "../../compoents/InitDecorator";
 import { Toast,Modal } from 'antd-mobile';
 import {waitFunc} from "../../utils/util";
-import globalStyle from "../../globalStyle";
+import globalStyle from "../../style/globalStyle";
 import {Prompt,} from "react-router-dom";
 
 

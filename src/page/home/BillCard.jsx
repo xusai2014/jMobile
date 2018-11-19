@@ -5,7 +5,7 @@ import {InitDecorator} from "../../compoents/InitDecorator";
 import {Modal, Progress, Toast}  from "antd-mobile";
 import {jsNative} from "sx-jsbridge";
 import {waitFunc} from "../../utils/util";
-import globalStyle from "../../globalStyle";
+import globalStyle from "../../style/globalStyle";
 import styles from './style/card.less'
 const {loginHelper} = jsNative;
 

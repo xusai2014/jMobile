@@ -1,17 +1,17 @@
 import React from 'react';
-import {Modal, Toast} from 'antd-mobile'
+import { Modal, Toast } from 'antd-mobile'
 import BillCard from "./BillCard";
 import Popup from "./components/Popup";
-import {InitDecorator} from "../../compoents/InitDecorator";
-import {jsNative,} from "sx-jsbridge";
-import {judgeEnv} from "../../utils/util";
-import globalStyle from "../../globalStyle";
+import { InitDecorator } from "../../compoents/InitDecorator";
+import { jsNative, } from "sx-jsbridge";
+import { judgeEnv } from "../../utils/util";
+import globalStyle from "../../style/globalStyle";
 import MoreItem from "./components/MoreItem";
 import IconEnter from "./components/IconEnter";
 import FreeInterest from "./components/FreeInterest";
-const {loginHelper, nativeOpenNewWebView} = jsNative;
 import styles from './style/index.less'
-import {ACTIVITY_CARD, BILL_LIST, GET_IDENTITY_INFO, MARK_BILL_STATUS} from "../../utils/ActionsType";
+import { ACTIVITY_CARD, BILL_LIST, GET_IDENTITY_INFO, MARK_BILL_STATUS } from "../../utils/ActionsType";
+const {loginHelper, nativeOpenNewWebView} = jsNative;
 
 @InitDecorator((state) => {
   return {

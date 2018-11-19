@@ -6,7 +6,7 @@ import {Toast,Modal} from "antd-mobile";
 import {
   regEmail
 } from '../../utils/util';
-import globalStyle from "../../globalStyle";
+import globalStyle from "../../style/globalStyle";
 import { jsNative} from 'sx-jsbridge'
 @InitDecorator((state) => {
   return {

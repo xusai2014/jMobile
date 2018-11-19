@@ -3,7 +3,7 @@ import Header from "../../compoents/Header";
 import {Tabs, Toast, Modal} from "antd-mobile"
 import {getEchoForm, getLoginList, loginCyber, removeBillAllStatus, removeLoginStatus,} from "../../actions/reqAction";
 import {InitDecorator} from "../../compoents/InitDecorator";
-import globalStyle from "../../globalStyle";
+import globalStyle from "../../style/globalStyle";
 import {jsNative} from "sx-jsbridge";
 
 const cardType = 'CREDITCARD'

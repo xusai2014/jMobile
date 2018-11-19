@@ -9,7 +9,7 @@ import {
     verifyCode
 } from "../../actions/reqAction";
 import {waitFunc} from "../../utils/util";
-import globalStyle from "../../globalStyle";
+import globalStyle from "../../style/globalStyle";
 import KeyWord from "../home/components/KeyWord";
 import {BILL_DETAIL_LIST} from "../../utils/ActionsType";
 @InitDecorator((state)=>{

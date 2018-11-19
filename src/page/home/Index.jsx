@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { Modal, Toast } from 'antd-mobile'
 import BillCard from "./BillCard";
@@ -11,8 +12,29 @@ import IconEnter from "./components/IconEnter";
 import FreeInterest from "./components/FreeInterest";
 import styles from './style/index.less'
 import { ACTIVITY_CARD, BILL_LIST, GET_IDENTITY_INFO, MARK_BILL_STATUS } from "../../utils/ActionsType";
-const {loginHelper, nativeOpenNewWebView} = jsNative;
 
+const {loginHelper, nativeOpenNewWebView} = jsNative;
+type Props = {
+  billList: any,
+  huandaoData: any,
+  activities: any,
+  examineAccount: any,
+  isLogged: boolean,
+  apiDispatcher: Function,
+  history: any,
+}
+type State = {
+  interestShow: boolean, //免息期弹窗展示,
+  visible: boolean,//弹出框
+  authSts: string,// 是否实名认证
+  freeItems: boolean,//免息期弹窗
+  examineAccount: boolean,//是否是审核账号
+  MERC_SN: string,// 用户商编
+  moreAction: boolean, // 更多菜单
+  level: number,// 更多菜单展示的层级
+  activeCard: any, // 当前要处理账某个账单的详细数据
+  syncfunc: Function,
+}
 @InitDecorator((state) => {
   return {
     billList: state.BillReducer.billList,
@@ -21,8 +43,8 @@ const {loginHelper, nativeOpenNewWebView} = jsNative;
     examineAccount: state.CardsReducer.examineAccount,
   }
 })
-export default class Index extends React.Component {
-  constructor(props) {
+export default class Index extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       interestShow: false, //免息期弹窗展示,
@@ -52,7 +74,7 @@ export default class Index extends React.Component {
   }
 
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     if (nextProps.isLogged && this.props.isLogged != nextProps.isLogged) {
       // 全局组件订阅的登录状态，如Native 与 Server通知登录状态已切换，立即更新视图
       this.initData();
@@ -92,7 +114,7 @@ export default class Index extends React.Component {
     nativeOpenNewWebView({url})
   }
 
-  identifyFunc(callback) {
+  identifyFunc(callback: Function) {
     this.props.apiDispatcher(GET_IDENTITY_INFO, {appType: 'mpos'})
       .then((result) => {
         const {data} = result;
@@ -126,13 +148,15 @@ export default class Index extends React.Component {
       })
   }
 
-  loginEnter(type, params) {
+  loginEnter(type: number, params: any) {
     loginHelper(() => {
       switch (type) {
         case 1:
           //展示免息期
           this.setState({interestShow: true}, () => {
-            document.body.style.position = 'fixed'
+            if(document.body){
+              document.body.style.position = 'fixed'
+            }
           });
           return;
         case 2:
@@ -158,12 +182,12 @@ export default class Index extends React.Component {
     })
   }
 
-  openPPMoney(gameUri) {
+  openPPMoney(gameUri: string) {
     const {MERC_SN} = this.state
     if (!MERC_SN) {
       return;
     }
-    if (localStorage.getItem(MERC_SN)) {
+    if (!!localStorage.getItem(MERC_SN)) {
       jsNative.nativeOpenNewWebView({url: gameUri}, () => {
       });
     } else {
@@ -172,7 +196,7 @@ export default class Index extends React.Component {
         [{
           text: '我知道了',
           onPress: () => {
-            localStorage.setItem(MERC_SN, true);
+            localStorage.setItem(MERC_SN, 'true');
             jsNative.nativeOpenNewWebView({url: gameUri}, () => {
             });
           },
@@ -357,16 +381,16 @@ export default class Index extends React.Component {
     ]
   }
 
-  moreActions = (activeCard) => [
+  moreActions = (activeCard: any) => [
     {
       name: "更新账单",
-      action: (param) => {
+      action: (param: any) => {
         this.setState({moreAction: false})
         this.state.syncfunc()
       },
     }, {
       name: "manual",
-      action: (param) => {
+      action: (param: any) => {
         this.setState({moreAction: false});
         const {
           cardNum,
@@ -385,7 +409,7 @@ export default class Index extends React.Component {
       },
     }, {
       name: "标记还部分",
-      action: (param) => {
+      action: (param: any) => {
         this.setState({level: 2})
       },
     }
@@ -437,7 +461,7 @@ export default class Index extends React.Component {
     action: "",
     title: "挖金币"
   }]
-  onWrapTouchStart = (e) => {
+  onWrapTouchStart = (e:SyntheticEvent<HTMLBaseElement>) => {
     // antd-mobile 提供的差异化处理，貌似没个卵用
     // fix touch to scroll background page on iOS
     if (!/iPhone|iPod|iPad/i.test(navigator.userAgent)) {
@@ -451,7 +475,7 @@ export default class Index extends React.Component {
 }
 
 
-function closest(el, selector) {
+function closest(el:any, selector:any) {
   const matchesSelector = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector;
   while (el) {
     if (matchesSelector.call(el, selector)) {

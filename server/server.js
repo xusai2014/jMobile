@@ -75,27 +75,27 @@ app.use(dev);
 *   @author jerryxu
 *   监听文件改动，触发静态检查
 */
-global.watchTimer = null;
-fs.watch(path.join(__dirname, '../src/'),()=>{
-  if(watchTimer!=null){
-    clearTimeout(watchTimer);
-    watchTimer = setTimeout(()=>{
-      log.warn('excuting*********')
-      execFile(flow, ['check'], (err, stdout) => {
-        log.warn(stdout);
-      })
-      watchTimer = null;
-    },1000);
-  } else {
-    watchTimer = setTimeout(()=>{
-      console.warn('excuting*********')
-      execFile(flow, ['check'], (err, stdout) => {
-        log.warn(stdout);
-      })
-      watchTimer = null;
-    },1000);
-  }
-})
+// global.watchTimer = null;
+// fs.watch(path.join(__dirname, '../src/'),()=>{
+//   if(watchTimer!=null){
+//     clearTimeout(watchTimer);
+//     watchTimer = setTimeout(()=>{
+//       log.warn('excuting*********')
+//       execFile(flow, ['check'], (err, stdout) => {
+//         log.warn(stdout);
+//       })
+//       watchTimer = null;
+//     },1000);
+//   } else {
+//     watchTimer = setTimeout(()=>{
+//       console.warn('excuting*********')
+//       execFile(flow, ['check'], (err, stdout) => {
+//         log.warn(stdout);
+//       })
+//       watchTimer = null;
+//     },1000);
+//   }
+// })
 /**
  *   @author jerryxu
  *   @description 配置热推送

@@ -1,123 +1,128 @@
-export const  ERROR = 'ERROR';
+// @flow
+/* eslint-disable */
+
+/**
+ *   @author jerryxu
+ *   @params TRDE_CDODE 接口编码
+ */
+const generate = (TRDE_CDODE: string): ActionType => ['REQUEST', TRDE_CDODE, 'FAILURE'];
+
+export const ERROR = 'ERROR';
 export const CLEAR_MSG = 'CLEAR_MSG';
-export const ASYNC_COOKIE='ASYNC_COOKIE';
+export const ASYNC_COOKIE = 'ASYNC_COOKIE';
 
-export const COMMONT_PAGE_NUMBER='COMMONT_PAGE_NUMBER'
+export const COMMONT_PAGE_NUMBER = 'COMMONT_PAGE_NUMBER';
 // 个性限额分页
-export const FORM_SET='FORM_SET';
+export const FORM_SET = 'FORM_SET';
 
-export const SET_UUID='SET_UUID';
+export const SET_UUID = 'SET_UUID';
 
-//或许魔蝎提供可登录的网银列表
-export const GET_BANK_LIST = ['REQUEST', 'CH801','FAILURE'];
-//获取网银登录方式
-export const GET_BANK_LOGIN_LIST = ['REQUEST', 'CH802','FAILURE'];
-//登录接口
-export const LOGIN_CYBER = ['REQUEST', 'CH803','FAILURE'];
+// 或许魔蝎提供可登录的网银列表
+export const GET_BANK_LIST: ActionType = generate('CH801');
+// 获取网银登录方式
+export const GET_BANK_LOGIN_LIST: ActionType = generate('CH802');
+// 登录接口
+export const LOGIN_CYBER: ActionType = generate('CH803');
 
-//检查登录状态，输入验证码
-export const VERYFY_CODE_STARUS = ['REQUEST', 'CH804','FAILURE'];
+// 检查登录状态，输入验证码
+export const VERYFY_CODE_STARUS: ActionType = generate('CH804');
 
-//检查网银任务状态
-export const CHECK_CYBER_STATUS = ['REQUEST', 'CH805','FAILURE'];
+// 检查网银任务状态
+export const CHECK_CYBER_STATUS: ActionType = generate('CH805');
 
-//账单列表
-export const BILL_LIST = ['REQUEST', 'CH807','FAILURE'];
+// 账单列表
+export const BILL_LIST: ActionType = generate('CH807');
 
-//检查账单导入状态
-export const POLLING_CYBER = ['REQUEST', 'CH810','FAILURE'];
+// 检查账单导入状态
+export const POLLING_CYBER: ActionType = generate('CH810');
 
-//账单详情
+// 账单详情
 
-export const BILL_DETAIL = ['REQUEST', 'CH808','FAILURE'];
+export const BILL_DETAIL: ActionType = generate('CH808');
 
-//还款记录
-export const PAY_DETAIL = ['REQUEST', 'CH819','FAILURE'];
+// 还款记录
+export const PAY_DETAIL: ActionType = generate('CH819');
 
-//还到
-export const HUAN_DAO = ['REQUEST', 'CH818','FAILURE'];
+// 还到
+export const HUAN_DAO: ActionType = generate('CH818');
 
-//同步
-export const SYNC_BILL = ['REQUEST', 'CH806','FAILURE'];
+// 同步
+export const SYNC_BILL: ActionType = generate('CH806');
 
-//免息期
-export const FREE_INTEREST = ['REQUEST', 'CH812','FAILURE'];
+// 免息期
+export const FREE_INTEREST: ActionType = generate('CH812');
 
-//邮箱登录
-export const EMAIL_LOGIN = ['REQUEST', 'CH813','FAILURE'];
+// 邮箱登录
+export const EMAIL_LOGIN: ActionType = generate('CH813');
 
-//邮箱创建任务状态
-export const EMAIL_TASK_STATUS = ['REQUEST', 'CH815','FAILURE'];
+// 邮箱创建任务状态
+export const EMAIL_TASK_STATUS: ActionType = generate('CH815');
 
+// 删除账单
 
-//删除账单
+export const DELETE_BILL: ActionType = generate('CH821');
 
-export const DELETE_BILL = ['REQUEST','CH821','FAILURE'];
+// 直接导入邮箱，创建任务和直接登录
 
-//直接导入邮箱，创建任务和直接登录
+export const DIRECT_EMAIL_BILL: ActionType = generate('CH817');
 
-export const DIRECT_EMAIL_BILL = ['REQUEST','CH817','FAILURE'];
+// 绑定邮箱列表的接口
+export const EMAIL_LIST: ActionType = generate('CH816');
 
-//绑定邮箱列表的接口
-export const EMAIL_LIST = ['REQUEST','CH816','FAILURE'];
+// 删除邮箱
+export const DELETE_EMAIL: ActionType = generate('CH822');
 
-//删除邮箱
-export const DELETE_EMAIL = ['REQUEST','CH822','FAILURE'];
+// 信用卡卡包列表接口
+export const CARDS_LIST: ActionType = generate('M511');
 
+// 判断是否绑定了本人卡
 
-//信用卡卡包列表接口
-export const CARDS_LIST = ['REQUEST','M511','FAILURE'];
+export const JUDGE_SEL_CARD: ActionType = generate('CH823');
 
-//判断是否绑定了本人卡
+// 发卡行
 
-export const JUDGE_SEL_CARD = ['REQUEST','CH823','FAILURE'];
+export const IDENTITY_BNK: ActionType = generate('CH828');
 
-//发卡行
+// M512,M502.M503
+// 提交信息
+export const POST_INFO: ActionType = generate('M512');
+// 发送验证码
+export const SEND_VERIFICATION: ActionType = generate('M502');
+// 验证验证码
+export const VERIFY_CODE: ActionType = generate('M503');
 
-export const IDENTITY_BNK = ['REQUEST','CH828','FAILURE'];
+// 实名认证接口
+export const GET_IDENTITY_INFO: ActionType = generate('M113');
 
-//M512,M502.M503
-//提交信息
-export const POST_INFO = ['REQUEST','M512','FAILURE'];
-//发送验证码
-export const SEND_VERIFICATION = ['REQUEST','M502','FAILURE'];
-//验证验证码
-export const VERIFY_CODE = ['REQUEST','M503','FAILURE'];
+// 解绑信用卡
+export const LOOSE_CARD: ActionType = generate('M814');
 
-//实名认证接口
-export const GET_IDENTITY_INFO = ['REQUEST','M113','FAILURE'];
+// 手写账单
+export const HANDLE_BILL: ActionType = generate('CH811');
 
-//解绑信用卡
-export const LOOSE_CARD = ['REQUEST','M814','FAILURE'];
+// 查看账单编号
+export const GET_BILL_ID: ActionType = generate('CH824');
 
-//手写账单
-export const HANDLE_BILL = ['REQUEST','CH811','FAILURE'];
+// 活动列表
+export const ACTIVITY_CARD: ActionType = generate('CH820');
 
-//查看账单编号
-export const GET_BILL_ID = ['REQUEST','CH824','FAILURE'];
+// 删除登录状态
+export const REMOVE_LOGIN_STATUS: ActionType = generate('CH826');
 
-//活动列表
-export const ACTIVITY_CARD = ['REQUEST','CH820','FAILURE'];
+// 删除账单及任务状态
+export const REMOVE_BILL_ALL_STATUS: ActionType = generate('CH827');
 
-//删除登录状态
-export const REMOVE_LOGIN_STATUS = ['REQUEST','CH826','FAILURE'];
+// 广告位接口
+export const ADTIVITY_DATA: ActionType = generate('MP013');
 
-//删除账单及任务状态
-export const REMOVE_BILL_ALL_STATUS = ['REQUEST','CH827','FAILURE'];
+// Mark Bill
+export const MARK_BILL_STATUS: ActionType = generate('CH829');
+// Mark rest
 
-//广告位接口
-export const ADTIVITY_DATA = ['REQUEST','MP013','FAILURE'];
+export const MARK_BILL_REST: ActionType = generate('CH830');
 
+// echo
+export const ECHO_FOEM: ActionType = generate('CH831');
 
-//Mark Bill
-export const MARK_BILL_STATUS = ['REQUEST','CH829','FAILURE',];
-//Mark rest
-
-export const MARK_BILL_REST = ['REQUEST','CH830','FAILURE',];
-
-//echo
-export const ECHO_FOEM = ['REQUEST','CH831','FAILURE',];
-
-//BILL list
-
-export const BILL_DETAIL_LIST = ['REQUEST','CH832','FAILURE',];
+// BILL list
+export const BILL_DETAIL_LIST: ActionType = generate('CH832');

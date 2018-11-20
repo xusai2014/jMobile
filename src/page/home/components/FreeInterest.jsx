@@ -9,11 +9,11 @@
  *   @warning 免息期面板，部分服务端数据需二次加工，接口需优化
  */
 import React from 'react';
-import {Modal} from "antd-mobile";
-import {getFreeInterest} from "../../../actions/reqAction";
-import {InitDecorator} from "../../../compoents/InitDecorator";
+import { Modal } from "antd-mobile";
+import { getFreeInterest } from "../../../actions/reqAction";
+import { InitDecorator } from "../../../compoents/InitDecorator";
 import FreeItem from "./FreeItem";
-import {computerFreePeriod} from "../../../utils/util";
+import { computerFreePeriod } from "../../../utils/util";
 @InitDecorator((state) => {
   return {
     apiInitData: state.BillReducer.freeIntrestData,
@@ -33,9 +33,9 @@ export default class FreeInterest extends React.Component {
 
   initData() {
     this.props.dispatch(getFreeInterest()).then((result) => {
-      this.setState({loadingData: false})
+      this.setState({ loadingData: false })
     }, () => {
-      this.setState({loadingData: false})
+      this.setState({ loadingData: false })
     })
   }
 
@@ -75,7 +75,7 @@ export default class FreeInterest extends React.Component {
     } = this.state;
     return isShow ?
       <Modal
-        style={{width: '6rem'}}
+        style={{ width: '6rem' }}
         key={'d'}
         visible={isShow}
         transparent
@@ -84,19 +84,19 @@ export default class FreeInterest extends React.Component {
           document.body.style.position = 'static';//恢复默认position
           closeFunc();
         }}
-        title={<div style={{textAlign: 'left'}}>最长免息期</div>}
-        wrapProps={{onTouchStart: this.onWrapTouchStart}}
+        title={<div style={{ textAlign: 'left' }}>最长免息期</div>}
+        wrapProps={{ onTouchStart: this.onWrapTouchStart }}
         closable={true}
       >
-        <div style={{height: '5.03rem', overflow: 'scroll'}}>
+        <div style={{ height: '5.03rem', overflow: 'scroll' }}>
           {
-            !loadingData ? (apiInitData.length == 0 ? <div style={{marginTop: '0.6rem'}}>
-              <img style={{width: '1.55rem'}} src="/static/img/Bitmap@1x.png"/>
+            !loadingData ? (apiInitData.length == 0 ? <div style={{ marginTop: '0.6rem' }}>
+              <img style={{ width: '1.55rem' }} src="/static/img/Bitmap@1x.png"/>
               <div>未导入信用卡账单</div>
               <div>无记录查看</div>
             </div>
               : apiInitData.map((v, k) => {
-                const {bank_logo: imgSrc, credit_limit, balance, bank_name, payment_due_date, card_number, bill_type} = v;
+                const { bank_logo: imgSrc, credit_limit, balance, bank_name, payment_due_date, card_number, bill_type } = v;
                 const freeInterest = computerFreePeriod(bill_type, payment_due_date);
                 return <FreeItem key={k}
                                  credit_limit={credit_limit}

@@ -1,31 +1,48 @@
+// @flow
 /**
- * Create by chengkai on 2018/7/30.
+ * Create by xusai
  * Describe:
  */
+import React from 'react';
+import { Modal } from 'antd-mobile';
+import globalStyle from '../style/globalStyle';
 
-import { Modal } from "antd-mobile";
-
-export const showSingleBtnModal = ({
-                                     title = '温馨提示',
-                                     message = '',
-                                     positiveBtnText = '确认',
-                                     onOk = () => {}
-                                   }) => {
-  Modal.alert(title, message, [
-    { text: positiveBtnText, onPress: onOk },
-  ]);
+type AlertParams = {
+  title: string,
+  rightFunc: Function,
+  leftText?: string,
+  description?: string,
+  rightText?: string,
+  leftFunc?: Function,
 }
 
-export const showDoubleBtnModal = ({
-                                     title = '温馨提示',
-                                     message = '',
-                                     onOk = () => {},
-                                     onCancel = () => {},
-                                     negativeBtnText = '取消',
-                                     positiveBtnText = '确认',
-                                   }) => {
-  Modal.alert(title, message, [
-    { text: negativeBtnText, onPress: onCancel },
-    { text: positiveBtnText, onPress: onOk },
-  ]);
+export default function ModalAlert(alertParams: AlertParams): void {
+  const {
+    title = '',
+    leftText = '',
+    rightText = '',
+    leftFunc = '',
+    rightFunc,
+    description
+  } = alertParams;
+  const actions = [];
+  if (leftText) {
+    actions.push({
+      text: leftText,
+      onPress: leftFunc && leftFunc(),
+      style: globalStyle.cancelStyle
+    });
+  }
+  if (rightText) {
+    actions.push({
+      text: rightText,
+      onPress: rightFunc(),
+      style: globalStyle.sureStyle
+    });
+  }
+
+  Modal.alert(
+    <span className="alert_title">{title}</span>,
+    description, actions
+  );
 }

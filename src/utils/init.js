@@ -2,10 +2,11 @@
 import sa from 'sa-sdk-javascript';
 import Promise from 'promise-polyfill';
 import { initJSBridge, jsNative, nativeJs } from 'sx-jsbridge';
+import type { BrowserHistory } from 'history/createBrowserHistory';
 import { fetchPromise, PromiseList } from './fetch-middleware';
 import uam from './deviceMark';// ua mark
 
-export default (historyApi: any, store: any) => {
+export default (historyApi: BrowserHistory, store: any) => {
   // To add to window, 定义全局变量
   if (!window.Promise) {
     window.Promise = Promise;
@@ -32,7 +33,7 @@ export default (historyApi: any, store: any) => {
    *  神策数据统计，初始化
    */
   sa.init({
-    server_url: process.env.mode != 'production' ? 'https://sc.vbill.cn/sa?project=MPOS_TEST' : 'https://sc.vbill.cn/sa?project=SXF_PLUS',
+    server_url: process.env.mode !== 'production' ? 'https://sc.vbill.cn/sa?project=MPOS_TEST' : 'https://sc.vbill.cn/sa?project=SXF_PLUS',
     heatmap: {
       // 是否开启点击图，默认 default 表示开启，自动采集 $WebClick 事件，可以设置 'not_collect' 表示关闭
       clickmap: 'default',

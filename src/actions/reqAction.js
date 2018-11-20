@@ -1,3 +1,4 @@
+// @flow
 import { ActionCreator } from '../utils/fetch-middleware';
 import {
   POLLING_CYBER,
@@ -10,282 +11,47 @@ import {
   DIRECT_EMAIL_BILL, EMAIL_LIST, DELETE_EMAIL, CARDS_LIST, JUDGE_SEL_CARD, IDENTITY_BNK, POST_INFO, SEND_VERIFICATION,
   VERIFY_CODE, GET_IDENTITY_INFO, LOOSE_CARD, HANDLE_BILL, GET_BILL_ID, ACTIVITY_CARD, REMOVE_LOGIN_STATUS,
   REMOVE_BILL_ALL_STATUS, ADTIVITY_DATA, MARK_BILL_STATUS, MARK_BILL_REST, ECHO_FOEM, BILL_DETAIL_LIST
-} from '../utils/ActionsType'
+} from '../utils/ActionsType';
 
-export const getBankList = (data) => ActionCreator(
-  GET_BANK_LIST,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': GET_BANK_LIST[1]}
-)();
+export const getBankList = (data:any) => actionGenerator({ type: GET_BANK_LIST, data });
+export const getLoginList = (data:any) => actionGenerator({ type: GET_BANK_LOGIN_LIST, data });
+export const loginCyber = (data:any) => actionGenerator({ type: LOGIN_CYBER, data });
+export const checkToken = (data:any) => actionGenerator({ type: CHECK_CYBER_STATUS, data });
+export const pollingCyber = (data:any) => actionGenerator({ type: POLLING_CYBER, data });
+export const verifyCode = (data:any) => actionGenerator({ type: VERYFY_CODE_STARUS, data });
+export const getBillList = (data:any) => actionGenerator({ type: BILL_LIST, data });
+export const getBillDetail = (data:any) => actionGenerator({ type: BILL_DETAIL, data });
+export const getPayDetail = (data:any) => actionGenerator({ type: PAY_DETAIL, data });
+export const getHUandao = (data:any) => actionGenerator({ type: HUAN_DAO, data });
+export const syncBill = (data:any) => actionGenerator({ type: SYNC_BILL, data });
+export const getFreeInterest = (data:any) => actionGenerator({ type: FREE_INTEREST, data });
+export const emailLogin = (data:any) => actionGenerator({ type: EMAIL_LOGIN, data });
+export const checkEmailTask = (data:any) => actionGenerator({ type: EMAIL_TASK_STATUS, data });
+export const deleteBill = (data:any) => actionGenerator({ type: DELETE_BILL, data });
+export const directImport = (data:any) => actionGenerator({ type: DIRECT_EMAIL_BILL, data });
+export const getEmailList = (data:any) => actionGenerator({ type: EMAIL_LIST, data });
+export const removeEmail = (data:any) => actionGenerator({ type: DELETE_EMAIL, data });
+export const getCardsList = (data:any) => actionGenerator({ type: CARDS_LIST, data });
+export const judgeSelfCard = (data:any) => actionGenerator({ type: JUDGE_SEL_CARD, data });
+export const identityBank = (data:any) => actionGenerator({ type: IDENTITY_BNK, data });
+export const postInfo = (data:any) => actionGenerator({ type: POST_INFO, data });
+export const sendVerification = (data:any) => actionGenerator({ type: SEND_VERIFICATION, data });
+export const verifySMSCode = (data:any) => actionGenerator({ type: VERIFY_CODE, data });
+export const getIndetiyInfo = (data:any) => actionGenerator({ type: GET_IDENTITY_INFO, data });
+export const looseCard = (data:any) => actionGenerator({ type: LOOSE_CARD, data });
+export const handleBillForm = (data:any) => actionGenerator({ type: HANDLE_BILL, data });
+export const getBillId = (data:any) => actionGenerator({ type: GET_BILL_ID, data });
+export const getActivities = (data:any) => actionGenerator({ type: ACTIVITY_CARD, data });
+export const removeLoginStatus = (data:any) => actionGenerator({ type: REMOVE_LOGIN_STATUS, data });
+export const removeBillAllStatus = (data:any) => actionGenerator({ type: REMOVE_BILL_ALL_STATUS, data });
+export const getActivityData = (data:any) => actionGenerator({ type: ADTIVITY_DATA, data });
+export const setMarkBill = (data:any) => actionGenerator({ type: MARK_BILL_STATUS, data });
+export const setBillRest = (data:any) => actionGenerator({ type: MARK_BILL_REST, data });
+export const getEchoForm = (data: any) => actionGenerator({ type: ECHO_FOEM, data });
+export const getBillDetaillList = (data: any) => actionGenerator({ type: BILL_DETAIL_LIST, data });
 
-export const getLoginList = (data) => ActionCreator(
-  GET_BANK_LOGIN_LIST,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': GET_BANK_LOGIN_LIST[1]}
-)();
-
-export const loginCyber = (data) => ActionCreator(
-  LOGIN_CYBER,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': LOGIN_CYBER[1]}
-)();
-
-export const checkToken = (data) => ActionCreator(
-  CHECK_CYBER_STATUS,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': CHECK_CYBER_STATUS[1]}
-)();
-
-
-export const pollingCyber = (data) => ActionCreator(
-  POLLING_CYBER,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': POLLING_CYBER[1]}
-)();
-
-export const verifyCode = (data) => ActionCreator(
-  VERYFY_CODE_STARUS,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': VERYFY_CODE_STARUS[1]}
-)();
-
-
-export const getBillList = (data) => ActionCreator(
-  BILL_LIST,
-    `/api`,
-    'POST',
-    {...data, 'TRDE_CODE': BILL_LIST[1]}
-  )();
-
-  export const getBillDetail = (data) => ActionCreator(
-    BILL_DETAIL,
-    `/api`,
-    'POST',
-    {...data, 'TRDE_CODE': BILL_DETAIL[1]}
-  )();
-
-
-export const getPayDetail= (data) => ActionCreator(
-  PAY_DETAIL,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': PAY_DETAIL[1]}
-)();
-
-export const getHUandao= (data) => ActionCreator(
-  HUAN_DAO,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': HUAN_DAO[1]}
-)();
-
-export const syncBill= (data) => ActionCreator(
-  SYNC_BILL,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': SYNC_BILL[1]}
-)();
-
-export const getFreeInterest= (data) => ActionCreator(
-  FREE_INTEREST,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': FREE_INTEREST[1]}
-)();
-
-
-export const emailLogin = (data) => ActionCreator(
-  EMAIL_LOGIN,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': EMAIL_LOGIN[1]}
-)();
-
-export const checkEmailTask = (data) => ActionCreator(
-  EMAIL_TASK_STATUS,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': EMAIL_TASK_STATUS[1]}
-)();
-
-
-  export const deleteBill = (data) => ActionCreator(
-    DELETE_BILL,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': DELETE_BILL[1]}
-)();
-
-export const directImport = (data) => ActionCreator(
-  DIRECT_EMAIL_BILL,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': DIRECT_EMAIL_BILL[1]}
-)();
-
-export const getEmailList = (data) => ActionCreator(
-  EMAIL_LIST,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': EMAIL_LIST[1]}
-)();
-
-
-export const removeEmail = (data) => ActionCreator(
-  DELETE_EMAIL,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': DELETE_EMAIL[1]}
-)();
-
-export const getCardsList = (data) => ActionCreator(
-  CARDS_LIST,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': CARDS_LIST[1]}
-)();
-
-export const judgeSelfCard = (data) => ActionCreator(
-  JUDGE_SEL_CARD,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': JUDGE_SEL_CARD[1]}
-)();
-
-export const identityBank = (data) => ActionCreator(
-  IDENTITY_BNK,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': IDENTITY_BNK[1]}
-)();
-
-export const postInfo = (data) => ActionCreator(
-  POST_INFO,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': POST_INFO[1]}
-)();
-
-export const sendVerification = (data) => ActionCreator(
-  SEND_VERIFICATION,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': SEND_VERIFICATION[1]}
-)();
-
-export const verifySMSCode = (data) => ActionCreator(
-  VERIFY_CODE,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': VERIFY_CODE[1]}
-)();
-
-export const getIndetiyInfo = (data) => ActionCreator(
-  GET_IDENTITY_INFO,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': GET_IDENTITY_INFO[1]}
-)();
-
-export const looseCard = (data) => ActionCreator(
-  LOOSE_CARD,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': LOOSE_CARD[1]}
-)();
-
-export const handleBillForm = (data) => ActionCreator(
-  HANDLE_BILL,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': HANDLE_BILL[1]}
-)();
-
-export const getBillId = (data) => ActionCreator(
-  GET_BILL_ID,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': GET_BILL_ID[1]}
-)();
-
-export const getActivities = (data) => ActionCreator(
-  ACTIVITY_CARD,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': ACTIVITY_CARD[1]}
-)();
-
-  export const removeLoginStatus = (data) => ActionCreator(
-    REMOVE_LOGIN_STATUS,
-    `/api`,
-    'POST',
-    {...data, 'TRDE_CODE': REMOVE_LOGIN_STATUS[1]}
-  )();
-
-export const removeBillAllStatus = (data) => ActionCreator(
-  REMOVE_BILL_ALL_STATUS,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': REMOVE_BILL_ALL_STATUS[1]}
-)();
-
-export const getActivityData = (data) => ActionCreator(
-  ADTIVITY_DATA,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': ADTIVITY_DATA[1]}
-)();
-
-
-export const setMarkBill = (data) => ActionCreator(
-  MARK_BILL_STATUS,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': MARK_BILL_STATUS[1]}
-)();
-
-export const setBillRest = (data) => ActionCreator(
-  MARK_BILL_REST,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': MARK_BILL_REST[1]}
-)();
-
-export const getEchoForm = (data) => ActionCreator(
-  ECHO_FOEM,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': ECHO_FOEM[1]}
-)();
-
-export const getBillDetaillList = (data) => ActionCreator(
-  BILL_DETAIL_LIST,
-  `/api`,
-  'POST',
-  {...data, 'TRDE_CODE': BILL_DETAIL_LIST[1]}
-)();
-
-export const actionGenerator = ({ data,type}) => ActionCreator(
-    type,
-    `/api`,
-    'POST',
-    {...data, 'TRDE_CODE': type[1]}
-)();
-
-
-
-
-
-
-
-
-
-
-
-
+export const actionGenerator = ({ data, type }: any) => ActionCreator({
+  type,
+  method: 'POST',
+  data: { ...data, TRDE_CODE: type[1] }
+})();

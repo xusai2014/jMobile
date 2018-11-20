@@ -46,3 +46,21 @@ export default function ModalAlert(alertParams: AlertParams): void {
     description, actions
   );
 }
+
+type singleParams = {
+  title: string,
+  message?: string,
+  positiveBtnText?: string,
+  onOk: Function
+}
+export const showSingleBtnModal = (args: singleParams): void => {
+  const {
+    title = '温馨提示',
+    message = '',
+    positiveBtnText = '确认',
+    onOk = () => {}
+  } = args
+  Modal.alert(title, message, [
+    { text: positiveBtnText, onPress: onOk }
+  ]);
+};

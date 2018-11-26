@@ -1,15 +1,13 @@
 import React from 'react';
 import Header from '../../compoents/Header'
-import {connect} from "react-redux";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {getBankList, getEmailList} from '../../actions/reqAction';
 
-@connect((state)=>{
- return {
-   bankList:state.BillReducer.bankList,
- }
+@InitDecorator((state)=>{
+  return {
+    bankList:state.BillReducer.bankList,
+  }
 })
-@InitDecorator()
 export default class MethodList extends React.Component{
   async componentWillMount(){
     this.props.dispatch(getBankList()).then((result)=>{

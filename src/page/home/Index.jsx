@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { Toast } from 'antd-mobile'
 import BillCard from "./BillCard";
 import Popup from "./components/Popup";

@@ -1,11 +1,13 @@
 // @flow
 import * as React from 'react';
 import { withRouter } from 'react-router-dom';
+import styles from './FixedContent.less';
 
 type Props = {
-  className:string,
+  className?:string,
   children:React.Node
 }
+
 type State = {}
 
 @withRouter
@@ -38,12 +40,12 @@ export default class FixedContent extends React.Component<Props, State> {
   };
 
   render() {
-    const { children, className } = this.props;
+    const { children, className = '' } = this.props;
     return (
       <div
         ref="content"
-        className={className}
-        style={{ background: '#F5F5F5', width: '7.5rem', minHeight: gloablMinHeight }}>
+        className={`${styles.container} ${className}`}
+        style={{minHeight: gloablMinHeight }}>
         {children}
       </div>
     );

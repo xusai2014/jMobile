@@ -1,57 +1,33 @@
-import React from 'react';
+// @flow
+
+import * as React from 'react';
 import { connect } from 'react-redux';
-import { jsNative } from 'sx-jsbridge';
-import { ActionCreator } from '../utils/fetch-middleware';
+import { actionGenerator } from '../actions/reqAction';
 
-const { nativeRequestBaseParams } = jsNative;
+export function InitDecorator<
+  S, // Redux state
+  RS:{ dispatch: Function, isLogged:string, reqParams:Object }, // 注入返回的 Props
+  Con, // 装饰的最终容器
+  C:React.ComponentType<RS>, // 目标组件
+  M:<S, RS>(s: S) => RS // 订阅Redux
+  >(m: M): (WrappedComponent: C) => Con {
+  return WrappedComponent => connect(state => ({
+    isLogged: state.GlobalReducer.isLogged,
+    reqParams: state.GlobalReducer.reqParams,
+    ...m(state)
+  }))(
+    class extends React.Component<RS> {
+      render() {
+        const { props } = this;
+        return (
+          <WrappedComponent
+            {...props}
+            apiDispatcher={(type: PromiseActionType, data: Object) => props.dispatch(actionGenerator({ type, data }))}
+          />);
+      }
+    }
+  );
+};
 
-export const InitDecorator = (mergeStateToprops = () => ({})) => Coms => connect(state => ({
-  isLogged: state.GlobalReducer.isLogged,
-  reqParams: state.GlobalReducer.reqParams,
-  ...mergeStateToprops(state)
-}))(class extends React.Component {
-  constructor(props) {
-    super(props);
-    this.resetParams();
-  }
-
-  /**
-   * 获取请求基础参数
-   * @returns {{APPVERSION: *, OSVERSION: *, PLATFORM: *, TOKEN_ID: *, CHANNEL_NO: *}}
-   */
-  getBaseParams = () => nativeRequestBaseParams().then((reqParams) => {
-    this.syncData(reqParams);
-  });
-
-  /**
-   * 重置native返回的请求参数
-   */
-  resetParams() {
-    nativeRequestBaseParams().then((reqParams) => {
-      this.syncData(reqParams);
-    });
-  }
-
-  syncData(v) {
-    const { props } = this;
-    props.dispatch({ type: 'syncData', data: v });
-  }
-
-  render() {
-    const { props } = this;
-    return (
-      <Coms
-        {...props}
-        getBaseParams={this.getBaseParams}
-        resetParams={() => this.resetParams()}
-        apiDispatcher={(type, data) => props.dispatch(ActionCreator({
-          type,
-          url: '/api',
-          method: 'POST',
-          data: { ...data, TRDE_CODE: type[1] }
-        })())}
-      />);
-  }
-});
 export default InitDecorator;
 

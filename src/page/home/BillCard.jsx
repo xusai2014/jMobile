@@ -9,7 +9,6 @@ import globalStyle from "../../style/globalStyle";
 import styles from './style/card.less'
 const {loginHelper} = jsNative;
 
-@withRouter
 @InitDecorator((state) => {
   return {
     syncBillStatus: state.BillReducer.syncBillStatus,

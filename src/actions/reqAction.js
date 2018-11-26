@@ -50,8 +50,8 @@ export const setBillRest = (data:any) => actionGenerator({ type: MARK_BILL_REST,
 export const getEchoForm = (data: any) => actionGenerator({ type: ECHO_FOEM, data });
 export const getBillDetaillList = (data: any) => actionGenerator({ type: BILL_DETAIL_LIST, data });
 
-export const actionGenerator = ({ data, type }: any) => ActionCreator({
+export const actionGenerator = ({ data, type }: Object):PromiseAction => ActionCreator({
   type,
   method: 'POST',
   data: { ...data, TRDE_CODE: type[1] }
-})();
+});

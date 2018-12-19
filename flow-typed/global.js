@@ -9,8 +9,8 @@ declare var sa: any; // 神策统计
 declare type PromiseActionType = ['REQUEST', string, 'FAILURE']; // 定义异步事件类型
 declare type ActionType = string;
 declare type BaseAction = {| // 基本事件
-  payload:string,
-  data:?Object,
+  payload?:string,
+  data?:Object|boolean|string,
   type:string,
 |}
 

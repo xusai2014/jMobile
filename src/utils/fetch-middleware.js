@@ -17,13 +17,14 @@ import { showSingleBtnModal } from '../compoents/ModalAlert';
 const { nativeLogin, nativeQuitLogon, nativeRequestBaseParams } = jsNative;
 
 type actionParams = {
-  type: string,
+  type: PromiseActionType,
+  data: Object,
   method: string,
   key?: string,
   url?: string,
-  data: any
 }
-export const ActionCreator = (args: actionParams): Function => {
+
+export const ActionCreator = (args: actionParams): PromiseAction => {
   const {
     type,
     method = 'GET',
@@ -31,11 +32,11 @@ export const ActionCreator = (args: actionParams): Function => {
     url = '/api',
     data
   } = args;
-  return () => ({
+  return {
     payload: key,
     promise: () => fetchPromise(url, method, data, true),
     types: [...type]
-  });
+  };
 };
 
 /**
@@ -51,7 +52,7 @@ export class PromiseList {
     PromiseList.list.push(promise);
   }
 
-  static cancel(): void {
+  cancel = (): void => {
     PromiseList.list.forEach((v) => {
       v.isCanceled = true;
     });
@@ -248,11 +249,11 @@ export function filterResponse(data: any): any {
  * @param successCall
  * @param cancelCall
  */
-export const checkReLoginFlow = (
-  err: any,
-  successCall: Function = () => {},
-  cancelCall: Function = () => {}
-): any => {
+export const checkReLoginFlow = (err: any,
+                                 successCall: Function = () => {
+                                 },
+                                 cancelCall: Function = () => {
+                                 }): any => {
   if (window.loginAlert) {
     return;
   }

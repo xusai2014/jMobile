@@ -11,6 +11,9 @@ export default (historyApi: BrowserHistory, store: any) => {
   if (!window.Promise) {
     window.Promise = Promise;
   }
+  if (!window.$) {
+    window.$ = {};
+  }
   window.fetchPromise = fetchPromise;
   window.promiseList = new PromiseList();
   window.uam = uam;
@@ -39,9 +42,9 @@ export default (historyApi: BrowserHistory, store: any) => {
       clickmap: 'default',
       // 是否开启触达注意力图，默认 default 表示开启，自动采集 $WebStay 事件，可以设置 'not_collect' 表示关闭
       scroll_notice_map: 'default',
-      show_log: true,
       is_single_page: true
-    }
+    },
+    show_log: false
   });
 
   /**

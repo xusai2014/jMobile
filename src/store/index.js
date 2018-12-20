@@ -44,11 +44,11 @@ const promiseMiddleware: any = () => (next): DispatchAPI<Action> => (action: Act
       }
       next({ ...rest, data: null, type: SUCCESS });
       next({ ...rest, data: result, type: FAILURE });
-      throw Error('接口失败');
+      throw Error(`接口失败${JSON.stringify(result)}`);
     },
     (error) => {
       next({ ...rest, data: error, type: FAILURE });
-      throw Error('接口失败');
+      throw Error(error.message?error.message:"接口失败");
     }
   );
 };

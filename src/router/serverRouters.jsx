@@ -4,6 +4,7 @@
 */
 import React from 'react';
 import { Switch,Route} from 'react-router-dom';
+import NoMatch from '../page/NoMatch';
 import HomeIndex from '../page/home/Index.jsx';
 import CardsList from '../page/cardsPackage/CardsList.jsx';
 import Result from '../page/result/Result.jsx';
@@ -31,4 +32,4 @@ export default ()=>(<Switch><Route exact={false} path={'/home/index'} component=
 <Route exact={false} path={'/email/add'} component={EmailAdd} />
 <Route exact={false} path={'/bill/detail/:billId'} component={BillDetail} />
 <Route exact={false} path={'/cyber/login/:bankId'} component={CyberBank} />
-</Switch>)
+<Route component={NoMatch}/></Switch>)

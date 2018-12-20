@@ -22,14 +22,28 @@ initFunc(historyAPi, store);
 const container: HTMLElement | null = document.getElementById('content');
 
 if (container !== null) {
-  ReactDOM.render(
-    <Provider store={store}>
-      <Router history={historyAPi}>
-        <FixedContent>
-          <Routers />
-        </FixedContent>
-      </Router>
-    </Provider>,
-    container,
-  );
+  if (container.hasChildNodes()) {
+    ReactDOM.hydrate(
+      <Provider store={store}>
+        <Router history={historyAPi}>
+          <FixedContent>
+            <Routers />
+          </FixedContent>
+        </Router>
+      </Provider>,
+      container,
+    );
+  } else {
+    ReactDOM.render(
+      <Provider store={store}>
+        <Router history={historyAPi}>
+          <FixedContent>
+            <Routers />
+          </FixedContent>
+        </Router>
+      </Provider>,
+      container,
+    );
+  }
+
 }

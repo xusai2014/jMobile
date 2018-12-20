@@ -175,7 +175,7 @@ const httpsServer = https.createServer({
   cert: fs.readFileSync('./cert/certificate.crt', 'utf8')
 }, app);
 
-app.listen(PORT, () => {
+httpsServer.listen(PORT, () => {
   log.info(`启动服务器的端口: ${PORT}!`);
 });
 

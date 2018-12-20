@@ -264,7 +264,7 @@ export default class LoadingStatus extends React.Component{
   }
   render() {
     const  { type,}   = this.props.match.params;
-    const { title } = results[type];
+    const { title = '' } = results[type]?results[type]:{};
     const { progress, } = this.state;
     return [<Header key="1" title={`正在导入${title}`} ></Header>,
       <Prompt message={()=>{

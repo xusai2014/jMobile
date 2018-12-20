@@ -49,14 +49,14 @@ export default function (state = initialState, actions = {}) {
     case 'FAILURE':
       return {
         ...state,
-        errMsg: actions.data.err.message,
+        errMsg: actions.data.err ? actions.data.err.message : actions.data.message,
         requestStaus: false
       };
     case ASYNC_COOKIE:
 
       return {
         ...state,
-        ...actions.data,
+        ...actions.data
       };
     case CLEAR_MSG:
       return {

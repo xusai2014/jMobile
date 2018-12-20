@@ -5,12 +5,41 @@
   "main": "index.js",
   "scripts": {
     "dev": "export mode=development && npx babel-node server/server.js",
-    "build": "npx babel-node server/generate-routers.js && export mode=production && npx webpack --progress --profile --colors --config webpack.config.babel.js",
+    "build": "rm -rf build && npx babel-node server/generate-routers.js && export mode=production && npx webpack --progress --profile --colors --config webpack.config.babel.js",
+    "postbuild": "npx react-snap",
     "debug": "export mode=development && npx babel-node server/server.js --inspect-brk=9229",
     "type": "flow-typed install"
   },
   "theme": {
     "icon-url": "'/static/font/iconfont/iconfont'"
+  },
+  "reactSnap": {
+    "source": "build",
+    "port": "3300",
+    "userAgent": "ReactSnap Android",
+    "skipThirdPartyRequests": false,
+    "asyncScriptTags": true,
+    "cacheAjaxRequests": true,
+    "minifyHtml": {
+      "collapseWhitespace": false,
+      "removeComments": false
+    },
+    "destination": "./build/dist",
+    "include": [
+      "/home/index",
+      "/cards/cardslist",
+      "/result/:type",
+      "/load/:type",
+      "/cards/edit",
+      "/bill/method",
+      "/bill/cardlist",
+      "/manual/handlebill",
+      "/manual/add",
+      "/email/manager",
+      "/email/add",
+      "/bill/detail/:billId",
+      "/cyber/login/:bankId"
+    ]
   },
   "browserslist": [
     "iOS >= 8",
@@ -20,9 +49,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "antd": "^3.5.2",
     "antd-mobile": "^2.1.8",
-    "babel-polyfill": "^6.26.0",
     "history": "^4.7.2",
     "promise-polyfill": "^7.1.2",
     "rc-form": "^2.2.0",
@@ -55,6 +82,7 @@
     "babel-plugin-css-modules-transform": "^1.6.1",
     "babel-plugin-import": "^1.7.0",
     "babel-plugin-react-css-modules": "^3.4.2",
+    "babel-polyfill": "^6.26.0",
     "copy-webpack-plugin": "^4.5.1",
     "css-loader": "^0.28.11",
     "css-modules-require-hook": "^4.2.3",
@@ -68,6 +96,7 @@
     "less-loader": "^4.1.0",
     "postcss": "6.0.1",
     "postcss-loader": "^2.1.4",
+    "react-snap": "^1.23.0",
     "redux-devtools-extension": "^2.13.2",
     "static-html-webpack-plugin": "^1.2.0",
     "style-loader": "^0.21.0",

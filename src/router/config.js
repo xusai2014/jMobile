@@ -59,6 +59,11 @@ export default [{
     path:"/cyber/login/:bankId",
     name:"CyberBank"
 
+  },{
+    component:"../page/3.4.0/ImportBills.jsx",
+    path:"/3.4.0/importbills",
+    name:"ImportBills"
+
   }
 
 ]

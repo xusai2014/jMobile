@@ -38,7 +38,8 @@
       "/email/manager",
       "/email/add",
       "/bill/detail/:billId",
-      "/cyber/login/:bankId"
+      "/cyber/login/:bankId",
+      "/3.4.0/importbills"
     ]
   },
   "browserslist": [

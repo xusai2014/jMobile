@@ -45,5 +45,4 @@ if (container !== null) {
       container,
     );
   }
-
 }

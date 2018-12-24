@@ -58,36 +58,10 @@
 + M503 **绑定信用卡接口**
 
 
+-----------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// M512,M502.M503
-// 提交信息
-export const POST_INFO: PromiseActionType = generate('M512');
-// 发送验证码
-export const SEND_VERIFICATION: PromiseActionType = generate('M502');
-// 验证验证码
-export const VERIFY_CODE: PromiseActionType = generate('M503');
-
++ 
 
 
 

@@ -12,7 +12,7 @@ type Props = {
   backStart?: Function
 }
 @withRouter
- export default class AllHeader extends React.Component<Props> {
+ export default class Header extends React.Component<Props> {
   componentWillMount() {
     const { props } = this;
     this.refreshTitle(props.title);

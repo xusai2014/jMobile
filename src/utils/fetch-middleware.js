@@ -197,7 +197,7 @@ export function parseJSON(response: Response): string | Object {
       code: '7777'
     }
   };
-};
+}
 
 /**
  *   @author jerryxu

@@ -10,52 +10,50 @@ import {
   FREE_INTEREST,
   EMAIL_LOGIN,
   EMAIL_TASK_STATUS, DELETE_BILL, DIRECT_EMAIL_BILL, EMAIL_LIST, DELETE_EMAIL, HANDLE_BILL, REMOVE_BILL_ALL_STATUS,
-  ADTIVITY_DATA, ECHO_FOEM, BILL_DETAIL_LIST,
+  ADTIVITY_DATA, ECHO_FOEM, BILL_DETAIL_LIST
 } from '../utils/ActionsType';
 
 const initialState = {
   bankList: [],
   loginList: {},
-  cyberTaskId:'',
-  cyberTokenStatus:{},
-  cyberStatus:{},
-  verifyCodeStatus:{},
-  CHECK_CYBER_BILL:{},
-  billList:{},
-  payDetail:[],
-  huandaoData:{},
-  syncBillStatus:{},
-  freeIntrestData:[],
-  emailLogin:{},
-  emailTaskStatus:{},
-  deleteBillStatus:{},
-  emailList:[],
-  handeBill:{},
-  billDetail:{
-    pageResponseDto:{
-      pageList:[]
+  cyberTaskId: '',
+  cyberTokenStatus: {},
+  cyberStatus: {},
+  verifyCodeStatus: {},
+  CHECK_CYBER_BILL: {},
+  billList: {},
+  payDetail: [],
+  huandaoData: {},
+  syncBillStatus: {},
+  freeIntrestData: [],
+  emailLogin: {},
+  emailTaskStatus: {},
+  deleteBillStatus: {},
+  emailList: [],
+  handeBill: {},
+  billDetail: {
+    pageResponseDto: {
+      pageList: []
     }
   },
-  billAllStatus:{
-
-  },
-  activityData:{},
-  echoForm:{},
-  billDetailList:{}
+  billAllStatus: {},
+  activityData: {},
+  echoForm: {},
+  billDetailList: {}
 };
-//全局状态信息，数据信息存储
-export default function (state = initialState, actions = {} ) {
+// 全局状态信息，数据信息存储
+export default function (state = initialState, actions = {}) {
   switch (actions.type) {
     case GET_BANK_LIST[1]:
       const [creditCard = {}] = actions.data;
-      const {bank_list = []} = creditCard
+      const { bank_list = [] } = creditCard;
       return {
         ...state,
         bankList: bank_list
       }
 
     case GET_BANK_LOGIN_LIST[1]:
-      const {subtype, logins = []} = actions.data;
+      const { subtype, logins = [] } = actions.data;
 
       return {
         ...state,
@@ -65,7 +63,8 @@ export default function (state = initialState, actions = {} ) {
             logins.map((v, k) => {
               const {
                 login_type, password_desc, username_desc,
-                username_regex, password_regex, username1_desc ='',username1_regex = '',...rest} = v;
+                username_regex, password_regex, username1_desc = '', username1_regex = '', ...rest
+              } = v;
               let items = [];
               items.push({
                 name: username_desc, value: "",
@@ -105,57 +104,57 @@ export default function (state = initialState, actions = {} ) {
     case CHECK_CYBER_STATUS[1]:
       return {
         ...state,
-        cyberTokenStatus:actions.data,
+        cyberTokenStatus: actions.data,
       }
     case POLLING_CYBER[1]:
       return {
         ...state,
-        cyberStatus:actions.data,
+        cyberStatus: actions.data,
       }
     case VERYFY_CODE_STARUS[1]:
       return {
         ...state,
-        verifyCodeStatus:actions.data,
+        verifyCodeStatus: actions.data,
       }
     case BILL_LIST[1]:
       return {
         ...state,
-        billList:actions.data,
+        billList: actions.data,
       }
     case BILL_DETAIL[1]:
       return {
         ...state,
-        billDetail:actions.data,
+        billDetail: actions.data,
       }
     case PAY_DETAIL[1]:
       return {
         ...state,
-        payDetail:actions.data
+        payDetail: actions.data
       }
     case HUAN_DAO[1]:
       return {
         ...state,
-        haidaoData:actions.data,
+        haidaoData: actions.data,
       }
     case SYNC_BILL[1]:
       return {
         ...state,
-        syncBillStatus:actions.data,
+        syncBillStatus: actions.data,
       }
     case FREE_INTEREST[1]:
       return {
         ...state,
-        freeIntrestData:actions.data
+        freeIntrestData: actions.data
       }
     case EMAIL_LOGIN[1]:
       return {
         ...state,
-        emailLogin:actions.data
+        emailLogin: actions.data
       }
     case EMAIL_TASK_STATUS[1]:
       return {
         ...state,
-        emailTaskStatus:actions.data,
+        emailTaskStatus: actions.data,
       }
     case DELETE_BILL[1]:
       return state;
@@ -165,7 +164,7 @@ export default function (state = initialState, actions = {} ) {
     case EMAIL_LIST[1]:
       return {
         ...state,
-        emailList:actions.data,
+        emailList: actions.data,
       }
     case DELETE_EMAIL[1]:
       return {
@@ -174,27 +173,27 @@ export default function (state = initialState, actions = {} ) {
     case HANDLE_BILL[1]:
       return {
         ...state,
-        handeBill:actions.data
+        handeBill: actions.data
       }
     case REMOVE_BILL_ALL_STATUS[1]:
       return {
         ...state,
-        billAllStatus:actions.data
+        billAllStatus: actions.data
       }
     case ADTIVITY_DATA[1]:
       return {
         ...state,
-        activityData:actions.data
+        activityData: actions.data
       }
     case ECHO_FOEM[1]:
       return {
         ...state,
-        echoForm:actions.data,
+        echoForm: actions.data,
       }
     case BILL_DETAIL_LIST[1]:
       return {
         ...state,
-        billDetailList:actions.data,
+        billDetailList: actions.data,
       }
     default:
       return state

@@ -48,14 +48,14 @@ const promiseMiddleware: any = () => (next): DispatchAPI<Action> => (action: Act
     },
     (error) => {
       next({ ...rest, data: error, type: FAILURE });
-      throw Error(error.message?error.message:"接口失败");
+      throw Error(error.message ? error.message : '接口失败');
     }
   );
 };
 
 type State = any;
 const Storage = () => {
-  const finalCreateStore = composeWithDevTools(applyMiddleware<Action, State, DispatchAPI<Action>>(promiseMiddleware))(createStore);
+  const finalCreateStore = composeWithDevTools(applyMiddleware < Action, State, DispatchAPI < Action >> (promiseMiddleware))(createStore);
   return finalCreateStore(reducers);
 };
 

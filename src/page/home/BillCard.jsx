@@ -1,13 +1,12 @@
 import React from 'react';
-import {withRouter} from "react-router-dom";
-import {checkToken, getIndetiyInfo, getLoginList, syncBill, verifyCode} from "../../actions/reqAction";
-import {InitDecorator} from "../../compoents/InitDecorator";
-import {Modal, Progress, Toast}  from "antd-mobile";
-import {jsNative} from "sx-jsbridge";
-import {waitFunc} from "../../utils/util";
+import { checkToken, getIndetiyInfo, getLoginList, syncBill, verifyCode } from "../../actions/reqAction";
+import { InitDecorator } from "../../compoents/InitDecorator";
+import { Modal, Progress, Toast }  from "antd-mobile";
+import { jsNative } from "sx-jsbridge";
+import { waitFunc } from "../../utils/util";
 import globalStyle from "../../style/globalStyle";
 import styles from './style/card.less'
-const {loginHelper} = jsNative;
+const { loginHelper } = jsNative;
 
 @InitDecorator((state) => {
   return {
@@ -33,20 +32,20 @@ export default class BillCard extends React.Component {
         cardType: 'CREDITCARD',
       })).then((result) => {
         Toast.hide();
-        const {data} = result;
-        const {subtype = ''} = data;
+        const { data } = result;
+        const { subtype = '' } = data;
         if (subtype) {
-            Modal.alert(<span className="alert_title">暂时无法获取账单的最新状态</span>, <span className="alert_content">如果您已通过其导入它平台还款，建议您通过网银导入</span>, [
-            {text: '暂不需要', onPress: () => console.log('置顶聊天被点击了'), style: globalStyle.cancelStyle},
+          Modal.alert(<span className="alert_title">暂时无法获取账单的最新状态</span>, <span className="alert_content">如果您已通过其导入它平台还款，建议您通过网银导入</span>, [
+            { text: '暂不需要', onPress: () => console.log('置顶聊天被点击了'), style: globalStyle.cancelStyle },
             {
               text: '通过网银导入',
-              onPress: () => this.props.history.push(`/cyber/login/${abbr}`, {name: bank_name}),
+              onPress: () => this.props.history.push(`/cyber/login/${abbr}`, { name: bank_name }),
               style: globalStyle.sureStyle
             }
           ]);
         } else {
-            Modal.alert(<span className="alert_title">该银行暂不支持同步您的账单数据</span>, '', [
-            {text: '我知道了', onPress: () => console.log('置顶聊天被点击了'), style: globalStyle.singleStyle}
+          Modal.alert(<span className="alert_title">该银行暂不支持同步您的账单数据</span>, '', [
+            { text: '我知道了', onPress: () => console.log('置顶聊天被点击了'), style: globalStyle.singleStyle }
           ]);
         }
 
@@ -62,7 +61,7 @@ export default class BillCard extends React.Component {
       taskId: task_id,
       cardNum,
     })).then((result) => {
-      const {data} = result;
+      const { data } = result;
       if (typeof data != 'undefined') {
         this.loopLogin(data, importBillType)
       } else {
@@ -101,8 +100,8 @@ export default class BillCard extends React.Component {
    *   @description 第三步流程判断任务状态，分别处理
    */
   handleStatus(status, taskId, loginType) {
-    const {data = {}} = status;
-    const { phase_status = '', input, description} = data;
+    const { data = {} } = status;
+    const { phase_status = '', input, description } = data;
     switch (phase_status) {
       case 'WAIT_CODE'://输入验证码
         Toast.hide();
@@ -131,7 +130,7 @@ export default class BillCard extends React.Component {
         return;
       case "DONE_FAIL":
         Toast.info(description);
-        this.setDeepState('inputData', {login_type: loginType}, {
+        this.setDeepState('inputData', { login_type: loginType }, {
           disabled: true
         });
         return;
@@ -156,7 +155,7 @@ export default class BillCard extends React.Component {
    *   @params 任务编号 短信验证码
    *   @description 第三步流程的分支流程，输入验证码检查登录状态
    */
-  async verifycation({taskId, value: code}) {
+  async verifycation({ taskId, value: code }) {
     Toast.loading('请稍候', 0)
     await this.props.dispatch(verifyCode({
       taskId,
@@ -171,12 +170,12 @@ export default class BillCard extends React.Component {
    *   @params 魔蝎验证码模版 任务编号 信息描述 回调函数
    *   @description Popup提示，输入信息，异步处理
    */
-  promptClick({input, taskId, description, callback}) {
-      Modal.prompt('输入验证码', description, [{
+  promptClick({ input, taskId, description, callback }) {
+    Modal.prompt('输入验证码', description, [{
       text: '取消',
       onPress: value => new Promise((resolve) => {
         resolve();
-          Modal.alert(<span className="alert_title">是否退出当前认证流程</span>, <span
+        Modal.alert(<span className="alert_title">是否退出当前认证流程</span>, <span
           className="alert_content">选择“是”将退出当前认证流程已填写信息将丢失</span>, [
           {
             text: "是", onPress: () => {
@@ -184,7 +183,7 @@ export default class BillCard extends React.Component {
           },
           {
             text: "否", onPress: () => {
-            this.promptClick({input, taskId, description, callback})
+            this.promptClick({ input, taskId, description, callback })
           }, style: globalStyle.sureStyle
           }
         ])
@@ -201,7 +200,7 @@ export default class BillCard extends React.Component {
             Toast.info('请检查您输入的验证码位数')
             return;
           }
-          callback({taskId, value})
+          callback({ taskId, value })
           resolve();
 
         }),
@@ -211,14 +210,14 @@ export default class BillCard extends React.Component {
   }
 
   judgeTaskStatus(status) {
-    const {data} = status;
-    const { phase_status} = data;
+    const { data } = status;
+    const { phase_status } = data;
     return phase_status == "DOING"
   }
 
 
   judgeStatus(bill_type, payment_due_date, bill_date, action) {
-    const {examineAccount} = this.props;
+    const { examineAccount } = this.props;
     if (bill_type == 'DONE') {
       const duM = moment(payment_due_date);
       if (parseInt(duM.diff(moment(), 'days')) < 0) {
@@ -289,15 +288,15 @@ export default class BillCard extends React.Component {
     this.props.dispatch(getIndetiyInfo({
       appType: 'mpos'
     })).then((result) => {
-      const {data} = result;
-      const {authSts} = data;
+      const { data } = result;
+      const { authSts } = data;
       //  authSts 99:未认证，01：已认证，02：驳回，00：审核中
       if (authSts == '01') {
         callback();
       } else if (authSts == '-1') {
         //数据尚未装载完毕不处理
       } else if (authSts == '99') {
-          Modal.alert(<span className="alert_title">您尚未通过实名认证，请先进行实名认证</span>, '', [
+        Modal.alert(<span className="alert_title">您尚未通过实名认证，请先进行实名认证</span>, '', [
           {
             text: "取消", onPress: () => {
           }, style: globalStyle.cancelStyle
@@ -346,7 +345,7 @@ export default class BillCard extends React.Component {
       percent,
       syncBegin
     } = this.state;
-    const {day, date, des, actionName, action, key} = this.judgeStatus(bill_type, payment_due_date, bill_date, repay)
+    const { day, date, des, actionName, action, key } = this.judgeStatus(bill_type, payment_due_date, bill_date, repay)
     return <div onClick={(e) => {
       if (!real) {
         if (isLogged) {
@@ -361,12 +360,12 @@ export default class BillCard extends React.Component {
       if (examineAccount) {
         return
       }
-      this.props.history.push(`/bill/detail/${bill_id}`, {bank_name, card_num, bank_id})
+      this.props.history.push(`/bill/detail/${bill_id}`, { bank_name, card_num, bank_id })
     }} className={styles.container}>
       <div className={styles.body}>
         {
           isNew == '01' ? <div className={styles.new}>
-            <img style={{width: '0.445rem'}} src="/static/img/new@2x.png"/>
+            <img style={{ width: '0.445rem' }} src="/static/img/new@2x.png"/>
           </div> : null
         }
         <div className={styles.main}>
@@ -379,12 +378,12 @@ export default class BillCard extends React.Component {
 
           >{card_num}</span>
         </div>
-        <div style={{width: '4.26rem', display: 'inline-block'}}>
+        <div style={{ width: '4.26rem', display: 'inline-block' }}>
           {
             syncBegin ?
               <div className={styles.right}>
                 {percent > 0 ? `${percent}%更新中...` : '登录中...'}
-                <Progress style={{width: "1.32rem"}} percent={percent} position="normal"/>
+                <Progress style={{ width: "1.32rem" }} percent={percent} position="normal"/>
               </div> :
               <img src="/static/img/1.1.0/more@2x.png" className={styles.more} onClick={(e) => {
                 e.stopPropagation();
@@ -408,7 +407,7 @@ export default class BillCard extends React.Component {
           }}>本期账单
           </div>
         </div>
-        <div style={{width: "2.84rem", display: 'inline-block'}}>
+        <div style={{ width: "2.84rem", display: 'inline-block' }}>
           <div className={styles.tips}>
             {day >= 0 ? day : 0}
           </div>
@@ -434,7 +433,7 @@ export default class BillCard extends React.Component {
           </div>
         </div>
         {!examineAccount ?
-          <div style={{background: actionName == '更新未出' ? 'rgb(153, 153, 153)' : '#4C7BFE',}}
+          <div style={{ background: actionName == '更新未出' ? 'rgb(153, 153, 153)' : '#4C7BFE', }}
                className={styles.btn}
                onClick={(e) => {
                  if (actionName == '更新未出') {

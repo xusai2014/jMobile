@@ -12,6 +12,7 @@ import FreeInterest from "./components/FreeInterest";
 import styles from './style/index.less'
 import { ACTIVITY_CARD, BILL_LIST, GET_IDENTITY_INFO, MARK_BILL_STATUS } from "../../utils/ActionsType";
 import ModalAlert from "../../compoents/ModalAlert";
+import DebounceButton from "../../compoents/DebounceButton";
 
 const { loginHelper, nativeOpenNewWebView } = jsNative;
 type Props = {
@@ -236,20 +237,20 @@ export default class Index extends React.Component<Props, State> {
             if (examineAccount && type == '1') {
               return null
             }
-            return <div key={k} onClick={() => {
+            return <DebounceButton  onClick={() => {
               if (type == '0') {
                 this.loginEnter(3, { action })
               } else if (type == '1') {
                 this.loginEnter(4, { action })
               }
-            }}>
+            }}><div key={k} >
               <span className={styles.iconItem}>
                 <img src={img} style={{ width: '0.65rem' }}/>
               </span>
               <div className={styles.textStyle}>
                 {text}
               </div>
-            </div>
+            </div></DebounceButton>
           })
         }
       </div>

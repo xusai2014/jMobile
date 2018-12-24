@@ -27,7 +27,7 @@ export function InitDecorator<
       }
     }
   );
-};
+}
 
 export default InitDecorator;
 

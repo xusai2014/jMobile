@@ -40,7 +40,7 @@
         });
         if(document.documentElement){
           var designedWidth = 750;
-          var actualWidth = Math.min(450, window.screen.availWidth);
+          var actualWidth = Math.min(450, window.innerWidth);
           document.documentElement.style.fontSize = actualWidth * 100 / designedWidth+"px";
         }
     </script>

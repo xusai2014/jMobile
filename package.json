@@ -18,9 +18,12 @@
     "port": "3300",
     "userAgent": "ReactSnap Android",
     "skipThirdPartyRequests": false,
-    "asyncScriptTags": true,
+    "asyncScriptTags": false,
     "cacheAjaxRequests": true,
-    "puppeteerArgs":["--no-sandbox", "--disable-setuid-sandbox"],
+    "puppeteerArgs": [
+      "--no-sandbox",
+      "--disable-setuid-sandbox"
+    ],
     "minifyHtml": {
       "collapseWhitespace": false,
       "removeComments": false

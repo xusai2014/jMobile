@@ -11,7 +11,27 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
     <title><%= htmlWebpackPlugin.options.title %></title>
+    <script src="https://cdn.staticfile.org/fastclick/1.0.6/fastclick.min.js"></script>
+    <script>
+      window.gloablMinHeight = document.documentElement.clientHeight -18;
+      if ('addEventListener' in document) {
+        document.addEventListener('DOMContentLoaded', function () {
+          FastClick && FastClick.attach(document.body);
+        }, false);
+      }
 
+      window.requestAnimationFrame(() => {
+        if (document.body && document.body.style) {
+          document.body.style.overflowY = '';
+          document.body.style.position = 'static';
+        }
+      });
+      if(document.documentElement){
+        var designedWidth = 750;
+        var actualWidth = Math.min(450, window.innerWidth);
+        document.documentElement.style.fontSize = actualWidth * 100 / designedWidth+"px";
+      }
+    </script>
     <script type="text/javascript">
         //禁止第三方网站恶意嵌套
         try {
@@ -98,31 +118,10 @@
 <div id="content">
 </div>
 <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/fastclick/1.0.6/fastclick.min.js"></script>
 <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 <script src="https://cdn.staticfile.org/lodash.js/4.17.4/lodash.min.js"></script>
 <script src="https://cdn.staticfile.org/moment.js/2.18.1/moment.min.js"></script>
 <script src="https://cdn.staticfile.org/moment.js/2.18.1/locale/zh-cn.js"></script>
 <script src="https://cdn.staticfile.org/crypto-js/3.1.9/crypto-js.min.js"></script>
-<script>
-  window.gloablMinHeight = document.documentElement.clientHeight -18;
-  if ('addEventListener' in document) {
-    document.addEventListener('DOMContentLoaded', function () {
-      FastClick && FastClick.attach(document.body);
-    }, false);
-  }
-
-  window.requestAnimationFrame(() => {
-    if (document.body && document.body.style) {
-      document.body.style.overflowY = '';
-      document.body.style.position = 'static';
-    }
-  });
-  if(document.documentElement){
-    var designedWidth = 750;
-    var actualWidth = Math.min(450, window.innerWidth);
-    document.documentElement.style.fontSize = actualWidth * 100 / designedWidth+"px";
-  }
-</script>
 </body>
 </html>

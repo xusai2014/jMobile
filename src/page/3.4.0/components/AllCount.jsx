@@ -11,12 +11,11 @@ export default class  AllCount extends React.Component{
         echoData: PropTypes.object.isRequired,
     }
     render(){
-        const {echoData={},getEmailAccount=()=>{
-        }} = this.props;
+        const {echoData={},getEmailAccount=()=>{},billProcess} = this.props;
         const{email='an****01@163.com',des='全部账号'}=echoData;
         return (
             <div className={styles.allAccount}>
-                <div className={styles.input}><input placeholder={email}/></div>
+                <div className={styles.input}><input placeholder={email} onClick={billProcess}/></div>
                 <button onClick={getEmailAccount}>{des}</button>
             </div>
         )

@@ -14,21 +14,21 @@ export default class CardList extends  React.Component{
     }
     render(){
         const {echoData={},noMarginRight,bankCardLogin}=this.props;
-        const {img='/static/img/3.4.0/zs@2x.png',describe='招商银行'}=echoData;
+        const {logo_uri='/static/img/3.4.0/zs@2x.png',name='招商银行'}=echoData;
         return(
             <div>
                 {noMarginRight ?
                     <div className={styles.noMargin}>
-                        <img src={img} className={styles.img} onClick={bankCardLogin}/>
+                        <img src={logo_uri} className={styles.img} onClick={bankCardLogin}/>
                         <span className={styles.des}>
-                            {describe}
+                            {name}
                         </span>
                     </div>
                     :
                     <div className={styles.container}>
-                        <img src={img} className={styles.img}/>
+                        <img src={logo_uri} className={styles.img} onClick={bankCardLogin}/>
                         <span className={styles.des}>
-                            {describe}
+                            {name}
                         </span>
                     </div>
                 }

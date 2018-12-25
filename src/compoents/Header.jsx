@@ -53,6 +53,7 @@ type Props = {
         <div
           className={styles.container}
           style={{ background: color }}
+          key={'1'}
         >
           {
             hide ? null
@@ -70,7 +71,7 @@ type Props = {
               </div>
           }
         </div>,
-        <div className={styles.bottom} style={{background: color}}></div>
+        <div key={'2'} className={styles.bottom} style={{background: color}}></div>
       ]
     );
   }

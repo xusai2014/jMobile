@@ -20,7 +20,10 @@
     "skipThirdPartyRequests": false,
     "asyncScriptTags": true,
     "cacheAjaxRequests": true,
-    "puppeteerArgs":["--no-sandbox", "--disable-setuid-sandbox"],
+    "puppeteerArgs": [
+      "--no-sandbox",
+      "--disable-setuid-sandbox"
+    ],
     "minifyHtml": {
       "collapseWhitespace": false,
       "removeComments": false
@@ -40,7 +43,8 @@
       "/email/add",
       "/bill/detail/:billId",
       "/cyber/login/:bankId",
-      "/3.4.0/importbills"
+      "/3.4.0/importbills",
+      "/3.4.0/choosebank"
     ]
   },
   "browserslist": [

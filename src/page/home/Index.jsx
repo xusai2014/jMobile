@@ -14,7 +14,7 @@ import { ACTIVITY_CARD, BILL_LIST, GET_IDENTITY_INFO, MARK_BILL_STATUS } from ".
 import ModalAlert from "../../compoents/ModalAlert";
 import DebounceButton from "../../compoents/DebounceButton";
 
-const { loginHelper, nativeOpenNewWebView } = jsNative;
+const { loginHelper, nativeOpenNewWebView, nativeRequestBaseParams  } = jsNative;
 type Props = {
   billList: any,
   huandaoData: any,
@@ -153,7 +153,17 @@ export default class Index extends React.Component<Props, State> {
           return;
         case 2:
           //添加账单
-          this.identifyFunc(() => this.props.history.push('/bill/method'))
+          this.identifyFunc(() => {
+            // TODO 区分APP版本，进入不同的账单导入入口页
+            nativeRequestBaseParams().then(params=>{
+                const appVersion=params['APP_VERSIONS'].split('.');
+                let sum='';
+                appVersion.forEach(v=>{sum+=v})
+                const version=Number(sum);
+                if(version>=340)  this.props.history.push('/3.4.0/importbills');
+                else  this.props.history.push('/bill/method')
+            })
+          })
           return;
         case 3:
           //进入卡包

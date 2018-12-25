@@ -4,13 +4,14 @@ import PayMethodList from './components/PayMethodList';
 import CardList from './components/CardList';
 import AllCount from './components/AllCount';
 import styles from './ImportBills.less';
-import {directImport,getBankList, getEmailList} from "../../actions/reqAction";
+import {directImport, getBankList, getEmailList} from "../../actions/reqAction";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {Toast} from "antd-mobile";
 
 @InitDecorator((state) => {
     return {
-        bankList:state.BillReducer.bankList,
+        bankList: state.BillReducer.bankList,
+        requestStaus: state.GlobalReducer.requestStaus
     }
 })
 export default class ImportBills extends React.Component {
@@ -18,9 +19,9 @@ export default class ImportBills extends React.Component {
         super(props);
         this.state = {
             showAllBank: false,
-            showAllCount:false,
-            account:'',
-            task_id:''
+            showAllCount: false,
+            account: '',
+            task_id: ''
         }
     }
 
@@ -29,34 +30,34 @@ export default class ImportBills extends React.Component {
         }, (err) => {
         });
         this.props.dispatch(getEmailList()).then((result) => {
-            const { data = [] }= result;
-            if(data.length >0){
-               this.setState({
-                   showAllCount:true,
-                   account:result.data[0].account,
-                   task_id:result.data[0].task_id,
-               })
+            const {data = []} = result;
+            if (data.length > 0) {
+                this.setState({
+                    showAllCount: true,
+                    account: result.data[0].account,
+                    task_id: result.data[0].task_id,
+                })
             } else {
                 this.setState({
-                    showAllCount:false
+                    showAllCount: false
                 })
             }
         }, (err) => {
         });
     }
     billDetail = () => {
-        const{task_id}=this.state;
-        Toast.loading('请稍后',0,null,true)
-        if(this.props.requestStaus){
+        const {task_id} = this.state;
+        Toast.loading('请稍后', 0, null, true)
+        if (this.props.requestStaus) {
             return;
         }
         this.props.dispatch(directImport({
             task_id,
-        })).then((result)=>{
-            const { data:taskId = '' } =result;
+        })).then((result) => {
+            const {data: taskId = ''} = result;
             this.props.history.push('/load/email', {taskId, loginType: "03"})
             Toast.hide();
-        },(err)=>{
+        }, (err) => {
             Toast.hide();
         });
     }
@@ -64,23 +65,22 @@ export default class ImportBills extends React.Component {
         this.props.history.push('/email/manager');
     }
     importEmail = () => {
-        this.props.dispatch(getEmailList({
-        })).then((result)=>{
-            const { data = [] }= result;
-            if(data.length >0){
+        this.props.dispatch(getEmailList({})).then((result) => {
+            const {data = []} = result;
+            if (data.length > 0) {
                 this.props.history.push('/email/manager');
             } else {
                 this.props.history.push('/email/add');
             }
-        },(err)=>{
-
+        }, (err) => {
         });
     }
     WriteBillByHand = () => {
         this.props.history.push('/bill/cardlist');
     }
     cardLogin = () => {
-        this.props.history.push('/cyber/login/:bankId');
+        //TODO
+        //跳转到对应网银的登录页面
     }
     netSilverList = () => {
         this.props.history.push('/3.4.0/choosebank');
@@ -92,12 +92,19 @@ export default class ImportBills extends React.Component {
             }
         )
     }
+    cardListLayout(condition, value) {
+        if (condition) {
+            return (<CardList echoData={value} key={value.name} noMarginRight={true} bankCardLogin={this.cardLogin}/>)
+        } else {
+            return (<CardList echoData={value} key={value.name} noMarginRight={false} bankCardLogin={this.cardLogin}/>)
+        }
+    }
     componentDidMount() {
     }
 
     render() {
-        const {echoData = [],bankList=[]} = this.props;
-        const {showAllBank,showAllCount,account} = this.state;
+        const {echoData = [], bankList = []} = this.props;
+        const {showAllBank, showAllCount, account} = this.state;
         const moreIcon = {logo_uri: '/static/img/3.4.0/more@2x.png', name: '全部银行'}
         const {
             sourceData = [{
@@ -110,33 +117,24 @@ export default class ImportBills extends React.Component {
                 describe: "没有邮箱，网银账单？请手动输入账单",
             }]
         } = echoData;
-        const allCountList = {email:account, des: '全部账号'};
+        const allCountList = {email: account, des: '全部账号'};
         const cardList = bankList.map((v, k) => {
-            if (k <= 7) {
-                if ((k + 1) % 3 == 0) {
-                    return (
-                        <CardList echoData={v} key={v.name} noMarginRight={true} bankCardLogin={this.cardLogin}/>)
-                } else {
-                    return (<CardList echoData={v} key={v.name} noMarginRight={false} bankCardLogin={this.cardLogin}/>)
-                }
-            }
-            if(k===8) return (<CardList echoData={moreIcon} key={moreIcon.name} noMarginRight={true} bankCardLogin={this.showBankAll}/>)
+            const cond = !!((k + 1) % 3 == 0);
+            if (k <= 7) return (this.cardListLayout(cond, v))
+            if (k === 8) return (<CardList echoData={moreIcon} key={moreIcon.name} noMarginRight={true} bankCardLogin={this.showBankAll}/>)
             else return null;
         })
-        const cardListAll=bankList.map((v,k)=>{
-            if ((k + 1) % 3 == 0) {
-                return (
-                    <CardList echoData={v} key={v.name} noMarginRight={true} bankCardLogin={this.cardLogin}/>)
-            } else {
-                return (<CardList echoData={v} key={v.name} noMarginRight={false} bankCardLogin={this.cardLogin}/>)
-            }
+        const cardListAll = bankList.map((v, k) => {
+            const condition = !!((k + 1) % 3 == 0);
+            return (this.cardListLayout(condition, v));
         })
         return (
             <div className={styles.container} style={{minHeight: gloablMinHeight}}>
                 <Header title="添加账单"/>
                 <PayMethodList echoData={sourceData[0]} exportEmail={this.importEmail} key={sourceData[0].name}/>
                 <div className={styles.accountInfo}>
-                    {showAllCount?<AllCount echoData={allCountList} getEmailAccount={this.getEmailAccount} billProcess={this.billDetail} key={allCountList.des}/>:null}
+                    {showAllCount ? <AllCount echoData={allCountList} getEmailAccount={this.getEmailAccount}
+                                              billProcess={this.billDetail} key={allCountList.des}/> : null}
                 </div>
                 <PayMethodList echoData={sourceData[1]} exportEmail={this.WriteBillByHand} key={sourceData[1].name}/>
                 <div className={styles.margin}></div>
@@ -153,7 +151,7 @@ export default class ImportBills extends React.Component {
                 </div>
                 <div className={styles.cardList}>
                     <div className={styles.firstLine}>
-                        {showAllBank?cardListAll:cardList}
+                        {showAllBank ? cardListAll : cardList}
                     </div>
                 </div>
             </div>

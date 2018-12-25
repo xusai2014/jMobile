@@ -18,7 +18,7 @@
     "port": "3300",
     "userAgent": "ReactSnap Android",
     "skipThirdPartyRequests": false,
-    "asyncScriptTags": true,
+    "asyncScriptTags": false,
     "cacheAjaxRequests": true,
     "puppeteerArgs": [
       "--no-sandbox",

@@ -45,6 +45,7 @@ export default class ImportBills extends React.Component {
         }, (err) => {
         });
     }
+
     billDetail = () => {
         const {task_id} = this.state;
         Toast.loading('请稍后', 0, null, true)
@@ -68,15 +69,15 @@ export default class ImportBills extends React.Component {
         this.props.dispatch(getEmailList({})).then((result) => {
             const {data = []} = result;
             if (data.length > 0) {
-                this.props.history.push('/email/manager');
+                this.props.history.push('/3.4.0/email/EmailManager');
             } else {
-                this.props.history.push('/email/add');
+                this.props.history.push('/3.4.0/email/EmailAdd');
             }
         }, (err) => {
         });
     }
     WriteBillByHand = () => {
-        this.props.history.push('/bill/cardlist');
+        this.props.history.push('/3.4.0/bankcardlist');
     }
     cardLogin = () => {
         //TODO
@@ -92,6 +93,7 @@ export default class ImportBills extends React.Component {
             }
         )
     }
+
     cardListLayout(condition, value) {
         if (condition) {
             return (<CardList echoData={value} key={value.name} noMarginRight={true} bankCardLogin={this.cardLogin}/>)
@@ -99,6 +101,7 @@ export default class ImportBills extends React.Component {
             return (<CardList echoData={value} key={value.name} noMarginRight={false} bankCardLogin={this.cardLogin}/>)
         }
     }
+
     componentDidMount() {
     }
 
@@ -108,11 +111,11 @@ export default class ImportBills extends React.Component {
         const moreIcon = {logo_uri: '/static/img/3.4.0/more@2x.png', name: '全部银行'}
         const {
             sourceData = [{
-                img: "/static/img/email@2x.png",
+                img: "/static/img/3.4.0/email@2x.png",
                 name: "邮箱导入",
                 describe: "绑定账单后去邮箱，一键获取信用卡账单",
             }, {
-                img: "/static/img/shoushu@2x.png",
+                img: "/static/img/3.4.0/shoushu@2x.png",
                 name: "手输账单",
                 describe: "没有邮箱，网银账单？请手动输入账单",
             }]
@@ -121,7 +124,8 @@ export default class ImportBills extends React.Component {
         const cardList = bankList.map((v, k) => {
             const cond = !!((k + 1) % 3 == 0);
             if (k <= 7) return (this.cardListLayout(cond, v))
-            if (k === 8) return (<CardList echoData={moreIcon} key={moreIcon.name} noMarginRight={true} bankCardLogin={this.showBankAll}/>)
+            if (k === 8) return (<CardList echoData={moreIcon} key={moreIcon.name} noMarginRight={true}
+                                           bankCardLogin={this.showBankAll}/>)
             else return null;
         })
         const cardListAll = bankList.map((v, k) => {

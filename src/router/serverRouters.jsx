@@ -20,6 +20,9 @@ import BillDetail from '../page/bill/BillDetail.jsx';
 import CyberBank from '../page/cyber/CyberBank.jsx';
 import ImportBills from '../page/3.4.0/ImportBills.jsx';
 import ChooseBank from '../page/3.4.0/ChooseBank.jsx';
+import EmailAdd_3.4.0 from '../page/3.4.0/email/EmailAdd.jsx';
+import EmailManager_3.4.0 from '../page/3.4.0/email/EmailManager.jsx';
+import BankCardList_3.4.0 from '../page/3.4.0/BankCardList.jsx';
 
 export default ()=>(<Switch><Route exact={false} path={'/home/index'} component={HomeIndex} />
 <Route exact={false} path={'/cards/cardslist'} component={CardsList} />
@@ -36,4 +39,7 @@ export default ()=>(<Switch><Route exact={false} path={'/home/index'} component=
 <Route exact={false} path={'/cyber/login/:bankId'} component={CyberBank} />
 <Route exact={false} path={'/3.4.0/importbills'} component={ImportBills} />
 <Route exact={false} path={'/3.4.0/choosebank'} component={ChooseBank} />
+<Route exact={false} path={'/3.4.0/email/emailadd'} component={EmailAdd_3.4.0} />
+<Route exact={false} path={'/3.4.0/email/EmailManager'} component={EmailManager_3.4.0} />
+<Route exact={false} path={'/3.4.0/bankcardlist'} component={BankCardList_3.4.0} />
 <Route component={NoMatch}/></Switch>)

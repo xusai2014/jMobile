@@ -18,7 +18,7 @@
     "port": "3300",
     "userAgent": "ReactSnap Android",
     "skipThirdPartyRequests": false,
-    "asyncScriptTags": false,
+    "asyncScriptTags": true,
     "cacheAjaxRequests": true,
     "puppeteerArgs": [
       "--no-sandbox",
@@ -44,7 +44,10 @@
       "/bill/detail/:billId",
       "/cyber/login/:bankId",
       "/3.4.0/importbills",
-      "/3.4.0/choosebank"
+      "/3.4.0/choosebank",
+      "/3.4.0/email/emailadd",
+      "/3.4.0/email/EmailManager",
+      "/3.4.0/bankcardlist"
     ]
   },
   "browserslist": [

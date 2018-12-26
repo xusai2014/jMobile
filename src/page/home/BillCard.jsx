@@ -352,7 +352,7 @@ export default class BillCard extends React.Component {
     return <div onClick={(e) => {
       if (!real) {
         if (isLogged) {
-          this.identifyFunc(() => enterMethodList())
+          this.identifyFunc(() => enterMethodList(this.props))
           return
         }
         e.stopPropagation();

@@ -156,7 +156,7 @@ export default class Index extends React.Component<Props, State> {
           //添加账单
           this.identifyFunc(() => {
             // TODO 区分APP版本，进入不同的账单导入入口页
-            enterMethodList()
+            enterMethodList(this.props)
           })
           return;
         case 3:

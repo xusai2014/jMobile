@@ -71,13 +71,13 @@ export const computerFreePeriod  = (bill_type,payment_due_date)=>{
 *   @description
 */
 
-export  function enterMethodList(){
+export  function enterMethodList(props){
   nativeRequestBaseParams().then(params=>{
     const appVersion=params['APP_VERSIONS'].split('.');
     let sum='';
     appVersion.forEach(v=>{sum+=v})
     const version=Number(sum);
-    if(version>=330)  this.props.history.push('/3.4.0/importbills');
-    else  this.props.history.push('/bill/method')
+    if(version>=340)  props.history.push('/3.4.0/importbills');
+    else  props.history.push('/bill/method')
   })
 }

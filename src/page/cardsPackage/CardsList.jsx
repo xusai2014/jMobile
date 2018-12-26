@@ -228,7 +228,7 @@ export default class CardsList extends React.Component {
                       Modal.alert('', <span className="alert_content">此卡还未添加账单，请先导入账单再查看详情。</span>, [
                       {
                         text: "添加账单", onPress: () => {
-                        enterMethodList()
+                        enterMethodList(this.props)
                       }, style: globalStyle.cancelStyle
                       },
                       {text: '取消', onPress: () => console.log('cancel'), style: globalStyle.sureStyle},

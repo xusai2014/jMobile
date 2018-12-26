@@ -25,6 +25,7 @@ export default class ImportBills extends React.Component {
   }
 
   async componentWillMount() {
+    // 数据初始化
     this.props.dispatch(getBankList()).then((result) => {
     }, (err) => {
     });
@@ -37,10 +38,13 @@ export default class ImportBills extends React.Component {
     });
   }
 
+  /**
+  *   @author jerryxu
+  *   @methodName 跳转结果页面
+  *   @params  loginType: '01' 网银， 03 邮箱 status: 1 是成功 2是无数据 3是失败
+  *   @description loginType 账单导入方式 status 账单导入结果 description 账单导入结果描述
+  */
   goResult(loginType, status, description){
-
-    // loginType: '01' 网银， 03 邮箱
-    // 1 是成功 2是无数据 3是失败
     if(status == 1){
       if(loginType == '01'){
         this.props.history.push('/result/cybersuccess',{
@@ -50,7 +54,6 @@ export default class ImportBills extends React.Component {
         this.props.history.push('/result/esuccess',{
           result:description
         })
-
       }
     } else if(status == 2){
       if(loginType == '01'){
@@ -73,8 +76,14 @@ export default class ImportBills extends React.Component {
         })
       }
     }
-
   }
+
+  /**
+  *   @author jerryxu
+  *   @methodName 邮箱账单更新
+  *   @params v 用户信息
+  *   @description
+  */
 
   billDetail = (v) => {
     const { account = '@', password, } = v;
@@ -106,7 +115,10 @@ export default class ImportBills extends React.Component {
   getEmailAccount = () => {
     this.props.history.push('/email/manager');
   }
-
+  /**
+  *   @author jerryxu
+  *   @methodName 新建邮箱账单导入
+  */
   importEmail = () => {
 
     JSBridge.invoke('emailImport', response => {
@@ -133,10 +145,16 @@ export default class ImportBills extends React.Component {
     });
   }
 
+  // 手写账单跳转
   WriteBillByHand = () => {
     this.props.history.push('/manual/add')
   }
-
+  /**
+  *   @author jerryxu
+  *   @methodName 指定银行网银账单导入
+  *   @params abbr 银行编码
+  *   @description 需要先拿到用户信息
+  */
   cardLogin = (abbr) => {
 
     this.props.dispatch(getEchoForm({ bankName: abbr })).then((result) => {
@@ -183,6 +201,11 @@ export default class ImportBills extends React.Component {
     }, (err) => {
     })
   }
+
+  /**
+  *   @author jerryxu
+  *   @methodName 新建网银账单
+  */
   netSilverList = () => {
     JSBridge.invoke('bankImport', response => {
       const {
@@ -203,6 +226,7 @@ export default class ImportBills extends React.Component {
       userInfo: []
     });
   }
+
   showBankAll = () => {
     this.setState(
       {

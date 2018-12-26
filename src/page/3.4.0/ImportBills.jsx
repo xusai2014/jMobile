@@ -8,6 +8,7 @@ import { getBankList, getEchoForm, getEmailList } from "../../actions/reqAction"
 import { InitDecorator } from "../../compoents/InitDecorator";
 import { Toast } from "antd-mobile";
 import { jsNative } from 'sx-jsbridge';
+import { goResult } from "../../utils/util";
 
 @InitDecorator((state) => {
   return {
@@ -96,9 +97,9 @@ export default class ImportBills extends React.Component {
         moxieData,
       } = response;
       if(result === 'SUCCESS'){
-        this.goResult('03',1,'导入成功')
+        goResult('03',1,'导入成功',this.props)
       } else if(result === 'FAILED'){
-        this.goResult('03',1,errorMsg)
+        goResult('03',1,errorMsg,this.props)
       } else if(result === 'CANCEL'){
 
       }
@@ -113,7 +114,7 @@ export default class ImportBills extends React.Component {
   }
 
   getEmailAccount = () => {
-    this.props.history.push('/email/manager');
+    this.props.history.push('/3.4.0/email/EmailManager');
   }
   /**
   *   @author jerryxu
@@ -129,9 +130,9 @@ export default class ImportBills extends React.Component {
         moxieData,
       } = response;
       if(result === 'SUCCESS'){
-        this.goResult('03',1,'导入成功')
+        goResult('03',1,'导入成功',this.props);
       } else if(result === 'FAILED'){
-        this.goResult('03',1,errorMsg)
+        goResult('03',1,errorMsg,this.props);
       } else if(result === 'CANCEL'){
 
       }
@@ -184,9 +185,9 @@ export default class ImportBills extends React.Component {
             moxieData,
           } = response;
           if(result === 'SUCCESS'){
-            this.goResult('01',1,'导入成功')
+            goResult('01',1,'导入成功',this.props)
           } else if(result === 'FAILED'){
-            this.goResult('01',1,errorMsg)
+            goResult('01',1,errorMsg,this.props)
           } else if(result === 'CANCEL'){
 
           }
@@ -215,9 +216,9 @@ export default class ImportBills extends React.Component {
         moxieData,
       } = response;
       if(result === 'SUCCESS'){
-        this.goResult('01',1,'导入成功')
+        goResult('01',1,'导入成功',this.props)
       } else if(result === 'FAILED'){
-        this.goResult('01',1,errorMsg)
+        goResult('01',1,errorMsg,this.props)
       } else if(result === 'CANCEL'){
 
       }

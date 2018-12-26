@@ -3,7 +3,7 @@ import { checkToken, getIndetiyInfo, getLoginList, syncBill, verifyCode } from "
 import { InitDecorator } from "../../compoents/InitDecorator";
 import { Modal, Progress, Toast }  from "antd-mobile";
 import { jsNative } from "sx-jsbridge";
-import { enterMethodList, waitFunc } from "../../utils/util";
+import { enterBankImport, enterMethodList, waitFunc } from "../../utils/util";
 import globalStyle from "../../style/globalStyle";
 import styles from './style/card.less'
 const { loginHelper } = jsNative;
@@ -39,7 +39,7 @@ export default class BillCard extends React.Component {
             { text: '暂不需要', onPress: () => console.log('置顶聊天被点击了'), style: globalStyle.cancelStyle },
             {
               text: '通过网银导入',
-              onPress: () => this.props.history.push(`/cyber/login/${abbr}`, { name: bank_name }),
+              onPress: () => enterBankImport(this.props,abbr,bank_name),
               style: globalStyle.sureStyle
             }
           ]);

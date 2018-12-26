@@ -1,83 +1,115 @@
 import React from 'react';
 import Header from "../../../compoents/Header";
-import {Icon, SwipeAction, List, Modal} from "antd-mobile";
-import {InitDecorator} from "../../../compoents/InitDecorator";
-import {directImport, getEmailList, removeEmail} from "../../../actions/reqAction";
-import {Toast} from "antd-mobile";
+import { Icon, SwipeAction, List, Modal } from "antd-mobile";
+import { InitDecorator } from "../../../compoents/InitDecorator";
+import { getEmailList, removeEmail } from "../../../actions/reqAction";
+import { Toast } from "antd-mobile";
 import globalStyle from "../../../style/globalStyle";
+import { goResult } from "../../../utils/util";
 
-@InitDecorator((state)=>{
+@InitDecorator((state) => {
   return {
-    emailList:state.BillReducer.emailList,
-    requestStaus:state.GlobalReducer.requestStaus
+    emailList: state.BillReducer.emailList,
+    requestStaus: state.GlobalReducer.requestStaus
   }
 })
-export default class EmailManager extends React.Component{
+export default class EmailManager extends React.Component {
 
-  async importEmailOne(taskId){
-    Toast.loading('请稍后',0,null,true)
-    if(this.props.requestStaus){
-      return;
-    }
 
-    this.props.dispatch(directImport({
-      taskId,
-    })).then((result)=>{
+  importEmailOne(v) {
+    JSBridge.invoke('emailImport', response => {
+      const {
+        errorCode,
+        errorMsg,
+        result,
+        moxieData,
+      } = response;
+      if (result === 'SUCCESS') {
+        goResult('03', 1, '导入成功', this.props)
+      } else if (result === 'FAILED') {
+        goResult('03', 1, errorMsg, this.props)
+      } else if (result === 'CANCEL') {
 
-      const { data:taskId = '' } =result;
-      this.props.history.push('/load/email', {taskId, loginType: "03"})
-      Toast.hide();
-    },(err)=>{
-      Toast.hide();
+      }
+    }, {
+      type: "add",
+      userInfo: {
+        mailName: "",
+        accountName: "",
+        password: ""
+      }
     });
-
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     promiseList.cancel()
   }
 
-  async componentDidMount(){
+  async componentDidMount() {
     this.props.dispatch(getEmailList());
 
   }
 
-  async removeEmailOne(uuid){
+  async removeEmailOne(uuid) {
     this.props.dispatch(removeEmail({
       uuid,
-    })).then(()=>{
+    })).then(() => {
       this.props.dispatch(getEmailList());
     });
 
   }
-  render(){
+
+  render() {
     const {
       emailList
     } = this.props;
     return [
-      <Header title="邮箱选择" right={(<Icon type="plus" onClick={()=>{this.props.history.push('/email/add')}}/>)}/>,
+      <Header title="邮箱选择" right={(<Icon type="plus" onClick={() => {
+        JSBridge.invoke('emailImport', response => {
+          const {
+            errorCode,
+            errorMsg,
+            result,
+            moxieData,
+          } = response;
+          if (result === 'SUCCESS') {
+            goResult('03', 1, '导入成功', this.props)
+          } else if (result === 'FAILED') {
+            goResult('03', 1, errorMsg, this.props)
+          } else if (result === 'CANCEL') {
+
+          }
+        }, {
+          type: "add",
+          userInfo: {
+            mailName: "",
+            accountName: "",
+            password: ""
+          }
+        });
+      }}/>)}/>,
       <div>
         {
-          emailList.map((v,k)=>{
+          emailList.map((v, k) => {
             const {
               account,
               task_id,
               uuid = '',
               lastTime
             } = v;
-            return<SwipeAction
+            return <SwipeAction
               style={{ backgroundColor: 'gray' }}
               autoClose
               right={[
                 {
                   text: '删除',
                   onPress: () => {
-                      Modal.alert('', <span className="alert_content">确定删除邮箱</span>, [
-                      { text: '取消', onPress: () => console.log('cancel'),style: globalStyle.cancelStyle},
-                      { text: '确认', onPress: () => this.removeEmailOne(uuid),style: globalStyle.sureStyle },
+                    Modal.alert('', <span className="alert_content">确定删除邮箱</span>, [
+                      { text: '取消', onPress: () => console.log('cancel'), style: globalStyle.cancelStyle },
+                      { text: '确认', onPress: () => this.removeEmailOne(uuid), style: globalStyle.sureStyle },
                     ])
                   },
-                  style: { width:"1.73rem",backgroundColor: '#FF2D55', color: 'white' },
+                  style: { width: "1.73rem", backgroundColor: '#FF2D55', color: 'white' },
                 },
               ]}
 
@@ -88,32 +120,34 @@ export default class EmailManager extends React.Component{
               <List.Item
                 arrow="horizontal"
                 onClick={e => {
-                  this.importEmailOne(task_id);
+                  this.importEmailOne(v);
                 }}
-              ><div style={{
-                fontSize: '0.31rem',
-                color: '#333333',
-                letterSpacing: '-1PX',
-                margin:"0.2rem 0 0.01rem 0 "
-              }}>{account}</div>
+              >
+                <div style={{
+                  fontSize: '0.31rem',
+                  color: '#333333',
+                  letterSpacing: '-1PX',
+                  margin: "0.2rem 0 0.01rem 0 "
+                }}>{account}</div>
                 <div style={{
                   fontSize: '0.24rem',
                   color: '#999999',
                   letterSpacing: '-0.77PX',
-                  margin:"0 0 0.2rem 0 "
-                }}>上次导入时间 {lastTime?lastTime:""}</div>
+                  margin: "0 0 0.2rem 0 "
+                }}>上次导入时间 {lastTime ? lastTime : ""}</div>
               </List.Item>
             </SwipeAction>
           })
         }
         <div style={{
-          width:'7.5rem',
-          margin:"0.4rem 0 0 0",
-          textAlign:'center',
+          width: '7.5rem',
+          margin: "0.4rem 0 0 0",
+          textAlign: 'center',
           fontSize: '0.24rem',
           color: '#999999',
           letterSpacing: '-0.77PX'
-        }}>左滑可以删除邮箱</div>
+        }}>左滑可以删除邮箱
+        </div>
       </div>
     ]
   }

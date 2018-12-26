@@ -91,7 +91,7 @@ export default class ImportBills extends React.Component {
             name: nameVal,
             name1: username1,
             password: password,
-            uuid
+            uuid,
           }
         })
         JSBridge.invoke('bankImport', response => {

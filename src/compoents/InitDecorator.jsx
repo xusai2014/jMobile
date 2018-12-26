@@ -3,6 +3,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { actionGenerator } from '../actions/reqAction';
+import { withRouter } from 'react-router-dom';
+import { jsNative} from 'sx-jsbridge'
 
 export function InitDecorator<
   S, // Redux state
@@ -11,12 +13,30 @@ export function InitDecorator<
   C:React.ComponentType<RS>, // 目标组件
   M:<S, RS>(s: S) => RS // 订阅Redux
   >(m: M): (WrappedComponent: C) => Con {
-  return WrappedComponent => connect(state => ({
+  return WrappedComponent => withRouter(connect(state => ({
     isLogged: state.GlobalReducer.isLogged,
     reqParams: state.GlobalReducer.reqParams,
     ...m(state)
   }))(
     class extends React.Component<RS> {
+      constructor(props) {
+        super(props);
+        this.resetParams();
+      }
+
+      syncData(v){
+        this.props.dispatch({type:'syncData',data:v})
+      }
+
+      /**
+       * 重置native返回的请求参数
+       */
+      resetParams() {
+        jsNative.nativeRequestBaseParams().then((reqParams) => {
+          this.syncData(reqParams);
+        })
+      }
+
       render() {
         const { props } = this;
         return (
@@ -26,7 +46,7 @@ export function InitDecorator<
           />);
       }
     }
-  );
+  ));
 }
 
 export default InitDecorator;

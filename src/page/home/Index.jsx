@@ -36,6 +36,7 @@ type State = {
   activeCard: any, // 当前要处理账某个账单的详细数据
   syncfunc: Function,
 }
+
 @InitDecorator((state) => {
   return {
     billList: state.BillReducer.billList,
@@ -160,7 +161,7 @@ export default class Index extends React.Component<Props, State> {
                 let sum='';
                 appVersion.forEach(v=>{sum+=v})
                 const version=Number(sum);
-                if(version>=330)  this.props.history.push('/3.4.0/importbills');
+                if(version>=340)  this.props.history.push('/3.4.0/importbills');
                 else  this.props.history.push('/bill/method')
             })
           })

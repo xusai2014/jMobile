@@ -36,7 +36,7 @@ export default class DebounceButton extends React.Component<{}, Props> {
     return (<button
       disabled={disabled}
       onClick={this.btnClick.bind(this)}
-      className={`${className} ${activeOpen?activeClassName:""} ${styles.btn}`}
+      className={`${className} ${styles.btn} ${activeOpen?activeClassName:""}`}
     >{children}</button>);
   }
 }

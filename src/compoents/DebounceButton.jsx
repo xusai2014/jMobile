@@ -1,18 +1,19 @@
 import React from 'react';
 import styles from './DebounceButton.less'
 type Props = {
-  disabled?: boolean,
-  onClick?: Function,
-  className?: string,
-  children?: React.ComponentType<any>,
-  activeClassName?:string,
-  activeOpen?:boolean,
+  disabled?: boolean, // 初始化按钮状态， disable  True禁止使用 False允许点击
+  onClick?: Function, //  点击事件
+  className?: string, //  定义样式
+  children?: React.ComponentType<any>, //子节点
+  activeClassName?:string,// 激活状态样式
+  activeOpen?:boolean, // 开启激活状态交互，会使用默认激活状态样式
 }
 export default class DebounceButton extends React.Component<{}, Props> {
   THROTTOLE_TIME = 250;
 
   constructor(props) {
     super(props);
+    // 截流，函数抖动
     this.emitChangeDebounced = _.debounce(this.excute.bind(this), this.THROTTOLE_TIME);
   }
 

@@ -72,14 +72,14 @@ export default [{
   }, {
     component:"../page/3.4.0/email/EmailAdd.jsx",
     path:"/3.4.0/email/emailadd",
-    name:"EmailAdd_3.4.0"
+    name:"EmailAdd340"
   },{
     component:"../page/3.4.0/email/EmailManager.jsx",
     path:"/3.4.0/email/EmailManager",
-    name:"EmailManager_3.4.0"
+    name:"EmailManager340"
   },{
     component:"../page/3.4.0/BankCardList.jsx",
     path:"/3.4.0/bankcardlist",
-    name:"BankCardList_3.4.0"
+    name:"BankCardList340"
   },
 ]

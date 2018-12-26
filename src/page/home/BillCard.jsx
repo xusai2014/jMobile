@@ -3,7 +3,7 @@ import { checkToken, getIndetiyInfo, getLoginList, syncBill, verifyCode } from "
 import { InitDecorator } from "../../compoents/InitDecorator";
 import { Modal, Progress, Toast }  from "antd-mobile";
 import { jsNative } from "sx-jsbridge";
-import { waitFunc } from "../../utils/util";
+import { enterMethodList, waitFunc } from "../../utils/util";
 import globalStyle from "../../style/globalStyle";
 import styles from './style/card.less'
 const { loginHelper } = jsNative;
@@ -179,6 +179,9 @@ export default class BillCard extends React.Component {
           className="alert_content">选择“是”将退出当前认证流程已填写信息将丢失</span>, [
           {
             text: "是", onPress: () => {
+            this.setState({
+              syncBegin: false,
+            })
           }, style: globalStyle.cancelStyle
           },
           {
@@ -349,7 +352,7 @@ export default class BillCard extends React.Component {
     return <div onClick={(e) => {
       if (!real) {
         if (isLogged) {
-          this.identifyFunc(() => this.props.history.push('/bill/method'))
+          this.identifyFunc(() => enterMethodList())
           return
         }
         e.stopPropagation();

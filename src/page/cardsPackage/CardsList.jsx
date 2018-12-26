@@ -5,7 +5,7 @@ import {Menu, Icon, Toast, Modal} from "antd-mobile";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {getBillId, getCardsList, getIndetiyInfo, looseCard} from "../../actions/reqAction";
 import {jsNative} from 'sx-jsbridge'
-import {judgeEnv} from "../../utils/util";
+import { enterMethodList, judgeEnv } from "../../utils/util";
 import globalStyle from "../../style/globalStyle";
 
 
@@ -228,7 +228,7 @@ export default class CardsList extends React.Component {
                       Modal.alert('', <span className="alert_content">此卡还未添加账单，请先导入账单再查看详情。</span>, [
                       {
                         text: "添加账单", onPress: () => {
-                        this.props.history.push('/bill/method')
+                        enterMethodList()
                       }, style: globalStyle.cancelStyle
                       },
                       {text: '取消', onPress: () => console.log('cancel'), style: globalStyle.sureStyle},

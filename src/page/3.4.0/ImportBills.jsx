@@ -30,7 +30,6 @@ export default class ImportBills extends React.Component {
     });
     this.props.dispatch(getEmailList()).then((result) => {
       const { data = [] } = result;
-      debugger;
       this.setState({
         accountList: data,
       })

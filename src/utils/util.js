@@ -1,4 +1,5 @@
-
+import { jsNative, } from "sx-jsbridge";
+const { nativeRequestBaseParams } = jsNative;
 export const getSearch = (props) => {
     let search = ""
     let pathname = decodeURIComponent(props.location.search)
@@ -61,4 +62,22 @@ export const computerFreePeriod  = (bill_type,payment_due_date)=>{
     return '--'
   }
 
+}
+
+/**
+*   @author jerryxu
+*   @methodName i
+*   @params mod
+*   @description
+*/
+
+export  function enterMethodList(){
+  nativeRequestBaseParams().then(params=>{
+    const appVersion=params['APP_VERSIONS'].split('.');
+    let sum='';
+    appVersion.forEach(v=>{sum+=v})
+    const version=Number(sum);
+    if(version>=330)  this.props.history.push('/3.4.0/importbills');
+    else  this.props.history.push('/bill/method')
+  })
 }

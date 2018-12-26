@@ -5,7 +5,7 @@ import BillCard from "./BillCard";
 import Popup from "./components/Popup";
 import { InitDecorator } from "../../compoents/InitDecorator";
 import { jsNative, } from "sx-jsbridge";
-import { judgeEnv } from "../../utils/util";
+import { enterMethodList, judgeEnv } from "../../utils/util";
 import MoreItem from "./components/MoreItem";
 import IconEnter from "./components/IconEnter";
 import FreeInterest from "./components/FreeInterest";
@@ -156,14 +156,7 @@ export default class Index extends React.Component<Props, State> {
           //添加账单
           this.identifyFunc(() => {
             // TODO 区分APP版本，进入不同的账单导入入口页
-            nativeRequestBaseParams().then(params=>{
-                const appVersion=params['APP_VERSIONS'].split('.');
-                let sum='';
-                appVersion.forEach(v=>{sum+=v})
-                const version=Number(sum);
-                if(version>=340)  this.props.history.push('/3.4.0/importbills');
-                else  this.props.history.push('/bill/method')
-            })
+            enterMethodList()
           })
           return;
         case 3:

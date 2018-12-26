@@ -22,4 +22,7 @@ export default ()=>(<Switch><Route exact={false} path={'/home/index'} component=
 <Route exact={false} path={'/cyber/login/:bankId'} component={ Loadable({loader: () => import('../page/cyber/CyberBank.jsx'),loading: Loading,})} />
 <Route exact={false} path={'/3.4.0/importbills'} component={ Loadable({loader: () => import('../page/3.4.0/ImportBills.jsx'),loading: Loading,})} />
 <Route exact={false} path={'/3.4.0/choosebank'} component={ Loadable({loader: () => import('../page/3.4.0/ChooseBank.jsx'),loading: Loading,})} />
+<Route exact={false} path={'/3.4.0/email/emailadd'} component={ Loadable({loader: () => import('../page/3.4.0/email/EmailAdd.jsx'),loading: Loading,})} />
+<Route exact={false} path={'/3.4.0/email/EmailManager'} component={ Loadable({loader: () => import('../page/3.4.0/email/EmailManager.jsx'),loading: Loading,})} />
+<Route exact={false} path={'/3.4.0/bankcardlist'} component={ Loadable({loader: () => import('../page/3.4.0/BankCardList.jsx'),loading: Loading,})} />
 <Route component={NoMatch}/></Switch>)

@@ -12,7 +12,7 @@ export default class PayMethodList extends React.Component{
     }
     render() {
         const {echoData={},exportEmail} = this.props;
-        const { img = "/static/img/email@2x.png",
+        const { img = "/static/img/3.4.0/email@2x.png",
                 name = "邮箱导入",
                 describe = "绑定账单后去邮箱，一键获取信用卡账单"}=echoData;
         return (

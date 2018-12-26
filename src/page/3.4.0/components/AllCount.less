@@ -1,38 +1,39 @@
-.allAccount{
+.box{
+  width: 6.94rem;
   height: 1.44rem;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  border-bottom:1px solid #f9f9f9;
-  .input{
-    background: #f8f8f8;
-    height: 0.98rem;
-    margin-left: 0.06rem;
+  .allAccount{
+    height: 1.44rem;
     display: flex;
     align-items: center;
-    >input{
+    border-bottom:1px solid #f9f9f9;
+    overflow-x: auto;
+    /*适应苹果*/
+    -webkit-overflow-scrolling:touch;
+    .input{
       background: #f8f8f8;
-      border: 0;
-    }
-    >input::-webkit-input-placeholder{
-      font-size:0.26rem;
-      font-family:PingFangSC-Medium;
-      font-weight:500;
-      color:rgba(51,51,51,1);
-      line-height:37px;
-      text-align: center;
+      height: 0.98rem;
+      margin-left: 0.28rem;
+      display: flex;
+      align-items: center;
+      .account{
+        margin: 0 0.35rem;
+      }
     }
   }
-}
-.des{
-  background: #f8f8f8;
-  margin-left: 0.1rem;
-  >div{
-    width:1.79rem;
-    height: 0.98rem;
-    margin-left: 0.12rem;
-    border: none;
-    line-height: 0.89rem;
-    display: inline-block;
+  /*隐藏掉滚动条*/
+  .allAccount::-webkit-scrollbar {
+    display: none;
+  }
+  .des{
+    background: #f8f8f8;
+    margin-left: 0.1rem;
+    >div{
+      width:1.79rem;
+      height: 0.98rem;
+      margin-left: 0.12rem;
+      border: none;
+      line-height: 0.89rem;
+      display: inline-block;
+    }
   }
 }

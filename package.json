@@ -44,7 +44,10 @@
       "/bill/detail/:billId",
       "/cyber/login/:bankId",
       "/3.4.0/importbills",
-      "/3.4.0/choosebank"
+      "/3.4.0/choosebank",
+      "/3.4.0/email/emailadd",
+      "/3.4.0/email/EmailManager",
+      "/3.4.0/bankcardlist"
     ]
   },
   "browserslist": [
@@ -66,7 +69,7 @@
     "react-router-dom": "^4.2.2",
     "redux": "^3.7.2",
     "sa-sdk-javascript": "^1.10.3",
-    "sx-jsbridge": "1.2.2",
+    "sx-jsbridge": "1.2.1",
     "url-loader": "^1.0.1",
     "whatwg-fetch": "^2.0.4"
   },

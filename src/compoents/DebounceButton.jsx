@@ -5,6 +5,8 @@ type Props = {
   onClick?: Function,
   className?: string,
   children?: React.ComponentType<any>,
+  activeClassName?:string,
+  activeOpen?:boolean,
 }
 export default class DebounceButton extends React.Component<{}, Props> {
   THROTTOLE_TIME = 250;
@@ -28,11 +30,13 @@ export default class DebounceButton extends React.Component<{}, Props> {
       disabled = false,
       className = '',
       children = null,
+      activeClassName = styles.activeBtn,
+      activeOpen = false
     } = this.props;
     return (<button
       disabled={disabled}
       onClick={this.btnClick.bind(this)}
-      className={`${className} ${styles.btn}`}
+      className={`${className} ${activeOpen?activeClassName:""} ${styles.btn}`}
     >{children}</button>);
   }
 }

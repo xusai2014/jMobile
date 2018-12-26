@@ -6872,9 +6872,9 @@ svgo@^0.7.0:
     sax "~1.2.1"
     whet.extend "~0.9.9"
 
-sx-jsbridge@1.2.1:
-  version "1.2.1"
-  resolved "https://registry.npmjs.org/sx-jsbridge/-/sx-jsbridge-1.2.1.tgz#6c9a7ad402509439526a2a98bea88dc25d69f141"
+sx-jsbridge@1.2.2:
+  version "1.2.2"
+  resolved "https://registry.npmjs.org/sx-jsbridge/-/sx-jsbridge-1.2.2.tgz#eb9bc32e2491d5a422c15af12e9e639b4d1af8ed"
 
 symbol-observable@^1.0.3:
   version "1.2.0"

@@ -2,7 +2,7 @@ import React from 'react';
 import styles from "./ChooseBank.less";
 import Header from '../../compoents/Header';
 import BankList from './components/BankList';
-import {getBankList} from "../../actions/reqAction";
+import { getBankList, getEchoForm } from "../../actions/reqAction";
 import {InitDecorator} from "../../compoents/InitDecorator";
 
 @InitDecorator((state) => {
@@ -24,6 +24,28 @@ export default class ChooseBank extends React.Component {
     chooseResult = () => {
         //TODO
         //跳转到对应银行的网银登录页
+      this.props.dispatch(getEchoForm({bankName: abbr})).then((result) => {
+        if (result) {
+          const {data = []} = result
+          data.map((v, k) => {
+            const {
+              bankLoginType,
+              password,
+              username,
+              uuid,
+            } = v;
+            let [ nameVal,username1] = username.split(username.indexOf(','))
+            this.setDeepState('inputData', bankLoginType, {
+              username:nameVal,
+              password,
+              uuid,
+              username1,
+              echoStatus: true
+            })
+          })
+        }
+      }, (err) => {
+      })
     }
 
     render() {

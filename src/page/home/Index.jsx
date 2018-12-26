@@ -160,7 +160,7 @@ export default class Index extends React.Component<Props, State> {
                 let sum='';
                 appVersion.forEach(v=>{sum+=v})
                 const version=Number(sum);
-                if(version>=340)  this.props.history.push('/3.4.0/importbills');
+                if(version>=330)  this.props.history.push('/3.4.0/importbills');
                 else  this.props.history.push('/bill/method')
             })
           })

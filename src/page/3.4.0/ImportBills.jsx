@@ -39,8 +39,6 @@ export default class ImportBills extends React.Component {
   }
 
   billDetail = (v) => {
-    debugger;
-    const { account, password } = v;
     JSBridge.invoke('emailImport', response => {
 
     }, {
@@ -96,7 +94,8 @@ export default class ImportBills extends React.Component {
             uuid
           }
         })
-        JSBridge.invoke('bankImport', response => {}, {
+        JSBridge.invoke('bankImport', response => {
+        }, {
           type: "update",
           runModel: "foreground",
           bankCode: abbr,
@@ -111,11 +110,7 @@ export default class ImportBills extends React.Component {
     JSBridge.invoke('bankImport', response => {
     }, {
       type: "add",
-      userInfo: {
-        mailName: "",
-        accountName: "",
-        password: ""
-      },
+      userInfo: []
     });
   }
   showBankAll = () => {

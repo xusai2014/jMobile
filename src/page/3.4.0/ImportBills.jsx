@@ -37,15 +37,68 @@ export default class ImportBills extends React.Component {
     });
   }
 
-  billDetail = (v) => {
-    JSBridge.invoke('emailImport', response => {
+  goResult(loginType, status, description){
 
+    // loginType: '01' 网银， 03 邮箱
+    // 1 是成功 2是无数据 3是失败
+    if(status == 1){
+      if(loginType == '01'){
+        this.props.history.push('/result/cybersuccess',{
+          result:description
+        })
+      } else if(loginType == '03'){
+        this.props.history.push('/result/esuccess',{
+          result:description
+        })
+
+      }
+    } else if(status == 2){
+      if(loginType == '01'){
+        this.props.history.push('/result/cybernodata',{
+          result:description
+        })
+      } else if(loginType == '03'){
+        this.props.history.push('/result/enodata',{
+          result:description
+        })
+      }
+    }else if(status == 3) {
+      if(loginType == '01'){
+        this.props.history.push('/result/cyberfailed',{
+          result:description
+        })
+      } else if(loginType == '03'){
+        this.props.history.push('/result/efailed',{
+          result:description
+        })
+      }
+    }
+
+  }
+
+  billDetail = (v) => {
+    const { account = '@', password, } = v;
+    const type = account.split('@')[1];
+    JSBridge.invoke('emailImport', response => {
+      const {
+        errorCode,
+        errorMsg,
+        result,
+        moxieData,
+      } = response;
+      if(result === 'SUCCESS'){
+        this.goResult('03',1,'导入成功')
+      } else if(result === 'FAILED'){
+        this.goResult('03',1,errorMsg)
+      } else if(result === 'CANCEL'){
+
+      }
     }, {
       type: "update",
       userInfo: {
-        mailName: "163.com",
-        accountName: "18800102517@163.com",
-        password: "shizhibuyu@163.com"
+        mailName: type,
+        accountName: account,
+        password: password
       }
     });
   }
@@ -57,7 +110,19 @@ export default class ImportBills extends React.Component {
   importEmail = () => {
 
     JSBridge.invoke('emailImport', response => {
+      const {
+        errorCode,
+        errorMsg,
+        result,
+        moxieData,
+      } = response;
+      if(result === 'SUCCESS'){
+        this.goResult('03',1,'导入成功')
+      } else if(result === 'FAILED'){
+        this.goResult('03',1,errorMsg)
+      } else if(result === 'CANCEL'){
 
+      }
     }, {
       type: "add",
       userInfo: {
@@ -69,7 +134,7 @@ export default class ImportBills extends React.Component {
   }
 
   WriteBillByHand = () => {
-
+    this.props.history.push('/manual/add')
   }
 
   cardLogin = (abbr) => {
@@ -94,6 +159,19 @@ export default class ImportBills extends React.Component {
           }
         })
         JSBridge.invoke('bankImport', response => {
+          const {
+            errorCode,
+            errorMsg,
+            result,
+            moxieData,
+          } = response;
+          if(result === 'SUCCESS'){
+            this.goResult('01',1,'导入成功')
+          } else if(result === 'FAILED'){
+            this.goResult('01',1,errorMsg)
+          } else if(result === 'CANCEL'){
+
+          }
         }, {
           type: "update",
           runModel: "foreground",
@@ -107,6 +185,19 @@ export default class ImportBills extends React.Component {
   }
   netSilverList = () => {
     JSBridge.invoke('bankImport', response => {
+      const {
+        errorCode,
+        errorMsg,
+        result,
+        moxieData,
+      } = response;
+      if(result === 'SUCCESS'){
+        this.goResult('01',1,'导入成功')
+      } else if(result === 'FAILED'){
+        this.goResult('01',1,errorMsg)
+      } else if(result === 'CANCEL'){
+
+      }
     }, {
       type: "add",
       userInfo: []

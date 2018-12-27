@@ -117,7 +117,6 @@ export function addEmail(props) {
 export function updateEmail(userInfo,props) {
   const { emailType, account, password } = userInfo;
   JSBridge.invoke('emailImport', response => {
-    debugger;
     const {
       errorCode,
       errorMsg,

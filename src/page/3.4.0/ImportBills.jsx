@@ -261,9 +261,9 @@ export default class ImportBills extends React.Component {
 
 function handleErroMsg(errorCode,errorMsg) {
   if(errorCode.includes('app')){
-    if('app01'.equals(errorCode)){
+    if('app01' === errorCode ){
       return '导入账单中断，请重新导入';
-    } else if('app02'.equals(errorCode)){
+    } else if('app02' === errorCode){
       return '未知错误'
     }
   }  else if(errorCode.includes('api')){

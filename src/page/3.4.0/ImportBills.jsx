@@ -236,14 +236,6 @@ export default class ImportBills extends React.Component {
     )
   }
 
-  cardListLayout(condition, value) {
-    if (condition) {
-      return (<CardList echoData={value} key={value.name} noMarginRight={true} bankCardLogin={this.cardLogin}/>)
-    } else {
-      return (<CardList echoData={value} key={value.name} noMarginRight={false} bankCardLogin={this.cardLogin}/>)
-    }
-  }
-
   componentDidMount() {
   }
 
@@ -263,16 +255,12 @@ export default class ImportBills extends React.Component {
       }]
     } = echoData;
     const cardList = bankList.map((v, k) => {
-      const cond = !!((k + 1) % 3 == 0);
-      if (k <= 7) return (this.cardListLayout(cond, v))
+      if (k <= 7) return (<CardList echoData={v} key={v.name} bankCardLogin={this.cardLogin}/>)
       if (k === 8) return (
-        <CardList echoData={moreIcon} key={moreIcon.name} noMarginRight={true} bankCardLogin={this.showBankAll}/>)
+        <CardList echoData={moreIcon} key={moreIcon.name} bankCardLogin={this.showBankAll}/>)
       else return null;
     })
-    const cardListAll = bankList.map((v, k) => {
-      const condition = !!((k + 1) % 3 == 0);
-      return (this.cardListLayout(condition, v));
-    })
+    const cardListAll = bankList.map((v) =><CardList echoData={v} key={v.name} bankCardLogin={this.cardLogin}/>)
 
     return (
       <div className={styles.container} style={{ minHeight: gloablMinHeight }}>
@@ -288,12 +276,12 @@ export default class ImportBills extends React.Component {
         <div className={styles.margin}></div>
         <div className={styles.Content}>
           <div className={styles.text}>
-                        <span className={styles.contentName} onClick={this.netSilverList}>
-                        通过网银查询账单
-                        </span>
-            <span className={styles.contentDescribe}>
-                            实时获取账单、额度、消费明细、积分信息
-                        </span>
+              <span className={styles.contentName} onClick={this.netSilverList}>
+               通过网银查询账单
+              </span>
+              <span className={styles.contentDescribe}>
+                  实时获取账单、额度、消费明细、积分信息
+              </span>
           </div>
           <img src="/static/img/3.4.0/goNext.png" onClick={this.netSilverList}/>
         </div>

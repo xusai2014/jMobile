@@ -1,6 +1,7 @@
 .box{
   width: 6.94rem;
   height: 1.44rem;
+  margin: 0 auto;
   .allAccount{
     height: 1.44rem;
     display: flex;
@@ -12,12 +13,15 @@
     .input{
       background: #f8f8f8;
       height: 0.98rem;
-      margin-left: 0.28rem;
+      margin-left: 0.5rem;
       display: flex;
       align-items: center;
       .account{
         margin: 0 0.35rem;
       }
+    }
+    .input:first-child{
+      margin-left: 0;
     }
   }
   /*隐藏掉滚动条*/
@@ -26,14 +30,14 @@
   }
   .des{
     background: #f8f8f8;
-    margin-left: 0.1rem;
+    margin-left: 0.5rem;
     >div{
       width:1.79rem;
       height: 0.98rem;
-      margin-left: 0.12rem;
       border: none;
-      line-height: 0.89rem;
+      line-height: 0.98rem;
       display: inline-block;
+      text-align: center;
     }
   }
 }

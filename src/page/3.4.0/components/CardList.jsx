@@ -15,30 +15,17 @@ export default class CardList extends React.Component {
   }
 
   render() {
-    const { echoData = {}, noMarginRight, bankCardLogin } = this.props;
+    const { echoData = {}, bankCardLogin } = this.props;
     const { logo_uri = '/static/img/3.4.0/zs@2x.png', name = '招商银行' } = echoData;
     const { abbr } = echoData;
     return (
       <div>
-        {noMarginRight ?
-          <div className={styles.noMargin}>
-            <DebounceButton onClick={() => bankCardLogin(abbr)}>
-              <img src={logo_uri} className={styles.img}/>
-            </DebounceButton>
-            <span className={styles.des}>
-                            {name}
-                        </span>
-          </div>
-          :
-          <div className={styles.container}>
-            <DebounceButton onClick={() => bankCardLogin(abbr)}>
-              <img src={logo_uri} className={styles.img}/>
-            </DebounceButton>
-            <span className={styles.des}>
-                            {name}
-                        </span>
-          </div>
-        }
+        <DebounceButton className={`${styles.noMargin} ${styles.activeBtn}`}  onClick={() => bankCardLogin(abbr)}>
+          <img src={logo_uri} className={styles.img}/>
+          <span className={styles.des}>
+            {name}
+          </span>
+        </DebounceButton>
       </div>
     )
   }

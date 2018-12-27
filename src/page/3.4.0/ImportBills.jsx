@@ -9,6 +9,7 @@ import { InitDecorator } from "../../compoents/InitDecorator";
 import { Toast } from "antd-mobile";
 import { jsNative } from 'sx-jsbridge';
 import { goResult } from "../../utils/util";
+import DebounceButton from "../../compoents/DebounceButton"
 
 @InitDecorator((state) => {
   return {
@@ -274,17 +275,19 @@ export default class ImportBills extends React.Component {
         </div>
         <PayMethodList echoData={sourceData[1]} exportEmail={this.WriteBillByHand} key={sourceData[1].name}/>
         <div className={styles.margin}></div>
-        <div className={styles.Content}>
-          <div className={styles.text}>
-              <span className={styles.contentName} onClick={this.netSilverList}>
-               通过网银查询账单
-              </span>
-              <span className={styles.contentDescribe}>
-                  实时获取账单、额度、消费明细、积分信息
-              </span>
+        <DebounceButton onClick={this.netSilverList} className={styles.checkBill} activeOpen={true} activeClassName={styles.active}>
+          <div className={styles.Content}>
+            <span className={styles.text}>
+                <span className={styles.contentName}>
+                 通过网银查询账单
+                </span>
+                <span className={styles.contentDescribe}>
+                    实时获取账单、额度、消费明细、积分信息
+                </span>
+            </span>
+            <img src="/static/img/3.4.0/goNext.png"/>
           </div>
-          <img src="/static/img/3.4.0/goNext.png" onClick={this.netSilverList}/>
-        </div>
+        </DebounceButton>
         <div className={styles.cardList}>
           <div className={styles.firstLine}>
             {showAllBank ? cardListAll : cardList}

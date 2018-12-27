@@ -1,7 +1,5 @@
 .container{
-  background: rgb(255, 255, 255);
-  borderTop: '1PX solid #DDDDDD';
-  borderBottom:'1PX solid #DDDDDD';
+  width: 100%;
 }
 .content{
   width: 6.94rem ;
@@ -22,7 +20,10 @@
   }
   .textContent
   {
-    display: inline-block; margin: 0.41rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
   }
   .nameText{
     font-size:0.24rem;
@@ -32,8 +33,14 @@
     line-height:0.33rem;
   }
   .describe{
+    margin-top: 0.04rem;
     font-size: 0.22rem;
     color: rgb(153, 153, 153);
     letter-spacing: 0px;
+  }
+}
+.active{
+  &:active{
+    background-color: #f5f6f8;
   }
 }

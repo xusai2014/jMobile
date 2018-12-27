@@ -23,21 +23,19 @@ export default class PayMethodList extends React.Component {
             describe = "绑定账单后去邮箱，一键获取信用卡账单"
         } = echoData;
         return (
-            <div
-                className={styles.container}
-            >
+            <DebounceButton onClick={exportEmail} className={styles.container} activeOpen={true} activeClassName={styles.active}>
                 <div className={styles.content}>
-                    <DebounceButton className={styles.imgContainer} onClick={exportEmail}>
+                    <div className={styles.imgContainer}>
                         <img src={img} className={styles.img}/>
-                    </DebounceButton>
+                    </div>
                     <div className={styles.textContent}>
-                        <DebounceButton className={styles.nameText} onClick={exportEmail}>
+                        <span className={styles.nameText}>
                             {name}
-                        </DebounceButton>
-                        <div className={styles.describe}>{describe}</div>
+                        </span>
+                        <span className={styles.describe}>{describe}</span>
                     </div>
                 </div>
-            </div>
+            </DebounceButton>
         )
     }
 }

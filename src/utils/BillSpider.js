@@ -102,6 +102,7 @@ export function addEmail(props) {
     } else if (result === 'FAIL') {
       goResult('03', 3, handleErroMsg(errorCode,errorMsg), props)
     } else if (result === 'CANCEL') {
+      Toast.info('已取消导入')
     }
   }, {
     type: "add",
@@ -128,7 +129,7 @@ export function updateEmail(userInfo,props) {
     } else if(result === 'FAIL'){
       goResult('03',3,handleErroMsg(errorCode,errorMsg),props)
     } else if(result === 'CANCEL'){
-
+      Toast.info('已取消导入')
     }
   }, {
     type: "update",
@@ -147,14 +148,14 @@ export function updateBankForeground (bankCode,userInfo,props) {
       errorCode,
       errorMsg,
       result,
-      moxieData,
+      // moxieData,
     } = response;
     if(result === 'SUCCESS'){
       goResult('01',1,'导入成功',props)
     } else if(result === 'FAIL'){
       goResult('01',3,handleErroMsg(errorCode,errorMsg),props)
     } else if(result === 'CANCEL'){
-
+      Toast.info('已取消导入')
     }
   }, {
     type: "update",

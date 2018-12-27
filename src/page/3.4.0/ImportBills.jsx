@@ -6,9 +6,7 @@ import AllCount from './components/AllCount';
 import styles from './ImportBills.less';
 import { getBankList, getEchoForm, getEmailList } from "../../actions/reqAction";
 import { InitDecorator } from "../../compoents/InitDecorator";
-import { Toast } from "antd-mobile";
-import { jsNative } from 'sx-jsbridge';
-import { addEmail, goResult, handleErroMsg, updateBankForeground, updateEmail } from "../../utils/BillSpider";
+import { addBank, addEmail, updateBankForeground, updateEmail } from "../../utils/BillSpider";
 import DebounceButton from "../../compoents/DebounceButton"
 
 @InitDecorator((state) => {
@@ -81,10 +79,10 @@ export default class ImportBills extends React.Component {
           const {
             bankLoginType,
             password,
-            username,
+            unMosaicUsername,
             uuid,
           } = v;
-          let [nameVal, username1] = username.split(username.indexOf(','))
+          let [nameVal, username1] = unMosaicUsername.split(unMosaicUsername.indexOf(','))
           return {
             loginType: bankLoginType,
             name: nameVal,
@@ -104,24 +102,7 @@ export default class ImportBills extends React.Component {
   *   @methodName 新建网银账单
   */
   netSilverList = () => {
-    JSBridge.invoke('bankImport', response => {
-      const {
-        errorCode,
-        errorMsg,
-        result,
-        moxieData,
-      } = response;
-      if(result === 'SUCCESS'){
-        goResult('01',1,'导入成功',this.props)
-      } else if(result === 'FAIL'){
-        goResult('01',3,handleErroMsg(errorCode,errorMsg),this.props)
-      } else if(result === 'CANCEL'){
-
-      }
-    }, {
-      type: "add",
-      userInfo: []
-    });
+    addBank(this.props);
   }
 
   showBankAll = () => {

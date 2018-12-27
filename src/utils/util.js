@@ -106,7 +106,7 @@ export function enterBankImport(props, abbr, bank_name,) {
         } = response;
         if (result === 'SUCCESS') {
           goResult('01', 1, '导入成功', props)
-        } else if (result === 'FAILED') {
+        } else if (result === 'FAIL') {
           goResult('01', 1, errorMsg, props)
         } else if (result === 'CANCEL') {
 

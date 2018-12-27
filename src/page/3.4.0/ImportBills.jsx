@@ -91,6 +91,7 @@ export default class ImportBills extends React.Component {
     const { account = '@', password, emailType } = v;
     const type = account.split('@')[1];
     JSBridge.invoke('emailImport', response => {
+      debugger;
       const {
         errorCode,
         errorMsg,
@@ -99,8 +100,8 @@ export default class ImportBills extends React.Component {
       } = response;
       if(result === 'SUCCESS'){
         goResult('03',1,'导入成功',this.props)
-      } else if(result === 'FAILED'){
-        goResult('03',1,errorMsg,this.props)
+      } else if(result === 'FAIL'){
+        goResult('03',3,errorMsg,this.props)
       } else if(result === 'CANCEL'){
 
       }
@@ -132,7 +133,7 @@ export default class ImportBills extends React.Component {
       } = response;
       if(result === 'SUCCESS'){
         goResult('03',1,'导入成功',this.props);
-      } else if(result === 'FAILED'){
+      } else if(result === 'FAIL'){
         goResult('03',1,errorMsg,this.props);
       } else if(result === 'CANCEL'){
 
@@ -187,8 +188,8 @@ export default class ImportBills extends React.Component {
           } = response;
           if(result === 'SUCCESS'){
             goResult('01',1,'导入成功',this.props)
-          } else if(result === 'FAILED'){
-            goResult('01',1,errorMsg,this.props)
+          } else if(result === 'FAIL'){
+            goResult('01',3,errorMsg,this.props)
           } else if(result === 'CANCEL'){
 
           }
@@ -218,8 +219,8 @@ export default class ImportBills extends React.Component {
       } = response;
       if(result === 'SUCCESS'){
         goResult('01',1,'导入成功',this.props)
-      } else if(result === 'FAILED'){
-        goResult('01',1,errorMsg,this.props)
+      } else if(result === 'FAIL'){
+        goResult('01',3,errorMsg,this.props)
       } else if(result === 'CANCEL'){
 
       }

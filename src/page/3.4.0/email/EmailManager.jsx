@@ -26,8 +26,8 @@ export default class EmailManager extends React.Component {
       } = response;
       if (result === 'SUCCESS') {
         goResult('03', 1, '导入成功', this.props)
-      } else if (result === 'FAILED') {
-        goResult('03', 1, errorMsg, this.props)
+      } else if (result === 'FAIL') {
+        goResult('03', 3, errorMsg, this.props)
       } else if (result === 'CANCEL') {
 
       }
@@ -74,8 +74,8 @@ export default class EmailManager extends React.Component {
           } = response;
           if (result === 'SUCCESS') {
             goResult('03', 1, '导入成功', this.props)
-          } else if (result === 'FAILED') {
-            goResult('03', 1, errorMsg, this.props)
+          } else if (result === 'FAIL') {
+            goResult('03', 3, errorMsg, this.props)
           } else if (result === 'CANCEL') {
 
           }

@@ -5,7 +5,8 @@ import BillCard from "./BillCard";
 import Popup from "./components/Popup";
 import { InitDecorator } from "../../compoents/InitDecorator";
 import { jsNative, } from "sx-jsbridge";
-import { enterMethodList, judgeEnv } from "../../utils/util";
+import {  judgeEnv } from "../../utils/util";
+import { enterMethodList, } from '../../utils/BillSpider';
 import MoreItem from "./components/MoreItem";
 import IconEnter from "./components/IconEnter";
 import FreeInterest from "./components/FreeInterest";
@@ -14,7 +15,7 @@ import { ACTIVITY_CARD, BILL_LIST, GET_IDENTITY_INFO, MARK_BILL_STATUS } from ".
 import ModalAlert from "../../compoents/ModalAlert";
 import DebounceButton from "../../compoents/DebounceButton";
 
-const { loginHelper, nativeOpenNewWebView, nativeRequestBaseParams  } = jsNative;
+const { loginHelper, nativeOpenNewWebView  } = jsNative;
 type Props = {
   billList: any,
   huandaoData: any,

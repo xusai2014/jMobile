@@ -18,7 +18,6 @@ export default class BankCardList extends React.Component{
     this.props.dispatch(getCardsList({
       type:'01',
     })).then((result) => {
-
     }, (err) => {
 
     });

@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from '../../compoents/Header';
 import Adtivity from './Adtivity';
-import { enterMethodList, VersionNUm } from "../../utils/util";
+import { enterMethodList, VersionNUm } from "../../utils/BillSpider";
 import { jsNative  } from "sx-jsbridge";
 
 export default class Result extends React.Component {

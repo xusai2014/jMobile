@@ -8,7 +8,7 @@ import { getBankList, getEchoForm, getEmailList } from "../../actions/reqAction"
 import { InitDecorator } from "../../compoents/InitDecorator";
 import { Toast } from "antd-mobile";
 import { jsNative } from 'sx-jsbridge';
-import { goResult } from "../../utils/util";
+import { addEmail, goResult, handleErroMsg, updateBankForeground, updateEmail } from "../../utils/BillSpider";
 import DebounceButton from "../../compoents/DebounceButton"
 
 @InitDecorator((state) => {
@@ -48,31 +48,7 @@ export default class ImportBills extends React.Component {
   */
 
   billDetail = (v) => {
-    const { account = '@', password, emailType } = v;
-    const type = account.split('@')[1];
-    JSBridge.invoke('emailImport', response => {
-      debugger;
-      const {
-        errorCode,
-        errorMsg,
-        result,
-        moxieData,
-      } = response;
-      if(result === 'SUCCESS'){
-        goResult('03',1,'导入成功',this.props)
-      } else if(result === 'FAIL'){
-        goResult('03',3,handleErroMsg(errorCode,errorMsg),this.props)
-      } else if(result === 'CANCEL'){
-
-      }
-    }, {
-      type: "update",
-      userInfo: {
-        mailName: emailType,
-        accountName: account,
-        password: password
-      }
-    });
+    updateEmail(v,this.props);
   }
 
   getEmailAccount = () => {
@@ -83,29 +59,7 @@ export default class ImportBills extends React.Component {
   *   @methodName 新建邮箱账单导入
   */
   importEmail = () => {
-
-    JSBridge.invoke('emailImport', response => {
-      const {
-        errorCode,
-        errorMsg,
-        result,
-        moxieData,
-      } = response;
-      if(result === 'SUCCESS'){
-        goResult('03',1,'导入成功',this.props);
-      } else if(result === 'FAIL'){
-        goResult('03',3,handleErroMsg(errorCode,errorMsg),this.props);
-      } else if(result === 'CANCEL'){
-
-      }
-    }, {
-      type: "add",
-      userInfo: {
-        mailName: "",
-        accountName: "",
-        password: ""
-      }
-    });
+    addEmail(this.props);
   }
 
   // 手写账单跳转
@@ -139,27 +93,7 @@ export default class ImportBills extends React.Component {
             uuid,
           }
         })
-        JSBridge.invoke('bankImport', response => {
-          const {
-            errorCode,
-            errorMsg,
-            result,
-            moxieData,
-          } = response;
-          if(result === 'SUCCESS'){
-            goResult('01',1,'导入成功',this.props)
-          } else if(result === 'FAIL'){
-            goResult('01',3,handleErroMsg(errorCode,errorMsg),this.props)
-          } else if(result === 'CANCEL'){
-
-          }
-        }, {
-          type: "update",
-          runModel: "foreground",
-          bankCode: abbr,
-          userInfo,
-        });
-
+        updateBankForeground(abbr,userInfo,this.props);
       }
     }, (err) => {
     })
@@ -259,16 +193,3 @@ export default class ImportBills extends React.Component {
   }
 }
 
-function handleErroMsg(errorCode,errorMsg) {
-  if(errorCode.includes('app')){
-    if('app01' === errorCode ){
-      return '导入账单中断，请重新导入';
-    } else if('app02' === errorCode){
-      return '未知错误'
-    }
-  }  else if(errorCode.includes('api')){
-    return errorMsg;
-  } else {
-    return errorMsg;
-  }
-}

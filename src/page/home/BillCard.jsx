@@ -3,7 +3,8 @@ import { checkToken, getIndetiyInfo, getLoginList, syncBill, verifyCode } from "
 import { InitDecorator } from "../../compoents/InitDecorator";
 import { Modal, Progress, Toast }  from "antd-mobile";
 import { jsNative } from "sx-jsbridge";
-import { enterBankImport, enterMethodList, waitFunc } from "../../utils/util";
+import {  waitFunc } from "../../utils/util";
+import { enterBankImport, enterMethodList,} from '../../utils/BillSpider';
 import globalStyle from "../../style/globalStyle";
 import styles from './style/card.less'
 const { loginHelper } = jsNative;

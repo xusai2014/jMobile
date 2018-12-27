@@ -5,7 +5,7 @@ import { InitDecorator } from "../../../compoents/InitDecorator";
 import { getEmailList, removeEmail } from "../../../actions/reqAction";
 import { Toast } from "antd-mobile";
 import globalStyle from "../../../style/globalStyle";
-import { goResult } from "../../../utils/util";
+import { addEmail,  } from "../../../utils/BillSpider";
 
 @InitDecorator((state) => {
   return {
@@ -17,28 +17,7 @@ export default class EmailManager extends React.Component {
 
 
   importEmailOne(v) {
-    JSBridge.invoke('emailImport', response => {
-      const {
-        errorCode,
-        errorMsg,
-        result,
-        moxieData,
-      } = response;
-      if (result === 'SUCCESS') {
-        goResult('03', 1, '导入成功', this.props)
-      } else if (result === 'FAIL') {
-        goResult('03', 3, errorMsg, this.props)
-      } else if (result === 'CANCEL') {
-
-      }
-    }, {
-      type: "add",
-      userInfo: {
-        mailName: "",
-        accountName: "",
-        password: ""
-      }
-    });
+    addEmail(this.props);
   }
 
   componentWillUnmount() {
@@ -65,28 +44,7 @@ export default class EmailManager extends React.Component {
     } = this.props;
     return [
       <Header title="邮箱选择" right={(<Icon type="plus" onClick={() => {
-        JSBridge.invoke('emailImport', response => {
-          const {
-            errorCode,
-            errorMsg,
-            result,
-            moxieData,
-          } = response;
-          if (result === 'SUCCESS') {
-            goResult('03', 1, '导入成功', this.props)
-          } else if (result === 'FAIL') {
-            goResult('03', 3, errorMsg, this.props)
-          } else if (result === 'CANCEL') {
-
-          }
-        }, {
-          type: "add",
-          userInfo: {
-            mailName: "",
-            accountName: "",
-            password: ""
-          }
-        });
+        addEmail(this.props);
       }}/>)}/>,
       <div>
         {
@@ -152,3 +110,4 @@ export default class EmailManager extends React.Component {
     ]
   }
 }
+

@@ -8,7 +8,8 @@ import {
   checkToken, deleteBill, getBillDetail, getLoginList, getPayDetail, setMarkBill, syncBill,
   verifyCode
 } from "../../actions/reqAction";
-import { enterMethodList, waitFunc } from "../../utils/util";
+import {  waitFunc } from "../../utils/util";
+import { enterMethodList } from '../../utils/BillSpider';
 import globalStyle from "../../style/globalStyle";
 import KeyWord from "../home/components/KeyWord";
 import { BILL_DETAIL_LIST } from "../../utils/ActionsType";

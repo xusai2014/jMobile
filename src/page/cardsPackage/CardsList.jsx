@@ -4,8 +4,9 @@ import Card from "./components/Card";
 import {Menu, Icon, Toast, Modal} from "antd-mobile";
 import {InitDecorator} from "../../compoents/InitDecorator";
 import {getBillId, getCardsList, getIndetiyInfo, looseCard} from "../../actions/reqAction";
-import {jsNative} from 'sx-jsbridge'
-import { enterMethodList, judgeEnv } from "../../utils/util";
+import {jsNative} from 'sx-jsbridge';
+import { judgeEnv } from "../../utils/util";
+import { enterMethodList, } from '../../utils/BillSpider';
 import globalStyle from "../../style/globalStyle";
 
 

@@ -65,11 +65,7 @@ export default [{
     path:"/3.4.0/importbills",
     name:"ImportBills"
   },
-  {
-    component:"../page/3.4.0/ChooseBank.jsx",
-    path:"/3.4.0/choosebank",
-    name:"ChooseBank"
-  }, {
+   {
     component:"../page/3.4.0/email/EmailAdd.jsx",
     path:"/3.4.0/email/emailadd",
     name:"EmailAdd340"

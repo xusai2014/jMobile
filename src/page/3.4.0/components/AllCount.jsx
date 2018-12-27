@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from "./AllCount.less";
 import DebounceButton from "../../../compoents/DebounceButton";
-import {SwipeAction,List} from "antd-mobile";
 
 export default class AllCount extends React.Component {
 

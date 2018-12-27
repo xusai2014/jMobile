@@ -70,7 +70,7 @@ export const computerFreePeriod = (bill_type, payment_due_date) => {
  *   @params mod
  *   @description
  */
-const VersionNUm = 330
+export const VersionNUm = 340
 
 export function enterMethodList(props) {
   nativeRequestBaseParams().then(params => {

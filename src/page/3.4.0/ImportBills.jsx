@@ -94,7 +94,7 @@ export default class ImportBills extends React.Component {
       if(result === 'SUCCESS'){
         goResult('03',1,'导入成功',this.props);
       } else if(result === 'FAIL'){
-        goResult('03',1,handleErroMsg(errorCode,errorMsg),this.props);
+        goResult('03',3,handleErroMsg(errorCode,errorMsg),this.props);
       } else if(result === 'CANCEL'){
 
       }
@@ -271,5 +271,4 @@ function handleErroMsg(errorCode,errorMsg) {
   } else {
     return errorMsg;
   }
-
 }

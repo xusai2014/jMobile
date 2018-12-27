@@ -2,13 +2,17 @@
   width: 6.94rem;
   height: 1.44rem;
   margin: 0 auto;
+  border-bottom:1px solid #f9f9f9;
+  overflow: hidden;
   .allAccount{
     height: 1.44rem;
     display: flex;
     align-items: center;
-    border-bottom:1px solid #f9f9f9;
     overflow-x: auto;
-    /*适应苹果*/
+    overflow-y: hidden;
+    /*将滚动条挤出可视区域*/
+    padding-bottom: 0.2rem;
+    /*适应苹果,使苹果可以流畅的滑动*/
     -webkit-overflow-scrolling:touch;
     .input{
       background: #f8f8f8;
@@ -26,8 +30,8 @@
   }
   /*隐藏掉滚动条*/
   .allAccount::-webkit-scrollbar {
-    height:0 !important;
-    width:0 !important;
+    width: 0;
+    height: 0;
     display: none;
   }
   .des{

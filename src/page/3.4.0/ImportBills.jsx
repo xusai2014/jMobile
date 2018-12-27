@@ -42,46 +42,6 @@ export default class ImportBills extends React.Component {
 
   /**
   *   @author jerryxu
-  *   @methodName 跳转结果页面
-  *   @params  loginType: '01' 网银， 03 邮箱 status: 1 是成功 2是无数据 3是失败
-  *   @description loginType 账单导入方式 status 账单导入结果 description 账单导入结果描述
-  */
-  goResult(loginType, status, description){
-    if(status == 1){
-      if(loginType == '01'){
-        this.props.history.push('/result/cybersuccess',{
-          result:description
-        })
-      } else if(loginType == '03'){
-        this.props.history.push('/result/esuccess',{
-          result:description
-        })
-      }
-    } else if(status == 2){
-      if(loginType == '01'){
-        this.props.history.push('/result/cybernodata',{
-          result:description
-        })
-      } else if(loginType == '03'){
-        this.props.history.push('/result/enodata',{
-          result:description
-        })
-      }
-    }else if(status == 3) {
-      if(loginType == '01'){
-        this.props.history.push('/result/cyberfailed',{
-          result:description
-        })
-      } else if(loginType == '03'){
-        this.props.history.push('/result/efailed',{
-          result:description
-        })
-      }
-    }
-  }
-
-  /**
-  *   @author jerryxu
   *   @methodName 邮箱账单更新
   *   @params v 用户信息
   *   @description
@@ -101,7 +61,7 @@ export default class ImportBills extends React.Component {
       if(result === 'SUCCESS'){
         goResult('03',1,'导入成功',this.props)
       } else if(result === 'FAIL'){
-        goResult('03',3,errorMsg,this.props)
+        goResult('03',3,handleErroMsg(errorCode,errorMsg),this.props)
       } else if(result === 'CANCEL'){
 
       }
@@ -134,7 +94,7 @@ export default class ImportBills extends React.Component {
       if(result === 'SUCCESS'){
         goResult('03',1,'导入成功',this.props);
       } else if(result === 'FAIL'){
-        goResult('03',1,errorMsg,this.props);
+        goResult('03',1,handleErroMsg(errorCode,errorMsg),this.props);
       } else if(result === 'CANCEL'){
 
       }
@@ -189,7 +149,7 @@ export default class ImportBills extends React.Component {
           if(result === 'SUCCESS'){
             goResult('01',1,'导入成功',this.props)
           } else if(result === 'FAIL'){
-            goResult('01',3,errorMsg,this.props)
+            goResult('01',3,handleErroMsg(errorCode,errorMsg),this.props)
           } else if(result === 'CANCEL'){
 
           }
@@ -220,7 +180,7 @@ export default class ImportBills extends React.Component {
       if(result === 'SUCCESS'){
         goResult('01',1,'导入成功',this.props)
       } else if(result === 'FAIL'){
-        goResult('01',3,errorMsg,this.props)
+        goResult('01',3,handleErroMsg(errorCode,errorMsg),this.props)
       } else if(result === 'CANCEL'){
 
       }
@@ -296,6 +256,20 @@ export default class ImportBills extends React.Component {
         </div>
       </div>
     )
-
   }
+}
+
+function handleErroMsg(errorCode,errorMsg) {
+  if(errorCode.includes('app')){
+    if('app01'.equals(errorCode)){
+      return '导入账单中断，请重新导入';
+    } else if('app02'.equals(errorCode)){
+      return '未知错误'
+    }
+  }  else if(errorCode.includes('api')){
+    return errorMsg;
+  } else {
+    return errorMsg;
+  }
+
 }

@@ -89,7 +89,13 @@ export default class Result extends React.Component {
       </div>),
       title: "无数据导入"
     }, cybersuccess: {
-      describe: (data) => <div>成功导入：{data.map((v, k) => <div>{v.bankName}信用卡 导入{v.count}笔账单</div>)}</div>,
+      describe: (data = []) => {
+        if(typeof  data === 'string'){
+          return data;
+        } else {
+          return <div>成功导入：{data.map((v, k) => <div>{v.bankName}信用卡 导入{v.count}笔账单</div>)}</div>;
+        }
+      },
       footer: () => (<div className="enableBtn" onClick={() => this.props.history.push('/home/index')}>完成</div>),
       title: "导入成功",
       img: "/static/img/done@2x.png",

@@ -87,7 +87,7 @@ export default class ImportBills extends React.Component {
   */
 
   billDetail = (v) => {
-    const { account = '@', password, } = v;
+    const { account = '@', password, emailType } = v;
     const type = account.split('@')[1];
     JSBridge.invoke('emailImport', response => {
       const {
@@ -106,7 +106,7 @@ export default class ImportBills extends React.Component {
     }, {
       type: "update",
       userInfo: {
-        mailName: type,
+        mailName: emailType,
         accountName: account,
         password: password
       }

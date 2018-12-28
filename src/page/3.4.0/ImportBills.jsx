@@ -131,7 +131,10 @@ export default class ImportBills extends React.Component {
       }
     )
   }
-
+  cardListShow = (conditon,v) => {
+    if(conditon) return <CardList echoData={v} key={v.name}  addStyle={true} bankCardLogin={this.cardLogin}/>
+    else return <CardList echoData={v} key={v.name} bankCardLogin={this.cardLogin}/>
+  }
   componentDidMount() {
   }
 
@@ -151,12 +154,16 @@ export default class ImportBills extends React.Component {
       }]
     } = echoData;
     const cardList = bankList.map((v, k) => {
-      if (k <= 7) return (<CardList echoData={v} key={v.name} bankCardLogin={this.cardLogin}/>)
+      const cond=(k+1)%3;
+      if (k <= 7) {return (this.cardListShow(!cond,v))}
       if (k === 8) return (
-        <CardList echoData={moreIcon} key={moreIcon.name} bankCardLogin={this.showBankAll}/>)
+        <CardList echoData={moreIcon} key={moreIcon.name} bankCardLogin={this.showBankAll} addStyle={true}/>)
       else return null;
     })
-    const cardListAll = bankList.map((v) =><CardList echoData={v} key={v.name} bankCardLogin={this.cardLogin}/>)
+    const cardListAll = bankList.map((v,k) =>{
+      const cond=(k+1)%3;
+      return (this.cardListShow(!cond,v));
+    })
 
     return (
       <div className={styles.container} style={{ minHeight: gloablMinHeight }}>

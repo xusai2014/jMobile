@@ -119,13 +119,13 @@ export default class DayPicker extends React.Component {
 
     return (
       [
-        <div style={styles.input} onClick={() => {
+        <div key={'1'} style={styles.input} onClick={() => {
           this.selectDay()
         }}>{
           this.state.dayVal?this.state.dayVal:'选择日期'
         }</div>,
         showPanel ?
-          <div style={styles.panel} onClick={(e)=>{
+          <div key={'2'} style={styles.panel} onClick={(e)=>{
             this.destroyStyle()
             this.setState({
               showPanel:false
@@ -176,7 +176,7 @@ export default class DayPicker extends React.Component {
                 >
                   {
                     this.dtaObj.initArr.map((v, k) => {
-                      return <div style={styles.item}>{k}</div>
+                      return <div key={k} style={styles.item}>{k}</div>
                     })
                   }
                 </div>

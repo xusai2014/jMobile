@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import Header from '../../compoents/Header';
 import PayMethodList from './components/PayMethodList';
@@ -9,14 +11,29 @@ import { InitDecorator } from "../../compoents/InitDecorator";
 import { addBank, addEmail, updateBankForeground, updateEmail } from "../../utils/BillSpider";
 import DebounceButton from "../../compoents/DebounceButton"
 
+type Props = {
+  bankList:[], //银行列表
+}
+
+type State = {
+  showAllBank:boolean, // 是否展示所有银行
+  accountList:[], //点击网银获取用户留存账户信息
+}
+
+type EmaillUserInfo = {
+  account:string,
+  passwrod:string,
+  uuid:string,
+  emailType:string,
+}
+
 @InitDecorator((state) => {
   return {
     bankList: state.BillReducer.bankList,
-    requestStaus: state.GlobalReducer.requestStaus
   }
 })
-export default class ImportBills extends React.Component {
-  constructor(props) {
+export default class ImportBills extends React.Component<State,Props> {
+  constructor(props:Props) {
     super(props);
     this.state = {
       showAllBank: false,
@@ -26,16 +43,12 @@ export default class ImportBills extends React.Component {
 
   async componentWillMount() {
     // 数据初始化
-    this.props.dispatch(getBankList()).then((result) => {
-    }, (err) => {
-    });
-    this.props.dispatch(getEmailList()).then((result) => {
-      const { data = [] } = result;
-      this.setState({
-        accountList: data,
-      })
-    }, (err) => {
-    });
+    this.props.dispatch(getBankList());
+    const apiData = await this.props.dispatch(getEmailList());
+    const { data:accountList = [] } = apiData;
+    this.setState({
+      accountList
+    })
   }
 
   /**
@@ -45,7 +58,7 @@ export default class ImportBills extends React.Component {
   *   @description
   */
 
-  billDetail = (v) => {
+  billDetail = (v:EmaillUserInfo) => {
     updateEmail(v,this.props);
   }
 
@@ -62,7 +75,7 @@ export default class ImportBills extends React.Component {
 
   // 手写账单跳转
   WriteBillByHand = () => {
-    this.props.history.push('/manual/add')
+    this.props.history.push('/manual/handlebill');
   }
   /**
   *   @author jerryxu

@@ -1,4 +1,4 @@
-// flow-typed signature: 802623650036aba3021ca2796e7c505d
+// flow-typed signature: ad8e8491a38c216b8cf3bd966caa0a41
 // flow-typed version: <<STUB>>/@babel/core_v^7.0.0-beta.46/flow_v0.86.0
 
 /**
@@ -134,10 +134,6 @@ declare module '@babel/core/lib/transform-file-browser' {
   declare module.exports: any;
 }
 
-declare module '@babel/core/lib/transform-file-sync-browser' {
-  declare module.exports: any;
-}
-
 declare module '@babel/core/lib/transform-file' {
   declare module.exports: any;
 }
@@ -266,9 +262,6 @@ declare module '@babel/core/lib/transform-ast.js' {
 }
 declare module '@babel/core/lib/transform-file-browser.js' {
   declare module.exports: $Exports<'@babel/core/lib/transform-file-browser'>;
-}
-declare module '@babel/core/lib/transform-file-sync-browser.js' {
-  declare module.exports: $Exports<'@babel/core/lib/transform-file-sync-browser'>;
 }
 declare module '@babel/core/lib/transform-file.js' {
   declare module.exports: $Exports<'@babel/core/lib/transform-file'>;

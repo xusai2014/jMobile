@@ -1,4 +1,4 @@
-// flow-typed signature: 6485b3ccbd5884acab29d604b06d45ad
+// flow-typed signature: 04b812a6acddc980877bae26edc21cb5
 // flow-typed version: <<STUB>>/sa-sdk-javascript_v^1.10.3/flow_v0.86.0
 
 /**
@@ -34,94 +34,6 @@ declare module 'sa-sdk-javascript/sensorsdata.min' {
   declare module.exports: any;
 }
 
-declare module 'sa-sdk-javascript/src/detector.min' {
-  declare module.exports: any;
-}
-
-declare module 'sa-sdk-javascript/src/dot' {
-  declare module.exports: any;
-}
-
-declare module 'sa-sdk-javascript/src/heatmap' {
-  declare module.exports: any;
-}
-
-declare module 'sa-sdk-javascript/src/jquery' {
-  declare module.exports: any;
-}
-
-declare module 'sa-sdk-javascript/src/json2' {
-  declare module.exports: any;
-}
-
-declare module 'sa-sdk-javascript/src/jsontree' {
-  declare module.exports: any;
-}
-
-declare module 'sa-sdk-javascript/src/modal' {
-  declare module.exports: any;
-}
-
-declare module 'sa-sdk-javascript/src/promise.min' {
-  declare module.exports: any;
-}
-
-declare module 'sa-sdk-javascript/src/sdk' {
-  declare module.exports: any;
-}
-
-declare module 'sa-sdk-javascript/src/sensorsdata.full.amd' {
-  declare module.exports: any;
-}
-
-declare module 'sa-sdk-javascript/src/sensorsdata.full' {
-  declare module.exports: any;
-}
-
-declare module 'sa-sdk-javascript/src/sensorsdata' {
-  declare module.exports: any;
-}
-
-declare module 'sa-sdk-javascript/src/suggest' {
-  declare module.exports: any;
-}
-
-declare module 'sa-sdk-javascript/src/template' {
-  declare module.exports: any;
-}
-
-declare module 'sa-sdk-javascript/src/template/define_url' {
-  declare module.exports: any;
-}
-
-declare module 'sa-sdk-javascript/src/template/head_box' {
-  declare module.exports: any;
-}
-
-declare module 'sa-sdk-javascript/src/template/popover_box' {
-  declare module.exports: any;
-}
-
-declare module 'sa-sdk-javascript/src/template/testmode_box' {
-  declare module.exports: any;
-}
-
-declare module 'sa-sdk-javascript/src/template/trigger_box' {
-  declare module.exports: any;
-}
-
-declare module 'sa-sdk-javascript/src/vendor' {
-  declare module.exports: any;
-}
-
-declare module 'sa-sdk-javascript/src/version' {
-  declare module.exports: any;
-}
-
-declare module 'sa-sdk-javascript/src/vtrack.sdk' {
-  declare module.exports: any;
-}
-
 declare module 'sa-sdk-javascript/version' {
   declare module.exports: any;
 }
@@ -135,72 +47,6 @@ declare module 'sa-sdk-javascript/sensorsdata.amd.min.js' {
 }
 declare module 'sa-sdk-javascript/sensorsdata.min.js' {
   declare module.exports: $Exports<'sa-sdk-javascript/sensorsdata.min'>;
-}
-declare module 'sa-sdk-javascript/src/detector.min.js' {
-  declare module.exports: $Exports<'sa-sdk-javascript/src/detector.min'>;
-}
-declare module 'sa-sdk-javascript/src/dot.js' {
-  declare module.exports: $Exports<'sa-sdk-javascript/src/dot'>;
-}
-declare module 'sa-sdk-javascript/src/heatmap.js' {
-  declare module.exports: $Exports<'sa-sdk-javascript/src/heatmap'>;
-}
-declare module 'sa-sdk-javascript/src/jquery.js' {
-  declare module.exports: $Exports<'sa-sdk-javascript/src/jquery'>;
-}
-declare module 'sa-sdk-javascript/src/json2.js' {
-  declare module.exports: $Exports<'sa-sdk-javascript/src/json2'>;
-}
-declare module 'sa-sdk-javascript/src/jsontree.js' {
-  declare module.exports: $Exports<'sa-sdk-javascript/src/jsontree'>;
-}
-declare module 'sa-sdk-javascript/src/modal.js' {
-  declare module.exports: $Exports<'sa-sdk-javascript/src/modal'>;
-}
-declare module 'sa-sdk-javascript/src/promise.min.js' {
-  declare module.exports: $Exports<'sa-sdk-javascript/src/promise.min'>;
-}
-declare module 'sa-sdk-javascript/src/sdk.js' {
-  declare module.exports: $Exports<'sa-sdk-javascript/src/sdk'>;
-}
-declare module 'sa-sdk-javascript/src/sensorsdata.full.amd.js' {
-  declare module.exports: $Exports<'sa-sdk-javascript/src/sensorsdata.full.amd'>;
-}
-declare module 'sa-sdk-javascript/src/sensorsdata.full.js' {
-  declare module.exports: $Exports<'sa-sdk-javascript/src/sensorsdata.full'>;
-}
-declare module 'sa-sdk-javascript/src/sensorsdata.js' {
-  declare module.exports: $Exports<'sa-sdk-javascript/src/sensorsdata'>;
-}
-declare module 'sa-sdk-javascript/src/suggest.js' {
-  declare module.exports: $Exports<'sa-sdk-javascript/src/suggest'>;
-}
-declare module 'sa-sdk-javascript/src/template.js' {
-  declare module.exports: $Exports<'sa-sdk-javascript/src/template'>;
-}
-declare module 'sa-sdk-javascript/src/template/define_url.js' {
-  declare module.exports: $Exports<'sa-sdk-javascript/src/template/define_url'>;
-}
-declare module 'sa-sdk-javascript/src/template/head_box.js' {
-  declare module.exports: $Exports<'sa-sdk-javascript/src/template/head_box'>;
-}
-declare module 'sa-sdk-javascript/src/template/popover_box.js' {
-  declare module.exports: $Exports<'sa-sdk-javascript/src/template/popover_box'>;
-}
-declare module 'sa-sdk-javascript/src/template/testmode_box.js' {
-  declare module.exports: $Exports<'sa-sdk-javascript/src/template/testmode_box'>;
-}
-declare module 'sa-sdk-javascript/src/template/trigger_box.js' {
-  declare module.exports: $Exports<'sa-sdk-javascript/src/template/trigger_box'>;
-}
-declare module 'sa-sdk-javascript/src/vendor.js' {
-  declare module.exports: $Exports<'sa-sdk-javascript/src/vendor'>;
-}
-declare module 'sa-sdk-javascript/src/version.js' {
-  declare module.exports: $Exports<'sa-sdk-javascript/src/version'>;
-}
-declare module 'sa-sdk-javascript/src/vtrack.sdk.js' {
-  declare module.exports: $Exports<'sa-sdk-javascript/src/vtrack.sdk'>;
 }
 declare module 'sa-sdk-javascript/version.js' {
   declare module.exports: $Exports<'sa-sdk-javascript/version'>;

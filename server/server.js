@@ -157,7 +157,6 @@ const clientProxy = proxy({
       if (err) {
         return next(err);
       }
-      const {s} = proxyRes;
       res.set('content-type', 'text/html');
       res.send(result);
       res.end();

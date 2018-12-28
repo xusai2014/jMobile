@@ -116,6 +116,7 @@ export function addEmail(props) {
 
 export function updateEmail(userInfo,props) {
   const { emailType, account, password } = userInfo;
+  const uuidInfo=!!userInfo?userInfo.uuid:'';
   JSBridge.invoke('emailImport', response => {
     const {
       errorCode,
@@ -132,16 +133,18 @@ export function updateEmail(userInfo,props) {
     }
   }, {
     type: "update",
+    uuid:uuidInfo,
     userInfo: {
       mailName: emailType,
       accountName: account,
-      password: password
+      password: password,
     }
   });
 
 }
 
 export function updateBankForeground (bankCode,userInfo,props) {
+  const uuidInfo=userInfo.length>0?userInfo[0].uuid:'';
   JSBridge.invoke('bankImport', response => {
     const {
       errorCode,
@@ -161,6 +164,7 @@ export function updateBankForeground (bankCode,userInfo,props) {
     runModel: "foreground",
     bankCode,
     userInfo,
+    uuid:uuidInfo
   });
 }
 

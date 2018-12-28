@@ -3,7 +3,6 @@ import Header from "../../../compoents/Header";
 import { Icon, SwipeAction, List, Modal } from "antd-mobile";
 import { InitDecorator } from "../../../compoents/InitDecorator";
 import { getEmailList, removeEmail } from "../../../actions/reqAction";
-import { Toast } from "antd-mobile";
 import globalStyle from "../../../style/globalStyle";
 import { addEmail,  } from "../../../utils/BillSpider";
 
@@ -51,7 +50,6 @@ export default class EmailManager extends React.Component {
           emailList.map((v, k) => {
             const {
               account,
-              task_id,
               uuid = '',
               lastTime
             } = v;

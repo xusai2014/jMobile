@@ -274,7 +274,6 @@ export default class BillDetail extends React.Component {
   }
 
   componentDidMount() {
-    // TODO 账单明细的下拉加载
     this.initData()
   }
 
@@ -376,7 +375,6 @@ export default class BillDetail extends React.Component {
     this.props.dispatch(deleteBill({
       billId,
     })).then((result) => {
-      //TODO succeed to delete bill
       this.props.history.go(-1)
     })
   }

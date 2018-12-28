@@ -26,7 +26,6 @@ export default class BillCard extends React.Component {
   }
 
   async callSyncBill(task_id, importBillType, abbr, cardNum, bank_name) {
-    // TODO 仅支持网银
     Toast.loading('请稍候', 0);
     if (importBillType != '01') {
       this.props.dispatch(getLoginList({

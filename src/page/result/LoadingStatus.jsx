@@ -99,7 +99,6 @@ export default class LoadingStatus extends React.Component{
         return;
       case "DONE_FAIL":
         Toast.info(description);
-        // TODO 添加参数 uuid
         this.props.dispatch(removeLoginStatus({taskId})).then(()=>{
           this.goResult(loginType,3,description)
         })

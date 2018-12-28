@@ -225,7 +225,6 @@ export default class CardsList extends React.Component {
 
                     this.props.history.push(`/bill/detail/${result.data}`,{bank_name:bankNm,card_num:actNo.substr(actNo.length-4),bank_id:bankNo})
                   } else {
-                    // TODO  跳转逻辑 jerry
                       Modal.alert('', <span className="alert_content">此卡还未添加账单，请先导入账单再查看详情。</span>, [
                       {
                         text: "添加账单", onPress: () => {

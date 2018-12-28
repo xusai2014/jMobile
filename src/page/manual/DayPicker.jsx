@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from "moment";
 export default class DayPicker extends React.Component {
   constructor(props) {
     super(props);
@@ -43,12 +44,12 @@ export default class DayPicker extends React.Component {
       this.dtaObj.dta_Y = this.dtaObj.dta_Y + dtaY;
     }
     this.refs.canlenda.style.transition = 'cubic-bezier(0,0,0.2,1.15) 0.5s';
-    this.refs.canlenda.style.webkitTransition = 'cubic-bezier(0,0,0.2,1.15) 0.5s';
+    this.refs.canlenda.style.WebkitTransition = 'cubic-bezier(0,0,0.2,1.15) 0.5s';
 
     this.refs.canlenda.style.transform = `translate3d(0,${this.dtaObj.dta_Y}px,0)`;
-    this.refs.canlenda.style.webkitTransform = `translate3d(0,${this.dtaObj.dta_Y}px,0)`;
+    this.refs.canlenda.style.WebkitTransform = `translate3d(0,${this.dtaObj.dta_Y}px,0)`;
     this.reviseItem();
-    this.selectValue()
+    this.selectValue();
   }
 
   reviseItem() {
@@ -58,13 +59,13 @@ export default class DayPicker extends React.Component {
       //向上偏移
       this.dtaObj.dta_Y = this.dtaObj.dta_Y - this.dtaObj.itemV - l
       this.refs.canlenda.style.transform = `translate3d(0,${this.dtaObj.dta_Y}px,0)`;
-      this.refs.canlenda.style.webkitTransform = `translate3d(0,${this.dtaObj.dta_Y}px,0)`;
+      this.refs.canlenda.style.WebkitTransform = `translate3d(0,${this.dtaObj.dta_Y}px,0)`;
 
     } else {
       //向下偏移
       this.dtaObj.dta_Y = this.dtaObj.dta_Y - l
       this.refs.canlenda.style.transform = `translate3d(0,${this.dtaObj.dta_Y}px,0)`;
-      this.refs.canlenda.style.webkitTransform = `translate3d(0,${this.dtaObj.dta_Y}px,0)`;
+      this.refs.canlenda.style.WebkitTransform = `translate3d(0,${this.dtaObj.dta_Y}px,0)`;
     }
   }
 
@@ -155,9 +156,9 @@ export default class DayPicker extends React.Component {
                 <div style={{
                   ...styles.list,
                   transition: 'cubic-bezier(0,0,0.2,1.15) 0.5s',
-                  webkitTransition :'cubic-bezier(0,0,0.2,1.15) 0.5s',
+                  WebkitTransition :'cubic-bezier(0,0,0.2,1.15) 0.5s',
                   transform : `translate3d(0,${this.dtaObj.dta_Y}px,0)`,
-                  webkitTransform : `translate3d(0,${this.dtaObj.dta_Y}px,0)`,
+                  WebkitTransform : `translate3d(0,${this.dtaObj.dta_Y}px,0)`,
                 }}
                      onTouchMove={(e) => {
                        this.dtaObj.end_X = e.touches[0].pageX

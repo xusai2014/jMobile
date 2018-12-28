@@ -12,6 +12,7 @@ import {
   EMAIL_TASK_STATUS, DELETE_BILL, DIRECT_EMAIL_BILL, EMAIL_LIST, DELETE_EMAIL, HANDLE_BILL, REMOVE_BILL_ALL_STATUS,
   ADTIVITY_DATA, ECHO_FOEM, BILL_DETAIL_LIST
 } from '../utils/ActionsType';
+import  _values from "lodash/values";
 
 const initialState = {
   bankList: [],
@@ -59,7 +60,7 @@ export default function (state = initialState, actions = {}) {
         ...state,
         loginList: {
           ...state.loginList,
-          [subtype]: _.values(
+          [subtype]: _values(
             logins.map((v, k) => {
               const {
                 login_type, password_desc, username_desc,

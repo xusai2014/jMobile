@@ -162,6 +162,7 @@ export function updateBankForeground (bankCode,userInfo,props) {
   }, {
     type: "update",
     runModel: "foreground",
+
     bankCode,
     userInfo,
     uuid:uuidInfo

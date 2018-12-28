@@ -78,8 +78,6 @@ export default {
   externals: {
     jquery: 'jQuery',
     fastclick: 'FastClick',
-    lodash: '_',
-    moment: 'moment'
   },
   resolve: {
     extensions: ['.web.js', '.js', '.jsx', '.scss', '.less', '.css'],

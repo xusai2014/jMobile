@@ -11,6 +11,7 @@ import Routers from './router';
 import FixedContent from './compoents/FixedContent';
 import 'whatwg-fetch';// whatwg 是fetch API的统一版本，在不支持fetch的浏览器中处理兼容问题，同时引入轻量的promise库
 import './style/style.less';
+import 'moment/locale/zh-cn';
 import initFunc from './utils/init';
 
 const historyAPi: BrowserHistory = createBrowserHistory();

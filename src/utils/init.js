@@ -5,6 +5,7 @@ import { initJSBridge, jsNative, nativeJs } from 'sx-jsbridge';
 import type { BrowserHistory } from 'history/createBrowserHistory';
 import { fetchPromise, PromiseList } from './fetch-middleware';
 import uam from './deviceMark';// ua mark
+import * as moment from 'moment';
 
 export default (historyApi: BrowserHistory, store: any) => {
   // To add to window, 定义全局变量
@@ -18,6 +19,8 @@ export default (historyApi: BrowserHistory, store: any) => {
   window.promiseList = new PromiseList();
   window.uam = uam;
   window.sa = sa;
+
+  moment.locale('zh-cn');
   /**
    * 初始化js briadge, True 表示启用 Mock 模式， TOKEN_ID 是自定义用户身份凭证
    */

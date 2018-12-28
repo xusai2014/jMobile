@@ -14,6 +14,8 @@ import styles from './style/index.less'
 import { ACTIVITY_CARD, BILL_LIST, GET_IDENTITY_INFO, MARK_BILL_STATUS } from "../../utils/ActionsType";
 import ModalAlert from "../../compoents/ModalAlert";
 import DebounceButton from "../../compoents/DebounceButton";
+import _debounce from 'lodash/debounce';
+import moment from "moment";
 
 const { loginHelper, nativeOpenNewWebView  } = jsNative;
 type Props = {
@@ -331,13 +333,13 @@ export default class Index extends React.Component<Props, State> {
         }
       </div>,
       <div key={'c'} className={styles.addBtn}
-           onClick={() => _.debounce(this.loginEnter(2), 1000)}
+           onClick={() => _debounce(this.loginEnter(2), 1000)}
       >
         <img className={styles.addImg} src="/static/img/addCard@2x.png"/>
         <span className={styles.addText}>添加信用卡账单</span>
       </div>,
       <div>{(isLogged && !examineAccount) ?
-        <div className={styles.enterCard} onClick={() => _.debounce(this.openCardMarket(), 1000)}>
+        <div className={styles.enterCard} onClick={() => _debounce(this.openCardMarket(), 1000)}>
           <img src="/static/img/信用卡2x.png" style={{ width: "0.41rem" }}/>
           <span className={styles.applyCard}>
           办信用卡

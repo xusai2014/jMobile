@@ -7,6 +7,7 @@ import {  waitFunc } from "../../utils/util";
 import { enterBankImport, enterMethodList,} from '../../utils/BillSpider';
 import globalStyle from "../../style/globalStyle";
 import styles from './style/card.less'
+import moment from "moment";
 const { loginHelper } = jsNative;
 
 @InitDecorator((state) => {

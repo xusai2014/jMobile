@@ -58,7 +58,10 @@
   "license": "ISC",
   "dependencies": {
     "antd-mobile": "^2.1.8",
+    "crypto-js": "^3.1.9-1",
     "history": "^4.7.2",
+    "lodash": "^4.17.11",
+    "moment": "^2.23.0",
     "promise-polyfill": "^7.1.2",
     "rc-form": "^2.2.0",
     "react": "^16.3.2",
@@ -68,7 +71,7 @@
     "react-router-dom": "^4.2.2",
     "redux": "^3.7.2",
     "sa-sdk-javascript": "^1.10.3",
-    "sx-jsbridge": "1.2.1",
+    "sx-jsbridge": "^1.2.4",
     "url-loader": "^1.0.1",
     "whatwg-fetch": "^2.0.4"
   },

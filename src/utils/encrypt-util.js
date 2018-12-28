@@ -1,10 +1,12 @@
 // @flow
+import _sortBy from 'lodash/sortBy';
+import CryptoJS from 'crypto-js'
 export const SIGN_KEY: string = 'zxcasdqwe';
 const SECRET_KEY: string = '9ce8cfcdd1f572ed9d9461f7f6d81833';
 
 export const generateSign = (basicInfo: any, signKey: string) => {
   const arr = Object.keys(basicInfo);
-  const pureData = _.sortBy(arr, (a: string) => a.toLowerCase());
+  const pureData = _sortBy(arr, (a: string) => a.toLowerCase());
   let dataString = '';
   pureData.forEach((v) => {
     dataString += basicInfo[v];

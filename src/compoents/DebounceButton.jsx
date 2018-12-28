@@ -1,5 +1,6 @@
 import React from 'react';
-import styles from './DebounceButton.less'
+import styles from './DebounceButton.less';
+import _debounce from 'lodash/debounce';
 type Props = {
   disabled?: boolean, // 初始化按钮状态， disable  True禁止使用 False允许点击
   onClick?: Function, //  点击事件
@@ -14,7 +15,7 @@ export default class DebounceButton extends React.Component<{}, Props> {
   constructor(props) {
     super(props);
     // 截流，函数抖动
-    this.emitChangeDebounced = _.debounce(this.excute.bind(this), this.THROTTOLE_TIME);
+    this.emitChangeDebounced = _debounce(this.excute.bind(this), this.THROTTOLE_TIME);
   }
 
   excute(v) {

@@ -13,6 +13,8 @@ import { enterMethodList } from '../../utils/BillSpider';
 import globalStyle from "../../style/globalStyle";
 import KeyWord from "../home/components/KeyWord";
 import { BILL_DETAIL_LIST } from "../../utils/ActionsType";
+import  _values from "lodash/values";
+import moment from "moment";
 @InitDecorator((state) => {
   return {
     billDetail: state.BillReducer.billDetail,
@@ -357,7 +359,7 @@ export default class BillDetail extends React.Component {
       return {
         from: moment(from).format('MM-DD'),
         to: moment(to).format('MM-DD'),
-        datalist: _.values(list.map((v, k) => {
+        datalist: _values(list.map((v, k) => {
           const { description, trans_date, amount_money } = v;
           return {
             description,

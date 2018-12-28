@@ -1,4 +1,5 @@
 import { jsNative, } from "sx-jsbridge";
+import moment from "moment";
 const { nativeRequestBaseParams } = jsNative;
 export const getSearch = (props) => {
   let search = ""

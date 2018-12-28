@@ -6,7 +6,7 @@ export default class Loading extends React.Component{
     if(error){
         return <NoMatch/>
     } else {
-      return [<style>{
+      return [<style key="style">{
         `.spinner {
         margin: 80px auto;
         width: 20px;
@@ -137,7 +137,7 @@ export default class Loading extends React.Component{
         }
       }`
       }
-      </style>,<div className="spinner">
+      </style>,<div key='div' className="spinner">
         <div className="spinner-container container1">
           <div className="circle1"></div>
           <div className="circle2"></div>

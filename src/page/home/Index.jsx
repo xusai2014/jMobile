@@ -5,7 +5,7 @@ import BillCard from "./BillCard";
 import Popup from "./components/Popup";
 import { InitDecorator } from "../../compoents/InitDecorator";
 import { jsNative, } from "sx-jsbridge";
-import {  judgeEnv } from "../../utils/util";
+import { judgeEnv } from "../../utils/util";
 import { enterMethodList, } from '../../utils/BillSpider';
 import MoreItem from "./components/MoreItem";
 import IconEnter from "./components/IconEnter";
@@ -17,7 +17,7 @@ import DebounceButton from "../../compoents/DebounceButton";
 import _debounce from 'lodash/debounce';
 import moment from "moment";
 
-const { loginHelper, nativeOpenNewWebView  } = jsNative;
+const { loginHelper, nativeOpenNewWebView } = jsNative;
 type Props = {
   billList: any,
   huandaoData: any,
@@ -244,20 +244,23 @@ export default class Index extends React.Component<Props, State> {
             if (examineAccount && type == '1') {
               return null
             }
-            return <DebounceButton  onClick={() => {
-              if (type == '0') {
-                this.loginEnter(3, { action })
-              } else if (type == '1') {
-                this.loginEnter(4, { action })
-              }
-            }}><div key={k} >
+            return <DebounceButton
+              key={k}
+              onClick={() => {
+                if (type == '0') {
+                  this.loginEnter(3, { action })
+                } else if (type == '1') {
+                  this.loginEnter(4, { action })
+                }
+              }}>
+
               <span className={styles.iconItem}>
                 <img src={img} style={{ width: '0.65rem' }}/>
               </span>
               <div className={styles.textStyle}>
                 {text}
               </div>
-            </div></DebounceButton>
+            </DebounceButton>
           })
         }
       </div>
@@ -338,7 +341,7 @@ export default class Index extends React.Component<Props, State> {
         <img className={styles.addImg} src="/static/img/addCard@2x.png"/>
         <span className={styles.addText}>添加信用卡账单</span>
       </div>,
-      <div>{(isLogged && !examineAccount) ?
+      <div key='isLogged'>{(isLogged && !examineAccount) ?
         <div className={styles.enterCard} onClick={() => _debounce(this.openCardMarket(), 1000)}>
           <img src="/static/img/信用卡2x.png" style={{ width: "0.41rem" }}/>
           <span className={styles.applyCard}>
@@ -378,6 +381,7 @@ export default class Index extends React.Component<Props, State> {
                   setLevel={() => {
                     this.setState({ level: 1 })
                   }}
+                  key="MoreItem"
         /> : null
     ]
   }

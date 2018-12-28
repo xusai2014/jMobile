@@ -4,7 +4,7 @@ import { Icon, SwipeAction, List, Modal } from "antd-mobile";
 import { InitDecorator } from "../../../compoents/InitDecorator";
 import { getEmailList, removeEmail } from "../../../actions/reqAction";
 import globalStyle from "../../../style/globalStyle";
-import { addEmail,  } from "../../../utils/BillSpider";
+import { addEmail, updateEmail } from "../../../utils/BillSpider";
 
 @InitDecorator((state) => {
   return {
@@ -16,7 +16,7 @@ export default class EmailManager extends React.Component {
 
 
   importEmailOne(v) {
-    addEmail(this.props);
+    updateEmail(v,this.props);
   }
 
   componentWillUnmount() {

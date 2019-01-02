@@ -6,6 +6,7 @@
  */
 import { jsNative } from "sx-jsbridge";
 import { Toast } from "antd-mobile";
+import {getEchoForm} from "../actions/reqAction";
 const { nativeRequestBaseParams } = jsNative;
 export const VersionNUm = 330;
 
@@ -25,7 +26,7 @@ export function enterMethodList(props) {
   })
 }
 
-export function enterBankImport(props, abbr, bank_name,) {
+export function enterBankImport(props, abbr, bank_name) {
   nativeRequestBaseParams().then(params => {
     const appVersion = params['APP_VERSIONS'].split('.');
     let sum = '';
@@ -34,7 +35,29 @@ export function enterBankImport(props, abbr, bank_name,) {
     })
     const version = Number(sum);
     if (version >= VersionNUm) {
-      addBank(props);
+      props.dispatch(getEchoForm({ bankName: abbr })).then((result) => {
+        if (result) {
+          const { data = [] } = result;
+          const userInfo = data.map((v) => {
+            const {
+              bankLoginType,
+              password,
+              unMosaicUsername,
+              uuid,
+            } = v;
+            let [nameVal, username1] = unMosaicUsername.split(unMosaicUsername.indexOf(','))
+            return {
+              loginType: bankLoginType,
+              name: nameVal,
+              name1: username1,
+              password: password,
+              uuid,
+            }
+          })
+          updateBankForeground(abbr,userInfo,props);
+        }
+      }, (err) => {
+      })
     } else {
       props.history.push(`/cyber/login/${abbr}`, { name: bank_name })
     }

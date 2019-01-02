@@ -160,36 +160,36 @@ export default class ImportBills extends React.Component<State,Props> {
     })
 
     return (
-      <div className={styles.container} style={{ minHeight: gloablMinHeight }}>
-        <Header title="添加账单"/>
-        <PayMethodList echoData={sourceData[0]} exportEmail={this.importEmail} key={sourceData[0].name}/>
-        <div className={styles.accountInfo}>
-          <AllCount accountList={accountList}
-                    getEmailAccount={this.getEmailAccount}
-                    billProcess={this.billDetail}
-          />
-        </div>
-        <PayMethodList echoData={sourceData[1]} exportEmail={this.WriteBillByHand} key={sourceData[1].name}/>
-        <div className={styles.margin}></div>
-        <DebounceButton onClick={this.netSilverList} className={styles.checkBill} activeOpen={true} activeClassName={styles.active}>
-          <div className={styles.Content}>
-            <span className={styles.text}>
-                <span className={styles.contentName}>
-                 通过网银查询账单
-                </span>
-                <span className={styles.contentDescribe}>
-                    实时获取账单、额度、消费明细、积分信息
-                </span>
-            </span>
-            <img src="/static/img/3.4.0/goNext.png"/>
+        <div className={styles.container}>
+          <Header title="添加账单"/>
+          <PayMethodList echoData={sourceData[0]} exportEmail={this.importEmail} key={sourceData[0].name}/>
+          <div className={styles.accountInfo}>
+            <AllCount accountList={accountList}
+                      getEmailAccount={this.getEmailAccount}
+                      billProcess={this.billDetail}
+            />
           </div>
-        </DebounceButton>
-        <div className={styles.cardList}>
-          <div className={styles.firstLine}>
-            {showAllBank ? cardListAll : cardList}
+          <PayMethodList echoData={sourceData[1]} exportEmail={this.WriteBillByHand} key={sourceData[1].name}/>
+          <div className={styles.margin}></div>
+          <DebounceButton onClick={this.netSilverList} className={styles.checkBill} activeOpen={true} activeClassName={styles.active}>
+            <div className={styles.Content}>
+              <span className={styles.text}>
+                  <span className={styles.contentName}>
+                   通过网银查询账单
+                  </span>
+                  <span className={styles.contentDescribe}>
+                      实时获取账单、额度、消费明细、积分信息
+                  </span>
+              </span>
+              <img src="/static/img/3.4.0/goNext.png"/>
+            </div>
+          </DebounceButton>
+          <div className={styles.cardList}>
+            <div className={styles.firstLine}>
+              {showAllBank ? cardListAll : cardList}
+            </div>
           </div>
         </div>
-      </div>
     )
   }
 }

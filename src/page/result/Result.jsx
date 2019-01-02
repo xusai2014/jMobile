@@ -111,6 +111,13 @@ export default class Result extends React.Component {
         <div style={styles.actionsImport} onClick={() => enterMethodList(this.props)}>网银导入</div>
       </div>),
       title: "无数据导入"
+    }, unknowpage: {
+      img: "/static/img/done@2x.png",
+      describe: () => "导入结果未知",
+      footer: () => (<div>
+      <div style={styles.actionsImport} onClick={() => enterMethodList(this.props)}>重新导入</div>
+      </div>),
+      title: "结果未知"
     },
 
   }

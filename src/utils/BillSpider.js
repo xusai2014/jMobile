@@ -95,6 +95,10 @@ export function goResult(loginType, status, description, props) {
         result: description
       })
     }
+  } else if( status === 4){
+    props.history.push('/result/unknowpage', {
+      result: description
+    })
   }
 }
 
@@ -123,7 +127,12 @@ export function addEmail(props) {
     if (result === 'SUCCESS') {
       goResult('03', 1, '导入成功', props)
     } else if (result === 'FAIL') {
-      goResult('03', 3, handleErroMsg(errorCode,errorMsg), props)
+      if(errorCode === 'app02' ){
+        goResult('03', 4, handleErroMsg(errorCode,errorMsg), props);
+      } else {
+        goResult('03', 3, handleErroMsg(errorCode,errorMsg), props);
+      }
+
     } else if (result === 'CANCEL') {
       Toast.info('已取消导入')
     }
@@ -150,7 +159,11 @@ export function updateEmail(userInfo,props) {
     if(result === 'SUCCESS'){
       goResult('03',1,'导入成功',props)
     } else if(result === 'FAIL'){
-      goResult('03',3,handleErroMsg(errorCode,errorMsg),props)
+      if(errorCode === 'app02' ){
+        goResult('03', 4, handleErroMsg(errorCode,errorMsg), props);
+      } else {
+        goResult('03',3,handleErroMsg(errorCode,errorMsg),props)
+      }
     } else if(result === 'CANCEL'){
       Toast.info('已取消导入')
     }
@@ -178,7 +191,11 @@ export function updateBankForeground (bankCode,userInfo,props) {
     if(result === 'SUCCESS'){
       goResult('01',1,'导入成功',props)
     } else if(result === 'FAIL'){
-      goResult('01',3,handleErroMsg(errorCode,errorMsg),props)
+      if(errorCode === 'app02' ){
+        goResult('03', 4, handleErroMsg(errorCode,errorMsg), props);
+      } else {
+        goResult('03',3,handleErroMsg(errorCode,errorMsg),props);
+      }
     } else if(result === 'CANCEL'){
       Toast.info('已取消导入')
     }
@@ -203,7 +220,11 @@ export function addBank(props) {
     if (result === 'SUCCESS') {
       goResult('01', 1, '导入成功', props)
     } else if (result === 'FAIL') {
-      goResult('01', 1, handleErroMsg(errorCode, errorMsg), props)
+      if(errorCode === 'app02' ){
+        goResult('03', 4, handleErroMsg(errorCode,errorMsg), props);
+      } else {
+        goResult('03',3,handleErroMsg(errorCode,errorMsg),props)
+      }
     } else if (result === 'CANCEL') {
       Toast.info('已取消导入');
     }

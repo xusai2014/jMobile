@@ -95,14 +95,34 @@ export default class ImportBills extends React.Component<State,Props> {
             unMosaicUsername,
             uuid,
           } = v;
-          let [nameVal, username1] = unMosaicUsername.split(unMosaicUsername.indexOf(','))
-          return {
-            loginType: bankLoginType,
-            name: nameVal,
-            name1: username1,
-            password: password,
-            uuid,
+          let arr = unMosaicUsername.split(',');
+          if(arr.length === 1){
+            return {
+              loginType: bankLoginType,
+              name: arr[0],
+              name1: '',
+              password: password,
+              uuid,
+            }
+          } else if(arr.length === 2){
+            let [nameVal, username1] = arr;
+            return {
+              loginType: bankLoginType,
+              name: nameVal,
+              name1: username1,
+              password: password,
+              uuid,
+            }
+          } else if( arr.length === 0){
+            return {
+              loginType: bankLoginType,
+              name: '',
+              name1: '',
+              password: password,
+              uuid,
+            }
           }
+
         })
         updateBankForeground(abbr,userInfo,this.props);
       }

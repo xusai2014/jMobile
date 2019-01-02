@@ -71,7 +71,7 @@
     "react-router-dom": "^4.2.2",
     "redux": "^3.7.2",
     "sa-sdk-javascript": "^1.10.3",
-    "sx-jsbridge": "^1.2.4",
+    "sx-jsbridge": "^1.2.5",
     "url-loader": "^1.0.1",
     "whatwg-fetch": "^2.0.4"
   },

@@ -3,6 +3,8 @@ import Header from '../../compoents/Header';
 import Adtivity from './Adtivity';
 import { enterMethodList, VersionNUm } from "../../utils/BillSpider";
 import { jsNative  } from "sx-jsbridge";
+import doneImg  from '../../../static/img/done@2x.png';
+import nothingImg from '../../../static/img/nothing@2x.png';
 
 export default class Result extends React.Component {
 
@@ -72,16 +74,16 @@ export default class Result extends React.Component {
       },
       footer: () => ([<div onClick={() => this.props.history.push('/home/index')} className="enableBtn">完成</div>,]),
       title: "导入成功",
-      img: "/static/img/done@2x.png",
+      img: doneImg,
     },
     efailed: {
       describe: (data) => data,
       footer: () => (<div onClick={() => this.enterLoginPage()} className="enableBtn">重新登录</div>),
       title: "导入失败",
-      img: "/static/img/nothing@2x.png",
+      img: nothingImg,
     },
     enodata: {
-      img: "/static/img/done@2x.png",
+      img: doneImg,
       describe: () => "您的邮箱内没有新的交易数据，请尝试其他账单导入方式吧！",
       footer: () => (<div>
         <div style={styles.actionReplace} onClick={() => this.enterEmailList()}>换一个邮箱导入</div>
@@ -98,21 +100,21 @@ export default class Result extends React.Component {
       },
       footer: () => (<div className="enableBtn" onClick={() => this.props.history.push('/home/index')}>完成</div>),
       title: "导入成功",
-      img: "/static/img/done@2x.png",
+      img: doneImg,
     }, cyberfailed: {
       describe: (data) => data,
       footer: () => (<div onClick={() => this.enterLoginPage} className="enableBtn">重新登录</div>),
       title: "导入失败",
-      img: "/static/img/nothing@2x.png",
+      img: nothingImg,
     }, cybernodata: {
-      img: "/static/img/done@2x.png",
+      img: doneImg,
       describe: () => "暂无新的交易数据，请尝试导入其他网银账单吧！",
       footer: () => (<div>
         <div style={styles.actionsImport} onClick={() => enterMethodList(this.props)}>网银导入</div>
       </div>),
       title: "无数据导入"
     }, unknowpage: {
-      img: "/static/img/done@2x.png",
+      img: doneImg,
       describe: () => "导入结果未知",
       footer: () => (<div>
       <div style={styles.actionsImport} onClick={() => enterMethodList(this.props)}>重新导入</div>

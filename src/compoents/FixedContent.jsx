@@ -20,6 +20,13 @@ export default class FixedContent extends React.Component<Props, State> {
     //window.addEventListener('resize', this.initStyle);
   }
 
+  // Scroll Restoration
+  componentDidUpdate(prevProps) {
+    if (this.props.location !== prevProps.location) {
+      window.scrollTo(0, 0);
+    }
+  }
+
   componentWillUnmount() {
     //window.removeEventListener('resize', this.initStyle);
   }

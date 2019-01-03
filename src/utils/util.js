@@ -64,3 +64,28 @@ export const computerFreePeriod = (bill_type, payment_due_date) => {
   }
 
 }
+
+/**
+ *   @author yang_lj
+ *   @methodName 邮箱账号脱敏
+ *   @params mod
+ *   @description 中间四位脱敏，不足六位的前后不脱敏
+ */
+export const accountHandle = (accountInfo)=>{
+  if(!accountInfo.includes('@')){
+    return accountInfo;
+  }
+  const array=accountInfo.split('@');
+  const [ account , mail] = array;
+  let accountMosaic = '';
+  const len  = account.length;
+  const symbol='*';
+  if(len>=6){
+      const headNum = Math.ceil((len-4)/2);
+      accountMosaic = account.substr(0,headNum)+'****'+account.substring(headNum+4,len);
+      return accountMosaic+'@'+mail;
+  } else {
+      accountMosaic=account.substr(0,1)+symbol.repeat(len-2)+account.substr(len-1,0);
+      return accountMosaic+'@'+mail;
+  }
+}

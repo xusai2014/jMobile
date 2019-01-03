@@ -2,10 +2,11 @@
 import * as React from 'react';
 import { withRouter } from 'react-router-dom';
 import styles from './FixedContent.less';
+import { TransitionGroup, CSSTransition } from "react-transition-group";
 
 type Props = {
-  className?:string,
-  children:React.Node
+  className?: string,
+  children: React.Node
 }
 
 type State = {}
@@ -32,16 +33,23 @@ export default class FixedContent extends React.Component<Props, State> {
   }
 
 
-
   render() {
-    const { children, className = '' } = this.props;
+    const { children, className = '',location } = this.props;
     return (
-      <div
-        ref="content"
-        className={`${styles.container} ${className}`}
-        style={{minHeight: gloablMinHeight }}>
-        {children}
-      </div>
+      <TransitionGroup>
+        <CSSTransition
+          key={location.key}
+          classNames="fade"
+          timeout={300}
+        >
+        <div
+          ref="content"
+          className={`${styles.container} ${className}`}
+          style={{ minHeight: gloablMinHeight }}>
+          {children}
+        </div>
+        </CSSTransition>
+      </TransitionGroup>
     );
   }
 }

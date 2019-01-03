@@ -428,7 +428,7 @@ export default class Index extends React.Component<Props, State> {
     payment_due_date: moment().format('YYYY-MM-DD'),
     task_id: "11111111111",
     bill_id: "11111111",
-    bill_date: moment().format('YYYY-MM-DD'),
+    bill_date: moment().subtract(-19, 'days').format('YYYY-MM-DD'),
     logo_uri: '/static/img/招商银行@2x.png',
     importBillType: "",
     isNew: '00',

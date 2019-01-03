@@ -222,9 +222,11 @@ export default class BillCard extends React.Component {
 
   judgeStatus(bill_type, payment_due_date, bill_date, action) {
     const { examineAccount } = this.props;
+    const timeCurrent=moment().format('YYYY-MM-DD');
+    const nowMonent = moment(timeCurrent);
     if (bill_type == 'DONE') {
-      const duM = moment(payment_due_date);
-      if (parseInt(duM.diff(moment(), 'days')) < 0) {
+      const duM = moment(moment(payment_due_date).format('YYYY-MM-DD'));
+      if (parseInt(duM.diff(nowMonent, 'days')) < 0) {
         return {
           day: " ",
           date: duM.format('MM-DD'),
@@ -232,7 +234,7 @@ export default class BillCard extends React.Component {
             color: 'red',
             fontSize: '0.29rem',
             letterSpacing: '1PX'
-          }}>{`逾期${moment().diff(duM, 'days')}天`}</span>,
+          }}>{`逾期${nowMonent.diff(duM, 'days')}天`}</span>,
           actionName: examineAccount ? "点击" : "立即还款",
           action: examineAccount ? () => {
           } : action,
@@ -240,7 +242,7 @@ export default class BillCard extends React.Component {
         }
       } else {
         return {
-          day: duM.diff(moment(), 'days'),
+          day: duM.diff(nowMonent, 'days'),
           date: duM.format('MM-DD'),
           des: '天后到期',
           actionName: examineAccount ? "" : "立即还款",
@@ -251,7 +253,7 @@ export default class BillCard extends React.Component {
       }
     } else if (bill_type == 'UNDONE') {
       const duM = moment(bill_date);
-      const days = duM.diff(moment(), 'days');
+      const days = duM.diff(nowMonent, 'days');
       return parseInt(days) > 0 ? {
         day: days,
         date: duM.format('MM-DD'),

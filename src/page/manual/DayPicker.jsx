@@ -115,29 +115,35 @@ export default class DayPicker extends React.Component {
 
   render() {
     const {showPanel} = this.state;
-    const { name = '' } = this.props;
+    const { name = '', preventSlide, admitSlide} = this.props;
 
     return (
       [
         <div key={'1'} style={styles.input} onClick={() => {
+          preventSlide();
           this.selectDay()
         }}>{
           this.state.dayVal?this.state.dayVal:'选择日期'
         }</div>,
         showPanel ?
-          <div key={'2'} style={styles.panel} onClick={(e)=>{
-            this.destroyStyle()
+          <div key={'2'} style={styles.panel} onClick={()=>{
+            this.destroyStyle();
+            admitSlide();
             this.setState({
               showPanel:false
             })
-          }}>
+          }}  onTouchMove={(e)=>{
+            e.preventDefault();
+          }}
+          >
             <div style={styles.container} onClick={(e)=>{
               e.preventDefault();
               e.stopPropagation();
             }}>
               <div style={styles.header}>
                 <span style={{marginLeft: '0.3rem'}} onClick={()=>{
-                  this.destroyStyle()
+                  this.destroyStyle();
+                  admitSlide();
                   this.setState({
                     showPanel:false
                   })
@@ -146,6 +152,7 @@ export default class DayPicker extends React.Component {
                 <span style={{color: '#4C7BFE', marginRight: '0.3rem'}} onClick={()=>{
                   this.selectValue();
                   this.destroyStyle();
+                  admitSlide();
                   this.setState({
                     showPanel:false
                   });

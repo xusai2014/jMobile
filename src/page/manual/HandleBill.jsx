@@ -27,7 +27,8 @@ export default class HandleBill extends React.Component {
       creditLimit: "",
       newBalance: "",
       bankNo: "",
-      enabelBtn: false
+      enabelBtn: false,
+      styleChange:false
     }
   }
 
@@ -169,9 +170,23 @@ export default class HandleBill extends React.Component {
 
   }
 
+  // 当弹出遮罩层的时候禁止底层页面滑动
+  preventSlide = () =>{
+    this.setState({
+       styleChange : true
+      }
+    )
+  }
+  // 允许滑动
+  admitSlide = () =>{
+    this.setState({
+      styleChange : false
+    })
+  }
+
   render() {
     const {
-      enabelBtn
+      enabelBtn,styleChange
     } = this.state;
     return [<Header key={1} title="手写账单"/>, <style key={2}>
       {
@@ -182,7 +197,7 @@ export default class HandleBill extends React.Component {
           }
         `
       }
-    </style>, <div key={3}>
+    </style>, <div key={3} style={styleChange?styles.itemAdd:{}}>
       {
         [{
           key: "fullCardNum",
@@ -230,6 +245,8 @@ export default class HandleBill extends React.Component {
               code == '1' ?
                 <DayPicker
                   name={name}
+                  preventSlide = {this.preventSlide}
+                  admitSlide = {this.admitSlide}
                   onRes={(day)=>{
                   this.setState({[key]: day}, () => {
                     this.enableBtn()
@@ -291,6 +308,11 @@ const styles = {
     margin: "0.3rem 0",
     display: 'flex',
     alignItems: "center"
+  },
+  itemAdd:{
+    position:'fixed',
+    height: '100%',
+    overflow:'hidden',
   },
   name: {
     width: "2.76rem",

@@ -80,7 +80,7 @@ export default class Index extends React.Component<Props, State> {
 
 
   componentWillReceiveProps(nextProps: Props) {
-    if (nextProps.isLogged && this.props.isLogged != nextProps.isLogged) {
+    if (nextProps.isLogged && this.props.isLogged !== nextProps.isLogged) {
       // 全局组件订阅的登录状态，如Native 与 Server通知登录状态已切换，立即更新视图
       this.initData();
     }
@@ -98,7 +98,7 @@ export default class Index extends React.Component<Props, State> {
           const { authSts, MERC_SN = '' } = data;
           this.setState({
             authSts: authSts,
-            examineAccount: MERC_SN != '700000000620451',
+            examineAccount: MERC_SN !== '700000000620451',
             MERC_SN
           })
         },
@@ -125,11 +125,11 @@ export default class Index extends React.Component<Props, State> {
         const { data } = result;
         const { authSts } = data;
         //  authSts 99:未认证，01：已认证，02：驳回，00：审核中
-        if (authSts == '01') {
+        if (authSts === '01') {
           callback();
-        } else if (authSts == '-1') {
+        } else if (authSts === '-1') {
           //数据尚未装载完毕不处理
-        } else if (authSts == '99') {
+        } else if (authSts === '99') {
           ModalAlert({
             title: '您尚未通过实名认证，请先进行实名认证',
             leftText: '取消',
@@ -160,14 +160,14 @@ export default class Index extends React.Component<Props, State> {
           this.identifyFunc(() => {
             // TODO 区分APP版本，进入不同的账单导入入口页
             enterMethodList(this.props)
-          })
+          });
           return;
         case 3:
           //进入卡包
           this.identifyFunc(() => {
-            const { action: url } = params
+            const { action: url } = params;
             this.props.history.push(url);
-          })
+          });
           return;
         case 4:
           //进入办卡中心
@@ -175,14 +175,14 @@ export default class Index extends React.Component<Props, State> {
           return;
         case 5:
           //还款
-          this.setState({ visible: true })
+          this.setState({ visible: true });
           return;
       }
     })
   }
 
   openPPMoney(gameUri: string) {
-    const { MERC_SN } = this.state
+    const { MERC_SN } = this.state;
     if (!MERC_SN) {
       return;
     }
@@ -207,7 +207,7 @@ export default class Index extends React.Component<Props, State> {
     const { interestShow, activeCard, visible, authSts, moreAction, level } = this.state;
     const { examineAccount } = this.props;
     const { isLogged, billList = {}, activities = [] } = this.props;
-    const { waitPaymentAmount = '0.00', waitPaymentNumber = '0', baseResponseBillDtoList } = billList
+    const { waitPaymentAmount = '0.00', waitPaymentNumber = '0', baseResponseBillDtoList } = billList;
     return [<div key={'a'} className={styles.container}>
       <div className={styles.top}>
         <div className={styles.topText}>7日内待还
@@ -221,11 +221,11 @@ export default class Index extends React.Component<Props, State> {
           }}
                      des={'免息期'} icon={"/static/img/canlendar@2x.png"}
           />
-          <span style={{ width: '0.18rem' }}></span>
+          <span style={{ width: '0.18rem' }} />
           <IconEnter action={() => this.loginEnter(2) }
                      des={'账单'} icon={"/static/img/indexadd@2x.png"}
           />
-          <span style={{ width: '0.3rem' }}></span>
+          <span style={{ width: '0.3rem' }} />
         </div>
       </div>
       <div style={{ marginTop: "0.19rem" }}>
@@ -238,18 +238,18 @@ export default class Index extends React.Component<Props, State> {
         {
           this.icons.map((v, k) => {
             const { img, text, action, type } = v;
-            if (!isLogged && type == '1') {
+            if (!isLogged && type === '1') {
               return null
             }
-            if (examineAccount && type == '1') {
+            if (examineAccount && type === '1') {
               return null
             }
             return <DebounceButton
               key={k}
               onClick={() => {
-                if (type == '0') {
+                if (type === '0') {
                   this.loginEnter(3, { action })
-                } else if (type == '1') {
+                } else if (type === '1') {
                   this.loginEnter(4, { action })
                 }
               }}>
@@ -264,7 +264,7 @@ export default class Index extends React.Component<Props, State> {
           })
         }
       </div>
-      <div className={styles.shadowBlock}></div>
+      <div className={styles.shadowBlock} />
       <div className={styles.activity}>
         {isLogged ? (!this.props.examineAccount ? activities.map((v, k) => {
           const { logoUri = '', gameUri, gameName = '' } = activities[k] ? activities[k] : {};
@@ -297,7 +297,7 @@ export default class Index extends React.Component<Props, State> {
         {
           isLogged ?
             (baseResponseBillDtoList ?
-              (baseResponseBillDtoList.length == 0 ?
+              (baseResponseBillDtoList.length === 0 ?
                 this.example : baseResponseBillDtoList).map((v, k) => {
                 return <BillCard {...v}
                                  showMoreAction={(task_id, importBillType, abbr, cardNum, bankId, bill_type, syncfunc) => this.setState({
@@ -311,7 +311,7 @@ export default class Index extends React.Component<Props, State> {
                                  isLogged={isLogged}
                                  key={k}
                                  repay={(e) => {
-                                   e.stopPropagation()
+                                   e.stopPropagation();
                                    this.setState({ visible: true })
                                  }}
                                  examineAccount={examineAccount}

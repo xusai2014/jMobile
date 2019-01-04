@@ -21,22 +21,22 @@ export default function ModalAlert(alertParams: AlertParams): void {
     title = '',
     leftText = '',
     rightText = '',
-    leftFunc = '',
-    rightFunc,
+    leftFunc = () => { },
+    rightFunc = () => { },
     description
   } = alertParams;
   const actions = [];
   if (leftText) {
     actions.push({
       text: leftText,
-      onPress: leftFunc && leftFunc(),
+      onPress: leftFunc,
       style: globalStyle.cancelStyle
     });
   }
   if (rightText) {
     actions.push({
       text: rightText,
-      onPress: rightFunc(),
+      onPress: rightFunc,
       style: globalStyle.sureStyle
     });
   }

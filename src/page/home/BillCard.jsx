@@ -8,6 +8,7 @@ import { enterBankImport, enterMethodList,} from '../../utils/BillSpider';
 import globalStyle from "../../style/globalStyle";
 import styles from './style/card.less'
 import moment from "moment";
+import ModalAlert from "../../compoents/ModalAlert";
 const { loginHelper } = jsNative;
 
 @InitDecorator((state) => {
@@ -305,17 +306,12 @@ export default class BillCard extends React.Component {
       } else if (authSts == '-1') {
         //数据尚未装载完毕不处理
       } else if (authSts == '99') {
-        Modal.alert(<span className="alert_title">您尚未通过实名认证，请先进行实名认证</span>, '', [
-          {
-            text: "取消", onPress: () => {
-          }, style: globalStyle.cancelStyle
-          },
-          {
-            text: "去认证", onPress: () => {
-            jsNative.nativeGoRealName();
-          }, style: globalStyle.sureStyle
-          },
-        ])
+        ModalAlert({
+          title: '您尚未通过实名认证，请先进行实名认证',
+          leftText: '取消',
+          rightText: '去认证',
+          rightFunc: () => jsNative.nativeGoRealName()
+        });
       } else {
         jsNative.nativeGoRealName();
       }

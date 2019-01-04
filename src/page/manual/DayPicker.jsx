@@ -115,7 +115,7 @@ export default class DayPicker extends React.Component {
 
   render() {
     const {showPanel} = this.state;
-    const { name = '', preventSlide, admitSlide} = this.props;
+    const { name = '', preventSlide=()=>{}, admitSlide=()=>{}} = this.props;
 
     return (
       [

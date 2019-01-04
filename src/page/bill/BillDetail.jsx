@@ -222,19 +222,19 @@ export default class BillDetail extends React.Component {
 
   judgeStatus(bill_type, payment_due_date, bill_date, action) {
     if (bill_type == 'DONE') {
-      const duM = moment(payment_due_date);
-      if (parseInt(duM.diff(moment(), 'days')) < 0) {
+      const duM =  this.setMoment(payment_due_date);
+      if (parseInt(duM.diff( this.setMoment(), 'days')) < 0) {
         return {
           day: " ",
           date: " ",
-          des: `已逾期${moment().diff(duM, 'days')}天`,
+          des: `已逾期${this.setMoment().diff(duM, 'days')}天`,
           actionName: "立即还款",
           action,
           key: "03"
         }
       } else {
         return {
-          day: duM.diff(moment(), 'days'),
+          day: duM.diff( this.setMoment(), 'days'),
           date: duM.format('MM-DD'),
           des: '天后到期',
           actionName: "立即还款",
@@ -243,8 +243,8 @@ export default class BillDetail extends React.Component {
         }
       }
     } else if (bill_type == 'UNDONE') {
-      const duM = moment(bill_date);
-      const days = duM.diff(moment(), 'days')
+      const duM =  this.setMoment(bill_date);
+      const days = duM.diff( this.setMoment(), 'days')
       return parseInt(days) > 0 ? {
         day: days,
         date: duM.format('MM-DD'),
@@ -306,6 +306,11 @@ export default class BillDetail extends React.Component {
     return ba.toFixed(2) + unit
   }
 
+  setMoment = (date) => {
+    if(!!date) return moment(moment(date).format('YYYY-MM-DD'));
+    else return moment(moment().format('YYYY-MM-DD'))
+  }
+
   generate(payment_due_date, bill_date, credit_limit, balance, bill_type) {
     const payDate = payment_due_date ? moment(payment_due_date).format('MM.DD') : moment().format('MM.DD')
     const billDate = bill_date ? moment(bill_date).format('MM.DD') : moment().format('MM.DD');
@@ -328,8 +333,8 @@ export default class BillDetail extends React.Component {
       ba = balance / 1000;
       baUnit = '千';
     }
-    let freeInterest = bill_type == 'DONE' ? parseInt(moment(payment_due_date).diff(moment(), 'days')) + parseInt(moment().daysInMonth()) :
-      parseInt(moment(payment_due_date).diff(moment(), 'days'))
+    let freeInterest = bill_type == 'DONE' ? parseInt( this.setMoment(payment_due_date).diff( this.setMoment(), 'days')) + parseInt(moment().daysInMonth()) :
+      parseInt(this.setMoment(payment_due_date).diff(this.setMoment(), 'days'))
     return [{
       title: "还款日", value: payDate,
       unit: ""

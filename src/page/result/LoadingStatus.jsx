@@ -59,7 +59,7 @@ export default class LoadingStatus extends React.Component{
       }
     } while (this.judgeStatus(login))
 
-    if(typeof login.data == 'undefined'){
+    if(typeof login === 'undefined' || typeof login.data == 'undefined'){
       Toast.fail('导入失败');
       return;
     }
@@ -68,7 +68,7 @@ export default class LoadingStatus extends React.Component{
   }
 
 
-  judgeStatus(status) {
+  judgeStatus(status ={}) {
     const {data = {} } = status;
     const { phase_status} = data;
     return "DOING" == phase_status;

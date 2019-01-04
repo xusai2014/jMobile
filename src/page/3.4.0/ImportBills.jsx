@@ -9,7 +9,6 @@ import styles from './ImportBills.less';
 import { getBankList, getEchoForm, getEmailList } from "../../actions/reqAction";
 import { InitDecorator } from "../../compoents/InitDecorator";
 import { addBank, addEmail, updateBankForeground, updateEmail } from "../../utils/BillSpider";
-import {accountHandle} from "../../utils/util";
 import DebounceButton from "../../compoents/DebounceButton"
 
 type Props = {
@@ -46,9 +45,6 @@ export default class ImportBills extends React.Component<State,Props> {
     this.props.dispatch(getBankList());
     const apiData = await this.props.dispatch(getEmailList());
     const { data:accountList = [] } = apiData;
-    accountList.forEach((v)=>{
-      v.account=accountHandle(v.account);
-    })
     this.setState({
       accountList
     })

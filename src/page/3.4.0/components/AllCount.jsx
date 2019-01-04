@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from "./AllCount.less";
 import DebounceButton from "../../../compoents/DebounceButton";
+import {accountHandle} from "../../../utils/util";
 
 export default class AllCount extends React.Component {
 
@@ -15,7 +16,7 @@ export default class AllCount extends React.Component {
           <div className={styles.allAccount}>
             {
               accountList.map((v, k) => {
-                const { account ='1111111118800102517@163.com' } = v;
+                const account = accountHandle(v.account);
                 return <DebounceButton className={styles.input} activeOpen={true} key={k} onClick={() => billProcess(v)}>
                   <span className={styles.account}>{account}</span>
                 </DebounceButton>

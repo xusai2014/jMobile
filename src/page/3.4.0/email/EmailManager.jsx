@@ -5,6 +5,7 @@ import { InitDecorator } from "../../../compoents/InitDecorator";
 import { getEmailList, removeEmail } from "../../../actions/reqAction";
 import globalStyle from "../../../style/globalStyle";
 import { addEmail, updateEmail } from "../../../utils/BillSpider";
+import {accountHandle} from "../../../utils/util";
 
 @InitDecorator((state) => {
   return {
@@ -49,10 +50,10 @@ export default class EmailManager extends React.Component {
         {
           emailList.map((v, k) => {
             const {
-              account,
               uuid = '',
               lastTime
             } = v;
+            const account = accountHandle(v.account);
             return <SwipeAction
               style={{ backgroundColor: 'gray' }}
               autoClose

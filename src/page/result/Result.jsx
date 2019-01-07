@@ -9,19 +9,19 @@ import nothingImg from '../../../static/img/nothing@2x.png';
 export default class Result extends React.Component {
 
   enterLoginPage() {
-    jsNative.nativeRequestBaseParams().then(params => {
+    jsNative.nativeRequestBaseParams().then((params) => {
       const appVersion = params['APP_VERSIONS'].split('.');
       let sum = '';
-      appVersion.forEach(v => {
-        sum += v
+      appVersion.forEach((v) => {
+        sum += v;
       })
       const version = Number(sum);
       if (version >= VersionNUm) {
         this.props.history.go(-1);
-      } else{
-        this.props.history.go(-2)
+      } else {
+        this.props.history.go(-2);
       }
-    })
+    });
   }
 
   enterEmailList() {
@@ -103,7 +103,7 @@ export default class Result extends React.Component {
       img: doneImg,
     }, cyberfailed: {
       describe: (data) => data,
-      footer: () => (<div onClick={() => this.enterLoginPage} className="enableBtn">重新登录</div>),
+      footer: () => (<div onClick={() => this.enterLoginPage()} className="enableBtn">重新登录</div>),
       title: "导入失败",
       img: nothingImg,
     }, cybernodata: {

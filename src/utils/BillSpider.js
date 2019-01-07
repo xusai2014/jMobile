@@ -10,7 +10,7 @@ import { getEchoForm } from '../actions/reqAction';
 
 const { nativeRequestBaseParams } = jsNative;
 
-export const VersionNUm = 330;
+export const VersionNUm = 340;
 export function enterMethodList(props) {
   nativeRequestBaseParams().then((params) => {
     const appVersion = params['APP_VERSIONS'].split('.');

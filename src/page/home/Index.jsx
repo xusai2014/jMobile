@@ -75,7 +75,7 @@ export default class Index extends React.Component<Props, State> {
   initData(cb) {
     this.getUserInfo();
     this.props.apiDispatcher(BILL_LIST).then(()=>{
-      cb & cb()
+      cb && cb();
     });
     this.props.apiDispatcher(ACTIVITY_CARD)
   }

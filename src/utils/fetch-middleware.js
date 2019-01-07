@@ -123,8 +123,8 @@ export const fetchPromise = async (url: string, method?: string = 'GET', data?: 
       .then((result) => {
         resolve(result);
       })
-      .catch(() => {
-        reject(new Error(`接口异常${data}`));
+      .catch((err) => {
+        reject(new Error(`接口异常${JSON.stringify(data)}`, err));
       })
   ).finally(() => {
     Storage.dispatch({ type: 'FINISH', data: false });

@@ -72,9 +72,11 @@ export default class Index extends React.Component<Props, State> {
     }
   }
 
-  initData() {
+  initData(cb) {
     this.getUserInfo();
-    this.getBillList();
+    this.props.apiDispatcher(BILL_LIST).then(()=>{
+      cb & cb()
+    });
     this.props.apiDispatcher(ACTIVITY_CARD)
   }
 
@@ -316,7 +318,9 @@ export default class Index extends React.Component<Props, State> {
                                  }}
                                  examineAccount={examineAccount}
                                  authSts={authSts}
-                                 updateData={() => this.initData()}
+                                 updateData={(callback) => {
+                                   this.initData(callback)
+                                 }}
                 />
               }) : null)
             :

@@ -20,7 +20,7 @@
         }, false);
       }
 
-      window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(function(){
         if (document.body && document.body.style) {
           document.body.style.overflowY = '';
           document.body.style.position = 'static';

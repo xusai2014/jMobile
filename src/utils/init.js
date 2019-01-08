@@ -39,7 +39,7 @@ export default (historyApi: BrowserHistory, store: any) => {
    *  神策数据统计，初始化
    */
   sa.init({
-    server_url: !window.location.href.includes('mpmw.vbill.cn') ? 'http://10.1.1.81:8106/sa?project=MPOS_TEST' : 'https://sc.vbill.cn/sa?project=SXF_PLUS',
+    server_url: !window.location.href.includes('mpmw.vbill.cn') ? 'https://sc.vbill.cn/sa?project=MPOS_TEST' : 'https://sc.vbill.cn/sa?project=SXF_PLUS',
     heatmap: {
       // 是否开启点击图，默认 default 表示开启，自动采集 $WebClick 事件，可以设置 'not_collect' 表示关闭
       clickmap: 'default',

@@ -13,6 +13,9 @@
   "theme": {
     "icon-url": "'/static/font/iconfont/iconfont'"
   },
+  "config": {
+    "puppeteer_download_host": "https://npm.taobao.org/mirrors"
+  },
   "reactSnap": {
     "source": "build",
     "port": "3300",

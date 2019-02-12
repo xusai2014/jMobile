@@ -6,5 +6,9 @@ export default [{
     component:"../page/exchangeRecord/ExchangeRecord.jsx",
     path:"/myapp/exchangeRecord",
     name:"ExchangeRecord"
+  },{
+  component:"../page/exchangeRecord/NoRecord.jsx",
+  path:"/myapp/noRecord",
+  name:"NoRecord"
   },
 ]

@@ -34,7 +34,8 @@
     "destination": "./build/dist",
     "include": [
       "/myapp/index",
-      "/myapp/exchangeRecord"
+      "/myapp/exchangeRecord",
+      "/myapp/noRecord"
     ]
   },
   "browserslist": [

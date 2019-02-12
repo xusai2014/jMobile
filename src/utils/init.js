@@ -30,7 +30,7 @@ export default (historyApi: BrowserHistory, store: any) => {
    */
   nativeJs.informLoginStatus(() => {
     jsNative.nativeRequestBaseParams().then((reqParams) => {
-      window.location.href = '/home/index'
+      window.location.href = '/home/index/'
       store.dispatch({ type: 'syncData', data: reqParams });
     });
   });

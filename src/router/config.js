@@ -14,5 +14,9 @@ export default [{
   component:"../page/exchangeRecord/OrderDetails.jsx",
   path:"/myapp/orderDetails",
   name:"OrderDetails"
-  },
+  },{
+  component:"../page/process/Process.jsx",
+  path:"/myapp/Process",
+  name:"Process"
+},
 ]

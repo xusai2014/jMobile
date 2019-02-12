@@ -1,0 +1,18 @@
+[ignore]
+.*/node_modules/.*
+[include]
+
+[libs] # 引入需要的接口文件
+src/interfaces/
+
+[lints]
+
+[options]
+module.file_ext=.js
+module.file_ext=.jsx
+module.file_ext=.json
+module.file_ext=.less
+module.name_mapper='^.*\.less$' -> 'css-module-flow'
+esproposal.decorators=ignore
+
+[strict]

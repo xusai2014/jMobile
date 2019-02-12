@@ -9,3 +9,5 @@ build/
 .settings/
 catalina*
 /logs/
+node_modules/
+.idea

@@ -1,0 +1,159 @@
+import React from 'react';
+import Header from '../../compoents/Header';
+import Adtivity from './Adtivity';
+import { enterMethodList, VersionNUm } from "../../utils/BillSpider";
+import { jsNative  } from "sx-jsbridge";
+import doneImg  from '../../../static/img/done@2x.png';
+import nothingImg from '../../../static/img/nothing@2x.png';
+
+export default class Result extends React.Component {
+
+  enterLoginPage() {
+    jsNative.nativeRequestBaseParams().then((params) => {
+      const appVersion = params['APP_VERSIONS'].split('.');
+      let sum = '';
+      appVersion.forEach((v) => {
+        sum += v;
+      })
+      const version = Number(sum);
+      if (version >= VersionNUm) {
+        this.props.history.go(-1);
+      } else {
+        this.props.history.go(-2);
+      }
+    });
+  }
+
+  enterEmailList() {
+    jsNative.nativeRequestBaseParams().then(params => {
+      const appVersion = params['APP_VERSIONS'].split('.');
+      let sum = '';
+      appVersion.forEach(v => {
+        sum += v
+      })
+      const version = Number(sum);
+      if (version >= VersionNUm) {
+        this.props.history.push('/3.4.0/importbills');
+      } else{
+        this.props.history.push('/email/add')
+      }
+    })
+  }
+
+  render() {
+    const { type, } = this.props.match.params;
+    const { describe = (restult) => result, footer = ()=>{}, title, img } = this.results[type]?this.results[type]:{};
+
+    const { state = {} } = this.props.location;
+    const { result } = state;
+
+    return [<Header backStart={() => this.enterLoginPage()}
+                    key="1" title={'导入结果'}
+                    right={<div onClick={() => {
+                      this.props.history.push('/home/index');
+                    }}>完成</div>}
+    />
+      , <div key={2} style={{ backgroundColor: "#FFFFFF", paddingBottom: "0.5rem" }}>
+        <img src={img} style={{ width: '1rem', margin: "0.3rem 3.25rem" }}/>
+        <div style={styles.describe}>{title}</div>
+        <div style={styles.resason}>{describe(result)}</div>
+        {footer()}
+        <Adtivity/>
+      </div>]
+  }
+
+  results = {
+    esuccess: {
+      describe: (data = []) => {
+        if(typeof  data === 'string'){
+          return data;
+        } else {
+          return <div>成功导入：{data.map((v, k) => <div>{v.bankName}信用卡 导入{v.count}笔账单</div>)}</div>;
+        }
+
+      },
+      footer: () => ([<div onClick={() => this.props.history.push('/home/index')} className="enableBtn">完成</div>,]),
+      title: "导入成功",
+      img: doneImg,
+    },
+    efailed: {
+      describe: (data) => data,
+      footer: () => (<div onClick={() => this.enterLoginPage()} className="enableBtn">重新登录</div>),
+      title: "导入失败",
+      img: nothingImg,
+    },
+    enodata: {
+      img: doneImg,
+      describe: () => "您的邮箱内没有新的交易数据，请尝试其他账单导入方式吧！",
+      footer: () => (<div>
+        <div style={styles.actionReplace} onClick={() => this.enterEmailList()}>换一个邮箱导入</div>
+        <div style={styles.actionReplace} onClick={() => enterMethodList(this.props)}>网银导入</div>
+      </div>),
+      title: "无数据导入"
+    }, cybersuccess: {
+      describe: (data = []) => {
+        if(typeof  data === 'string'){
+          return data;
+        } else {
+          return <div>成功导入：{data.map((v, k) => <div>{v.bankName}信用卡 导入{v.count}笔账单</div>)}</div>;
+        }
+      },
+      footer: () => (<div className="enableBtn" onClick={() => this.props.history.push('/home/index')}>完成</div>),
+      title: "导入成功",
+      img: doneImg,
+    }, cyberfailed: {
+      describe: (data) => data,
+      footer: () => (<div onClick={() => this.enterLoginPage()} className="enableBtn">重新登录</div>),
+      title: "导入失败",
+      img: nothingImg,
+    }, cybernodata: {
+      img: doneImg,
+      describe: () => "暂无新的交易数据，请尝试导入其他网银账单吧！",
+      footer: () => (<div>
+        <div style={styles.actionsImport} onClick={() => enterMethodList(this.props)}>网银导入</div>
+      </div>),
+      title: "无数据导入"
+    }, unknowpage: {
+      img: doneImg,
+      describe: () => "导入结果未知",
+      footer: () => (<div>
+      <div style={styles.actionsImport} onClick={() => enterMethodList(this.props)}>重新导入</div>
+      </div>),
+      title: "结果未知"
+    },
+
+  }
+}
+
+const styles = {
+  describe: {
+    fontSize: "0.36rem",
+    color: "#333333",
+    letterSpacing: '-1PX',
+    textAlign: 'center',
+
+  },
+  resason: {
+    fontSize: "0.24rem",
+    color: '#999999',
+    letterSpacing: '-0.67PX',
+    textAlign: "center",
+    margin: '0.3rem 1.53rem 0 1.53rem',
+    width: '4.44rem'
+  },
+  actionReplace: {
+    fontSize: "0.36rem",
+    letterSpacing: "0",
+    color: "#4C7BFE",
+    textAlign: 'center',
+    marginTop: '1.21rem'
+  },
+  actionsImport: {
+    fontSize: "0.36rem",
+    letterSpacing: "0",
+    color: "#4C7BFE",
+    textAlign: 'center',
+    marginTop: '0.63rem',
+    paddingBottom: "0.36rem"
+  }
+}

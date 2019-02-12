@@ -1,0 +1,48 @@
+.box{
+
+  height: 1.44rem;
+  margin: 0 auto;
+  border-bottom:1px solid #f9f9f9;
+  overflow: hidden;
+  .allAccount{
+    width: auto;
+    height: 0.98rem;
+    margin: 0.23rem 0;
+    white-space:nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    /*将滚动条挤出可视区域*/
+    padding-bottom: 0.3rem;
+    /*适应苹果,使苹果可以流畅的滑动*/
+    -webkit-overflow-scrolling:touch;
+    .input{
+      background: #f8f8f8;
+      height: 0.98rem;
+      margin-left: 0.5rem;
+      display: inline-flex;
+      align-items: center;
+      .account{
+        margin: 0 0.35rem;
+      }
+    }
+    .input:first-child{
+      margin-left: 0;
+    }
+  }
+  /*隐藏掉滚动条*/
+  .allAccount::-webkit-scrollbar {
+    display: none;
+  }
+  .des{
+    background: #f8f8f8;
+    margin-left: 0.5rem;
+    >div{
+      width:1.79rem;
+      height: 0.98rem;
+      border: none;
+      line-height: 0.98rem;
+      display: inline-block;
+      text-align: center;
+    }
+  }
+}

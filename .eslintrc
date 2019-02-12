@@ -1,0 +1,190 @@
+{
+  "extends": "airbnb",
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "node": true,
+    "commonjs": true,
+    "es6": true
+  },
+  "globals": {
+    "Babel": true,
+    "React": true,
+    "fetchPromise": true,
+    "promiseList": true,
+    "syncToRedux": true,
+    "uam": true,
+    "sa": true,
+    "JSBridge": true
+  },
+  "rules": {
+    "no-undef": 1,
+    "import/no-extraneous-dependencies": 0,
+    "import/no-unresolved": 0,
+    "comma-dangle": [
+      2,
+      "never"
+    ],
+    "max-len": [
+      2,
+      {
+        "code": 140,
+        "tabWidth": 2,
+        "ignoreUrls": true,
+        "ignoreComments": true
+      }
+    ],
+    "indent": [
+      2,
+      2,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "react/jsx-indent": [
+      2,
+      2
+    ],
+    "react/jsx-indent-props": [
+      2,
+      2
+    ],
+    "no-return-assign": [
+      1,
+      "always"
+    ],
+    "no-use-before-define": [
+      1,
+      "nofunc"
+    ],
+    // 使用前未定义
+    "jsx-a11y/click-events-have-key-events": 0,
+    "react/jsx-one-expression-per-line": 1,
+    "no-console": 2,
+    // 禁止使用console
+    "no-const-assign": 2,
+    // 禁止修改const声明的变量
+    "no-debugger": 2,
+    // 禁止使用debugger
+    "no-dupe-keys": 2,
+    // 在创建对象字面量时不允许键重复 {a:1,a:1}
+    "no-dupe-args": 2,
+    // 函数参数不能重复
+    "no-duplicate-case": 2,
+    // switch中的case标签不能重复
+    "no-extra-bind": 2,
+    // 禁止不必要的函数绑定
+    "no-func-assign": 2,
+    // 禁止重复的函数声明
+    "no-multiple-empty-lines": [
+      2,
+      {
+        "max": 1
+      }
+    ],
+    // 空行最多不能超过1行
+    "no-nested-ternary": 2,
+    // 禁止使用嵌套的三目运算
+    "no-redeclare": [
+      2,
+      {
+        "builtinGlobals": true
+      }
+    ],
+    // 不允许重复声明
+    "no-unreachable": 2,
+    // 不能有 不可能执行到的代码
+    "no-unused-expressions": [
+      2,
+      {
+        "allowTernary": true,
+        "allowShortCircuit": true
+      }
+    ],
+    // https://cloud.tencent.com/developer/section/1135777
+    "camelcase": 2,
+    // 强制驼峰法命名
+    "strict": 2,
+    // 使用严格模式
+    "curly": 2,
+    //if、else、while、for代码块用{}包围
+    "no-throw-literal": 2,
+    // 禁止抛出一个直接量 应是Error对象
+    "no-loop-func": 2,
+    //禁止在循环体中定义函数
+    "no-lone-blocks": 2,
+    // 多余的{}嵌套
+    "dot-location": [
+      2,
+      "property"
+    ],
+    // 换行调用对象方法,点操作符应写在行首
+    "block-scoped-var": 2,
+    // 变量定义后未使用
+    "no-multi-spaces": 1,
+    // 不允许多个空格
+    "no-unused-vars": 2,
+    // 变量定义后未使用
+    "no-shadow-restricted-names": 2,
+    // 关键词与命名冲突
+    "no-unexpected-multiline": 2,
+    // 行尾缺少分号可能导致一些意外情况
+    "no-sparse-arrays": 2,
+    // 数组中多出逗号
+    "valid-typeof": 2,
+    // 无效的类型判断
+    "no-extra-boolean-cast": 1,
+    // 多余的感叹号转布尔型
+    "no-extra-semi": 1,
+    // 多余的分号
+    "no-extra-parens": 1,
+    // 多余的括号
+    "no-underscore-dangle": [
+      2,
+      {
+        "allowAfterThis": true
+      }
+    ],
+    // 标识符不能以_开头或结尾
+    "react/jsx-filename-extension": [
+      2,
+      {
+        "extensions": [
+          ".js",
+          ".jsx"
+        ]
+      }
+    ],
+    // 使用导入的组件, 检测导入组件的文件扩展名为js、jsx
+    "no-script-url": "off",
+    "dot-notation": 0,
+    // https://eslint.org/docs/rules/dot-notation.html
+    "object-curly-newline": [
+      2,
+      {
+        // "ObjectExpression": "always",
+        "ObjectPattern": {
+          "multiline": true
+        }
+        // "ImportDeclaration": "never",
+        // "ExportDeclaration": { "multiline": true, "minProperties": 0 }
+      }
+    ],
+    "no-param-reassign": 1,
+    "react/prefer-stateless-function": 0,
+    // 构造方法
+    "jsx-a11y/no-noninteractive-element-interactions": [
+      2,
+      {
+        "handlers": [
+          "onMouseDown",
+          "onMouseUp",
+          "onKeyPress",
+          "onKeyDown",
+          "onKeyUp"
+        ]
+      }
+    ],
+    "no-plusplus": 0
+  }
+}

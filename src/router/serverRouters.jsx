@@ -10,10 +10,12 @@ import ExchangeRecord from '../page/exchangeRecord/ExchangeRecord.jsx';
 import NoRecord from '../page/exchangeRecord/NoRecord.jsx';
 import OrderDetails from '../page/exchangeRecord/OrderDetails.jsx';
 import Process from '../page/process/Process.jsx';
+import UploadForm from '../page/uploadForm/UploadForm.jsx';
 
 export default ()=>(<Switch><Route exact={false} path={'/myapp/index'} component={MyappIndex} />
 <Route exact={false} path={'/myapp/exchangeRecord'} component={ExchangeRecord} />
 <Route exact={false} path={'/myapp/noRecord'} component={NoRecord} />
 <Route exact={false} path={'/myapp/orderDetails'} component={OrderDetails} />
 <Route exact={false} path={'/myapp/Process'} component={Process} />
+<Route exact={false} path={'/myapp/UploadForm'} component={UploadForm} />
 <Route component={NoMatch}/></Switch>)

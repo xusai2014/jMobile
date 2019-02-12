@@ -18,5 +18,9 @@ export default [{
   component:"../page/process/Process.jsx",
   path:"/myapp/Process",
   name:"Process"
-},
+  },{
+  component:"../page/uploadForm/UploadForm.jsx",
+  path:"/myapp/UploadForm",
+  name:"UploadForm"
+  },
 ]

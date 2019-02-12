@@ -10,5 +10,9 @@ export default [{
   component:"../page/exchangeRecord/NoRecord.jsx",
   path:"/myapp/noRecord",
   name:"NoRecord"
+  },{
+  component:"../page/exchangeRecord/OrderDetails.jsx",
+  path:"/myapp/orderDetails",
+  name:"OrderDetails"
   },
 ]

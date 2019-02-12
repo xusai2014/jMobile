@@ -35,7 +35,8 @@
     "include": [
       "/myapp/index",
       "/myapp/exchangeRecord",
-      "/myapp/noRecord"
+      "/myapp/noRecord",
+      "/myapp/orderDetails"
     ]
   },
   "browserslist": [

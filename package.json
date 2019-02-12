@@ -33,23 +33,7 @@
     },
     "destination": "./build/dist",
     "include": [
-      "/home/index",
-      "/cards/cardslist",
-      "/result/:type",
-      "/load/:type",
-      "/cards/edit",
-      "/bill/method",
-      "/bill/cardlist",
-      "/manual/handlebill",
-      "/manual/add",
-      "/email/manager",
-      "/email/add",
-      "/bill/detail/:billId",
-      "/cyber/login/:bankId",
-      "/3.4.0/importbills",
-      "/3.4.0/email/emailadd",
-      "/3.4.0/email/EmailManager",
-      "/3.4.0/bankcardlist"
+      "/myapp/index"
     ]
   },
   "browserslist": [

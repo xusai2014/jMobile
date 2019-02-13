@@ -20,14 +20,18 @@ export default class fetchUtil {
       handleData, // 统一处理数据
       success,  // 成功回调
       failed,   // 失败回调
-      mode
+      mode,
+      mock
     } = options;
 
+    if (mock) {
+      this.mock = mock
+    }
     this.headers = {
       ...this.headers,
       ...headers
     };
-    if(transferBody){
+    if (transferBody) {
       this.transferBody = transferBody;
     }
     this.mode = mode;
@@ -39,13 +43,15 @@ export default class fetchUtil {
     if (failed) this.failedFunc = failed;
     if (beforeSend) this.beforeSendFunc = beforeSend;
   }
+
   mode = 'cors';
+  mock = false;
   baseUrl = '/';
   headers = {
-    'Content-Type':'application/json;charset=UTF-8'
+    'Content-Type': 'application/json;charset=UTF-8'
   };
 
-  beforeSendFunc = async (data,headers) => ({data,headers});
+  beforeSendFunc = async (data, headers) => ({data, headers});
 
   requestQuene = [];
 
@@ -58,9 +64,9 @@ export default class fetchUtil {
 
   transferBody = (response) => {
     const contentType = response.headers.get('content-type');
-    if(contentType.includes('application/json')){
+    if (contentType.includes('application/json')) {
       return response.json();
-    } else if(contentType.includes('text/html')){
+    } else if (contentType.includes('text/html')) {
       return response.text();
     } else {
       try {
@@ -75,6 +81,7 @@ export default class fetchUtil {
   failedFunc = (err) => {
     return err;
   };
+
 
   get(path) {
     return this.common(path, '', 'GET');
@@ -99,15 +106,15 @@ export default class fetchUtil {
   async common(path, data, method) {
     const controller = new AbortController()
     let options = {
-      method: method,
+      method: this.mock ? method : "GET",
       headers: this.headers,
       signal: controller.signal
     }
-    const { data:bodyData, headers = {}}= await this.beforeSendFunc(JSON.stringify(data));
-    if (bodyData) {
+    const {data: bodyData, headers = {}} = await this.beforeSendFunc(JSON.stringify(data));
+    if (options.method !== "GET" && bodyData) {
       options.body = bodyData;
     }
-    if(headers){
+    if (headers) {
       options.headers = {
         ...options.headers,
         ...headers,
@@ -119,14 +126,14 @@ export default class fetchUtil {
         .then((response) => {
           return this.checkStatus(response)
         }).then((response) => this.transferBody(response))
-        .then(({body,response}) => this.handleBody(body,response.headers.get('paramKey')))
+        .then(({body, response}) => this.handleBody(body, response.headers.get('paramKey')))
         .then((data) => {
           this.successFunc(data);
           resolve(data);
         })
         .catch((err) => {
           // 请求终止异常 错误静默
-          if (err.name === 'AbortError' ) {
+          if (err.name === 'AbortError') {
             console.log('request aborted')
             throw Error(err.message)
             return;

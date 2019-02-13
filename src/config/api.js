@@ -1,6 +1,30 @@
-export const apiUrl = '/api/test';
-// export const apiUrl = 'https://mposdev.suixingpay.com:8443/phoneclient/notify.htm';    // dev
-// export const apiUrl = 'http://172.16.41.180:8080/phoneclient/notify.htm';//Q
-// export const apiUrl = 'https://mpos.suixingpay.com/phoneclient/notify.htm';// 衍方
+export const envApi = () => {
+  const url = {
+    test: 'https://plus-gateway-test.suixingpay.com',
+    dev: 'http://172.16.151.124:8080',
+    prod: 'https://plus-gateway.suixingpay.com',
+    alpha: 'https://plus-gateway-alpha.suixingpay.com',
+    rc: 'https://plus-gateway-rc.suixingpay'
+  };
+  const domainUrl = window.location.href;
 
-export const isMock = false;
+  if (domainUrl.includes('test')) {
+    return url.test;
+  }
+  if (domainUrl.includes('rc')) {
+    return url.rc;
+  }
+  if (domainUrl.includes('alpha')) {
+    return url.alpha;
+  }
+  if (domainUrl.includes('mpaw-dev')) {
+    return url.dev;
+  }
+  if (domainUrl.includes('mpaw.vbill.cn')) {
+    return url.prod;
+  }
+  if (domainUrl.includes('mpaw.suixingpay.com')) {
+    return url.prod;
+  }
+  return '/new';
+}

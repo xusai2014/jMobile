@@ -83,13 +83,7 @@ export const JUDGE_SEL_CARD: PromiseActionType = generate('CH823');
 
 export const IDENTITY_BNK: PromiseActionType = generate('CH828');
 
-// M512,M502.M503
-// 提交信息
-export const POST_INFO: PromiseActionType = generate('M512');
-// 发送验证码
-export const SEND_VERIFICATION: PromiseActionType = generate('M502');
-// 验证验证码
-export const VERIFY_CODE: PromiseActionType = generate('M503');
+
 
 // 实名认证接口
 export const GET_IDENTITY_INFO: PromiseActionType = generate('M113');
@@ -115,11 +109,6 @@ export const REMOVE_BILL_ALL_STATUS: PromiseActionType = generate('CH827');
 // 广告位接口
 export const ADTIVITY_DATA: PromiseActionType = generate('MP013');
 
-// Mark Bill
-export const MARK_BILL_STATUS: PromiseActionType = generate('CH829');
-// Mark rest
-
-export const MARK_BILL_REST: PromiseActionType = generate('CH830');
 
 // echo
 export const ECHO_FOEM: PromiseActionType = generate('CH831');

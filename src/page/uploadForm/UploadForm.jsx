@@ -2,10 +2,23 @@ import React, { Component } from 'react';
 import styles from './UploadForm.less';
 import Actionsheet from "./components/Actionsheet";
 import Header from '../../compoents/Header';
+import DebounceButton from '../../compoents/DebounceButton';
 
 export default class UploadForm extends Component {
   state ={
     status : false
+  }
+  // 图片预览
+  picturePreview = () => {
+    console.log('图片预览');
+  }
+  // 图片上传
+  pictureUpload = () => {
+    console.log('图片上传');
+  }
+  // 提交
+  submitData = () => {
+    console.log('提交');
   }
   render() {
     return (
@@ -22,17 +35,21 @@ export default class UploadForm extends Component {
         <div className={styles.screenshotsUpload}>
           <div className={styles.upload}>
             <div className={styles.content}>
-              <div className={styles.example}>
+              <DebounceButton className={styles.example} onClick={this.picturePreview}>
                 <img src="../../../static/img/screenshots.png" alt="" className={styles.img} />
-                <span className={`${styles.text} ${styles.word}`}>示例</span>
-                <span className={`${styles.text} ${styles.preview}`}>预览</span>
-              </div>
+              </DebounceButton>
+              <span className={`${styles.text} ${styles.word}`}>示例</span>
+              <span className={`${styles.text} ${styles.preview}`}>
+                <DebounceButton className={styles.color} onClick={this.picturePreview}>
+                  预览
+                </DebounceButton>
+              </span>
             </div>
             <div className={styles.content}>
-              <div className={`${styles.example} ${styles.add}`}>
+              <DebounceButton className={`${styles.example} ${styles.add}`} onClick={this.pictureUpload}>
                 <img src="../../../static/img/add.png" alt="" className={styles.icon} />
-                <span className={`${styles.text} ${styles.click}`}>点击上传</span>
-              </div>
+              </DebounceButton>
+              <span className={`${styles.text} ${styles.click}`}>点击上传</span>
             </div>
           </div>
         </div>
@@ -56,7 +73,9 @@ export default class UploadForm extends Component {
           友情提示：请按要求正确提交兑换信息，任何恶意欺骗行为，一经发现直接扣款或封号处理。
         </div>
         <div className={styles.submit}>
-          提交
+          <DebounceButton onClick={this.submitData} className={styles.submitStyle}>
+            提交
+          </DebounceButton>
         </div>
       </div>
     );

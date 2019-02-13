@@ -1,9 +1,14 @@
+/**
+ *   @author jerryxu
+ *   封装网络请求库
+ */
 import 'whatwg-fetch';
 import 'abortcontroller-polyfill/dist/abortcontroller-polyfill-only';
 import { fetch } from 'whatwg-fetch';
 
 // use native browser implementation if it supports aborting
 const abortableFetch = ('signal' in new Request('')) ? window.fetch : fetch;
+
 
 export default class fetchUtil {
   constructor(baseUrl, options) {

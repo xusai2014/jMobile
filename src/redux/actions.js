@@ -1,6 +1,7 @@
-// @flow
+import { BILL_DETAIL_LIST } from "./actionType";
+export const getBillDetaillList = (data: any) => actionGenerator({ type: BILL_DETAIL_LIST, data });
 
-export const ActionCreator = (args) => {
+export const actionGenerator = ({ data, type }) => {
   const {
     type,
     method = 'GET',

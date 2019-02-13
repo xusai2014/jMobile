@@ -4,20 +4,18 @@ import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom';
 import { Router } from 'react-router-dom';
 import createBrowserHistory from 'history/createBrowserHistory';
-import store from './store';
+import store from './redux/store';
 import Routers from './router';
 import FixedContent from './compoents/FixedContent';
-import './style/style.less';
-import 'moment/locale/zh-cn';
-import initFunc from './utils/init';
+import initFunc from './common/init';
 
 const historyAPi = createBrowserHistory();
 /**
  *   @author jerryxu
- *   初始化系统方法
+ *   应用初始化
  */
 initFunc(historyAPi, store);
-const container: HTMLElement | null = document.getElementById('content');
+const container = document.getElementById('content');
 
 if (container !== null) {
   if (container.hasChildNodes()) {

@@ -1,12 +1,17 @@
-// @flow
+/**
+ *   @author jerryxu
+ *   应用初始化方法
+ */
 // import sa from 'sa-sdk-javascript';
 import Promise from 'promise-polyfill';
-import type { BrowserHistory } from 'history/createBrowserHistory';
 import * as moment from 'moment';
 import fetchUtil from "./fetchUtil";
-import { envApi } from "../config/api";
+import { envApi } from "./api";
+import './style.less';
+import 'moment/locale/zh-cn';
 
-export default (historyApi: BrowserHistory, store: any) => {
+
+export default (historyApi, store) => {
   // To add to window, 定义全局变量
   if (!window.Promise) {
     window.Promise = Promise;

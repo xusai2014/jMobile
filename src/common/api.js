@@ -1,3 +1,8 @@
+/**
+ *   @author jerryxu
+ *   多环境配置
+ */
+
 export const envApi = () => {
   const url = {
     test: 'https://plus-gateway-test.suixingpay.com',

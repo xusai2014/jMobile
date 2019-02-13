@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styles from './UploadForm.less';
+import Actionsheet from "./components/Actionsheet";
 import Header from '../../compoents/Header';
 
 export default class UploadForm extends Component {

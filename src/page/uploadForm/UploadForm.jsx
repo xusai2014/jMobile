@@ -6,7 +6,8 @@ import DebounceButton from '../../compoents/DebounceButton';
 
 export default class UploadForm extends Component {
   state ={
-    status : false
+    conversionCode: '', // 兑换码
+    note: '', // 备注
   }
   // 图片预览
   picturePreview = () => {
@@ -19,6 +20,18 @@ export default class UploadForm extends Component {
   // 提交
   submitData = () => {
     console.log('提交');
+  }
+  // 获取备注信息
+  getNote = (e) => {
+    this.setState({
+      note: e.target.value
+    })
+  }
+  // 获取兑换码
+  getconversionCode = (e) => {
+    this.setState({
+      conversionCode: e.target.value
+    })
   }
   render() {
     return (
@@ -58,7 +71,8 @@ export default class UploadForm extends Component {
             兑换码
           </span>
           <div className={styles.input}>
-            <textarea placeholder="复制整条兑换码信息"></textarea>
+            <textarea placeholder="复制整条兑换码信息" onChange={this.getconversionCode}>
+            </textarea>
           </div>
         </div>
         <div className={styles.note}>
@@ -66,7 +80,7 @@ export default class UploadForm extends Component {
             备注
           </span>
           <div className={styles.input}>
-            <input placeholder="如无特殊情况，请勿填写" type="text" />
+            <input placeholder="如无特殊情况，请勿填写" type="text" onChange={this.getNote} />
           </div>
         </div>
         <div className={styles.tip}>

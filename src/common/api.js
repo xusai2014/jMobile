@@ -2,6 +2,8 @@
  *   @author jerryxu
  *   多环境配置
  */
+import { MockUrl } from "./constants";
+const Mock  = true;
 
 export const envApi = () => {
   const url = {
@@ -31,5 +33,9 @@ export const envApi = () => {
   if (domainUrl.includes('mpaw.suixingpay.com')) {
     return url.prod;
   }
-  return '/new';
+  if(Mock){
+    return MockUrl;
+  } else {
+    return '/new';
+  }
 }

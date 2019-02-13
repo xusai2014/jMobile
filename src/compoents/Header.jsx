@@ -4,28 +4,21 @@ import { withRouter } from 'react-router-dom';
 import { jsNative } from 'sx-jsbridge';
 import styles from './Header.less';
 
-type Props = {
-  title: string,
-  hide?: boolean,
-  right?: string,
-  color?: string,
-  backStart?: Function
-}
 @withRouter
- export default class Header extends React.Component<Props> {
+ export default class Header extends React.Component {
   componentWillMount() {
     const { props } = this;
     this.refreshTitle(props.title);
   }
 
-  componentWillReceiveProps(nextprops:Props) {
+  componentWillReceiveProps(nextprops) {
     const { props } = this;
     if (props.title !== nextprops.title) {
       this.refreshTitle(nextprops.title);
     }
   }
 
-  refreshTitle = (title:string) => {
+  refreshTitle = (title) => {
     if (!title) {
       return;
     }

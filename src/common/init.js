@@ -20,25 +20,12 @@ export default (historyApi, store) => {
     window.$ = {};
   }
 
-  window.fetchPromise = new fetchUtil(envApi(), {
+  window.Jfetch = new fetchUtil(envApi(), {
     beforeSend: async (data) => {
-      const params = await nativePromiseBaseParams();
       return {
-        data: rsaUtill.encrypt(data),
+        data,
         headers: {
-          'PHONE-IMEI': params['PHONE_IMEI'],
-          'PHONE-IMSI': params['PHONE_IMSI'],
-          'PHONE-FIRM': params['PHONE_FIRM'],
-          'PHONE-MODLE': params['PHONE_MODLE'],
-          'PHONE-PLATFORM': 'H5',
-          'PHONE-VERSION': params['PHONE_VERSIONS'],
-          'PHONE-LANGUAGE': params['PHONE_LANGUAGE'],
-          'PHONE-NETWORK': params['PHONE_NETWORK'],
-          'PHONE-MAC': params['PHONE_MAC'],
-          'APP-VERSION': params['APP_VERSIONS'],
-          ROOTED: params['ROOTED'],
-          'APP-TYPE': params['APP-TYPE'],
-          TOKEN: encodeURIComponent(rsaUtill.encrypt(params['TOKEN_ID']))
+          'PHONE-MAC': "*****",
         }
       };
     },
@@ -59,9 +46,7 @@ export default (historyApi, store) => {
       })
     },
     handleData: (data,key) => {
-      const str = DES3.decrypt(rsaUtill.decrypt(key),data);
-      const result = JSON.parse(str)
-      return result;
+      return data;
     }
   });
 

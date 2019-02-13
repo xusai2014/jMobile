@@ -11,25 +11,30 @@ export default class UploadForm extends Component {
       <div className={styles.container}>
         <Header title="积分兑换" />
         <div className={styles.screenshots}>
-          <span className={styles.name}>
+          <div className={styles.name}>
             订单截图
-          </span>
+          </div>
           <div className={styles.descr}>
             （上传积分兑换订单截图）
           </div>
+        </div>
+        <div className={styles.screenshotsUpload}>
           <div className={styles.upload}>
-            <div className={styles.example}>
-              <img src="../../../static/img/screenshots.png" alt="" className={styles.img} />
+            <div className={styles.content}>
+              <div className={styles.example}>
+                <img src="../../../static/img/screenshots.png" alt="" className={styles.img} />
+                <span className={`${styles.text} ${styles.word}`}>示例</span>
+                <span className={`${styles.text} ${styles.preview}`}>预览</span>
+              </div>
             </div>
-            <div className={`${styles.example} ${styles.add}`}>
-              <img src="../../../static/img/add.png" alt="" className={styles.icon} />
+            <div className={styles.content}>
+              <div className={`${styles.example} ${styles.add}`}>
+                <img src="../../../static/img/add.png" alt="" className={styles.icon} />
+                <span className={`${styles.text} ${styles.click}`}>点击上传</span>
+              </div>
             </div>
           </div>
-          <span className={`${styles.text} ${styles.word}`}>示例</span>
-          <span className={`${styles.text} ${styles.preview}`}>预览</span>
-          <span className={`${styles.text} ${styles.click}`}>点击上传</span>
         </div>
-        <div className={styles.interval}>.</div>
         <div className={styles.conversionCode}>
           <span className={styles.title}>
             兑换码
@@ -46,11 +51,11 @@ export default class UploadForm extends Component {
             <input placeholder="如无特殊情况，请勿填写" type="text" />
           </div>
         </div>
-        <div className={styles.submit}>
-          提交
-        </div>
         <div className={styles.tip}>
           友情提示：请按要求正确提交兑换信息，任何恶意欺骗行为，一经发现直接扣款或封号处理。
+        </div>
+        <div className={styles.submit}>
+          提交
         </div>
       </div>
     );

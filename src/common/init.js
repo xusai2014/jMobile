@@ -30,6 +30,7 @@ export default (historyApi, store) => {
       };
     },
     mode: 'cors',
+    mock: false,
     checkStatus: (response) => {
       if (!!response && ((response.status >= 200 && response.status < 300) || response.status === 400)) {
         return response;

@@ -106,7 +106,7 @@ export default class fetchUtil {
   async common(path, data, method) {
     const controller = new AbortController()
     let options = {
-      method: this.mock ? method : "GET",
+      method: !this.mock ? method : "GET",
       headers: this.headers,
       signal: controller.signal
     }

@@ -8,14 +8,23 @@ export default class UploadForm extends Component {
   state ={
     conversionCode: '', // 兑换码
     note: '', // 备注
+    disabled: false, //预览弹出层的显隐藏
+    imgSrc: '../../../static/img/processImage.png', // 预览图片的地址
+    display:false
   }
   // 图片预览
   picturePreview = () => {
+    this.setState({
+      disabled: true
+    })
     console.log('图片预览');
   }
   // 图片上传
   pictureUpload = () => {
     console.log('图片上传');
+    this.setState({
+      display: true
+    })
   }
   // 提交
   submitData = () => {
@@ -33,10 +42,31 @@ export default class UploadForm extends Component {
       conversionCode: e.target.value
     })
   }
+  // 弹出层消失
+  modalDisable = () => {
+    this.setState({
+      disabled: false
+    })
+  }
+  // 取消上传
+  cancel = () => {
+    this.setState({
+      display: false
+    })
+  }
+  // 拍照上传
+  takePictures = () => {
+
+  }
+  // 通过图库上传
+  gallery = () => {
+
+  }
   render() {
+    const { disabled, imgSrc, display } = this.state;
     return (
-      <div className={styles.container}>
-        <Header title="积分兑换" />
+      <div className={styles.container} style={{height:gloablMinHeight}}>
+        <Header title="积分兑换"/>
         <div className={styles.screenshots}>
           <div className={styles.name}>
             订单截图
@@ -49,7 +79,7 @@ export default class UploadForm extends Component {
           <div className={styles.upload}>
             <div className={styles.content}>
               <DebounceButton className={styles.example} onClick={this.picturePreview}>
-                <img src="../../../static/img/screenshots.png" alt="" className={styles.img} />
+                <img src="../../../static/img/processImage.png" alt="" className={styles.img} />
               </DebounceButton>
               <span className={`${styles.text} ${styles.word}`}>示例</span>
               <span className={`${styles.text} ${styles.preview}`}>
@@ -91,6 +121,16 @@ export default class UploadForm extends Component {
             提交
           </DebounceButton>
         </div>
+        {
+          disabled ?
+            <div style={{ minHeight: gloablMinHeight }} className={styles.modal} onClick={this.modalDisable}>
+              <img src={imgSrc} className={styles.image}/>
+            </div>
+            : null
+        }
+        {
+          display ? <Actionsheet cancel={this.cancel} takePictures={this.takePictures} gallery={this.gallery}/> : null
+        }
       </div>
     );
   }

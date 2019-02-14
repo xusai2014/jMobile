@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import styles from './ProductShow.less';
+import checked from '../../../../static/img/checked.png'
+import unchecked from '../../../../static/img/unchecked.png';
 
 export default class ProductShow extends Component {
   state ={
@@ -24,8 +26,8 @@ export default class ProductShow extends Component {
         <span className={styles.detail}>
           {detail}
         </span>
-        {this.state.status?<img src="../../../../static/img/checked.png" alt="勾选" className={styles.check} />
-          : <img src="../../../../static/img/unchecked.png" alt="未勾选" className={styles.check} />
+        {this.state.status?<img src={checked} alt="勾选" className={styles.check} />
+          : <img src={unchecked} alt="未勾选" className={styles.check} />
         }
       </div>
     );

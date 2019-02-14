@@ -19,7 +19,7 @@ export default class Process extends Component {
         money : '100',
         detail : '沃尔玛电子码'
       }
-    ] } =this.props;
+    ], processImage ='../../../static/img/processImage.png' } =this.props;
     const productShow = sourceData.map((v,k) =>{
       return <ProductShow echoData={v} key={k} />
     })
@@ -47,8 +47,8 @@ export default class Process extends Component {
             关注【招商银行信用卡】公众号，进入微信公众号点击【办卡推荐】-【绑定.红包】-【微信账户绑定】 绑定信用卡。
           </span>
           <div className={styles.show}>
-            <img src="../../../static/img/processImage.png" alt="" className={styles.processImage} />
-            <img src="../../../static/img/processImage.png" alt="" className={styles.processImage}/>
+            <img src={processImage} alt="" className={styles.processImage} />
+            <img src={processImage} alt="" className={styles.processImage}/>
           </div>
         </div>
         <div className={styles.interval} style={{height:'0.32rem'}}>.</div>

@@ -3,19 +3,22 @@ import styles from './UploadForm.less';
 import Actionsheet from "./components/Actionsheet";
 import Header from '../../compoents/Header';
 import DebounceButton from '../../compoents/DebounceButton';
+import prewviewImage from '../../../static/img/processImage.png';
+import add from '../../../static/img/add.png';
 
 export default class UploadForm extends Component {
   state ={
     conversionCode: '', // 兑换码
     note: '', // 备注
     disabled: false, //预览弹出层的显隐藏
-    imgSrc: '../../../static/img/processImage.png', // 预览图片的地址
+    imgSrc: '', // 预览图片的地址
     display:false
   }
   // 图片预览
-  picturePreview = () => {
+  picturePreview = (e) => {
     this.setState({
-      disabled: true
+      disabled: true,
+      imgSrc: prewviewImage
     })
     console.log('图片预览');
   }
@@ -64,47 +67,58 @@ export default class UploadForm extends Component {
   }
   render() {
     const { disabled, imgSrc, display } = this.state;
+    const { uploadShow = true, conversionCodeShow = true } = this.props;
     return (
-      <div className={styles.container} style={{height:gloablMinHeight}}>
+      <div className={styles.container}>
         <Header title="积分兑换"/>
-        <div className={styles.screenshots}>
-          <div className={styles.name}>
-            订单截图
-          </div>
-          <div className={styles.descr}>
-            （上传积分兑换订单截图）
-          </div>
-        </div>
-        <div className={styles.screenshotsUpload}>
-          <div className={styles.upload}>
-            <div className={styles.content}>
-              <DebounceButton className={styles.example} onClick={this.picturePreview}>
-                <img src="../../../static/img/processImage.png" alt="" className={styles.img} />
-              </DebounceButton>
-              <span className={`${styles.text} ${styles.word}`}>示例</span>
-              <span className={`${styles.text} ${styles.preview}`}>
+        {
+          uploadShow ?
+            <div>
+              <div className={styles.screenshots}>
+                <div className={styles.name}>
+                  订单截图
+                </div>
+                <div className={styles.descr}>
+                  （上传积分兑换订单截图）
+                </div>
+              </div>
+              <div className={styles.screenshotsUpload}>
+                <div className={styles.upload}>
+                  <div className={styles.content}>
+                    <DebounceButton className={styles.example} onClick={this.picturePreview}>
+                      <img src={prewviewImage} alt="" className={styles.img} />
+                    </DebounceButton>
+                    <span className={`${styles.text} ${styles.word}`}>示例</span>
+                    <span className={`${styles.text} ${styles.preview}`}>
                 <DebounceButton className={styles.color} onClick={this.picturePreview}>
                   预览
                 </DebounceButton>
               </span>
+                  </div>
+                  <div className={styles.content}>
+                    <DebounceButton className={`${styles.example} ${styles.add}`} onClick={this.pictureUpload}>
+                      <img src={add} alt="" className={styles.icon} />
+                    </DebounceButton>
+                    <span className={`${styles.text} ${styles.click}`}>点击上传</span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className={styles.content}>
-              <DebounceButton className={`${styles.example} ${styles.add}`} onClick={this.pictureUpload}>
-                <img src="../../../static/img/add.png" alt="" className={styles.icon} />
-              </DebounceButton>
-              <span className={`${styles.text} ${styles.click}`}>点击上传</span>
+            : null
+        }
+        {
+          conversionCodeShow ?
+            <div className={styles.conversionCode}>
+              <span className={styles.title}>
+                兑换码
+              </span>
+              <div className={styles.input}>
+                <textarea placeholder="复制整条兑换码信息" onChange={this.getconversionCode}>
+                </textarea>
+              </div>
             </div>
-          </div>
-        </div>
-        <div className={styles.conversionCode}>
-          <span className={styles.title}>
-            兑换码
-          </span>
-          <div className={styles.input}>
-            <textarea placeholder="复制整条兑换码信息" onChange={this.getconversionCode}>
-            </textarea>
-          </div>
-        </div>
+            :null
+        }
         <div className={styles.note}>
           <span className={styles.name}>
             备注

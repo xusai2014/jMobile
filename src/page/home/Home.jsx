@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import styles from './Home.less';
 import { Carousel } from 'antd-mobile';
 import Header from '../../compoents/Header';
-import BankList from './components/BankList'
+import BankList from './components/BankList';
+import process from '../../../static/img/process.png'
 
 export default class Home extends Component {
   state = {
@@ -95,7 +96,7 @@ export default class Home extends Component {
         <div className={styles.interval}>.</div>
         <div className={styles.cashFlow}>
           <span className={styles.text}>兑换流程</span>
-          <img src="../../../static/img/process.png" alt="兑换流程" className={styles.process} />
+          <img src={process} alt="兑换流程" className={styles.process} />
         </div>
         <div className={styles.interval} style={{ height: '0.28rem' }}>.</div>
         <div className={styles.submit}>立即兑换</div>

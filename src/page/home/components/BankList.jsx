@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styles from './BankList.less';
+import checked from '../../../../static/img/new/selected.png';
 
 export default class BankList extends Component {
   render() {
@@ -12,7 +13,7 @@ export default class BankList extends Component {
           <div className={styles.bankIconText}>
             {name}
           </div>
-          <img src="../../../../static/img/new/selected.png" alt="" className={`${selected ? styles.selected:styles.cancel}`} />
+          <img src={checked} alt="" className={`${selected ? styles.selected:styles.cancel}`} />
         </div>
       </div>
     );

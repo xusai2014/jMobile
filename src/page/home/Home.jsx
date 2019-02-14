@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import styles from './Home.less';
-import {Carousel} from 'antd-mobile';
+import { Carousel } from 'antd-mobile';
 import Header from '../../compoents/Header';
 import BankList from './components/BankList';
-import process from '../../../static/img/process.png'
+import BannerItem from './components/BannerItem';
+import process from '../../../static/img/process.png';
 
 export default class Home extends Component {
   state = {
-    selected: false, // 银行图标是否是选中状态
     bankName: ''// 选中的银行名称
   }
 
@@ -16,25 +16,27 @@ export default class Home extends Component {
 
   // 选择相应的银行
   chooseBank = (name) => {
-    const {bankName} = this.state;
+    const { bankName } = this.state;
     console.log('name', name);
     this.setState({
       bankName: name
     });
     console.log('bankName', bankName);
-    const {selected} = this.state;
-    if (selected) this.setState({selected: false});
-    else this.setState({selected: true});
   }
-  // 将银行列表在轮播图中分页展示
-  bannerArrange = (bankList, min, max) => {
-    const {bankName} = this.state;
-    const bankShow = bankList.map((v, k) => {
-      if (k >= min && k <= max) {
+  // 实现银行列表的自动分页
+  bannerArrange = (bankList) => {
+    const { bankName } = this.state;
+    const pageNumber = Math.ceil(bankList.length / 8);
+    const newArray = [];
+    for (let i = 0; i < pageNumber; i++) newArray.push(i);
+    const content = newArray.map((v) => {
+      const pageContent = bankList.slice(8 * v, 8 * (v + 1));
+      const bankitems = pageContent.map((v, k) => {
         return <BankList echoData={v} key={k} chooseBank={this.chooseBank} selected={v.name == bankName} />;
-      }
-    })
-    return bankShow;
+      });
+      return <BannerItem children={bankitems} key={v} />;
+    });
+    return content;
   }
 
   render() {
@@ -77,21 +79,7 @@ export default class Home extends Component {
             dotStyle={{width: '0.1rem', height: '0.1rem', borderRadius: '50%', background: '#BBBBBB'}}
             dotActiveStyle={{width: '0.1rem', height: '0.1rem', borderRadius: '50%', background: '#3399FF'}}
           >
-            <div className={styles.bankListShow}>
-              <div className={styles.content}>
-                {this.bannerArrange(bankList, 0, 7)}
-              </div>
-            </div>
-            <div className={styles.bankListShow}>
-              <div className={styles.content}>
-                {this.bannerArrange(bankList, 8, 15)}
-              </div>
-            </div>
-            <div className={styles.bankListShow}>
-              <div className={styles.content}>
-                {this.bannerArrange(bankList, 16, 23)}
-              </div>
-            </div>
+            {this.bannerArrange(bankList)}
           </Carousel>
         </div>
         <div className={styles.interval}>.</div>

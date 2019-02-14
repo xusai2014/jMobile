@@ -40,7 +40,7 @@ import styles from './Header.less';
   }
 
   render() {
-    const { title, hide, right, color = '#FFFFFF', backStart = this.backStart } = this.props;
+    const { title, hide, right, color = '#FFFFFF', backStart = this.backStart, clickrightTitle } = this.props;
     return (
       [
         <div
@@ -60,7 +60,7 @@ import styles from './Header.less';
                   <img src="/static/img/back.png" className={styles.left_icon}/>
                 </div>
                 <span className={styles.title}>{title}</span>
-                <div className={styles.right}>{right}</div>
+                <div className={styles.right} onClick={clickrightTitle}>{right}</div>
               </div>
           }
         </div>,

@@ -5,12 +5,22 @@ import Header from '../../compoents/Header';
 import BankList from './components/BankList';
 import BannerItem from './components/BannerItem';
 import process from '../../../static/img/process.png';
+import DebounceButton from '../../compoents/DebounceButton';
 
 export default class Home extends Component {
   state = {
-    bankName: ''// 选中的银行名称
+    bankName: '', // 选中的银行名称
+    dotsShow: true,  //是否显示指示点
+    bankList: [], //银行列表
   }
-
+  componentWillMount() {
+    // const { bankList } = this.state;
+    // if (bankList.length <= 8) {
+    //   this.setState({
+    //     dotsShow: false
+    //   });
+    // };
+  }
   componentDidMount() {
   }
 
@@ -38,7 +48,18 @@ export default class Home extends Component {
     });
     return content;
   }
-
+  // 点击兑换记录
+  clickrightTitle = () => {
+    this.props.history.push('/myapp/exchangeRecord');
+  }
+  // 点击刷卡金跳到对应的兑换流程
+  processMange = () => {
+    this.props.history.push('/myapp/Process');
+  }
+  // 点击立即兑换实现跳转
+  immediatelyChange = () => {
+     this.props.history.push('/myapp/Process');
+  }
   render() {
     const {
       bankList = [
@@ -68,9 +89,10 @@ export default class Home extends Component {
         {logo_uri: '../../../../static/img/gs.png', name: '工商银行'},
       ]
     } = this.props;
+    const { dotsShow } = this.state;
     return (
       <div className={styles.container}>
-        <Header title="积分兑换" right="兑换记录"/>
+        <Header title="积分兑换" right="兑换记录" clickrightTitle={this.clickrightTitle} />
         <div className={styles.chooseBank}>选择银行</div>
         <div className={styles.bankList}>
           <Carousel
@@ -78,12 +100,13 @@ export default class Home extends Component {
             infinite
             dotStyle={{width: '0.1rem', height: '0.1rem', borderRadius: '50%', background: '#BBBBBB'}}
             dotActiveStyle={{width: '0.1rem', height: '0.1rem', borderRadius: '50%', background: '#3399FF'}}
+            dots={dotsShow}
           >
             {this.bannerArrange(bankList)}
           </Carousel>
         </div>
         <div className={styles.interval}>.</div>
-        <div className={styles.bankDetail}>
+        <div className={styles.bankDetail} onClick={this.processMange}>
           <img src="../../../../static/img/zs.png" alt="招商银行"/>
           <span className={styles.name}>招商银行</span>
           <div className={styles.exchangeInfo}>
@@ -111,22 +134,26 @@ export default class Home extends Component {
             <div className={styles.row} style={{fontSize: '0.26rem'}}>
               <div className={styles.columnFirst}>30000</div>
               <div className={styles.columnSecond}>100元沃尔玛购物券</div>
-              <div className={styles.columnThird} style={{color: '#3399FF'}}>30元刷卡金</div>
+              <div className={styles.columnThird} style={{color: '#3399FF'}} onClick={this.processMange}>30元刷卡金</div>
             </div>
             <div className={styles.row}>
               <div className={styles.columnFirst}>50000</div>
               <div className={styles.columnSecond}>500元沃尔玛购物券</div>
-              <div className={styles.columnThird} style={{color: '#3399FF'}}>50元刷卡金</div>
+              <div className={styles.columnThird} style={{color: '#3399FF'}} onClick={this.processMange}>50元刷卡金</div>
             </div>
           </div>
         </div>
         <div className={styles.interval}>.</div>
         <div className={styles.cashFlow}>
           <span className={styles.text}>兑换流程</span>
-          <img src={process} alt="兑换流程" className={styles.process}/>
+          <img src={process} alt="兑换流程" className={styles.process} />
         </div>
-        <div className={styles.interval} style={{height: '0.28rem'}}>.</div>
-        <div className={styles.submit}>立即兑换</div>
+        <div className={styles.interval} style={{ height: '0.28rem' }}>.</div>
+        <div className={styles.submit}>
+          <DebounceButton className={styles.button} onClick={this.immediatelyChange}>
+            立即兑换
+          </DebounceButton>
+        </div>
       </div>
     );
   }

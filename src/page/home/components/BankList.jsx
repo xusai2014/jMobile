@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styles from './BankList.less';
-import checked from '../../../../static/img/new/selected.png';
+import checked from '../../../../static/img/selected.png';
 
 export default class BankList extends Component {
   render() {

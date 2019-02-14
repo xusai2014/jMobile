@@ -35,9 +35,6 @@
   height: 2.2rem;
   display: block;
   position: relative;
-  &:active{
-    background-color: #dedede;
-  }
   > img{
     width: 0.58rem;
     height: 0.58rem;
@@ -79,7 +76,7 @@
 }
 .productList{
   width: 6.94rem;
-  height: 4.57rem;
+  min-height: 4.57rem;
   margin: 0 auto;
   position: relative;
   .text{
@@ -149,6 +146,9 @@
   }
 }
 .submit{
+  position: fixed;
+  bottom: 0;
+  left: 0;
   width: 100%;
   height: 0.94rem;
   text-align: center;

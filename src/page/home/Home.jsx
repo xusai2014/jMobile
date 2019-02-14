@@ -9,12 +9,33 @@ import DebounceButton from '../../compoents/DebounceButton';
 
 export default class Home extends Component {
   state = {
-    bankName: '', // 选中的银行名称
-    dotsShow: true,  //是否显示指示点
-    bankList: [], //银行列表
+    bankName: '广大银行', // 选中的银行名称
+    dotsShow: true,  // 是否显示指示点
+    bankList: [], // 银行列表
+    hasGoods: true, // 是否有可换购的商品
+    number: '1000', // 积分数
+    value: '6.88', // 换购价值
+    lowestcoreS: '58000',// 最低起购分数
   }
   componentWillMount() {
-    // const { bankList } = this.state;
+    // this.props.dispatch(getbankList({ bankName: abbr })).then((result) => {
+    //   if(false) this.setState({
+    //     hasGoods: false
+    //   })
+    // });
+    // for (let i=0;i<data.length;i++) // 默认选中第一家有产品的银行
+    // {
+    //   if(data[i].product) { // 如果产品列表不为空
+    //     this.setState({
+    //           bankName: result.data[i].name,
+    //       number:result.data[i].number,
+    //       value
+    //       lowestcoreS
+    //         });
+    //   }
+    //    return;
+    // }
+      // const { bankList } = this.state;
     // if (bankList.length <= 8) {
     //   this.setState({
     //     dotsShow: false
@@ -25,7 +46,18 @@ export default class Home extends Component {
   }
 
   // 选择相应的银行
-  chooseBank = (name) => {
+  chooseBank = (name,productList) => {
+    // if (!productList) {//如果银行下没有正常状态的商品
+    //   this.setState({
+    //     hasGoods: false
+    //   });
+    // } esle{
+    //   this.setState({
+    //     number: '1000', // 积分数
+    //     value: '6.88', // 换购价值
+    //     lowestcoreS: '58000',// 最低起购分数
+    //   })
+    // }
     const { bankName } = this.state;
     console.log('name', name);
     this.setState({
@@ -89,7 +121,7 @@ export default class Home extends Component {
         {logo_uri: '../../../../static/img/gs.png', name: '工商银行'},
       ]
     } = this.props;
-    const { dotsShow } = this.state;
+    const { dotsShow, hasGoods, number, value, lowestcoreS } = this.state;
     return (
       <div className={styles.container}>
         <Header title="积分兑换" right="兑换记录" clickrightTitle={this.clickrightTitle} />
@@ -106,16 +138,16 @@ export default class Home extends Component {
           </Carousel>
         </div>
         <div className={styles.interval}>.</div>
-        <div className={styles.bankDetail} onClick={this.processMange}>
-          <img src="../../../../static/img/zs.png" alt="招商银行"/>
+        <div className={styles.bankDetail}>
+          <img src="../../../../static/img/zs.png" alt="招商银行" />
           <span className={styles.name}>招商银行</span>
           <div className={styles.exchangeInfo}>
             每
-            <span className={styles.focus}>1000</span>
+            <span className={styles.focus}>{number}</span>
             积分的价值为
-            <span className={styles.focus}>6.88</span>
+            <span className={styles.focus}>{value}</span>
             元，最低
-            <span className={styles.focus}>58000</span>
+            <span className={styles.focus}>{lowestcoreS}</span>
             分起兑。
           </div>
           <span className={styles.integralQuery}>
@@ -123,27 +155,33 @@ export default class Home extends Component {
           </span>
         </div>
         <div className={styles.interval}>.</div>
-        <div className={styles.productList}>
-          <span className={styles.text}>支持兑换产品列表</span>
-          <div className={styles.list}>
-            <div className={styles.row}>
-              <div className={styles.columnFirst}><span>积分</span></div>
-              <div className={styles.columnSecond}>银行商品</div>
-              <div className={styles.columnThird}>可换购Pluss刷卡金</div>
+        {
+          hasGoods ?
+            <div>
+              <div className={styles.productList}>
+                <span className={styles.text}>支持兑换产品列表</span>
+                <div className={styles.list}>
+                  <div className={styles.row}>
+                    <div className={styles.columnFirst}><span>积分</span></div>
+                    <div className={styles.columnSecond}>银行商品</div>
+                    <div className={styles.columnThird}>可换购Pluss刷卡金</div>
+                  </div>
+                  <div className={styles.row}>
+                    <div className={styles.columnFirst}>30000</div>
+                    <div className={styles.columnSecond}>100元沃尔玛购物券</div>
+                    <div className={styles.columnThird} style={{ color: '#3399FF' }} onClick={this.processMange}>30元刷卡金</div>
+                  </div>
+                  <div className={styles.row}>
+                    <div className={styles.columnFirst}>50000</div>
+                    <div className={styles.columnSecond}>500元沃尔玛购物券</div>
+                    <div className={styles.columnThird} style={{ color: '#3399FF' }} onClick={this.processMange}>50元刷卡金</div>
+                  </div>
+                </div>
+              </div>
+              <div className={styles.interval}>.</div>
             </div>
-            <div className={styles.row} style={{fontSize: '0.26rem'}}>
-              <div className={styles.columnFirst}>30000</div>
-              <div className={styles.columnSecond}>100元沃尔玛购物券</div>
-              <div className={styles.columnThird} style={{color: '#3399FF'}} onClick={this.processMange}>30元刷卡金</div>
-            </div>
-            <div className={styles.row}>
-              <div className={styles.columnFirst}>50000</div>
-              <div className={styles.columnSecond}>500元沃尔玛购物券</div>
-              <div className={styles.columnThird} style={{color: '#3399FF'}} onClick={this.processMange}>50元刷卡金</div>
-            </div>
-          </div>
-        </div>
-        <div className={styles.interval}>.</div>
+            :null
+        }
         <div className={styles.cashFlow}>
           <span className={styles.text}>兑换流程</span>
           <img src={process} alt="兑换流程" className={styles.process} />

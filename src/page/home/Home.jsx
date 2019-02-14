@@ -1,11 +1,14 @@
 import React, {Component} from 'react';
 import styles from './Home.less';
-import { Carousel } from 'antd-mobile';
+import { Carousel,Modal } from 'antd-mobile';
 import Header from '../../compoents/Header';
 import BankList from './components/BankList';
 import BannerItem from './components/BannerItem';
 import process from '../../../static/img/process.png';
 import DebounceButton from '../../compoents/DebounceButton';
+import ProductList from './components/ProductList';
+
+const alert = Modal.alert;
 
 export default class Home extends Component {
   state = {
@@ -16,6 +19,9 @@ export default class Home extends Component {
     number: '1000', // 积分数
     value: '6.88', // 换购价值
     lowestcoreS: '58000',// 最低起购分数
+    integral : '', // 积分
+    bankGoods : '', // 银行商品
+    plusCredit : '', // 刷卡金
   }
   componentWillMount() {
     // this.props.dispatch(getbankList({ bankName: abbr })).then((result) => {
@@ -84,13 +90,17 @@ export default class Home extends Component {
   clickrightTitle = () => {
     this.props.history.push('/myapp/exchangeRecord');
   }
-  // 点击刷卡金跳到对应的兑换流程
-  processMange = () => {
-    this.props.history.push('/myapp/Process');
-  }
   // 点击立即兑换实现跳转
   immediatelyChange = () => {
      this.props.history.push('/myapp/Process');
+  }
+  // plus刷卡金换购
+  plusChange = () => {
+    const { plusCredit } = this.state;
+    alert('', `可兑换${plusCredit}元的随行付Plus App刷卡金，可直接抵扣交易手续费`, [
+      { text: '取消', onPress: () => console.log('cancel') },
+      { text: '确定', onPress: () => console.log('ok') }
+    ]);
   }
   render() {
     const {
@@ -159,23 +169,14 @@ export default class Home extends Component {
           hasGoods ?
             <div>
               <div className={styles.productList}>
-                <span className={styles.text}>支持兑换产品列表</span>
+                <div className={styles.text}>支持兑换产品列表</div>
                 <div className={styles.list}>
                   <div className={styles.row}>
                     <div className={styles.columnFirst}><span>积分</span></div>
                     <div className={styles.columnSecond}>银行商品</div>
                     <div className={styles.columnThird}>可换购Pluss刷卡金</div>
                   </div>
-                  <div className={styles.row}>
-                    <div className={styles.columnFirst}>30000</div>
-                    <div className={styles.columnSecond}>100元沃尔玛购物券</div>
-                    <div className={styles.columnThird} style={{ color: '#3399FF' }} onClick={this.processMange}>30元刷卡金</div>
-                  </div>
-                  <div className={styles.row}>
-                    <div className={styles.columnFirst}>50000</div>
-                    <div className={styles.columnSecond}>500元沃尔玛购物券</div>
-                    <div className={styles.columnThird} style={{ color: '#3399FF' }} onClick={this.processMange}>50元刷卡金</div>
-                  </div>
+                  <ProductList plusChange={this.plusChange} />
                 </div>
               </div>
               <div className={styles.interval}>.</div>

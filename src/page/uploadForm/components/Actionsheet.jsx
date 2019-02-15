@@ -6,10 +6,9 @@ import picture from '../../../../static/img/picture.png';
 
 export default class Actionsheet extends Component {
   state ={
-    status : false
   }
   render() {
-    const { cancel, takePictures, gallery } = this.props;
+    const { cancel = () => {}, takePictures = () => {}, gallery = () => {} } = this.props;
     return (
       <div style={{minHeight: gloablMinHeight}} className={styles.container}>
         <div className={styles.content}>

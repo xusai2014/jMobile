@@ -16,7 +16,6 @@ export default class Home extends Component {
     dotsShow: true,  // 是否显示指示点
     bankList: [], // 银行列表
     hasGoods: true, // 是否有可换购的商品
-    number: '1000', // 积分数
     value: '6.88', // 换购价值
     lowestcoreS: '58000',// 最低起购分数
     integral : '', // 积分
@@ -80,7 +79,7 @@ export default class Home extends Component {
     const content = newArray.map((v) => {
       const pageContent = bankList.slice(8 * v, 8 * (v + 1));
       const bankitems = pageContent.map((v, k) => {
-        return <BankList echoData={v} key={k} chooseBank={this.chooseBank} selected={v.name == bankName} />;
+        return <BankList echoData={v} key={k} chooseBank={this.chooseBank} selected={v.name == bankName} markIcon={v.markIcon} />;
       });
       return <BannerItem children={bankitems} key={v} />;
     });
@@ -131,7 +130,7 @@ export default class Home extends Component {
         {logo_uri: '../../../../static/img/gs.png', name: '工商银行'},
       ]
     } = this.props;
-    const { dotsShow, hasGoods, number, value, lowestcoreS } = this.state;
+    const { dotsShow, hasGoods, value, lowestcoreS } = this.state;
     return (
       <div className={styles.container}>
         <Header title="积分兑换" right="兑换记录" clickrightTitle={this.clickrightTitle} />
@@ -150,19 +149,21 @@ export default class Home extends Component {
         <div className={styles.interval}>.</div>
         <div className={styles.bankDetail}>
           <img src="../../../../static/img/zs.png" alt="招商银行" />
-          <span className={styles.name}>招商银行</span>
-          <div className={styles.exchangeInfo}>
-            每
-            <span className={styles.focus}>{number}</span>
-            积分的价值为
-            <span className={styles.focus}>{value}</span>
-            元，最低
-            <span className={styles.focus}>{lowestcoreS}</span>
-            分起兑。
+          <div className={styles.textContent}>
+            <div className={styles.name}>招商银行</div>
+            <div className={styles.exchangeInfo}>
+              每
+              <span className={styles.focus}>10000</span>
+              积分的价值为
+              <span className={styles.focus}>{value}</span>
+              元，最低
+              <span className={styles.focus}>{lowestcoreS}</span>
+              分起兑。
+            </div>
+            <div className={styles.integralQuery}>
+              积分查询：&nbsp;[招商银行]使用银行预留手机号编辑短信"CXJF+空格+卡号后四位"发到95528，查询积分，（+号不用写）
+            </div>
           </div>
-          <span className={styles.integralQuery}>
-            积分查询：&nbsp;[招商银行]使用银行预留手机号编辑短信"CXJF+空格+卡号后四位"发到95528，查询积分，（+号不用写）
-          </span>
         </div>
         <div className={styles.interval}>.</div>
         {

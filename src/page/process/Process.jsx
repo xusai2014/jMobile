@@ -7,6 +7,18 @@ export default class Process extends Component {
   state ={
      status : false
   }
+  // 跳转到兑换记录
+  clickrightTitle = () => {
+    this.props.history.push('/myapp/exchangeRecord');
+  }
+  // 电子码兑换链接
+  exchangeAddress = () => {
+
+  }
+  // 立即报单
+  ImmediateReport = () => {
+    this.props.history.push('/myapp/UploadForm');
+  }
   render() {
     const { sourceData = [
       { backgroundImage : '../../../../static/img/background.png',
@@ -25,18 +37,18 @@ export default class Process extends Component {
     })
     return (
       <div className={styles.container}>
-        <Header title="积分兑换" right="兑换记录" />
+        <Header title="积分兑换" right="兑换记录" clickrightTitle={this.clickrightTitle}/>
         <div className={styles.productStyle}>
           <span className={styles.name}>产品类型</span>
-          <div className={styles.code}>
-            {productShow}
-          </div>
-          <span className={styles.tip}>
-            温馨提示：报单信息与选择商品不符的一律不予核销，损失自负
-          </span>
-          <div className={styles.link}>
-            招商银行电子码兑换链接
-          </div>
+        </div>
+        <div className={styles.code}>
+          {productShow}
+        </div>
+        <div className={styles.tip}>
+          温馨提示：报单信息与选择商品不符的一律不予核销，损失自负
+        </div>
+        <div className={styles.link} onClick={this.exchangeAddress}>
+          招商银行电子码兑换链接
         </div>
         <div className={styles.interval}>.</div>
         <div className={styles.process}>
@@ -52,7 +64,7 @@ export default class Process extends Component {
           </div>
         </div>
         <div className={styles.interval} style={{height:'0.32rem'}}>.</div>
-        <div className={styles.submit}>立即报单</div>
+        <div className={styles.submit} onClick={this.ImmediateReport}>立即报单</div>
       </div>
     );
   }

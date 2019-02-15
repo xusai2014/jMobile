@@ -49,13 +49,13 @@ export default class UploadForm extends Component {
   modalDisable = () => {
     this.setState({
       disabled: false
-    })
+    });
   }
   // 取消上传
   cancel = () => {
     this.setState({
       display: false
-    })
+    });
   }
   // 拍照上传
   takePictures = () => {
@@ -90,10 +90,10 @@ export default class UploadForm extends Component {
                     </DebounceButton>
                     <span className={`${styles.text} ${styles.word}`}>示例</span>
                     <span className={`${styles.text} ${styles.preview}`}>
-                <DebounceButton className={styles.color} onClick={this.picturePreview}>
-                  预览
-                </DebounceButton>
-              </span>
+                      <DebounceButton className={styles.color} onClick={this.picturePreview}>
+                        预览
+                      </DebounceButton>
+                    </span>
                   </div>
                   <div className={styles.content}>
                     <DebounceButton className={`${styles.example} ${styles.add}`} onClick={this.pictureUpload}>
@@ -113,7 +113,7 @@ export default class UploadForm extends Component {
                 兑换码
               </span>
               <div className={styles.input}>
-                <textarea placeholder="复制整条兑换码信息" onChange={this.getconversionCode}>
+                <textarea placeholder="复制整条兑换码信息" onChange={this.getconversionCode} maxLength="500">
                 </textarea>
               </div>
             </div>
@@ -124,7 +124,7 @@ export default class UploadForm extends Component {
             备注
           </span>
           <div className={styles.input}>
-            <input placeholder="如无特殊情况，请勿填写" type="text" onChange={this.getNote} />
+            <input placeholder="如无特殊情况，请勿填写" type="text" onChange={this.getNote} maxLength="100"/>
           </div>
         </div>
         <div className={styles.tip}>

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import styles from './ProductShow.less';
-import checked from '../../../../static/img/checked.png'
+import checked from '../../../../static/img/checked.png';
 import unchecked from '../../../../static/img/unchecked.png';
+import DebounceButton from '../../../compoents/DebounceButton';
 
 export default class ProductShow extends Component {
   state ={
@@ -15,7 +16,7 @@ export default class ProductShow extends Component {
       checkProduct = () =>{}
     } = echoData;
     return (
-      <div className={styles.product} onClick={checkProduct}>
+      <DebounceButton className={styles.product} onClick={checkProduct}>
         <img src={backgroundImage} alt="" className={styles.background}/>
         <span className={styles.lable}>
           ￥
@@ -29,7 +30,7 @@ export default class ProductShow extends Component {
         {this.state.status?<img src={checked} alt="勾选" className={styles.check} />
           : <img src={unchecked} alt="未勾选" className={styles.check} />
         }
-      </div>
+      </DebounceButton>
     );
   }
 }

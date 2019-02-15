@@ -6,15 +6,20 @@ import DebounceButton from '../../compoents/DebounceButton';
 import PicturePreview from '../../compoents/PicturePreview';
 import prewviewImage from '../../../static/img/processImage.png';
 import add from '../../../static/img/add.png';
+import UploadImage from './components/UploadImage';
 
 export default class UploadForm extends Component {
-  state ={
-    conversionCode: '', // 兑换码
-    note: '', // 备注
-    disabled: false, //预览弹出层的显隐藏
-    imgSrc: '', // 预览图片的地址
-    display: false,
-    styleSheet: {}, //当出现遮罩层的时候，阻止遮罩层后的内容滚动
+  constructor (props) {
+    super(props);
+    this.state ={
+      conversionCode: '', // 兑换码
+      note: '', // 备注
+      disabled: false, //预览弹出层的显隐藏
+      imgSrc: '', // 预览图片的地址
+      display: false,
+      styleSheet: {}, // 当出现遮罩层的时候，阻止遮罩层后的内容滚动
+      uploadImages: [],// 上传的图片地址
+    };
   }
   // 图片预览
   picturePreview = () => {
@@ -36,8 +41,9 @@ export default class UploadForm extends Component {
   pictureUpload = () => {
     console.log('图片上传');
     this.setState({
-      display: true
-    })
+      display: true,
+      styleSheet: { height: gloablMinHeight }
+    });
   }
   // 提交
   submitData = () => {
@@ -47,7 +53,7 @@ export default class UploadForm extends Component {
   getNote = (e) => {
     this.setState({
       note: e.target.value
-    })
+    });
   }
   // 获取兑换码
   getconversionCode = (e) => {
@@ -64,7 +70,8 @@ export default class UploadForm extends Component {
   // 取消上传
   cancel = () => {
     this.setState({
-      display: false
+      display: false,
+      styleSheet: {}
     });
   }
   // 拍照上传
@@ -72,12 +79,37 @@ export default class UploadForm extends Component {
 
   }
   // 通过图库上传
-  gallery = () => {
-
+  gallery = (e) => {
+    const file = e.target.files[0];
+    console.log('file', file);
+    const imageType = /^image\//;
+    if (!imageType.test(file.type)) {
+      alert('请选择图片类型');
+      return;
+    }
+    else {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (e) => {
+        const { uploadImages } = this.state;
+        const newuploadImages = uploadImages.push(e.target.result)
+        // 上传的图片的编码
+        this.setState({
+          styleSheet: {},
+          uploadImages,
+          display: false
+        });
+        console.log('ne', uploadImages);
+        console.log(e.target.result);
+      };
+    }
   }
   render() {
-    const { disabled, imgSrc, display, styleSheet } = this.state;
+    const { disabled, imgSrc, display, styleSheet, uploadImages } = this.state;
     const { uploadShow = true, conversionCodeShow = true } = this.props;
+    const uploadImageList = uploadImages.map((v,k) => {
+      return <UploadImage imgSrc={v} key={k} onClick={this.picturePreview} />;
+    });
     return [
       <div className={styles.container} style={styleSheet} key={'b'}>
         <Header title="积分兑换" />
@@ -105,6 +137,7 @@ export default class UploadForm extends Component {
                       </DebounceButton>
                     </span>
                   </div>
+                  {!!uploadImages ? uploadImageList : null}
                   <div className={styles.content}>
                     <DebounceButton className={`${styles.example} ${styles.add}`} onClick={this.pictureUpload}>
                       <img src={add} alt="" className={styles.icon} />
@@ -149,7 +182,7 @@ export default class UploadForm extends Component {
           display ? <Actionsheet cancel={this.cancel} takePictures={this.takePictures} gallery={this.gallery} /> : null
         }
       </div>,
-      disabled ? <PicturePreview imgSrc={imgSrc} onClick={this.cancelPreview} key={'a'} /> : null
+      <PicturePreview imgSrc={imgSrc} onClick={this.cancelPreview} key={'a'} disabled={disabled} />,
     ];
   }
 }

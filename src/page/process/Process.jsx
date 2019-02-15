@@ -9,9 +9,9 @@ import DebounceButton from '../../compoents/DebounceButton';
 export default class Process extends Component {
   state ={
     disabled : false, // 是否进行图片预览
-    imgSrc: '', //预览图片的地址
-    styleSheet: {},
   }
+
+  prewviewImage = prewviewImage; //预览图片的地址
   // 跳转到兑换记录
   clickrightTitle = () => {
     this.props.history.push('/myapp/exchangeRecord');
@@ -27,20 +27,19 @@ export default class Process extends Component {
   // 实现兑换流程图片的预览
   picturePreview = () =>{
     this.setState({
-      imgSrc: '../../../static/img/screenshots.png',
-      disabled: true,
-      styleSheet: { height: gloablMinHeight }
+      disabled: true
     });
+    this.prewviewImage = prewviewImage;
   }
+
   // 取消图片预览
   cancelPreview = () => {
     this.setState({
       disabled: false,
-      styleSheet: {}
     });
   }
   render() {
-    const { disabled, imgSrc, styleSheet } = this.state;
+    const { disabled, styleSheet, background } = this.state;
     const { sourceData = [
       { backgroundImage : '../../../../static/img/background.png',
         money : '100',
@@ -83,13 +82,15 @@ export default class Process extends Component {
             <DebounceButton onClick={this.picturePreview} className={styles.button}>
               <img src={processImage} alt="" className={styles.processImage} />
             </DebounceButton>
-            <img src={processImage} alt="" className={styles.processImage} onClick={this.picturePreview} />
+            <DebounceButton onClick={this.picturePreview} className={styles.button}>
+              <img src={processImage} alt="" className={styles.processImage} />
+            </DebounceButton>
           </div>
         </div>
-        <div className={styles.interval} style={{height:'0.32rem'}}>.</div>
+        <div className={styles.interval} style={{ height: '0.32rem' }}>.</div>
         <div className={styles.submit} onClick={this.ImmediateReport}>立即报单</div>
       </div>,
-      disabled ? <PicturePreview imgSrc={imgSrc} onClick={this.cancelPreview} key={'a'} /> : null
+      <PicturePreview disabled={disabled} imgSrc={this.prewviewImage} onClick={this.cancelPreview} key={'a'} />
     ];
   }
 }

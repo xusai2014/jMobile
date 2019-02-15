@@ -132,7 +132,7 @@ export default class OrderDetails extends Component {
             :null
         }
       </div>,
-      disabled ? <PicturePreview imgSrc={imgSrc} onClick={this.cancelPreview} key={'a'} /> : null
+      <PicturePreview imgSrc={imgSrc} onClick={this.cancelPreview} key={'a'} disabled={disabled} />
     ];
   }
 }

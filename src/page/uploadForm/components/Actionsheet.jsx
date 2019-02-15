@@ -17,7 +17,8 @@ export default class Actionsheet extends Component {
               <span className={styles.title}>拍照</span>
               <img src={carme} alt="" />
             </DebounceButton>
-            <DebounceButton className={styles.option} style={{border:'none'}} activeOpen={true} onClick={gallery}>
+            <DebounceButton className={styles.option} style={{border:'none'}} activeOpen={true} onClick={ ()=>{} }>
+              <input type="file" className={styles.input} accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" onChange={(e) => { gallery(e); }} />
               <span className={styles.title}>图库</span>
               <img src={picture} alt="" />
             </DebounceButton>

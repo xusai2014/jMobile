@@ -3,6 +3,7 @@ import styles from './UploadForm.less';
 import Actionsheet from "./components/Actionsheet";
 import Header from '../../compoents/Header';
 import DebounceButton from '../../compoents/DebounceButton';
+import PicturePreview from '../../compoents/PicturePreview';
 import prewviewImage from '../../../static/img/processImage.png';
 import add from '../../../static/img/add.png';
 
@@ -12,15 +13,24 @@ export default class UploadForm extends Component {
     note: '', // 备注
     disabled: false, //预览弹出层的显隐藏
     imgSrc: '', // 预览图片的地址
-    display:false
+    display: false,
+    styleSheet: {}, //当出现遮罩层的时候，阻止遮罩层后的内容滚动
   }
   // 图片预览
-  picturePreview = (e) => {
+  picturePreview = () => {
     this.setState({
       disabled: true,
-      imgSrc: prewviewImage
+      imgSrc: prewviewImage,
+      styleSheet: { height: gloablMinHeight }
     })
     console.log('图片预览');
+  }
+  // 取消图片预览
+  cancelPreview = () => {
+    this.setState({
+      disabled: false,
+      styleSheet: {}
+    });
   }
   // 图片上传
   pictureUpload = () => {
@@ -66,11 +76,11 @@ export default class UploadForm extends Component {
 
   }
   render() {
-    const { disabled, imgSrc, display } = this.state;
+    const { disabled, imgSrc, display, styleSheet } = this.state;
     const { uploadShow = true, conversionCodeShow = true } = this.props;
-    return (
-      <div className={styles.container}>
-        <Header title="积分兑换"/>
+    return [
+      <div className={styles.container} style={styleSheet} key={'b'}>
+        <Header title="积分兑换" />
         {
           uploadShow ?
             <div>
@@ -136,16 +146,10 @@ export default class UploadForm extends Component {
           </DebounceButton>
         </div>
         {
-          disabled ?
-            <div style={{ minHeight: gloablMinHeight }} className={styles.modal} onClick={this.modalDisable}>
-              <img src={imgSrc} className={styles.image}/>
-            </div>
-            : null
+          display ? <Actionsheet cancel={this.cancel} takePictures={this.takePictures} gallery={this.gallery} /> : null
         }
-        {
-          display ? <Actionsheet cancel={this.cancel} takePictures={this.takePictures} gallery={this.gallery}/> : null
-        }
-      </div>
-    );
+      </div>,
+      disabled ? <PicturePreview imgSrc={imgSrc} onClick={this.cancelPreview} key={'a'} /> : null
+    ];
   }
 }

@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import styles from './OrderDetails.less';
 import Header from '../../compoents/Header';
-// import OrderInfo from './components/OrderInfo';
+import PicturePreview from "../../compoents/PicturePreview";
 
 export default class OrderDetails extends Component {
   state = {
+    disabled: false, // 是否进行图片预览
+    imgSrc: '', //预览图片的地址
+    styleSheet: {},
   }
   componentDidMount() {
   }
@@ -31,6 +34,21 @@ export default class OrderDetails extends Component {
       return <span style={styleSheet}>{status}</span>;
     }
   }
+  // 实现兑换流程图片的预览
+  picturePreview = () =>{
+    this.setState({
+      imgSrc: '../../../static/img/screenshots.png',
+      disabled: true,
+      styleSheet: { height: gloablMinHeight }
+    });
+  }
+  // 取消图片预览
+  cancelPreview = () => {
+    this.setState({
+      disabled: false,
+      styleSheet: {}
+    });
+  }
   render() {
     const { sourceData = {} } = this.props;
     const {
@@ -45,8 +63,9 @@ export default class OrderDetails extends Component {
       screenshots = '../../../static/img/screenshots.png',
       note = '尽快发货'
     } = sourceData;
-    return (
-      <div className={styles.container}>
+    const { disabled, imgSrc, styleSheet } = this.state;
+    return [
+      <div className={styles.container} style={styleSheet} key={'b'}>
         <Header title="订单详情" />
         <div className={styles.content}>
           <span className={styles.name}>订单号:</span>
@@ -98,7 +117,7 @@ export default class OrderDetails extends Component {
           !!screenshots ?
             <div className={styles.content} style={{ height: '2.78rem' }}>
               <span className={styles.name}>截图:</span>
-              <span className={styles.detail}>
+              <span className={styles.detail} onClick={this.picturePreview}>
                 <img src={screenshots} alt="" style={{ height: '2.31rem', width: '1.31rem' }} />
               </span>
             </div>
@@ -112,8 +131,9 @@ export default class OrderDetails extends Component {
             </div>
             :null
         }
-      </div>
-    );
+      </div>,
+      disabled ? <PicturePreview imgSrc={imgSrc} onClick={this.cancelPreview} key={'a'} /> : null
+    ];
   }
 }
 

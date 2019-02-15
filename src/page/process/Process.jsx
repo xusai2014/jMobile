@@ -2,10 +2,15 @@ import React, { Component } from 'react';
 import styles from './Process.less';
 import Header from '../../compoents/Header';
 import ProductShow from './components/ProductShow';
+import PicturePreview from "../../compoents/PicturePreview";
+import prewviewImage from "../../../static/img/processImage.png";
+import DebounceButton from '../../compoents/DebounceButton';
 
 export default class Process extends Component {
   state ={
-     status : false
+    disabled : false, // 是否进行图片预览
+    imgSrc: '', //预览图片的地址
+    styleSheet: {},
   }
   // 跳转到兑换记录
   clickrightTitle = () => {
@@ -17,9 +22,25 @@ export default class Process extends Component {
   }
   // 立即报单
   ImmediateReport = () => {
-    this.props.history.push('/myapp/UploadForm');
+    this.props.history.push('/myapploadForm');
+  }
+  // 实现兑换流程图片的预览
+  picturePreview = () =>{
+    this.setState({
+      imgSrc: '../../../static/img/screenshots.png',
+      disabled: true,
+      styleSheet: { height: gloablMinHeight }
+    });
+  }
+  // 取消图片预览
+  cancelPreview = () => {
+    this.setState({
+      disabled: false,
+      styleSheet: {}
+    });
   }
   render() {
+    const { disabled, imgSrc, styleSheet } = this.state;
     const { sourceData = [
       { backgroundImage : '../../../../static/img/background.png',
         money : '100',
@@ -35,8 +56,8 @@ export default class Process extends Component {
     const productShow = sourceData.map((v,k) =>{
       return <ProductShow echoData={v} key={k} />
     })
-    return (
-      <div className={styles.container}>
+    return [
+      <div className={styles.container} style={styleSheet} key={'b'}>
         <Header title="积分兑换" right="兑换记录" clickrightTitle={this.clickrightTitle}/>
         <div className={styles.productStyle}>
           <span className={styles.name}>产品类型</span>
@@ -59,13 +80,16 @@ export default class Process extends Component {
             关注【招商银行信用卡】公众号，进入微信公众号点击【办卡推荐】-【绑定.红包】-【微信账户绑定】 绑定信用卡。
           </span>
           <div className={styles.show}>
-            <img src={processImage} alt="" className={styles.processImage} />
-            <img src={processImage} alt="" className={styles.processImage}/>
+            <DebounceButton onClick={this.picturePreview} className={styles.button}>
+              <img src={processImage} alt="" className={styles.processImage} />
+            </DebounceButton>
+            <img src={processImage} alt="" className={styles.processImage} onClick={this.picturePreview} />
           </div>
         </div>
         <div className={styles.interval} style={{height:'0.32rem'}}>.</div>
         <div className={styles.submit} onClick={this.ImmediateReport}>立即报单</div>
-      </div>
-    );
+      </div>,
+      disabled ? <PicturePreview imgSrc={imgSrc} onClick={this.cancelPreview} key={'a'} /> : null
+    ];
   }
 }

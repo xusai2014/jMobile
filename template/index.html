@@ -13,7 +13,7 @@
     <title><%= htmlWebpackPlugin.options.title %></title>
     <script src="https://cdn.staticfile.org/fastclick/1.0.6/fastclick.min.js"></script>
     <script>
-      window.gloablMinHeight = document.documentElement.clientHeight -18;
+      window.gloablMinHeight = document.documentElement.clientHeight;
       if ('addEventListener' in document) {
         document.addEventListener('DOMContentLoaded', function () {
           FastClick && FastClick.attach(document.body);

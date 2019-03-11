@@ -4,28 +4,21 @@ import { withRouter } from 'react-router-dom';
 import { jsNative } from 'sx-jsbridge';
 import styles from './Header.less';
 
-type Props = {
-  title: string,
-  hide?: boolean,
-  right?: string,
-  color?: string,
-  backStart?: Function
-}
 @withRouter
- export default class Header extends React.Component<Props> {
+ export default class Header extends React.Component {
   componentWillMount() {
     const { props } = this;
     this.refreshTitle(props.title);
   }
 
-  componentWillReceiveProps(nextprops:Props) {
+  componentWillReceiveProps(nextprops) {
     const { props } = this;
     if (props.title !== nextprops.title) {
       this.refreshTitle(nextprops.title);
     }
   }
 
-  refreshTitle = (title:string) => {
+  refreshTitle = (title) => {
     if (!title) {
       return;
     }
@@ -47,7 +40,7 @@ type Props = {
   }
 
   render() {
-    const { title, hide, right, color = '#FFFFFF', backStart = this.backStart } = this.props;
+    const { title, hide, right, color = '#FFFFFF', backStart = this.backStart, clickrightTitle } = this.props;
     return (
       [
         <div
@@ -67,7 +60,7 @@ type Props = {
                   <img src="/static/img/back.png" className={styles.left_icon}/>
                 </div>
                 <span className={styles.title}>{title}</span>
-                <div className={styles.right}>{right}</div>
+                <div className={styles.right} onClick={clickrightTitle}>{right}</div>
               </div>
           }
         </div>,

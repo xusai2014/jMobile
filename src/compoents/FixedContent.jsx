@@ -5,15 +5,8 @@ import styles from './FixedContent.less';
 
 // import { TransitionGroup, CSSTransition } from "react-transition-group";
 
-type Props = {
-  className?: string,
-  children: React.Node
-}
-
-type State = {}
-
 @withRouter
-export default class FixedContent extends React.Component<Props, State> {
+export default class FixedContent extends React.Component {
   componentWillMount() {
     //this.initStyle();
   }

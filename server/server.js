@@ -71,31 +71,7 @@ dev.invalidate(()=>{
 })
 app.use(dev);
 
-/**
-*   @author jerryxu
-*   监听文件改动，触发静态检查
-*/
-// global.watchTimer = null;
-// fs.watch(path.join(__dirname, '../src/'),()=>{
-//   if(watchTimer!=null){
-//     clearTimeout(watchTimer);
-//     watchTimer = setTimeout(()=>{
-//       log.warn('excuting*********')
-//       execFile(flow, ['check'], (err, stdout) => {
-//         log.warn(stdout);
-//       })
-//       watchTimer = null;
-//     },1000);
-//   } else {
-//     watchTimer = setTimeout(()=>{
-//       console.warn('excuting*********')
-//       execFile(flow, ['check'], (err, stdout) => {
-//         log.warn(stdout);
-//       })
-//       watchTimer = null;
-//     },1000);
-//   }
-// })
+
 /**
  *   @author jerryxu
  *   @description 配置热推送
@@ -125,45 +101,18 @@ serverConfig.map((v, k) => {
  *   @author jerryxu
  *   @description 客户端页面请求
  */
-const clientProxy = proxy({
-  target: 'https://localhost:3200', // target host
-  changeOrigin: true,               // needed for virtual hosted sites
-  ws: true,                         // proxy websockets
-  pathRewrite: {
-    '^/*': '/render',     // rewrite path
-  },
-  router: {
-    // when request.headers.host == 'dev.localhost:3000',
-    // override target 'http://www.example.org' to 'http://localhost:8000'
-    'localhost:3200': 'http://localhost:3300'
-  },
-  onError: (err, req, res) => {
-    const filename = path.join(compiler.outputPath, 'index.html');
-    compiler.outputFileSystem.readFile(filename, function (err, result) {
-      if (err) {
-        console.log('Proxy--->',err);
-      }
-
-      res.set('content-type', 'text/html');
-      res.send(result);
-      res.end();
-    });
-  },
-  onProxyReq: (proxyReq, req, res) => {
-  },
-  onProxyRes: (proxyRes, req, res) => {
-    const filename = path.join(compiler.outputPath, 'index.html');
-    compiler.outputFileSystem.readFile(filename, function (err, result) {
-      if (err) {
-        return next(err);
-      }
-      res.set('content-type', 'text/html');
-      res.send(result);
-      res.end();
-    });
-  }
+app.get('/*', (req, res) => {
+  const filename = path.join(compiler.outputPath, 'index.html');
+  compiler.outputFileSystem.readFile(filename, (err, result) => {
+    if (err) {
+      return next(err);
+    }
+    res.set('content-type', 'text/html');
+    res.send(result);
+    res.end();
+    return null;
+  });
 });
-app.use('/*', clientProxy);
 
 /**
  *   @author jerryxu

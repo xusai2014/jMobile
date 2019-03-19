@@ -28,15 +28,7 @@ import styles from './Header.less';
   }
 
   backStart = () => {
-    jsNative.nativeCallBindCreditCard({}, (data) => {
-      const { TaskCenter = '' } = data;
-      if (window.location.href.includes('/cards/cardslist') && parseInt(TaskCenter, 10) === 1) {
-        jsNative.nativeCloseWebview({}, () => {
-        });
-      } else {
-        window.history.go(-1);
-      }
-    });
+    window.history.go(-1);
   }
 
   render() {

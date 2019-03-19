@@ -22,7 +22,7 @@ export default class Process extends Component {
   }
   // 立即报单
   ImmediateReport = () => {
-    this.props.history.push('/myapploadForm');
+    this.props.history.push('/myapp/UploadForm');
   }
   // 实现兑换流程图片的预览
   picturePreview = () =>{

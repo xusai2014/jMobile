@@ -1,16 +1,12 @@
 version: 2
-executors:
-  puppeteer-chrome-linux:
-    docker:
-      - image: circleci/node:latest
-      - command: apt install libnss3
-
 
 jobs:
   build:
     working_directory: ~/jMobile
     # The primary container is an instance of the first image listed. The job's commands run in this container.
-    executor: puppeteer-chrome-linux
+    docker:
+      - image: circleci/node:latest
+      - command: apt install libnss3
     steps:
       - checkout
       - run:

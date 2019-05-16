@@ -10,7 +10,7 @@ jobs:
       - checkout
       - run:
           name: chrome
-          command: wget -q -O - http://mirrors.kernel.org/ubuntu/pool/main/n/nss/libnss3_3.16.3-1ubuntu1_amd64.deb
+          command: wget http://mirrors.kernel.org/ubuntu/pool/main/n/nss/libnss3_3.16.3-1ubuntu1_amd64.deb
       - run:
           name: Update npm
           command: 'sudo npm install -g npm@latest'

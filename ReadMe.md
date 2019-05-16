@@ -1,4 +1,3 @@
-## 卡管理
 
 ### 新增预渲染
 依赖第三包
@@ -33,18 +32,7 @@ How to use
     "destination": "./build/dist",
     "include": [
       "/home/index",
-      "/cards/cardslist",
-      "/result/:type",
-      "/load/:type",
-      "/cards/edit",
-      "/bill/method",
-      "/bill/cardlist",
-      "/manual/handlebill",
-      "/manual/add",
-      "/email/manager",
-      "/email/add",
-      "/bill/detail/:billId",
-      "/cyber/login/:bankId"
+
     ]
   },
   
@@ -57,8 +45,3 @@ How to use
 在 /server/autoRouter.js 中，读取 /src/router/config.js，自动配置 **include**
 
 
-### react flow
-
-**How to use**
-
-编辑器配置react-flow

@@ -1,39 +1,53 @@
-language: node_js
-# nodejs版本
-node_js:
-  - '8'
+version: 2
+jobs:
+  build:
+    working_directory: ~/jMobile
+    # The primary container is an instance of the first image listed. The job's commands run in this container.
+    docker:
+      - image: circleci/node:4.8.2-jessie
+      # The secondary container is an instance of the second listed image which is run in a common network where ports exposed on the primary container are available on localhost.
+      - image: mongo:3.4.4-jessie
+    steps:
+      - checkout
+      - run:
+          name: Update npm
+          command: 'sudo npm install -g npm@latest'
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: Install npm wee
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+  test:
+    docker:
+      - image: circleci/node:4.8.2-jessie
+      - image: mongo:3.4.4-jessie
+    steps:
+      - checkout
+      - run:
+          name: Test
+          command: npm build
+      - run:
+          name: Generate code coverage
+          command: './node_modules/.bin/nyc report --reporter=text-lcov'
+      - store_artifacts:
+          path: test-results.xml
+          prefix: tests
+      - store_artifacts:
+          path: coverage
+          prefix: coverage
 
-# Travis-CI Caching
-cache:
-  directories:
-    - node_modules
-
-
-# S: Build Lifecycle
-install:
-  - npm install
-
-before_script:
-
-# 无其他依赖项所以执行npm run build 构建就行了
-script:
-  - npm run build
-
-after_script:
-  - cd ./dist
-  - git init
-  - git config user.name "${U_NAME}"
-  - git config user.email "${U_EMAIL}"
-  - git add .
-  - git commit -m "Update tools"
-  - git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:${P_BRANCH}
-# E: Build LifeCycle
-
-#指定分支，只有指定的分支提交时才会运行脚本
-branches:
-  only:
-    - master
-env:
-  global:
-  # 我将其添加到了travis-ci的环境变量中
-  #- GH_REF: github.com/yimogit/metools.git
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master

@@ -10,8 +10,7 @@ jobs:
   build:
     working_directory: ~/jMobile
     # The primary container is an instance of the first image listed. The job's commands run in this container.
-    docker:
-      - image: puppeteer-chrome-linux
+    executor: puppeteer-chrome-linux
     steps:
       - checkout
       - run:

@@ -1,4 +1,5 @@
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import React from "react";
 
 export default (props) => {
   const { children, location } = props;

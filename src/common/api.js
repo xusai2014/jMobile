@@ -2,36 +2,29 @@
  *   @author jerryxu
  *   多环境配置
  */
-import { MockUrl } from "./constants";
+import { MockUrl,EnvApiUrl } from "./constants";
 const Mock  = true;
 
 export const envApi = () => {
-  const url = {
-    test: 'https://plus-gateway-test.suixingpay.com',
-    dev: 'http://172.16.151.124:8080',
-    prod: 'https://plus-gateway.suixingpay.com',
-    alpha: 'https://plus-gateway-alpha.suixingpay.com',
-    rc: 'https://plus-gateway-rc.suixingpay'
-  };
   const domainUrl = window.location.href;
 
   if (domainUrl.includes('test')) {
-    return url.test;
+    return EnvApiUrl.test;
   }
   if (domainUrl.includes('rc')) {
-    return url.rc;
+    return EnvApiUrl.rc;
   }
   if (domainUrl.includes('alpha')) {
-    return url.alpha;
+    return EnvApiUrl.alpha;
   }
   if (domainUrl.includes('mpaw-dev')) {
-    return url.dev;
+    return EnvApiUrl.dev;
   }
   if (domainUrl.includes('mpaw.vbill.cn')) {
-    return url.prod;
+    return EnvApiUrl.prod;
   }
   if (domainUrl.includes('mpaw.suixingpay.com')) {
-    return url.prod;
+    return EnvApiUrl.prod;
   }
   if(Mock){
     return MockUrl;

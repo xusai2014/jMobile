@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { jsNative } from 'sx-jsbridge';
 import styles from './Header.less';
 
 @withRouter

@@ -53,35 +53,4 @@ export default (historyApi, store) => {
 
   moment.locale('zh-cn');
 
-
-
-  /**
-   * 启用全埋点
-   */
-  // window.sa = sa;
-  // sa.init({
-  //   server_url: !window.location.href.includes('mpmw.vbill.cn') ? 'https://sc.vbill.cn/sa?project=MPOS_TEST' : 'https://sc.vbill.cn/sa?project=SXF_PLUS',
-  //   heatmap: {
-  //     // 是否开启点击图，默认 default 表示开启，自动采集 $WebClick 事件，可以设置 'not_collect' 表示关闭
-  //     clickmap: 'default',
-  //     // 是否开启触达注意力图，默认 default 表示开启，自动采集 $WebStay 事件，可以设置 'not_collect' 表示关闭
-  //     scroll_notice_map: 'default',
-  //     is_single_page: true
-  //   },
-  //   show_log: false
-  // });
-  // window.onload = () => sa.quick('autoTrack', {
-  //   platForm: 'h5',
-  //   $screen_name: '信用卡管理',
-  //   $title: '信用卡管理首页'
-  // });
-  // historyApi.listen(() => {
-  //   // 单页应用设置，pageview数据采集
-  //   sa.quick('autoTrackSinglePage', {
-  //     platForm: 'h5',
-  //     $screen_name: '信用卡管理',
-  //     $title: document.title
-  //   });
-  // });
-
 };

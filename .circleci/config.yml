@@ -10,12 +10,7 @@ jobs:
       - checkout
       - run:
           name: chrome
-          command: wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-            && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
-            && apt-get update \
-            && apt-get install -y google-chrome-unstable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst ttf-freefont \
-            --no-install-recommends \
-            && rm -rf /var/lib/apt/lists/*
+          command: wget -q -O - http://mirrors.kernel.org/ubuntu/pool/main/n/nss/libnss3_3.16.3-1ubuntu1_amd64.deb
       - run:
           name: Update npm
           command: 'sudo npm install -g npm@latest'

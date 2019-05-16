@@ -6,7 +6,7 @@ jobs:
     # The primary container is an instance of the first image listed. The job's commands run in this container.
     docker:
       - image: circleci/node:latest
-      command: [--smallfiles]
+        command: [--smallfiles]
     steps:
       - checkout
       - run:

@@ -6,9 +6,11 @@ jobs:
     # The primary container is an instance of the first image listed. The job's commands run in this container.
     docker:
       - image: circleci/node:latest
-        command: wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub
     steps:
       - checkout
+      - run:
+          name: chrome
+          command: wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub
       - run:
           name: Update npm
           command: 'sudo npm install -g npm@latest'

@@ -8,9 +8,4 @@ import Loadable from 'react-loadable';
 import Loading from '../compoents/Loading';
 import NoMatch from '../page/NoMatch';
 export default ()=>(<Switch><Route exact={false} path={'/myapp/index'} component={ Loadable({loader: () => import('../page/home/Home.jsx'),loading: Loading,})} />
-<Route exact={false} path={'/myapp/exchangeRecord'} component={ Loadable({loader: () => import('../page/exchangeRecord/ExchangeRecord.jsx'),loading: Loading,})} />
-<Route exact={false} path={'/myapp/noRecord'} component={ Loadable({loader: () => import('../page/exchangeRecord/NoRecord.jsx'),loading: Loading,})} />
-<Route exact={false} path={'/myapp/orderDetails'} component={ Loadable({loader: () => import('../page/exchangeRecord/OrderDetails.jsx'),loading: Loading,})} />
-<Route exact={false} path={'/myapp/Process'} component={ Loadable({loader: () => import('../page/process/Process.jsx'),loading: Loading,})} />
-<Route exact={false} path={'/myapp/UploadForm'} component={ Loadable({loader: () => import('../page/uploadForm/UploadForm.jsx'),loading: Loading,})} />
 <Route component={NoMatch}/></Switch>)

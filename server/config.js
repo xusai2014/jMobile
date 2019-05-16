@@ -1,7 +1,7 @@
 export default [
    {
      "/api":{
-       target:"https://mpos.suixingpay.com",
+       target:"https://localhost:400",
        secure:false,
        changeOrigin: true,
        pathRewrite: {
@@ -10,7 +10,7 @@ export default [
      }
    },{
      '/rcsapi':{
-       target: 'http://172.16.138.138:9010',
+       target: 'https://localhost:400',
        pathRewrite: {"^/rcsapi" : ""},
        secure:false,
        changeOrigin: true
